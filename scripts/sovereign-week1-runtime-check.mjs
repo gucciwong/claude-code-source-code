@@ -19,7 +19,17 @@ const PROFILE_MATRIX = {
   '24GB': ['deepseek-coder:33b-q4', 'qwen2.5-coder:32b-q6'],
 }
 
-function parseArgs(argv) {
+export function parseRuntimeCheckArgs(argv) {
+  const knownOptions = new Set([
+    '--host',
+    '--port',
+    '--vram',
+    '--timeout-ms',
+    '--json',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     host: DEFAULT_HOST,
     port: DEFAULT_PORT,
@@ -32,23 +42,41 @@ function parseArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--host' && next) {
+    if (token === '--host' && !next) {
+      throw new Error('Missing value for --host.')
+    } else if (token === '--host' && next) {
       args.host = next
       i += 1
+    } else if (token === '--port' && !next) {
+      throw new Error('Missing value for --port.')
     } else if (token === '--port' && next) {
-      args.port = Number(next)
+      const parsedPort = Number(next)
+      if (!Number.isInteger(parsedPort) || parsedPort <= 0 || parsedPort > 65535) {
+        throw new Error(`Invalid --port value: ${next}`)
+      }
+      args.port = parsedPort
       i += 1
+    } else if (token === '--vram' && !next) {
+      throw new Error('Missing value for --vram.')
     } else if (token === '--vram' && next) {
       args.vram = next.toUpperCase()
       i += 1
+    } else if (token === '--timeout-ms' && !next) {
+      throw new Error('Missing value for --timeout-ms.')
     } else if (token === '--timeout-ms' && next) {
-      args.timeoutMs = Number(next)
+      const parsedTimeoutMs = Number(next)
+      if (!Number.isFinite(parsedTimeoutMs) || parsedTimeoutMs <= 0) {
+        throw new Error(`Invalid --timeout-ms value: ${next}`)
+      }
+      args.timeoutMs = parsedTimeoutMs
       i += 1
     } else if (token === '--json') {
       args.json = true
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for runtime-check CLI: ${token}`)
     }
   }
 
@@ -84,7 +112,7 @@ async function fetchJson(url, timeoutMs) {
   return response.json()
 }
 
-function normalizeTier(vram) {
+export function normalizeTier(vram) {
   if (!vram) return null
   const normalized = vram.replace(/\s+/g, '').toUpperCase()
   if (normalized === '6GB' || normalized === '8GB' || normalized === '12GB' || normalized === '24GB') {
@@ -148,7 +176,7 @@ function printHuman(result) {
 }
 
 async function main() {
-  const args = parseArgs(process.argv)
+  const args = parseRuntimeCheckArgs(process.argv)
   const baseUrl = `http://${args.host}:${args.port}`
 
   let reachable = false
@@ -180,7 +208,15 @@ async function main() {
   }
 }
 
-main().catch(error => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
-})
+import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
+
+const thisFilePath = fileURLToPath(import.meta.url)
+const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null
+
+if (invokedPath && thisFilePath === invokedPath) {
+  main().catch(error => {
+    console.error(error instanceof Error ? error.message : String(error))
+    process.exitCode = 1
+  })
+}
