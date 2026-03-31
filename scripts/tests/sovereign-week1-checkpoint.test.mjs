@@ -28,6 +28,17 @@ test('buildCheckpointSummary maps evidence to checkpoint fields', () => {
   assert.equal(summary.reason, 'Runtime is unreachable')
 })
 
+test('buildCheckpointSummary returns Ready when gate is satisfied', () => {
+  const summary = buildCheckpointSummary({
+    date: '2026-04-01',
+    metrics: { firstTokenLatencyMsAvg: 450, tokensPerSecondAvg: 35 },
+    gate: { readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+  })
+
+  assert.equal(summary.readiness, 'Ready')
+  assert.equal(summary.reason, 'All Week 1 gate signals are green')
+})
+
 test('toCheckpointText renders concise 4-line checkpoint update', () => {
   const text = toCheckpointText({
     date: '2026-04-01',
@@ -44,6 +55,21 @@ test('toCheckpointText renders concise 4-line checkpoint update', () => {
   assert.match(lines[2], /Latency: 470 ms/)
   assert.match(lines[3], /Throughput: 34 tps/)
   assert.match(lines[4], /Reason: All Week 1 gate signals are green/)
+})
+
+test('toCheckpointText renders Blocked readiness variant', () => {
+  const text = toCheckpointText({
+    date: '2026-04-01',
+    readiness: 'Blocked',
+    latencyMs: 620,
+    throughputTps: 28,
+    reason: 'Latency target failed',
+  })
+
+  assert.match(text, /Readiness: Blocked/)
+  assert.match(text, /Latency: 620 ms/)
+  assert.match(text, /Throughput: 28 tps/)
+  assert.match(text, /Reason: Latency target failed/)
 })
 
 test('parseCheckpointArgs throws when evidence-file value is missing', () => {

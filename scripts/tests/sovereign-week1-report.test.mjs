@@ -16,6 +16,21 @@ test('summarizeReadiness maps gate state to readable summary', () => {
   assert.match(summary.message, /Runtime is unreachable/)
 })
 
+test('summarizeReadiness returns Ready status when gate is satisfied', () => {
+  const summary = summarizeReadiness({
+    gate: { readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+  })
+
+  assert.equal(summary.status, 'Ready')
+  assert.match(summary.message, /green/i)
+})
+
+test('summarizeReadiness uses fallback message when reason is absent', () => {
+  const summary = summarizeReadiness({ gate: { readyForDemo: false } })
+  assert.equal(summary.status, 'Blocked')
+  assert.match(summary.message, /Gate not satisfied/)
+})
+
 test('buildMarkdownReport includes key metrics and status', () => {
   const report = buildMarkdownReport({
     date: '2026-04-01',
@@ -44,6 +59,31 @@ test('buildMarkdownReport includes key metrics and status', () => {
   assert.match(report, /Average first-token latency \(ms\): 483/)
   assert.match(report, /Average throughput \(tps\): 33/)
   assert.match(report, /Overall readiness: Ready/)
+})
+
+test('buildMarkdownReport renders fail indicators for targets not met', () => {
+  const report = buildMarkdownReport({
+    date: '2026-04-01',
+    runtimeReachable: false,
+    modelCount: 0,
+    metrics: {
+      firstTokenLatencyMsAvg: 650,
+      tokensPerSecondAvg: 20,
+      sampleCount: 2,
+    },
+    targets: {
+      latencyPass: false,
+      throughputPass: false,
+      latencyLimitMs: 500,
+      throughputMinimumTps: 30,
+    },
+    gate: { readyForDemo: false, reason: 'Latency target failed' },
+  })
+
+  assert.match(report, /Runtime reachable: no/)
+  assert.match(report, /Latency target.*fail/)
+  assert.match(report, /Throughput target.*fail/)
+  assert.match(report, /Overall readiness: Blocked/)
 })
 
 test('parseReportArgs throws when evidence-file value is missing', () => {
