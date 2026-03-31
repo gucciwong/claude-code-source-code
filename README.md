@@ -36,7 +36,8 @@ docs/
 │   ├── [07-prd-v2-execution-tracker.md]       # Sovereign execution tracker — phase streams, milestones, risks
 │   ├── [08-prd-v2-epics-and-tickets.md]       # Sovereign backlog — roadmap-aligned epics and tickets
 │   ├── [09-prd-v2-kpi-instrumentation-spec.md]# Sovereign KPI spec — product, technical, and business metrics
-│   └── [10-prd-v2-sprint-1-deliverables.md]   # Sovereign Sprint 1 package — Month 1 foundation scope
+│   ├── [10-prd-v2-sprint-1-deliverables.md]   # Sovereign Sprint 1 package — Month 1 foundation scope
+│   └── [11-prd-v2-week-1-execution-board.md]  # Sovereign Week 1 board — daily tasks, owners, demo evidence
 │
 └── zh/                                        # 中文
     ├── [01-遥测与隐私分析.md]                    # 遥测与隐私 — 收集了什么，为什么无法退出
