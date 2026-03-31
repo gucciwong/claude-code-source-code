@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import {
   buildDailyPaths,
   buildCommands,
+  extractStdoutFromExecError,
 } from '../sovereign-week1-daily-run.mjs'
 
 test('buildDailyPaths creates stable output file names', () => {
@@ -33,4 +34,15 @@ test('buildCommands wires runtime, benchmark, and evidence steps in order', () =
   assert.match(commands[2], /sovereign-week1-evidence-bundle/)
   assert.match(commands[2], /runtime\.json/)
   assert.match(commands[2], /benchmark\.json/)
+})
+
+test('extractStdoutFromExecError returns stdout when command exits non-zero', () => {
+  const error = {
+    stdout: '{"runtime":{"reachable":false}}\n',
+    stderr: 'failed',
+    code: 2,
+  }
+
+  const stdout = extractStdoutFromExecError(error)
+  assert.equal(stdout, '{"runtime":{"reachable":false}}\n')
 })

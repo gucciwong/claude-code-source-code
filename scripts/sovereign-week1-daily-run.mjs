@@ -78,12 +78,27 @@ async function ensureParent(path) {
   await mkdir(dirname(path), { recursive: true })
 }
 
+export function extractStdoutFromExecError(error) {
+  if (error && typeof error === 'object' && typeof error.stdout === 'string') {
+    return error.stdout
+  }
+  return null
+}
+
 async function runNodeScript(scriptPath, scriptArgs) {
-  const { stdout } = await execFileAsync(process.execPath, [scriptPath, ...scriptArgs], {
-    cwd: process.cwd(),
-    maxBuffer: 1024 * 1024,
-  })
-  return stdout
+  try {
+    const { stdout } = await execFileAsync(process.execPath, [scriptPath, ...scriptArgs], {
+      cwd: process.cwd(),
+      maxBuffer: 1024 * 1024,
+    })
+    return stdout
+  } catch (error) {
+    const recovered = extractStdoutFromExecError(error)
+    if (recovered !== null && recovered.trim().length > 0) {
+      return recovered
+    }
+    throw error
+  }
 }
 
 async function runCli() {
