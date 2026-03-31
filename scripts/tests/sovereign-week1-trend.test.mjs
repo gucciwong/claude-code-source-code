@@ -6,6 +6,7 @@ import {
   buildTrendReport,
   sortSummariesByDate,
   parseTrendArgs,
+  isWeek1SummaryFileName,
 } from '../sovereign-week1-trend.mjs'
 
 test('sortSummariesByDate sorts ascending by date key', () => {
@@ -85,4 +86,11 @@ test('parseTrendArgs throws when readiness-threshold value is missing', () => {
     () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--readiness-threshold']),
     /Missing value for --readiness-threshold/,
   )
+})
+
+test('isWeek1SummaryFileName accepts both date and numeric run keys', () => {
+  assert.equal(isWeek1SummaryFileName('week1-summary-2026-04-01.json'), true)
+  assert.equal(isWeek1SummaryFileName('week1-summary-1042.json'), true)
+  assert.equal(isWeek1SummaryFileName('week1-summary-.json'), false)
+  assert.equal(isWeek1SummaryFileName('week1-report-2026-04-01.md'), false)
 })

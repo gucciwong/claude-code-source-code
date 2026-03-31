@@ -4,7 +4,11 @@ import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { computeTrendMetrics, sortSummariesByDate } from './sovereign-week1-trend.mjs'
+import {
+  computeTrendMetrics,
+  sortSummariesByDate,
+  isWeek1SummaryFileName,
+} from './sovereign-week1-trend.mjs'
 
 export function deriveOverallStatus({ readinessRate, blockedDays, totalDays }) {
   if (totalDays === 0) {
@@ -54,7 +58,7 @@ export function buildExecutiveSummary({ overallStatus, trend, latest }) {
 async function readSummaries(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const files = entries
-    .filter(entry => entry.isFile() && /^week1-summary-\d{4}-\d{2}-\d{2}\.json$/.test(entry.name))
+    .filter(entry => entry.isFile() && isWeek1SummaryFileName(entry.name))
     .map(entry => `${dir}/${entry.name}`)
 
   const summaries = []

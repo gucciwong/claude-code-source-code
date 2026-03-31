@@ -4,6 +4,10 @@ import { readFile, readdir } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { resolve } from 'node:path'
 
+export function isWeek1SummaryFileName(name) {
+  return /^week1-summary-.+\.json$/.test(name)
+}
+
 export function sortSummariesByDate(summaries) {
   return [...summaries].sort((a, b) => String(a.date).localeCompare(String(b.date)))
 }
@@ -85,7 +89,7 @@ export function buildTrendReport(metrics) {
 async function readSummaryFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const summaryFiles = entries
-    .filter(entry => entry.isFile() && /^week1-summary-\d{4}-\d{2}-\d{2}\.json$/.test(entry.name))
+    .filter(entry => entry.isFile() && isWeek1SummaryFileName(entry.name))
     .map(entry => `${dir}/${entry.name}`)
 
   const summaries = []
