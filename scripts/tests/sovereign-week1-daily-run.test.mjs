@@ -6,6 +6,7 @@ import {
   buildCommands,
   extractStdoutFromExecError,
   buildRunSummary,
+  evaluateExitCode,
 } from '../sovereign-week1-daily-run.mjs'
 
 test('buildDailyPaths creates stable output file names', () => {
@@ -80,4 +81,10 @@ test('buildRunSummary returns compact machine-readable status object', () => {
   assert.equal(summary.readyForDemo, false)
   assert.equal(summary.reason, 'Runtime is unreachable')
   assert.equal(summary.output.evidenceFile, 'c.json')
+})
+
+test('evaluateExitCode returns 2 only when strict gate mode is enabled and run is blocked', () => {
+  assert.equal(evaluateExitCode({ strictGate: false, readyForDemo: false }), 0)
+  assert.equal(evaluateExitCode({ strictGate: true, readyForDemo: true }), 0)
+  assert.equal(evaluateExitCode({ strictGate: true, readyForDemo: false }), 2)
 })

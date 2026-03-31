@@ -40,6 +40,13 @@ export function buildRunSummary({ date, tier, evidence, output }) {
   }
 }
 
+export function evaluateExitCode({ strictGate, readyForDemo }) {
+  if (strictGate && !readyForDemo) {
+    return 2
+  }
+  return 0
+}
+
 function parseArgs(argv) {
   const today = new Date().toISOString().slice(0, 10)
   const args = {
@@ -48,6 +55,7 @@ function parseArgs(argv) {
     outDir: 'artifacts',
     sampleFile: 'scripts/tests/fixtures/week1-samples.json',
     dryRun: false,
+    strictGate: false,
   }
 
   for (let i = 2; i < argv.length; i += 1) {
@@ -68,6 +76,8 @@ function parseArgs(argv) {
       i += 1
     } else if (token === '--dry-run') {
       args.dryRun = true
+    } else if (token === '--strict-gate') {
+      args.strictGate = true
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
@@ -86,6 +96,7 @@ function printHelp() {
   console.log('  --out-dir <path>             Output directory (default: artifacts)')
   console.log('  --sample-file <path>         Benchmark sample JSON file')
   console.log('  --dry-run                    Print command plan only')
+  console.log('  --strict-gate                Exit 2 when readiness gate is blocked')
   console.log('  --help, -h                   Show this help')
 }
 
@@ -188,6 +199,11 @@ async function runCli() {
     output: paths,
   })
   await writeFile(paths.summaryFile, JSON.stringify(summary, null, 2), 'utf8')
+
+  process.exitCode = evaluateExitCode({
+    strictGate: args.strictGate,
+    readyForDemo: summary.readyForDemo,
+  })
 
   console.log(JSON.stringify({
     date: args.date,
