@@ -3,7 +3,7 @@
 > Status: Active
 > PRD Baseline: Sovereign Coder PRD v1.0 (2026-03-31)
 > Owner Group: Product, Platform Engineering, Applied AI
-> Last updated: 2026-03-31
+> Last updated: 2026-04-01
 
 ## 1. Purpose
 
@@ -36,6 +36,8 @@ Track delivery against the Sovereign Coder roadmap and ensure every phase milest
 1. Complete Month 1 deliverables for local inference, completion, VSCode MVP, and CLI MVP.
 2. Lock benchmark harness for HumanEval and SWE-bench Lite baseline runs.
 3. Finalize hardware profile support matrix for 6GB, 8GB, 12GB, and 24GB VRAM tiers.
+4. Enforce ticket-level owner and due-date accountability for Foundation Week 1-4 execution.
+5. Publish v0.1 entry criteria and run weekly go or no-go readiness checks.
 
 ## 5. Weekly Review Checklist
 
@@ -66,3 +68,29 @@ Track delivery against the Sovereign Coder roadmap and ensure every phase milest
 2. KPI instrumentation aligned with PRD success metrics.
 3. Sprint 1 scope locked to Month 1 roadmap outcomes.
 4. Ownership and review cadence confirmed for each stream.
+
+## 9. Ticket Ownership and Due Dates (Month 1)
+
+| Ticket | Scope Summary | DRI | Support | Due Date | Status |
+|---|---|---|---|---|---|
+| F1.1 | Ollama integration and local runtime bootstrap | Platform Lead (TBD) | Runtime Eng | 2026-04-07 | Planned |
+| F1.2 | Hardware profile mapping and model compatibility guardrails | Platform Lead (TBD) | Applied AI | 2026-04-10 | Planned |
+| F2.1 | Inline completion MVP and feedback events | IDE Lead (TBD) | Data Eng | 2026-04-14 | Planned |
+| F4.2 | CLI model operations and completion interface | Product Eng Lead (TBD) | Platform Eng | 2026-04-12 | Planned |
+| F4.1 | VSCode MVP runtime connection and status UX | IDE Lead (TBD) | Platform Eng | 2026-04-18 | Planned |
+
+## 10. v0.1 Entry Criteria (Go or No-Go)
+
+1. Local inference completes end-to-end on at least two validated hardware tiers (minimum 8GB and 12GB).
+2. Inline completion flow supports suggest, accept, and reject events with complete event payloads.
+3. CLI supports model list, model switch, and completion request in both human-readable and machine-readable modes.
+4. VSCode MVP demonstrates runtime status, completion request path, and actionable error recovery guidance.
+5. Baseline benchmark report is published for first-token latency, token throughput, and acceptance rate.
+6. No unresolved critical-severity blockers in local inference and completion path at release review.
+
+## 11. Month 1 Weekly Readout Template
+
+1. Planned versus completed ticket count by stream.
+2. Blockers opened and blockers closed this week.
+3. Latency, throughput, and acceptance trend versus baseline.
+4. Top 3 risks and mitigation owner actions due before next review.

@@ -142,8 +142,18 @@ Required fields:
 4. Dashboards mapped to product, technical, and business owners.
 5. Alert response playbook is documented.
 
-## 8. Open Decisions
+## 8. Decisions (Resolved 2026-04-01)
 
-1. Default aggregation windows for DAU and acceptance trends.
-2. Segment thresholds by hardware tier.
-3. Federation metrics retention period and anonymization policy.
+1. Default aggregation windows:
+	- DAU: UTC daily window (00:00 to 23:59).
+	- MAU: rolling 30-day window refreshed daily.
+	- Acceptance trend: 7-day moving average and 28-day moving average.
+2. Hardware-tier segmentation thresholds:
+	- Tier A: 6GB to 8GB VRAM.
+	- Tier B: 10GB to 16GB VRAM.
+	- Tier C: 20GB to 24GB VRAM.
+	- Alerts and benchmark comparisons must be computed per tier before global aggregation.
+3. Federation metrics retention and anonymization policy:
+	- Raw federation event retention: 90 days.
+	- Aggregated federation metrics retention: 24 months.
+	- Required anonymization: hash participant identifiers, remove direct org identifiers from analytics tables, and retain mapping only in restricted-access control plane stores.

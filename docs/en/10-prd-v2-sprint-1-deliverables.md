@@ -1,9 +1,9 @@
 # Sovereign Coder Sprint 1 Deliverables
 
-> Sprint Window: Weeks 1-2
+> Sprint Window: Weeks 1-4 (Foundation Month 1)
 > Phase Alignment: Foundation Month 1
 > Status: Planned
-> Date: 2026-03-31
+> Date: 2026-04-01
 
 ## 1. Sprint Objective
 
@@ -16,6 +16,7 @@ Deliver the first executable slice of the Sovereign Coder Foundation phase: loca
 3. Inline completion MVP flow with accept and reject instrumentation.
 4. VSCode plugin MVP shell with runtime connection.
 5. CLI command set for model list, switch, and completion request.
+6. Baseline benchmark package for first-token latency, throughput, and acceptance.
 
 ## 3. Scope by Workstream
 
@@ -45,10 +46,11 @@ Deliver the first executable slice of the Sovereign Coder Foundation phase: loca
 
 ## 4. Owners and Roles
 
-1. Product DRI: sprint scope and acceptance alignment.
-2. Platform DRI: inference runtime and model lifecycle.
-3. IDE DRI: VSCode extension behavior.
-4. Data DRI: baseline metric collection and dashboard wiring.
+1. Product DRI (TBD): sprint scope, acceptance alignment, weekly release readiness.
+2. Platform DRI (TBD): inference runtime, model lifecycle, hardware profile gates.
+3. IDE DRI (TBD): VSCode extension behavior and completion UX.
+4. Product Engineering DRI (TBD): CLI command surface and output contracts.
+5. Data DRI (TBD): instrumentation, baseline collection, dashboard wiring.
 
 ## 5. Week-by-Week Plan
 
@@ -60,8 +62,20 @@ Deliver the first executable slice of the Sovereign Coder Foundation phase: loca
 
 ## Week 2
 
+1. Stabilize hardware profile mapping and incompatible model guardrails.
+2. Complete CLI completion request flow and output mode validation.
+3. Instrument completion accept, reject, and edit-after-accept events.
+
+## Week 3
+
 1. Complete VSCode MVP shell and runtime connection.
-2. Capture and review baseline metrics.
+2. Add runtime status checks and recovery guidance UX.
+3. Capture benchmark baseline on validated hardware tiers.
+
+## Week 4
+
+1. Run end-to-end demo checklist and fix critical blockers.
+2. Publish Month 1 baseline report and readiness summary.
 3. Finalize Sprint 2 dependency map for context and RAG work.
 
 ## 6. Definition of Done
@@ -70,6 +84,8 @@ Deliver the first executable slice of the Sovereign Coder Foundation phase: loca
 2. Baseline metrics are captured and versioned.
 3. Demo scenarios complete without critical blockers.
 4. Sprint 2 backlog is created from unresolved dependencies.
+5. Each completed ticket has named owner sign-off and acceptance evidence.
+6. Completion and inference events pass schema and null-rate checks.
 
 ## 7. Demo Checklist
 
@@ -84,3 +100,5 @@ Deliver the first executable slice of the Sovereign Coder Foundation phase: loca
 1. Foundation Month 1 objectives are on-track for v0.1 milestone.
 2. No unresolved critical issues in local inference path.
 3. Sprint 2 scope is approved for context and indexing expansion.
+4. First-token latency and throughput baselines are published for all validated tiers.
+5. Acceptance baseline exists and can be compared week over week.
