@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import {
   deriveOverallStatus,
   buildExecutiveSummary,
+  parseStatusPackArgs,
 } from '../sovereign-week1-status-pack.mjs'
 
 test('deriveOverallStatus returns green at high readiness', () => {
@@ -53,4 +54,11 @@ test('buildExecutiveSummary renders concise weekly snapshot markdown', () => {
   assert.match(markdown, /Latest blocked streak: 2 day\(s\)/)
   assert.match(markdown, /Latest day: 2026-04-04 \(blocked\)/)
   assert.match(markdown, /Runtime is unreachable: 2/)
+})
+
+test('parseStatusPackArgs throws when out-file value is missing', () => {
+  assert.throws(
+    () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '--out-file']),
+    /Missing value for --out-file/,
+  )
 })

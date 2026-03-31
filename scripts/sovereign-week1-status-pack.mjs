@@ -66,7 +66,7 @@ async function readSummaries(dir) {
   return sortSummariesByDate(summaries)
 }
 
-function parseArgs(argv) {
+export function parseStatusPackArgs(argv) {
   const args = {
     dir: 'artifacts',
     outFile: 'artifacts/week1-executive-status.md',
@@ -80,6 +80,8 @@ function parseArgs(argv) {
     if (token === '--dir' && next) {
       args.dir = next
       i += 1
+    } else if (token === '--out-file' && !next) {
+      throw new Error('Missing value for --out-file.')
     } else if (token === '--out-file' && next) {
       args.outFile = next
       i += 1
@@ -105,7 +107,7 @@ function printHelp() {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseStatusPackArgs(process.argv)
   const summaries = await readSummaries(args.dir)
 
   if (summaries.length === 0) {
