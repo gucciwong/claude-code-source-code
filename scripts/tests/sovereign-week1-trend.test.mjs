@@ -88,6 +88,13 @@ test('parseTrendArgs throws when readiness-threshold value is missing', () => {
   )
 })
 
+test('parseTrendArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--unknown-flag']),
+    /Unknown option for trend CLI/,
+  )
+})
+
 test('isWeek1SummaryFileName accepts both date and numeric run keys', () => {
   assert.equal(isWeek1SummaryFileName('week1-summary-2026-04-01.json'), true)
   assert.equal(isWeek1SummaryFileName('week1-summary-1042.json'), true)

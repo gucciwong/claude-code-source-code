@@ -102,6 +102,14 @@ async function readSummaryFiles(dir) {
 }
 
 export function parseTrendArgs(argv) {
+  const knownOptions = new Set([
+    '--dir',
+    '--readiness-threshold',
+    '--json',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     dir: 'artifacts',
     json: false,
@@ -129,6 +137,8 @@ export function parseTrendArgs(argv) {
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for trend CLI: ${token}`)
     }
   }
 
