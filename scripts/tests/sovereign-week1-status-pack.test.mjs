@@ -62,3 +62,10 @@ test('parseStatusPackArgs throws when out-file value is missing', () => {
     /Missing value for --out-file/,
   )
 })
+
+test('parseStatusPackArgs throws when dir value is missing', () => {
+  assert.throws(
+    () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '--dir']),
+    /Missing value for --dir/,
+  )
+})
