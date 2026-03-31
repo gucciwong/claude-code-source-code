@@ -15,6 +15,7 @@
     "sovereign:week1:report": "node scripts/sovereign-week1-report.mjs",
     "sovereign:week1:checkpoint": "node scripts/sovereign-week1-checkpoint.mjs",
     "sovereign:week1:run": "node scripts/sovereign-week1-daily-run.mjs",
+    "sovereign:week1:ci": "node scripts/sovereign-week1-ci-run.mjs",
     "test:sovereign": "node --test scripts/tests/*.test.mjs"
   },
   "engines": {
