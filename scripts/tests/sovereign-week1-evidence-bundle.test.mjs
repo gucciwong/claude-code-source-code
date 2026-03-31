@@ -37,6 +37,36 @@ test('summarizeGateSignals returns fail when runtime is unreachable', () => {
   assert.match(gate.reason, /runtime/i)
 })
 
+test('summarizeGateSignals returns fail when latency target failed', () => {
+  const gate = summarizeGateSignals({
+    runtimeReachable: true,
+    targets: { latencyPass: false, throughputPass: true },
+  })
+
+  assert.equal(gate.readyForDemo, false)
+  assert.match(gate.reason, /latency/i)
+})
+
+test('summarizeGateSignals returns fail when throughput target failed', () => {
+  const gate = summarizeGateSignals({
+    runtimeReachable: true,
+    targets: { latencyPass: true, throughputPass: false },
+  })
+
+  assert.equal(gate.readyForDemo, false)
+  assert.match(gate.reason, /throughput/i)
+})
+
+test('summarizeGateSignals returns ready when all gate signals pass', () => {
+  const gate = summarizeGateSignals({
+    runtimeReachable: true,
+    targets: { latencyPass: true, throughputPass: true },
+  })
+
+  assert.equal(gate.readyForDemo, true)
+  assert.match(gate.reason, /green/i)
+})
+
 test('parseEvidenceBundleArgs throws when --runtime-file value is missing', () => {
   assert.throws(
     () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--runtime-file']),

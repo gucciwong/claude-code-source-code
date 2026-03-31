@@ -88,6 +88,14 @@ test('buildDailyRunArgs always enforces strict gate once', () => {
   assert.deepEqual(args, ['--strict-gate', '--date', '2026-04-01'])
 })
 
+test('buildDailyRunArgs does not duplicate --strict-gate when already present', () => {
+  const args = buildDailyRunArgs(['--strict-gate', '--date', '2026-04-01'])
+  const strictGateArgs = args.filter(value => value === '--strict-gate')
+
+  assert.equal(strictGateArgs.length, 1)
+  assert.deepEqual(args, ['--strict-gate', '--date', '2026-04-01'])
+})
+
 test('classifyExitCode softens gate-blocked run in soft mode', () => {
   const result = classifyExitCode({ childExitCode: 2, mode: 'soft' })
 
@@ -105,4 +113,11 @@ test('classifyExitCode keeps gate-blocked run failing in hard mode', () => {
 test('classifyExitCode passes through non-gate errors in all modes', () => {
   assert.equal(classifyExitCode({ childExitCode: 1, mode: 'soft' }).exitCode, 1)
   assert.equal(classifyExitCode({ childExitCode: 1, mode: 'hard' }).exitCode, 1)
+})
+
+test('classifyExitCode returns zero exit and no gate block on success', () => {
+  const result = classifyExitCode({ childExitCode: 0, mode: 'soft' })
+
+  assert.equal(result.exitCode, 0)
+  assert.equal(result.gateBlocked, false)
 })
