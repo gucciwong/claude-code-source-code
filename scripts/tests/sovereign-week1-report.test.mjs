@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import {
   buildMarkdownReport,
   summarizeReadiness,
+  parseReportArgs,
 } from '../sovereign-week1-report.mjs'
 
 test('summarizeReadiness maps gate state to readable summary', () => {
@@ -43,4 +44,25 @@ test('buildMarkdownReport includes key metrics and status', () => {
   assert.match(report, /Average first-token latency \(ms\): 483/)
   assert.match(report, /Average throughput \(tps\): 33/)
   assert.match(report, /Overall readiness: Ready/)
+})
+
+test('parseReportArgs throws when evidence-file value is missing', () => {
+  assert.throws(
+    () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '--evidence-file']),
+    /Missing value for --evidence-file/,
+  )
+})
+
+test('parseReportArgs throws when out-file value is missing', () => {
+  assert.throws(
+    () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '--out-file']),
+    /Missing value for --out-file/,
+  )
+})
+
+test('parseReportArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '--unknown']),
+    /Unknown option for report CLI/,
+  )
 })
