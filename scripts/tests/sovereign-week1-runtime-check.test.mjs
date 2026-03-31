@@ -33,6 +33,13 @@ test('parseRuntimeCheckArgs throws when --port is invalid', () => {
   )
 })
 
+test('parseRuntimeCheckArgs throws when --port is out of range', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--port', '70000']),
+    /Invalid --port value/,
+  )
+})
+
 test('parseRuntimeCheckArgs throws when --host value is missing', () => {
   assert.throws(
     () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--host']),
@@ -52,6 +59,35 @@ test('parseRuntimeCheckArgs throws when --timeout-ms value is missing', () => {
     () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--timeout-ms']),
     /Missing value for --timeout-ms/,
   )
+})
+
+test('parseRuntimeCheckArgs throws when --timeout-ms value is invalid', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--timeout-ms', '0']),
+    /Invalid --timeout-ms value/,
+  )
+})
+
+test('parseRuntimeCheckArgs parses valid explicit values', () => {
+  const args = parseRuntimeCheckArgs([
+    'node',
+    'scripts/sovereign-week1-runtime-check.mjs',
+    '--host',
+    'localhost',
+    '--port',
+    '11555',
+    '--vram',
+    '8gb',
+    '--timeout-ms',
+    '5000',
+    '--json',
+  ])
+
+  assert.equal(args.host, 'localhost')
+  assert.equal(args.port, 11555)
+  assert.equal(args.vram, '8GB')
+  assert.equal(args.timeoutMs, 5000)
+  assert.equal(args.json, true)
 })
 
 test('parseRuntimeCheckArgs throws on unknown options', () => {

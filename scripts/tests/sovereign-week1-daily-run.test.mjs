@@ -23,6 +23,11 @@ test('buildDailyPaths creates stable output file names', () => {
   assert.equal(paths.checkpointFile, 'artifacts/week1-checkpoint-2026-04-01.txt')
 })
 
+test('buildDailyPaths defaults to artifacts when outDir is omitted', () => {
+  const paths = buildDailyPaths({ date: '2026-04-01' })
+  assert.equal(paths.runtimeFile, 'artifacts/week1-runtime-2026-04-01.json')
+})
+
 test('buildCommands wires runtime, benchmark, and evidence steps in order', () => {
   const commands = buildCommands({
     date: '2026-04-01',
@@ -56,6 +61,12 @@ test('extractStdoutFromExecError returns stdout when command exits non-zero', ()
 
   const stdout = extractStdoutFromExecError(error)
   assert.equal(stdout, '{"runtime":{"reachable":false}}\n')
+})
+
+test('extractStdoutFromExecError returns null for non-object or missing stdout', () => {
+  assert.equal(extractStdoutFromExecError(null), null)
+  assert.equal(extractStdoutFromExecError({}), null)
+  assert.equal(extractStdoutFromExecError({ stdout: 123 }), null)
 })
 
 test('buildRunSummary returns compact machine-readable status object', () => {
@@ -148,6 +159,30 @@ test('parseDailyRunArgs throws when --tier value is unsupported', () => {
     () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--tier', '16GB']),
     /Unsupported --tier value/,
   )
+})
+
+test('parseDailyRunArgs parses provided values and booleans', () => {
+  const args = parseDailyRunArgs([
+    'node',
+    'scripts/sovereign-week1-daily-run.mjs',
+    '--date',
+    '2026-04-01',
+    '--tier',
+    '12GB',
+    '--out-dir',
+    'custom-artifacts',
+    '--sample-file',
+    'samples.json',
+    '--dry-run',
+    '--strict-gate',
+  ])
+
+  assert.equal(args.date, '2026-04-01')
+  assert.equal(args.tier, '12GB')
+  assert.equal(args.outDir, 'custom-artifacts')
+  assert.equal(args.sampleFile, 'samples.json')
+  assert.equal(args.dryRun, true)
+  assert.equal(args.strictGate, true)
 })
 
 test('parseDailyRunArgs throws on unknown options', () => {
