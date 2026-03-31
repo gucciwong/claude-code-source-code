@@ -44,6 +44,13 @@ test('parseCiArgs throws on unknown wrapper options', () => {
   )
 })
 
+test('parseCiArgs throws when --mode value is unsupported', () => {
+  assert.throws(
+    () => parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs', '--mode', 'medium']),
+    /Unsupported mode/,
+  )
+})
+
 test('parseCiArgs forwards args after -- separator without wrapper validation', () => {
   const parsed = parseCiArgs([
     'node',
