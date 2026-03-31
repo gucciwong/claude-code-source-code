@@ -7,6 +7,7 @@ import {
   extractStdoutFromExecError,
   buildRunSummary,
   evaluateExitCode,
+  parseDailyRunArgs,
 } from '../sovereign-week1-daily-run.mjs'
 
 test('buildDailyPaths creates stable output file names', () => {
@@ -87,4 +88,18 @@ test('evaluateExitCode returns 2 only when strict gate mode is enabled and run i
   assert.equal(evaluateExitCode({ strictGate: false, readyForDemo: false }), 0)
   assert.equal(evaluateExitCode({ strictGate: true, readyForDemo: true }), 0)
   assert.equal(evaluateExitCode({ strictGate: true, readyForDemo: false }), 2)
+})
+
+test('parseDailyRunArgs throws when --tier value is missing', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--tier']),
+    /Missing value for --tier/,
+  )
+})
+
+test('parseDailyRunArgs throws when --out-dir value is missing', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--out-dir']),
+    /Missing value for --out-dir/,
+  )
 })

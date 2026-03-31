@@ -47,7 +47,7 @@ export function evaluateExitCode({ strictGate, readyForDemo }) {
   return 0
 }
 
-function parseArgs(argv) {
+export function parseDailyRunArgs(argv) {
   const today = new Date().toISOString().slice(0, 10)
   const args = {
     date: today,
@@ -62,15 +62,23 @@ function parseArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--date' && next) {
+    if (token === '--date' && !next) {
+      throw new Error('Missing value for --date.')
+    } else if (token === '--date' && next) {
       args.date = next
       i += 1
+    } else if (token === '--tier' && !next) {
+      throw new Error('Missing value for --tier.')
     } else if (token === '--tier' && next) {
       args.tier = next
       i += 1
+    } else if (token === '--out-dir' && !next) {
+      throw new Error('Missing value for --out-dir.')
     } else if (token === '--out-dir' && next) {
       args.outDir = next
       i += 1
+    } else if (token === '--sample-file' && !next) {
+      throw new Error('Missing value for --sample-file.')
     } else if (token === '--sample-file' && next) {
       args.sampleFile = next
       i += 1
@@ -128,7 +136,7 @@ async function runNodeScript(scriptPath, scriptArgs) {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseDailyRunArgs(process.argv)
   const paths = buildDailyPaths({ outDir: args.outDir, date: args.date })
   const commands = buildCommands({
     date: args.date,
