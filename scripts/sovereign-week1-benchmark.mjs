@@ -122,6 +122,10 @@ export function parseBenchmarkArgs(argv) {
       process.exit(0)
     } else if (token.startsWith('--') && !knownOptions.has(token)) {
       throw new Error(`Unknown option for benchmark CLI: ${token}`)
+    } else if (token.startsWith('-')) {
+      throw new Error(`Unknown option for benchmark CLI: ${token}`)
+    } else {
+      throw new Error(`Unexpected positional argument: ${token}`)
     }
   }
 

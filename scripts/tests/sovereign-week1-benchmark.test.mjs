@@ -59,3 +59,17 @@ test('parseBenchmarkArgs throws on unknown options', () => {
     /Unknown option for benchmark CLI/,
   )
 })
+
+test('parseBenchmarkArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '-x']),
+    /Unknown option for benchmark CLI/,
+  )
+})
+
+test('parseBenchmarkArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
