@@ -53,6 +53,13 @@ test('parseBenchmarkArgs throws when --file value is missing', () => {
   )
 })
 
+test('parseBenchmarkArgs throws when --tier value is missing', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--tier']),
+    /Missing value for --tier/,
+  )
+})
+
 test('parseBenchmarkArgs throws on unknown options', () => {
   assert.throws(
     () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--unknown']),

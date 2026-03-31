@@ -97,6 +97,20 @@ test('parseDailyRunArgs throws when --tier value is missing', () => {
   )
 })
 
+test('parseDailyRunArgs throws when --date value is missing', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--date']),
+    /Missing value for --date/,
+  )
+})
+
+test('parseDailyRunArgs throws when --sample-file value is missing', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--sample-file']),
+    /Missing value for --sample-file/,
+  )
+})
+
 test('parseDailyRunArgs throws when --out-dir value is missing', () => {
   assert.throws(
     () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--out-dir']),

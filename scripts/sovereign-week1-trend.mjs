@@ -120,7 +120,9 @@ export function parseTrendArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--dir' && next) {
+    if (token === '--dir' && !next) {
+      throw new Error('Missing value for --dir.')
+    } else if (token === '--dir' && next) {
       args.dir = next
       i += 1
     } else if (token === '--readiness-threshold' && !next) {

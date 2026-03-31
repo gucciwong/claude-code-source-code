@@ -88,6 +88,13 @@ test('parseTrendArgs throws when readiness-threshold value is missing', () => {
   )
 })
 
+test('parseTrendArgs throws when --dir value is missing', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--dir']),
+    /Missing value for --dir/,
+  )
+})
+
 test('parseTrendArgs throws on unknown options', () => {
   assert.throws(
     () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--unknown-flag']),
