@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import {
   buildEvidenceBundle,
   summarizeGateSignals,
+  parseEvidenceBundleArgs,
 } from '../sovereign-week1-evidence-bundle.mjs'
 
 test('buildEvidenceBundle composes runtime and benchmark evidence', () => {
@@ -34,4 +35,25 @@ test('summarizeGateSignals returns fail when runtime is unreachable', () => {
 
   assert.equal(gate.readyForDemo, false)
   assert.match(gate.reason, /runtime/i)
+})
+
+test('parseEvidenceBundleArgs throws when --runtime-file value is missing', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--runtime-file']),
+    /Missing value for --runtime-file/,
+  )
+})
+
+test('parseEvidenceBundleArgs throws when --benchmark-file value is missing', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--benchmark-file']),
+    /Missing value for --benchmark-file/,
+  )
+})
+
+test('parseEvidenceBundleArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--unknown']),
+    /Unknown option for evidence-bundle CLI/,
+  )
 })

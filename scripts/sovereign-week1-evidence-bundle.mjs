@@ -48,7 +48,16 @@ export function summarizeGateSignals(bundle) {
   return { readyForDemo: true, reason: 'All Week 1 gate signals are green' }
 }
 
-function parseArgs(argv) {
+export function parseEvidenceBundleArgs(argv) {
+  const knownOptions = new Set([
+    '--date',
+    '--runtime-file',
+    '--benchmark-file',
+    '--json',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     date: new Date().toISOString().slice(0, 10),
     runtimeFile: null,
@@ -60,12 +69,18 @@ function parseArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--date' && next) {
+    if (token === '--date' && !next) {
+      throw new Error('Missing value for --date.')
+    } else if (token === '--date' && next) {
       args.date = next
       i += 1
+    } else if (token === '--runtime-file' && !next) {
+      throw new Error('Missing value for --runtime-file.')
     } else if (token === '--runtime-file' && next) {
       args.runtimeFile = next
       i += 1
+    } else if (token === '--benchmark-file' && !next) {
+      throw new Error('Missing value for --benchmark-file.')
     } else if (token === '--benchmark-file' && next) {
       args.benchmarkFile = next
       i += 1
@@ -74,6 +89,8 @@ function parseArgs(argv) {
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for evidence-bundle CLI: ${token}`)
     }
   }
 
@@ -103,7 +120,7 @@ function printHuman(bundle, gate) {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseEvidenceBundleArgs(process.argv)
 
   if (!args.runtimeFile || !args.benchmarkFile) {
     throw new Error('both --runtime-file and --benchmark-file are required')
