@@ -1,11 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   parseCiArgs,
   buildDailyRunArgs,
   classifyExitCode,
 } from '../sovereign-week1-ci-run.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('parseCiArgs defaults to soft mode and forwards no extra args', () => {
   const parsed = parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs'])
@@ -120,4 +127,64 @@ test('classifyExitCode returns zero exit and no gate block on success', () => {
 
   assert.equal(result.exitCode, 0)
   assert.equal(result.gateBlocked, false)
+})
+
+test('ci-run hard mode exits with code 2 when daily run is gate-blocked', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-ci-hard-'))
+  const sampleFile = join(dir, 'degraded-samples.json')
+
+  await writeFile(
+    sampleFile,
+    JSON.stringify([
+      { firstTokenLatencyMs: 900, tokensPerSecond: 20 },
+      { firstTokenLatencyMs: 950, tokensPerSecond: 18 },
+    ]),
+    'utf8',
+  )
+
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-ci-run.mjs',
+      '--mode',
+      'hard',
+      '--date',
+      '2026-04-01',
+      '--sample-file',
+      sampleFile,
+      '--out-dir',
+      dir,
+    ]),
+    error => {
+      assert.equal(error.code, 2)
+      return true
+    },
+  )
+})
+
+test('ci-run soft mode downgrades gate block to warning and exits zero', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-ci-soft-'))
+  const sampleFile = join(dir, 'degraded-samples.json')
+
+  await writeFile(
+    sampleFile,
+    JSON.stringify([
+      { firstTokenLatencyMs: 900, tokensPerSecond: 20 },
+      { firstTokenLatencyMs: 950, tokensPerSecond: 18 },
+    ]),
+    'utf8',
+  )
+
+  const { stderr } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--mode',
+    'soft',
+    '--date',
+    '2026-04-01',
+    '--sample-file',
+    sampleFile,
+    '--out-dir',
+    dir,
+  ])
+
+  assert.match(stderr, /treated as warning in soft mode/)
 })
