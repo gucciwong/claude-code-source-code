@@ -97,7 +97,7 @@ async function readSummaryFiles(dir) {
   return summaries
 }
 
-function parseArgs(argv) {
+export function parseTrendArgs(argv) {
   const args = {
     dir: 'artifacts',
     json: false,
@@ -111,6 +111,8 @@ function parseArgs(argv) {
     if (token === '--dir' && next) {
       args.dir = next
       i += 1
+    } else if (token === '--readiness-threshold' && !next) {
+      throw new Error('Missing value for --readiness-threshold. Use a number between 0 and 1.')
     } else if (token === '--readiness-threshold' && next) {
       const parsed = Number(next)
       if (!Number.isFinite(parsed) || parsed < 0 || parsed > 1) {
@@ -140,7 +142,7 @@ function printHelp() {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseTrendArgs(process.argv)
   const summaries = await readSummaryFiles(args.dir)
   const metrics = computeTrendMetrics(summaries, {
     readinessThreshold: args.readinessThreshold,

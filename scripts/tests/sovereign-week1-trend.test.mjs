@@ -5,6 +5,7 @@ import {
   computeTrendMetrics,
   buildTrendReport,
   sortSummariesByDate,
+  parseTrendArgs,
 } from '../sovereign-week1-trend.mjs'
 
 test('sortSummariesByDate sorts ascending by date key', () => {
@@ -77,4 +78,11 @@ test('buildTrendReport includes high-level metrics and top blocked reasons', () 
   assert.match(report, /Latest blocked streak: 0 day\(s\)/)
   assert.match(report, /Window: 2026-04-01 to 2026-04-04/)
   assert.match(report, /Runtime is unreachable: 1/)
+})
+
+test('parseTrendArgs throws when readiness-threshold value is missing', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--readiness-threshold']),
+    /Missing value for --readiness-threshold/,
+  )
 })
