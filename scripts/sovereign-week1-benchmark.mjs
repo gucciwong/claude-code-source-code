@@ -83,7 +83,15 @@ export function buildReport({ tier, samples }) {
   }
 }
 
-function parseArgs(argv) {
+export function parseBenchmarkArgs(argv) {
+  const knownOptions = new Set([
+    '--file',
+    '--tier',
+    '--json',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     file: null,
     tier: null,
@@ -94,10 +102,17 @@ function parseArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--file' && next) {
+    if (token === '--file' && !next) {
+      throw new Error('Missing value for --file.')
+    } else if (token === '--file' && next) {
       args.file = next
       i += 1
+    } else if (token === '--tier' && !next) {
+      throw new Error('Missing value for --tier.')
     } else if (token === '--tier' && next) {
+      if (!normalizeTier(next)) {
+        throw new Error(`Unsupported --tier value: ${next}. Use 6GB, 8GB, 12GB, or 24GB.`)
+      }
       args.tier = next
       i += 1
     } else if (token === '--json') {
@@ -105,6 +120,8 @@ function parseArgs(argv) {
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for benchmark CLI: ${token}`)
     }
   }
 
@@ -132,7 +149,7 @@ function printHuman(report) {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseBenchmarkArgs(process.argv)
 
   if (!args.file) {
     throw new Error('missing required argument: --file <samples.json>')

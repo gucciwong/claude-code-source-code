@@ -5,6 +5,7 @@ import {
   computeMetrics,
   validateSamples,
   buildReport,
+  parseBenchmarkArgs,
 } from '../sovereign-week1-benchmark.mjs'
 
 test('computeMetrics returns mean first token latency and mean throughput', () => {
@@ -43,4 +44,18 @@ test('buildReport computes target checks from PRD thresholds', () => {
   assert.equal(report.targets.throughputMinimumTps, 30)
   assert.equal(report.targets.latencyPass, true)
   assert.equal(report.targets.throughputPass, true)
+})
+
+test('parseBenchmarkArgs throws when --file value is missing', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--file']),
+    /Missing value for --file/,
+  )
+})
+
+test('parseBenchmarkArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--unknown']),
+    /Unknown option for benchmark CLI/,
+  )
 })
