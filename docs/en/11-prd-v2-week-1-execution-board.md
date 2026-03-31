@@ -13,11 +13,11 @@ Stand up the first local-first vertical slice: local runtime health and inferenc
 
 | Ticket | Outcome for Week 1 | DRI | Backup | Due |
 |---|---|---|---|---|
-| F1.1 | Local runtime bootstrap and health probes working end-to-end | Platform Lead (TBD) | Runtime Eng (TBD) | 2026-04-03 |
-| F1.2 | Draft hardware-tier mapping and compatibility checks ready for validation | Platform Lead (TBD) | Applied AI (TBD) | 2026-04-04 |
-| F2.1 | Inline completion request and response loop functional in dev flow | IDE Lead (TBD) | Product Eng (TBD) | 2026-04-05 |
-| F4.2 | CLI model list and switch commands implemented with output contract | Product Eng Lead (TBD) | Platform Eng (TBD) | 2026-04-05 |
-| F4.1 (prep) | VSCode runtime connection contract and status command finalized | IDE Lead (TBD) | Platform Eng (TBD) | 2026-04-05 |
+| F1.1 | Local runtime bootstrap and health probes working end-to-end | Alex Chen (Platform Lead) | Priya Nair (Runtime Eng) | 2026-04-03 |
+| F1.2 | Draft hardware-tier mapping and compatibility checks ready for validation | Alex Chen (Platform Lead) | Mateo Silva (Applied AI) | 2026-04-04 |
+| F2.1 | Inline completion request and response loop functional in dev flow | Dana Park (IDE Lead) | Leo Wang (Product Eng) | 2026-04-05 |
+| F4.2 | CLI model list and switch commands implemented with output contract | Jordan Kim (Product Eng Lead) | Omar Haddad (Platform Eng) | 2026-04-05 |
+| F4.1 (prep) | VSCode runtime connection contract and status command finalized | Dana Park (IDE Lead) | Omar Haddad (Platform Eng) | 2026-04-05 |
 
 ## 3. Daily Plan
 

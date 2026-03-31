@@ -28,30 +28,30 @@ Provide a single-page operational view of Month 1 progress across streams, ticke
 
 | Stream | Key Tickets | Week Target | Current Status | DRI | Notes |
 |---|---|---|---|---|---|
-| Inference Runtime | F1.1, F1.2, F1.3 | W1-W3 | Planned | Platform Lead (TBD) | Ollama bootstrap, model compatibility, benchmarks |
-| Completion Experience | F2.1 | W1-W2 | Planned | IDE Lead (TBD) | Suggest or accept or reject loop and fallback behavior |
-| IDE and CLI Surface | F4.1, F4.2 | W1-W3 | Planned | Product Eng Lead (TBD) | VSCode status path and CLI operation parity |
-| Context and Retrieval | F3.1, F3.2 prototype | W2-W3 | Planned | Core AI Lead (TBD) | Indexing kickoff and hybrid retrieval prototype |
-| Release and Operations | v0.1 gate prep | W4 | Planned | Product DRI (TBD) | Evidence packaging and go or no-go review |
+| Inference Runtime | F1.1, F1.2, F1.3 | W1-W3 | In Progress | Alex Chen (Platform Lead) | Ollama bootstrap, model compatibility, benchmarks |
+| Completion Experience | F2.1 | W1-W2 | In Progress | Dana Park (IDE Lead) | Suggest or accept or reject loop and fallback behavior |
+| IDE and CLI Surface | F4.1, F4.2 | W1-W3 | In Progress | Jordan Kim (Product Eng Lead) | VSCode status path and CLI operation parity |
+| Context and Retrieval | F3.1, F3.2 prototype | W2-W3 | Not Started | Irene Xu (Core AI Lead) | Indexing kickoff and hybrid retrieval prototype |
+| Release and Operations | v0.1 gate prep | W4 | Not Started | Maya Rossi (Product DRI) | Evidence packaging and go or no-go review |
 
 ## 5. Milestone and Gate Checklist
 
 | Milestone or Gate | Target Week | Required Evidence | Status |
 |---|---|---|---|
-| Runtime bootstrap validated | Week 1 | Health checks, local inference trace, setup guidance | Pending |
-| Completion MVP stabilized | Week 2 | Suggest or accept or reject flows plus telemetry audit | Pending |
-| Benchmark baseline finalized | Week 3 | Tiered latency and throughput reports plus regression thresholds | Pending |
-| v0.1 go or no-go review | Week 4 | Criterion matrix, defect ledger, final demo and readiness pack | Pending |
+| Runtime bootstrap validated | Week 1 | Health checks, local inference trace, setup guidance | In Progress |
+| Completion MVP stabilized | Week 2 | Suggest or accept or reject flows plus telemetry audit | Planned |
+| Benchmark baseline finalized | Week 3 | Tiered latency and throughput reports plus regression thresholds | Planned |
+| v0.1 go or no-go review | Week 4 | Criterion matrix, defect ledger, final demo and readiness pack | Planned |
 
 ## 6. KPI Rollup (Month 1 Baseline)
 
 | Metric | Target Reference | Baseline Snapshot | Owner | Status |
 |---|---|---|---|---|
-| first_token_latency_ms | <=500ms (7B), <=1000ms (32B) | TBD | Platform Lead (TBD) | Pending |
-| tokens_per_second | >=30 tps | TBD | Platform Lead (TBD) | Pending |
-| acceptance_rate | Week-over-week stable or improving | TBD | IDE Lead (TBD) | Pending |
-| schema_mismatch_rate | <0.2% | TBD | Data DRI (TBD) | Pending |
-| critical_field_null_rate | <0.5% | TBD | Data DRI (TBD) | Pending |
+| first_token_latency_ms | <=500ms (7B), <=1000ms (32B) | Collecting Week 1 baseline | Alex Chen (Platform Lead) | Collecting |
+| tokens_per_second | >=30 tps | Collecting Week 1 baseline | Alex Chen (Platform Lead) | Collecting |
+| acceptance_rate | Week-over-week stable or improving | Starts after completion MVP validation | Dana Park (IDE Lead) | Planned |
+| schema_mismatch_rate | <0.2% | Telemetry pipeline checks in progress | Sofia Patel (Data DRI) | In Progress |
+| critical_field_null_rate | <0.5% | Telemetry pipeline checks in progress | Sofia Patel (Data DRI) | In Progress |
 
 ## 7. Defect and Risk Rollup
 
@@ -59,7 +59,7 @@ Provide a single-page operational view of Month 1 progress across streams, ticke
 
 | Severity | Open | Mitigated | Deferred with plan | Owner |
 |---|---|---|---|---|
-| P0 | 0 (target) | 0 | 0 | Engineering Manager (TBD) |
+| P0 | 0 (target) | 0 | 0 | Noah Bennett (Engineering Manager) |
 | P1 | 0 (target) | 0 | 0 | Stream DRIs |
 | P2+ | Track weekly | Track weekly | Track weekly | Stream DRIs |
 
@@ -86,11 +86,11 @@ Mitigation ownership:
 
 | Decision Area | Required Sign-off | Status |
 |---|---|---|
-| Runtime and compatibility | Platform Lead (TBD) | Pending |
-| Completion and UX | IDE Lead (TBD) | Pending |
-| CLI contract and operability | Product Eng Lead (TBD) | Pending |
-| KPI and benchmark validity | Data DRI (TBD) | Pending |
-| Overall release recommendation | Product DRI (TBD) | Pending |
+| Runtime and compatibility | Alex Chen (Platform Lead) | Pending |
+| Completion and UX | Dana Park (IDE Lead) | Pending |
+| CLI contract and operability | Jordan Kim (Product Eng Lead) | Pending |
+| KPI and benchmark validity | Sofia Patel (Data DRI) | Pending |
+| Overall release recommendation | Maya Rossi (Product DRI) | Pending |
 
 ## 10. Transition to Sprint 2
 

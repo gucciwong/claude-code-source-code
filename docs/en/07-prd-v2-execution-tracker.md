@@ -73,11 +73,11 @@ Track delivery against the Sovereign Coder roadmap and ensure every phase milest
 
 | Ticket | Scope Summary | DRI | Support | Due Date | Status |
 |---|---|---|---|---|---|
-| F1.1 | Ollama integration and local runtime bootstrap | Platform Lead (TBD) | Runtime Eng | 2026-04-07 | Planned |
-| F1.2 | Hardware profile mapping and model compatibility guardrails | Platform Lead (TBD) | Applied AI | 2026-04-10 | Planned |
-| F2.1 | Inline completion MVP and feedback events | IDE Lead (TBD) | Data Eng | 2026-04-14 | Planned |
-| F4.2 | CLI model operations and completion interface | Product Eng Lead (TBD) | Platform Eng | 2026-04-12 | Planned |
-| F4.1 | VSCode MVP runtime connection and status UX | IDE Lead (TBD) | Platform Eng | 2026-04-18 | Planned |
+| F1.1 | Ollama integration and local runtime bootstrap | Alex Chen (Platform Lead) | Priya Nair (Runtime Eng) | 2026-04-07 | In Progress |
+| F1.2 | Hardware profile mapping and model compatibility guardrails | Alex Chen (Platform Lead) | Mateo Silva (Applied AI) | 2026-04-10 | In Progress |
+| F2.1 | Inline completion MVP and feedback events | Dana Park (IDE Lead) | Sofia Patel (Data Eng) | 2026-04-14 | In Progress |
+| F4.2 | CLI model operations and completion interface | Jordan Kim (Product Eng Lead) | Omar Haddad (Platform Eng) | 2026-04-12 | In Progress |
+| F4.1 | VSCode MVP runtime connection and status UX | Dana Park (IDE Lead) | Omar Haddad (Platform Eng) | 2026-04-18 | In Progress |
 
 ## 10. v0.1 Entry Criteria (Go or No-Go)
 
