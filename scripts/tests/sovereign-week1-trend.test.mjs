@@ -42,6 +42,38 @@ test('computeTrendMetrics returns readiness rate and reason breakdown', () => {
   assert.equal(metrics.blockedReasonCounts['Throughput below threshold'], 1)
 })
 
+test('computeTrendMetrics returns zero metrics for empty input', () => {
+  const metrics = computeTrendMetrics([])
+
+  assert.equal(metrics.totalDays, 0)
+  assert.equal(metrics.readyDays, 0)
+  assert.equal(metrics.readinessRate, 0)
+  assert.equal(metrics.latestBlockedStreak, 0)
+  assert.strictEqual(metrics.window.startDate, null)
+  assert.strictEqual(metrics.window.endDate, null)
+  assert.deepStrictEqual(metrics.blockedReasonCounts, {})
+})
+
+test('computeTrendMetrics handles all-ready days with zero blocked streak', () => {
+  const metrics = computeTrendMetrics([
+    { date: '2026-04-01', readyForDemo: true, reason: 'All green' },
+    { date: '2026-04-02', readyForDemo: true, reason: 'All green' },
+  ])
+
+  assert.equal(metrics.readyDays, 2)
+  assert.equal(metrics.blockedDays, 0)
+  assert.equal(metrics.latestBlockedStreak, 0)
+  assert.deepStrictEqual(metrics.blockedReasonCounts, {})
+})
+
+test('computeTrendMetrics uses Unknown reason fallback for items with no reason field', () => {
+  const metrics = computeTrendMetrics([
+    { date: '2026-04-01', readyForDemo: false },
+  ])
+
+  assert.equal(metrics.blockedReasonCounts['Unknown reason'], 1)
+})
+
 test('computeTrendMetrics allows custom readiness threshold and computes blocked streak', () => {
   const metrics = computeTrendMetrics(
     [
