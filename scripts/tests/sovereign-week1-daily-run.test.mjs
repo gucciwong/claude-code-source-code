@@ -1,5 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   buildDailyPaths,
@@ -9,6 +11,8 @@ import {
   evaluateExitCode,
   parseDailyRunArgs,
 } from '../sovereign-week1-daily-run.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('buildDailyPaths creates stable output file names', () => {
   const paths = buildDailyPaths({
@@ -204,4 +208,23 @@ test('parseDailyRunArgs throws on positional arguments', () => {
     () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', 'unexpected']),
     /Unexpected positional argument/,
   )
+})
+
+test('daily-run CLI --dry-run prints planned output paths and commands', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-daily-run.mjs',
+    '--date',
+    '2026-04-01',
+    '--tier',
+    '8GB',
+    '--sample-file',
+    'scripts/tests/fixtures/week1-samples.json',
+    '--dry-run',
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.paths.runtimeFile, 'artifacts/week1-runtime-2026-04-01.json')
+  assert.equal(payload.paths.summaryFile, 'artifacts/week1-summary-2026-04-01.json')
+  assert.equal(Array.isArray(payload.commands), true)
+  assert.equal(payload.commands.length, 5)
 })

@@ -1,10 +1,15 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { createServer } from 'node:http'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   parseRuntimeCheckArgs,
   normalizeTier,
 } from '../sovereign-week1-runtime-check.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('normalizeTier accepts supported tiers and normalizes casing/spacing', () => {
   assert.equal(normalizeTier('8gb'), '8GB')
@@ -108,5 +113,63 @@ test('parseRuntimeCheckArgs throws on positional arguments', () => {
   assert.throws(
     () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', 'unexpected']),
     /Unexpected positional argument/,
+  )
+})
+
+test('runtime-check CLI emits JSON for reachable local runtime endpoint', async () => {
+  const server = createServer((req, res) => {
+    if (req.url === '/api/tags') {
+      res.setHeader('content-type', 'application/json')
+      res.end(JSON.stringify({ models: [{ name: 'model-b' }, { name: 'model-a' }] }))
+      return
+    }
+    res.statusCode = 404
+    res.end('not found')
+  })
+
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const address = server.address()
+  const port = typeof address === 'object' && address ? address.port : 0
+
+  try {
+    const { stdout } = await execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-runtime-check.mjs',
+      '--host',
+      '127.0.0.1',
+      '--port',
+      String(port),
+      '--vram',
+      '8GB',
+      '--json',
+    ])
+
+    const payload = JSON.parse(stdout)
+    assert.equal(payload.runtime.reachable, true)
+    assert.deepEqual(payload.models.names, ['model-a', 'model-b'])
+    assert.equal(payload.profile.normalizedTier, '8GB')
+  } finally {
+    await new Promise(resolve => server.close(resolve))
+  }
+})
+
+test('runtime-check CLI exits with code 2 when runtime is unreachable', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-runtime-check.mjs',
+      '--host',
+      '127.0.0.1',
+      '--port',
+      '1',
+      '--json',
+      '--timeout-ms',
+      '20',
+    ]),
+    error => {
+      assert.equal(error.code, 2)
+      const payload = JSON.parse(error.stdout)
+      assert.equal(payload.runtime.reachable, false)
+      assert.equal(typeof payload.runtime.error, 'string')
+      return true
+    },
   )
 })
