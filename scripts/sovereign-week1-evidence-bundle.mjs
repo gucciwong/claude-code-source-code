@@ -91,6 +91,10 @@ export function parseEvidenceBundleArgs(argv) {
       process.exit(0)
     } else if (token.startsWith('--') && !knownOptions.has(token)) {
       throw new Error(`Unknown option for evidence-bundle CLI: ${token}`)
+    } else if (token.startsWith('-')) {
+      throw new Error(`Unknown option for evidence-bundle CLI: ${token}`)
+    } else {
+      throw new Error(`Unexpected positional argument: ${token}`)
     }
   }
 

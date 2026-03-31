@@ -57,3 +57,17 @@ test('parseEvidenceBundleArgs throws on unknown options', () => {
     /Unknown option for evidence-bundle CLI/,
   )
 })
+
+test('parseEvidenceBundleArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '-x']),
+    /Unknown option for evidence-bundle CLI/,
+  )
+})
+
+test('parseEvidenceBundleArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
