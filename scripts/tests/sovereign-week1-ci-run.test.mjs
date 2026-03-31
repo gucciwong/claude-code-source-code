@@ -30,6 +30,13 @@ test('parseCiArgs accepts hard mode and forwards remaining args', () => {
   assert.deepEqual(parsed.forwardArgs, ['--date', '2026-04-01', '--tier', '8GB'])
 })
 
+test('parseCiArgs throws when --mode is provided without value', () => {
+  assert.throws(
+    () => parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs', '--mode']),
+    /Missing value for --mode/,
+  )
+})
+
 test('buildDailyRunArgs always enforces strict gate once', () => {
   const args = buildDailyRunArgs(['--date', '2026-04-01'])
   const strictGateArgs = args.filter(value => value === '--strict-gate')
