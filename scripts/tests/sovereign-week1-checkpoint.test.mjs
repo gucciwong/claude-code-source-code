@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import {
   buildCheckpointSummary,
   toCheckpointText,
+  parseCheckpointArgs,
 } from '../sovereign-week1-checkpoint.mjs'
 
 test('buildCheckpointSummary maps evidence to checkpoint fields', () => {
@@ -43,4 +44,25 @@ test('toCheckpointText renders concise 4-line checkpoint update', () => {
   assert.match(lines[2], /Latency: 470 ms/)
   assert.match(lines[3], /Throughput: 34 tps/)
   assert.match(lines[4], /Reason: All Week 1 gate signals are green/)
+})
+
+test('parseCheckpointArgs throws when evidence-file value is missing', () => {
+  assert.throws(
+    () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '--evidence-file']),
+    /Missing value for --evidence-file/,
+  )
+})
+
+test('parseCheckpointArgs throws when out-file value is missing', () => {
+  assert.throws(
+    () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '--out-file']),
+    /Missing value for --out-file/,
+  )
+})
+
+test('parseCheckpointArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '--unknown']),
+    /Unknown option for checkpoint CLI/,
+  )
 })

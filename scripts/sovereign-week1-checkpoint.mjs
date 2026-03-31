@@ -25,7 +25,14 @@ export function toCheckpointText(summary) {
   ].join('\n')
 }
 
-function parseArgs(argv) {
+export function parseCheckpointArgs(argv) {
+  const knownOptions = new Set([
+    '--evidence-file',
+    '--out-file',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     evidenceFile: null,
     outFile: null,
@@ -35,15 +42,21 @@ function parseArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
-    if (token === '--evidence-file' && next) {
+    if (token === '--evidence-file' && !next) {
+      throw new Error('Missing value for --evidence-file.')
+    } else if (token === '--evidence-file' && next) {
       args.evidenceFile = next
       i += 1
+    } else if (token === '--out-file' && !next) {
+      throw new Error('Missing value for --out-file.')
     } else if (token === '--out-file' && next) {
       args.outFile = next
       i += 1
     } else if (token === '--help' || token === '-h') {
       console.log('Usage: node scripts/sovereign-week1-checkpoint.mjs --evidence-file <path> --out-file <path>')
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for checkpoint CLI: ${token}`)
     }
   }
 
@@ -51,7 +64,7 @@ function parseArgs(argv) {
 }
 
 async function runCli() {
-  const args = parseArgs(process.argv)
+  const args = parseCheckpointArgs(process.argv)
   if (!args.evidenceFile || !args.outFile) {
     throw new Error('both --evidence-file and --out-file are required')
   }
