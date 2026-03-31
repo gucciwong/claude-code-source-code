@@ -15,6 +15,7 @@ Provide a single-page operational view of Month 1 progress across streams, ticke
 2. Week 2: docs/en/12-prd-v2-week-2-execution-board.md
 3. Week 3: docs/en/13-prd-v2-week-3-execution-board.md
 4. Week 4: docs/en/14-prd-v2-week-4-closure-board.md
+5. Week 1 kickoff runbook: docs/en/16-prd-v2-week-1-kickoff-runbook.md
 
 ## 3. Month 1 Objective Summary
 

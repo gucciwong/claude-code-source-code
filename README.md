@@ -41,7 +41,8 @@ docs/
 │   ├── [12-prd-v2-week-2-execution-board.md]  # Sovereign Week 2 board — stabilization, benchmarks, F3.1 kickoff
 │   ├── [13-prd-v2-week-3-execution-board.md]  # Sovereign Week 3 board — indexing, retrieval, v0.1 gate prep
 │   ├── [14-prd-v2-week-4-closure-board.md]    # Sovereign Week 4 closure — v0.1 gate, burn-down, sprint handoff
-│   └── [15-prd-v2-month-1-master-tracker.md]  # Sovereign Month 1 tracker — one-page status, risks, and gates
+│   ├── [15-prd-v2-month-1-master-tracker.md]  # Sovereign Month 1 tracker — one-page status, risks, and gates
+│   └── [16-prd-v2-week-1-kickoff-runbook.md]  # Sovereign Week 1 kickoff — agenda, commitments, escalation path
 │
 └── zh/                                        # 中文
     ├── [01-遥测与隐私分析.md]                    # 遥测与隐私 — 收集了什么，为什么无法退出

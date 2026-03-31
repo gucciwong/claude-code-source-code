@@ -2,8 +2,9 @@
 
 > Scope Window: Foundation Month 1, Week 1
 > Alignment: F1.1, F1.2, F2.1, F4.2, F4.1 (prep)
-> Status: Ready to Execute
+> Status: In Progress (Kickoff Active)
 > Date: 2026-04-01
+> Kickoff Runbook: docs/en/16-prd-v2-week-1-kickoff-runbook.md
 
 ## 1. Week 1 Goal
 
