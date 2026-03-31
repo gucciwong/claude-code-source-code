@@ -1,5 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   computeTrendMetrics,
@@ -8,6 +13,8 @@ import {
   parseTrendArgs,
   isWeek1SummaryFileName,
 } from '../sovereign-week1-trend.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('sortSummariesByDate sorts ascending by date key', () => {
   const sorted = sortSummariesByDate([
@@ -204,4 +211,34 @@ test('isWeek1SummaryFileName accepts both date and numeric run keys', () => {
   assert.equal(isWeek1SummaryFileName('week1-summary-1042.json'), true)
   assert.equal(isWeek1SummaryFileName('week1-summary-.json'), false)
   assert.equal(isWeek1SummaryFileName('week1-report-2026-04-01.md'), false)
+})
+
+test('trend CLI reads summary files from directory and emits JSON metrics', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-trend-'))
+
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-01.json'),
+    JSON.stringify({ date: '2026-04-01', readyForDemo: true, reason: 'Ready' }),
+    'utf8',
+  )
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-02.json'),
+    JSON.stringify({ date: '2026-04-02', readyForDemo: false, reason: 'Runtime is unreachable' }),
+    'utf8',
+  )
+  await writeFile(join(dir, 'ignore-me.json'), JSON.stringify({ ok: true }), 'utf8')
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-trend.mjs',
+    '--dir',
+    dir,
+    '--json',
+  ])
+
+  const metrics = JSON.parse(stdout)
+  assert.equal(metrics.totalDays, 2)
+  assert.equal(metrics.readyDays, 1)
+  assert.equal(metrics.blockedDays, 1)
+  assert.equal(metrics.window.startDate, '2026-04-01')
+  assert.equal(metrics.window.endDate, '2026-04-02')
 })

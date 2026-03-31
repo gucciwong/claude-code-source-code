@@ -1,11 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile, readFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   deriveOverallStatus,
   buildExecutiveSummary,
   parseStatusPackArgs,
 } from '../sovereign-week1-status-pack.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('deriveOverallStatus returns green at high readiness', () => {
   const status = deriveOverallStatus({ readinessRate: 0.8, blockedDays: 1, totalDays: 5 })
@@ -155,4 +162,39 @@ test('parseStatusPackArgs throws on positional arguments', () => {
     () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', 'unexpected']),
     /Unexpected positional argument/,
   )
+})
+
+test('status-pack CLI builds markdown and emits JSON payload', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-status-pack-'))
+  const outFile = join(dir, 'status.md')
+
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-01.json'),
+    JSON.stringify({ date: '2026-04-01', readyForDemo: true, reason: 'Ready for demo' }),
+    'utf8',
+  )
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-02.json'),
+    JSON.stringify({ date: '2026-04-02', readyForDemo: false, reason: 'Runtime is unreachable' }),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-status-pack.mjs',
+    '--dir',
+    dir,
+    '--out-file',
+    outFile,
+    '--json',
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.overallStatus, 'YELLOW')
+  assert.equal(payload.trend.totalDays, 2)
+  assert.equal(payload.latest.date, '2026-04-02')
+  assert.equal(payload.outFile, outFile)
+
+  const markdown = await readFile(outFile, 'utf8')
+  assert.match(markdown, /Sovereign Week1 Executive Status Pack/)
+  assert.match(markdown, /Overall status: YELLOW/)
 })
