@@ -5,6 +5,7 @@ import {
   buildDailyPaths,
   buildCommands,
   extractStdoutFromExecError,
+  buildRunSummary,
 } from '../sovereign-week1-daily-run.mjs'
 
 test('buildDailyPaths creates stable output file names', () => {
@@ -53,4 +54,30 @@ test('extractStdoutFromExecError returns stdout when command exits non-zero', ()
 
   const stdout = extractStdoutFromExecError(error)
   assert.equal(stdout, '{"runtime":{"reachable":false}}\n')
+})
+
+test('buildRunSummary returns compact machine-readable status object', () => {
+  const summary = buildRunSummary({
+    date: '2026-04-01',
+    tier: '8GB',
+    evidence: {
+      gate: {
+        readyForDemo: false,
+        reason: 'Runtime is unreachable',
+      },
+    },
+    output: {
+      runtimeFile: 'a.json',
+      benchmarkFile: 'b.json',
+      evidenceFile: 'c.json',
+      reportFile: 'd.md',
+      checkpointFile: 'e.txt',
+    },
+  })
+
+  assert.equal(summary.date, '2026-04-01')
+  assert.equal(summary.tier, '8GB')
+  assert.equal(summary.readyForDemo, false)
+  assert.equal(summary.reason, 'Runtime is unreachable')
+  assert.equal(summary.output.evidenceFile, 'c.json')
 })

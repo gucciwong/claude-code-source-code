@@ -16,6 +16,7 @@ export function buildDailyPaths({ outDir, date }) {
     evidenceFile: `${base}/week1-evidence-${date}.json`,
     reportFile: `${base}/week1-report-${date}.md`,
     checkpointFile: `${base}/week1-checkpoint-${date}.txt`,
+    summaryFile: `${base}/week1-summary-${date}.json`,
   }
 }
 
@@ -27,6 +28,16 @@ export function buildCommands({ date, tier, sampleFile, runtimeFile, benchmarkFi
     `node scripts/sovereign-week1-report.mjs --evidence-file ${evidenceFile} --out-file ${reportFile}`,
     `node scripts/sovereign-week1-checkpoint.mjs --evidence-file ${evidenceFile} --out-file ${checkpointFile}`,
   ]
+}
+
+export function buildRunSummary({ date, tier, evidence, output }) {
+  return {
+    date,
+    tier,
+    readyForDemo: Boolean(evidence?.gate?.readyForDemo),
+    reason: evidence?.gate?.reason ?? 'No gate reason available',
+    output,
+  }
 }
 
 function parseArgs(argv) {
@@ -129,6 +140,7 @@ async function runCli() {
   await ensureParent(paths.evidenceFile)
   await ensureParent(paths.reportFile)
   await ensureParent(paths.checkpointFile)
+  await ensureParent(paths.summaryFile)
 
   const runtimeOut = await runNodeScript('scripts/sovereign-week1-runtime-check.mjs', ['--json'])
   await writeFile(paths.runtimeFile, runtimeOut, 'utf8')
@@ -153,6 +165,8 @@ async function runCli() {
   ])
   await writeFile(paths.evidenceFile, evidenceOut, 'utf8')
 
+  const evidence = JSON.parse(evidenceOut)
+
   await runNodeScript('scripts/sovereign-week1-report.mjs', [
     '--evidence-file',
     paths.evidenceFile,
@@ -166,6 +180,14 @@ async function runCli() {
     '--out-file',
     paths.checkpointFile,
   ])
+
+  const summary = buildRunSummary({
+    date: args.date,
+    tier: args.tier,
+    evidence,
+    output: paths,
+  })
+  await writeFile(paths.summaryFile, JSON.stringify(summary, null, 2), 'utf8')
 
   console.log(JSON.stringify({
     date: args.date,
