@@ -15,15 +15,17 @@ export function buildDailyPaths({ outDir, date }) {
     benchmarkFile: `${base}/week1-benchmark-${date}.json`,
     evidenceFile: `${base}/week1-evidence-${date}.json`,
     reportFile: `${base}/week1-report-${date}.md`,
+    checkpointFile: `${base}/week1-checkpoint-${date}.txt`,
   }
 }
 
-export function buildCommands({ date, tier, sampleFile, runtimeFile, benchmarkFile, evidenceFile, reportFile }) {
+export function buildCommands({ date, tier, sampleFile, runtimeFile, benchmarkFile, evidenceFile, reportFile, checkpointFile }) {
   return [
     `node scripts/sovereign-week1-runtime-check.mjs --json > ${runtimeFile}`,
     `node scripts/sovereign-week1-benchmark.mjs --file ${sampleFile} --tier ${tier} --json > ${benchmarkFile}`,
     `node scripts/sovereign-week1-evidence-bundle.mjs --runtime-file ${runtimeFile} --benchmark-file ${benchmarkFile} --date ${date} --json > ${evidenceFile}`,
     `node scripts/sovereign-week1-report.mjs --evidence-file ${evidenceFile} --out-file ${reportFile}`,
+    `node scripts/sovereign-week1-checkpoint.mjs --evidence-file ${evidenceFile} --out-file ${checkpointFile}`,
   ]
 }
 
@@ -114,6 +116,7 @@ async function runCli() {
     benchmarkFile: paths.benchmarkFile,
     evidenceFile: paths.evidenceFile,
     reportFile: paths.reportFile,
+    checkpointFile: paths.checkpointFile,
   })
 
   if (args.dryRun) {
@@ -125,6 +128,7 @@ async function runCli() {
   await ensureParent(paths.benchmarkFile)
   await ensureParent(paths.evidenceFile)
   await ensureParent(paths.reportFile)
+  await ensureParent(paths.checkpointFile)
 
   const runtimeOut = await runNodeScript('scripts/sovereign-week1-runtime-check.mjs', ['--json'])
   await writeFile(paths.runtimeFile, runtimeOut, 'utf8')
@@ -154,6 +158,13 @@ async function runCli() {
     paths.evidenceFile,
     '--out-file',
     paths.reportFile,
+  ])
+
+  await runNodeScript('scripts/sovereign-week1-checkpoint.mjs', [
+    '--evidence-file',
+    paths.evidenceFile,
+    '--out-file',
+    paths.checkpointFile,
   ])
 
   console.log(JSON.stringify({

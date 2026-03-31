@@ -17,6 +17,7 @@ test('buildDailyPaths creates stable output file names', () => {
   assert.equal(paths.benchmarkFile, 'artifacts/week1-benchmark-2026-04-01.json')
   assert.equal(paths.evidenceFile, 'artifacts/week1-evidence-2026-04-01.json')
   assert.equal(paths.reportFile, 'artifacts/week1-report-2026-04-01.md')
+  assert.equal(paths.checkpointFile, 'artifacts/week1-checkpoint-2026-04-01.txt')
 })
 
 test('buildCommands wires runtime, benchmark, and evidence steps in order', () => {
@@ -28,16 +29,19 @@ test('buildCommands wires runtime, benchmark, and evidence steps in order', () =
     benchmarkFile: 'benchmark.json',
     evidenceFile: 'evidence.json',
     reportFile: 'report.md',
+    checkpointFile: 'checkpoint.txt',
   })
 
-  assert.equal(commands.length, 4)
+  assert.equal(commands.length, 5)
   assert.match(commands[0], /sovereign-week1-runtime-check/)
   assert.match(commands[1], /sovereign-week1-benchmark/)
   assert.match(commands[2], /sovereign-week1-evidence-bundle/)
   assert.match(commands[3], /sovereign-week1-report/)
+  assert.match(commands[4], /sovereign-week1-checkpoint/)
   assert.match(commands[2], /runtime\.json/)
   assert.match(commands[2], /benchmark\.json/)
   assert.match(commands[3], /report\.md/)
+  assert.match(commands[4], /checkpoint\.txt/)
 })
 
 test('extractStdoutFromExecError returns stdout when command exits non-zero', () => {
