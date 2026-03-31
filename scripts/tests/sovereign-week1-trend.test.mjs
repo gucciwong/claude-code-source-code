@@ -88,6 +88,19 @@ test('computeTrendMetrics allows custom readiness threshold and computes blocked
   assert.equal(metrics.readinessTargetPass, true)
 })
 
+test('computeTrendMetrics uses default readiness threshold when option is invalid', () => {
+  const metrics = computeTrendMetrics(
+    [
+      { date: '2026-04-01', readyForDemo: true },
+      { date: '2026-04-02', readyForDemo: false, reason: 'Runtime is unreachable' },
+    ],
+    { readinessThreshold: Number.NaN },
+  )
+
+  assert.equal(metrics.readinessThreshold, 0.6)
+  assert.equal(metrics.readinessTargetPass, false)
+})
+
 test('buildTrendReport includes high-level metrics and top blocked reasons', () => {
   const report = buildTrendReport({
     totalDays: 4,
@@ -147,6 +160,22 @@ test('parseTrendArgs throws when --dir value is missing', () => {
     () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--dir']),
     /Missing value for --dir/,
   )
+})
+
+test('parseTrendArgs parses explicit values and json flag', () => {
+  const args = parseTrendArgs([
+    'node',
+    'scripts/sovereign-week1-trend.mjs',
+    '--dir',
+    'custom-artifacts',
+    '--readiness-threshold',
+    '0.75',
+    '--json',
+  ])
+
+  assert.equal(args.dir, 'custom-artifacts')
+  assert.equal(args.readinessThreshold, 0.75)
+  assert.equal(args.json, true)
 })
 
 test('parseTrendArgs throws on unknown options', () => {

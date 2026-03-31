@@ -126,6 +126,22 @@ test('parseBenchmarkArgs throws when --tier value is unsupported', () => {
   )
 })
 
+test('parseBenchmarkArgs parses explicit file, tier, and json flag', () => {
+  const args = parseBenchmarkArgs([
+    'node',
+    'scripts/sovereign-week1-benchmark.mjs',
+    '--file',
+    'samples.json',
+    '--tier',
+    '12GB',
+    '--json',
+  ])
+
+  assert.equal(args.file, 'samples.json')
+  assert.equal(args.tier, '12GB')
+  assert.equal(args.json, true)
+})
+
 test('parseBenchmarkArgs throws on unknown options', () => {
   assert.throws(
     () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--unknown']),
