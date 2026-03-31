@@ -117,3 +117,17 @@ test('parseDailyRunArgs throws on unknown options', () => {
     /Unknown option for daily-run CLI/,
   )
 })
+
+test('parseDailyRunArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '-x']),
+    /Unknown option for daily-run CLI/,
+  )
+})
+
+test('parseDailyRunArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
