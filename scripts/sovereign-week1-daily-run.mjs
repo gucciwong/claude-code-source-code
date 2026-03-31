@@ -48,6 +48,17 @@ export function evaluateExitCode({ strictGate, readyForDemo }) {
 }
 
 export function parseDailyRunArgs(argv) {
+  const knownOptions = new Set([
+    '--date',
+    '--tier',
+    '--out-dir',
+    '--sample-file',
+    '--dry-run',
+    '--strict-gate',
+    '--help',
+    '-h',
+  ])
+
   const supportedTiers = new Set(['6GB', '8GB', '12GB', '24GB'])
 
   const today = new Date().toISOString().slice(0, 10)
@@ -94,6 +105,8 @@ export function parseDailyRunArgs(argv) {
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for daily-run CLI: ${token}`)
     }
   }
 

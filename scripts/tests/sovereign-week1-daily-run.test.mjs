@@ -110,3 +110,10 @@ test('parseDailyRunArgs throws when --tier value is unsupported', () => {
     /Unsupported --tier value/,
   )
 })
+
+test('parseDailyRunArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--unknown-flag']),
+    /Unknown option for daily-run CLI/,
+  )
+})
