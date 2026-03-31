@@ -29,6 +29,8 @@ export function buildExecutiveSummary({ overallStatus, trend, latest }) {
     `Overall status: ${overallStatus}`,
     `Window: ${trend.window.startDate ?? 'N/A'} to ${trend.window.endDate ?? 'N/A'}`,
     `Readiness rate: ${readinessPercent}%`,
+    `Readiness target pass: ${Boolean(trend.readinessTargetPass)}`,
+    `Latest blocked streak: ${trend.latestBlockedStreak ?? 0} day(s)`,
     `Ready days: ${trend.readyDays} / ${trend.totalDays}`,
     `Blocked days: ${trend.blockedDays}`,
     `Latest day: ${latest.date} (${latestState})`,

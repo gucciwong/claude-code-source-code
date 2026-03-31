@@ -29,6 +29,8 @@ test('buildExecutiveSummary renders concise weekly snapshot markdown', () => {
       readyDays: 2,
       blockedDays: 2,
       readinessRate: 0.5,
+      readinessTargetPass: false,
+      latestBlockedStreak: 2,
       window: {
         startDate: '2026-04-01',
         endDate: '2026-04-04',
@@ -47,6 +49,8 @@ test('buildExecutiveSummary renders concise weekly snapshot markdown', () => {
   assert.match(markdown, /Sovereign Week1 Executive Status Pack/)
   assert.match(markdown, /Overall status: YELLOW/)
   assert.match(markdown, /Readiness rate: 50\.0%/)
+  assert.match(markdown, /Readiness target pass: false/)
+  assert.match(markdown, /Latest blocked streak: 2 day\(s\)/)
   assert.match(markdown, /Latest day: 2026-04-04 \(blocked\)/)
   assert.match(markdown, /Runtime is unreachable: 2/)
 })
