@@ -69,3 +69,10 @@ test('parseStatusPackArgs throws when dir value is missing', () => {
     /Missing value for --dir/,
   )
 })
+
+test('parseStatusPackArgs throws on unknown options', () => {
+  assert.throws(
+    () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '--unknown-flag']),
+    /Unknown option for status-pack CLI/,
+  )
+})

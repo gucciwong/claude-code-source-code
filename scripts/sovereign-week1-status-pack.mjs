@@ -71,6 +71,14 @@ async function readSummaries(dir) {
 }
 
 export function parseStatusPackArgs(argv) {
+  const knownOptions = new Set([
+    '--dir',
+    '--out-file',
+    '--json',
+    '--help',
+    '-h',
+  ])
+
   const args = {
     dir: 'artifacts',
     outFile: 'artifacts/week1-executive-status.md',
@@ -96,6 +104,8 @@ export function parseStatusPackArgs(argv) {
     } else if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    } else if (token.startsWith('--') && !knownOptions.has(token)) {
+      throw new Error(`Unknown option for status-pack CLI: ${token}`)
     }
   }
 
