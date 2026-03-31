@@ -17,10 +17,19 @@ export function parseCiArgs(argv) {
     '--strict-gate',
   ])
 
+  const forwardValueFlags = new Set([
+    '--date',
+    '--tier',
+    '--out-dir',
+    '--sample-file',
+  ])
+
   const result = {
     mode: 'soft',
     forwardArgs: [],
   }
+
+  let expectingForwardValue = false
 
   for (let i = 2; i < argv.length; i += 1) {
     const token = argv[i]
@@ -29,6 +38,12 @@ export function parseCiArgs(argv) {
     if (token === '--') {
       result.forwardArgs.push(...argv.slice(i + 1))
       break
+    }
+
+    if (expectingForwardValue) {
+      result.forwardArgs.push(token)
+      expectingForwardValue = false
+      continue
     }
 
     if (token === '--mode' && !next) {
@@ -50,7 +65,18 @@ export function parseCiArgs(argv) {
       throw new Error(`Unknown option for CI wrapper: ${token}`)
     }
 
+    if (!token.startsWith('--') && token.startsWith('-')) {
+      throw new Error(`Unknown option for CI wrapper: ${token}`)
+    }
+
+    if (!token.startsWith('-')) {
+      throw new Error(`Unexpected positional argument: ${token}`)
+    }
+
     result.forwardArgs.push(token)
+    if (forwardValueFlags.has(token)) {
+      expectingForwardValue = true
+    }
   }
 
   if (result.mode !== 'soft' && result.mode !== 'hard') {
