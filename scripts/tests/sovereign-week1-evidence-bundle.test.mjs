@@ -51,6 +51,13 @@ test('parseEvidenceBundleArgs throws when --benchmark-file value is missing', ()
   )
 })
 
+test('parseEvidenceBundleArgs throws when --date value is missing', () => {
+  assert.throws(
+    () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--date']),
+    /Missing value for --date/,
+  )
+})
+
 test('parseEvidenceBundleArgs throws on unknown options', () => {
   assert.throws(
     () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--unknown']),
