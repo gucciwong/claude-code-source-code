@@ -8,12 +8,24 @@ export function sortSummariesByDate(summaries) {
   return [...summaries].sort((a, b) => String(a.date).localeCompare(String(b.date)))
 }
 
-export function computeTrendMetrics(summaries) {
+export function computeTrendMetrics(summaries, options = {}) {
+  const readinessThreshold = Number.isFinite(options.readinessThreshold)
+    ? options.readinessThreshold
+    : 0.6
+
   const ordered = sortSummariesByDate(summaries)
   const totalDays = ordered.length
   const readyDays = ordered.filter(item => item.readyForDemo === true).length
   const blockedDays = totalDays - readyDays
   const readinessRate = totalDays === 0 ? 0 : Number((readyDays / totalDays).toFixed(3))
+
+  let latestBlockedStreak = 0
+  for (let i = ordered.length - 1; i >= 0; i -= 1) {
+    if (ordered[i].readyForDemo === true) {
+      break
+    }
+    latestBlockedStreak += 1
+  }
 
   const blockedReasonCounts = {}
   for (const item of ordered) {
@@ -29,6 +41,9 @@ export function computeTrendMetrics(summaries) {
     readyDays,
     blockedDays,
     readinessRate,
+    readinessThreshold,
+    readinessTargetPass: readinessRate >= readinessThreshold,
+    latestBlockedStreak,
     window: {
       startDate: ordered[0]?.date ?? null,
       endDate: ordered[ordered.length - 1]?.date ?? null,
@@ -47,6 +62,8 @@ export function buildTrendReport(metrics) {
     `Ready days: ${metrics.readyDays}`,
     `Blocked days: ${metrics.blockedDays}`,
     `Readiness rate: ${readinessPercent}%`,
+    `Readiness target pass: ${Boolean(metrics.readinessTargetPass)}`,
+    `Latest blocked streak: ${metrics.latestBlockedStreak ?? 0} day(s)`,
     '',
     'Blocked reasons:',
   ]
@@ -84,6 +101,7 @@ function parseArgs(argv) {
   const args = {
     dir: 'artifacts',
     json: false,
+    readinessThreshold: 0.6,
   }
 
   for (let i = 2; i < argv.length; i += 1) {
@@ -92,6 +110,13 @@ function parseArgs(argv) {
 
     if (token === '--dir' && next) {
       args.dir = next
+      i += 1
+    } else if (token === '--readiness-threshold' && next) {
+      const parsed = Number(next)
+      if (!Number.isFinite(parsed) || parsed < 0 || parsed > 1) {
+        throw new Error('Invalid --readiness-threshold. Use a number between 0 and 1.')
+      }
+      args.readinessThreshold = parsed
       i += 1
     } else if (token === '--json') {
       args.json = true
@@ -109,6 +134,7 @@ function printHelp() {
   console.log('')
   console.log('Options:')
   console.log('  --dir <path>                 Directory containing week1-summary-YYYY-MM-DD.json files')
+  console.log('  --readiness-threshold <0-1>  Target readiness rate (default: 0.6)')
   console.log('  --json                       Print metrics as JSON')
   console.log('  --help, -h                   Show this help')
 }
@@ -116,7 +142,9 @@ function printHelp() {
 async function runCli() {
   const args = parseArgs(process.argv)
   const summaries = await readSummaryFiles(args.dir)
-  const metrics = computeTrendMetrics(summaries)
+  const metrics = computeTrendMetrics(summaries, {
+    readinessThreshold: args.readinessThreshold,
+  })
 
   if (args.json) {
     console.log(JSON.stringify(metrics, null, 2))

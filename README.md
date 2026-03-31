@@ -32,6 +32,7 @@ Week 1 delivery now includes a script bundle that generates runtime checks, benc
 - `npm run sovereign:week1:ci -- --mode soft --date 2026-04-01 --tier 8GB --out-dir artifacts`
 - `npm run sovereign:week1:ci -- --mode hard --date 2026-04-01 --tier 8GB --out-dir artifacts`
 - `npm run sovereign:week1:trend -- --dir artifacts --json`
+- `npm run sovereign:week1:trend -- --dir artifacts --readiness-threshold 0.7 --json`
 - `npm run sovereign:week1:status-pack -- --dir artifacts --out-file artifacts/week1-executive-status.md --json`
 
 ### Gate semantics
