@@ -37,6 +37,13 @@ test('parseCiArgs throws when --mode is provided without value', () => {
   )
 })
 
+test('parseCiArgs throws on unknown wrapper options', () => {
+  assert.throws(
+    () => parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs', '--unknown-flag']),
+    /Unknown option for CI wrapper/,
+  )
+})
+
 test('buildDailyRunArgs always enforces strict gate once', () => {
   const args = buildDailyRunArgs(['--date', '2026-04-01'])
   const strictGateArgs = args.filter(value => value === '--strict-gate')

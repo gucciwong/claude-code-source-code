@@ -8,6 +8,15 @@ import { resolve } from 'node:path'
 const execFileAsync = promisify(execFile)
 
 export function parseCiArgs(argv) {
+  const knownForwardFlags = new Set([
+    '--date',
+    '--tier',
+    '--out-dir',
+    '--sample-file',
+    '--dry-run',
+    '--strict-gate',
+  ])
+
   const result = {
     mode: 'soft',
     forwardArgs: [],
@@ -30,6 +39,10 @@ export function parseCiArgs(argv) {
     if (token === '--help' || token === '-h') {
       printHelp()
       process.exit(0)
+    }
+
+    if (token.startsWith('--') && !knownForwardFlags.has(token)) {
+      throw new Error(`Unknown option for CI wrapper: ${token}`)
     }
 
     result.forwardArgs.push(token)
