@@ -1,0 +1,46 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
+import {
+  computeMetrics,
+  validateSamples,
+  buildReport,
+} from '../sovereign-week1-benchmark.mjs'
+
+test('computeMetrics returns mean first token latency and mean throughput', () => {
+  const metrics = computeMetrics([
+    { firstTokenLatencyMs: 420, tokensPerSecond: 35 },
+    { firstTokenLatencyMs: 580, tokensPerSecond: 31 },
+  ])
+
+  assert.equal(metrics.sampleCount, 2)
+  assert.equal(metrics.firstTokenLatencyMsAvg, 500)
+  assert.equal(metrics.tokensPerSecondAvg, 33)
+})
+
+test('validateSamples rejects invalid numeric values', () => {
+  assert.throws(
+    () => validateSamples([{ firstTokenLatencyMs: -1, tokensPerSecond: 10 }]),
+    /firstTokenLatencyMs/,
+  )
+
+  assert.throws(
+    () => validateSamples([{ firstTokenLatencyMs: 100, tokensPerSecond: 0 }]),
+    /tokensPerSecond/,
+  )
+})
+
+test('buildReport computes target checks from PRD thresholds', () => {
+  const report = buildReport({
+    tier: '8GB',
+    samples: [
+      { firstTokenLatencyMs: 450, tokensPerSecond: 32 },
+      { firstTokenLatencyMs: 470, tokensPerSecond: 34 },
+    ],
+  })
+
+  assert.equal(report.targets.latencyLimitMs, 500)
+  assert.equal(report.targets.throughputMinimumTps, 30)
+  assert.equal(report.targets.latencyPass, true)
+  assert.equal(report.targets.throughputPass, true)
+})

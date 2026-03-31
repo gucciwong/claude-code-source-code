@@ -9,7 +9,9 @@
     "build": "npm run prepare-src && node scripts/build.mjs",
     "check": "npm run prepare-src && tsc --noEmit",
     "start": "node dist/cli.js",
-    "sovereign:week1:check": "node scripts/sovereign-week1-runtime-check.mjs"
+    "sovereign:week1:check": "node scripts/sovereign-week1-runtime-check.mjs",
+    "sovereign:week1:benchmark": "node scripts/sovereign-week1-benchmark.mjs",
+    "test:sovereign": "node --test scripts/tests/*.test.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

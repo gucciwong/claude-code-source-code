@@ -1,0 +1,14 @@
+[
+  {
+    "firstTokenLatencyMs": 460,
+    "tokensPerSecond": 33
+  },
+  {
+    "firstTokenLatencyMs": 510,
+    "tokensPerSecond": 31
+  },
+  {
+    "firstTokenLatencyMs": 480,
+    "tokensPerSecond": 34
+  }
+]
