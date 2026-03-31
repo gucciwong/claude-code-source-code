@@ -37,3 +37,17 @@ test('parseRuntimeCheckArgs throws on unknown options', () => {
     /Unknown option for runtime-check CLI/,
   )
 })
+
+test('parseRuntimeCheckArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '-x']),
+    /Unknown option for runtime-check CLI/,
+  )
+})
+
+test('parseRuntimeCheckArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
