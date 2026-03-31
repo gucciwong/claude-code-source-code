@@ -31,6 +31,12 @@ test('summarizeReadiness uses fallback message when reason is absent', () => {
   assert.match(summary.message, /Gate not satisfied/)
 })
 
+test('summarizeReadiness uses ready fallback message when reason is absent', () => {
+  const summary = summarizeReadiness({ gate: { readyForDemo: true } })
+  assert.equal(summary.status, 'Ready')
+  assert.match(summary.message, /Ready for demo/)
+})
+
 test('buildMarkdownReport includes key metrics and status', () => {
   const report = buildMarkdownReport({
     date: '2026-04-01',
@@ -84,6 +90,30 @@ test('buildMarkdownReport renders fail indicators for targets not met', () => {
   assert.match(report, /Latency target.*fail/)
   assert.match(report, /Throughput target.*fail/)
   assert.match(report, /Overall readiness: Blocked/)
+})
+
+test('buildMarkdownReport falls back to defaults when evidence fields are missing', () => {
+  const report = buildMarkdownReport({ gate: { readyForDemo: false } })
+
+  assert.match(report, /Date: unknown/)
+  assert.match(report, /Runtime reachable: no/)
+  assert.match(report, /Models discovered: 0/)
+  assert.match(report, /Average first-token latency \(ms\): n\/a/)
+  assert.match(report, /Average throughput \(tps\): n\/a/)
+})
+
+test('parseReportArgs parses explicit file arguments', () => {
+  const args = parseReportArgs([
+    'node',
+    'scripts/sovereign-week1-report.mjs',
+    '--evidence-file',
+    'artifacts/week1-evidence.json',
+    '--out-file',
+    'artifacts/week1-report.md',
+  ])
+
+  assert.equal(args.evidenceFile, 'artifacts/week1-evidence.json')
+  assert.equal(args.outFile, 'artifacts/week1-report.md')
 })
 
 test('parseReportArgs throws when evidence-file value is missing', () => {

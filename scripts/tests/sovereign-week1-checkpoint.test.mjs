@@ -39,6 +39,16 @@ test('buildCheckpointSummary returns Ready when gate is satisfied', () => {
   assert.equal(summary.reason, 'All Week 1 gate signals are green')
 })
 
+test('buildCheckpointSummary falls back to unknown and n/a defaults', () => {
+  const summary = buildCheckpointSummary({})
+
+  assert.equal(summary.date, 'unknown')
+  assert.equal(summary.readiness, 'Blocked')
+  assert.equal(summary.latencyMs, 'n/a')
+  assert.equal(summary.throughputTps, 'n/a')
+  assert.equal(summary.reason, 'No gate reason available')
+})
+
 test('toCheckpointText renders concise 4-line checkpoint update', () => {
   const text = toCheckpointText({
     date: '2026-04-01',
@@ -84,6 +94,20 @@ test('parseCheckpointArgs throws when out-file value is missing', () => {
     () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '--out-file']),
     /Missing value for --out-file/,
   )
+})
+
+test('parseCheckpointArgs parses explicit file arguments', () => {
+  const args = parseCheckpointArgs([
+    'node',
+    'scripts/sovereign-week1-checkpoint.mjs',
+    '--evidence-file',
+    'artifacts/week1-evidence.json',
+    '--out-file',
+    'artifacts/week1-checkpoint.txt',
+  ])
+
+  assert.equal(args.evidenceFile, 'artifacts/week1-evidence.json')
+  assert.equal(args.outFile, 'artifacts/week1-checkpoint.txt')
 })
 
 test('parseCheckpointArgs throws on unknown options', () => {
