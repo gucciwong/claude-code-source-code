@@ -78,6 +78,19 @@ jobs:
             --tier ${{ steps.settings.outputs.tier }} \
             --out-dir artifacts
 
+      - name: Build trend snapshot
+        if: always()
+        run: |
+          npm run sovereign:week1:trend -- --dir artifacts --json > artifacts/week1-trend-${{ github.run_number }}.json
+
+      - name: Build executive status pack
+        if: always()
+        run: |
+          npm run sovereign:week1:status-pack -- \
+            --dir artifacts \
+            --out-file artifacts/week1-executive-status-${{ github.run_number }}.md \
+            --json > artifacts/week1-status-pack-${{ github.run_number }}.json
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4

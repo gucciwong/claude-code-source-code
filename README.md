@@ -47,7 +47,7 @@ Week 1 delivery now includes a script bundle that generates runtime checks, benc
     - scheduled daily run (soft mode)
     - manual run with selectable `mode` and `tier`
     - push to `main` when sovereign week1 scripts/tests/workflow change
-- Artifacts are uploaded from `artifacts/` on every run.
+- Artifacts are uploaded from `artifacts/` on every run, including trend JSON and executive status pack outputs.
 
 ---
 
