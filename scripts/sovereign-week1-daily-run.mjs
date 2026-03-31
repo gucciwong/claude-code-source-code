@@ -14,14 +14,16 @@ export function buildDailyPaths({ outDir, date }) {
     runtimeFile: `${base}/week1-runtime-${date}.json`,
     benchmarkFile: `${base}/week1-benchmark-${date}.json`,
     evidenceFile: `${base}/week1-evidence-${date}.json`,
+    reportFile: `${base}/week1-report-${date}.md`,
   }
 }
 
-export function buildCommands({ date, tier, sampleFile, runtimeFile, benchmarkFile, evidenceFile }) {
+export function buildCommands({ date, tier, sampleFile, runtimeFile, benchmarkFile, evidenceFile, reportFile }) {
   return [
     `node scripts/sovereign-week1-runtime-check.mjs --json > ${runtimeFile}`,
     `node scripts/sovereign-week1-benchmark.mjs --file ${sampleFile} --tier ${tier} --json > ${benchmarkFile}`,
     `node scripts/sovereign-week1-evidence-bundle.mjs --runtime-file ${runtimeFile} --benchmark-file ${benchmarkFile} --date ${date} --json > ${evidenceFile}`,
+    `node scripts/sovereign-week1-report.mjs --evidence-file ${evidenceFile} --out-file ${reportFile}`,
   ]
 }
 
@@ -111,6 +113,7 @@ async function runCli() {
     runtimeFile: paths.runtimeFile,
     benchmarkFile: paths.benchmarkFile,
     evidenceFile: paths.evidenceFile,
+    reportFile: paths.reportFile,
   })
 
   if (args.dryRun) {
@@ -121,6 +124,7 @@ async function runCli() {
   await ensureParent(paths.runtimeFile)
   await ensureParent(paths.benchmarkFile)
   await ensureParent(paths.evidenceFile)
+  await ensureParent(paths.reportFile)
 
   const runtimeOut = await runNodeScript('scripts/sovereign-week1-runtime-check.mjs', ['--json'])
   await writeFile(paths.runtimeFile, runtimeOut, 'utf8')
@@ -144,6 +148,13 @@ async function runCli() {
     '--json',
   ])
   await writeFile(paths.evidenceFile, evidenceOut, 'utf8')
+
+  await runNodeScript('scripts/sovereign-week1-report.mjs', [
+    '--evidence-file',
+    paths.evidenceFile,
+    '--out-file',
+    paths.reportFile,
+  ])
 
   console.log(JSON.stringify({
     date: args.date,
