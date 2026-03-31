@@ -95,6 +95,20 @@ test('parseTrendArgs throws on unknown options', () => {
   )
 })
 
+test('parseTrendArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '-x']),
+    /Unknown option for trend CLI/,
+  )
+})
+
+test('parseTrendArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
+
 test('isWeek1SummaryFileName accepts both date and numeric run keys', () => {
   assert.equal(isWeek1SummaryFileName('week1-summary-2026-04-01.json'), true)
   assert.equal(isWeek1SummaryFileName('week1-summary-1042.json'), true)
