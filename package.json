@@ -11,6 +11,7 @@
     "start": "node dist/cli.js",
     "sovereign:week1:check": "node scripts/sovereign-week1-runtime-check.mjs",
     "sovereign:week1:benchmark": "node scripts/sovereign-week1-benchmark.mjs",
+    "sovereign:week1:evidence": "node scripts/sovereign-week1-evidence-bundle.mjs",
     "test:sovereign": "node --test scripts/tests/*.test.mjs"
   },
   "engines": {

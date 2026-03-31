@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-04-01T09:00:00.000Z",
+  "runtime": {
+    "host": "127.0.0.1",
+    "port": 11434,
+    "reachable": true,
+    "error": null
+  },
+  "models": {
+    "count": 2,
+    "names": [
+      "qwen2.5-coder:14b-q4",
+      "starcoder2:15b-q4"
+    ]
+  },
+  "profile": {
+    "requestedTier": "8GB",
+    "normalizedTier": "8GB",
+    "recommendations": [
+      "starcoder2:15b-q4",
+      "qwen2.5-coder:14b-q4"
+    ],
+    "supportedTiers": [
+      "6GB",
+      "8GB",
+      "12GB",
+      "24GB"
+    ]
+  }
+}
