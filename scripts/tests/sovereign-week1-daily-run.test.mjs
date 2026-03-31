@@ -103,3 +103,10 @@ test('parseDailyRunArgs throws when --out-dir value is missing', () => {
     /Missing value for --out-dir/,
   )
 })
+
+test('parseDailyRunArgs throws when --tier value is unsupported', () => {
+  assert.throws(
+    () => parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--tier', '16GB']),
+    /Unsupported --tier value/,
+  )
+})

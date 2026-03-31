@@ -48,6 +48,8 @@ export function evaluateExitCode({ strictGate, readyForDemo }) {
 }
 
 export function parseDailyRunArgs(argv) {
+  const supportedTiers = new Set(['6GB', '8GB', '12GB', '24GB'])
+
   const today = new Date().toISOString().slice(0, 10)
   const args = {
     date: today,
@@ -70,6 +72,9 @@ export function parseDailyRunArgs(argv) {
     } else if (token === '--tier' && !next) {
       throw new Error('Missing value for --tier.')
     } else if (token === '--tier' && next) {
+      if (!supportedTiers.has(next)) {
+        throw new Error(`Unsupported --tier value: ${next}. Use 6GB, 8GB, 12GB, or 24GB.`)
+      }
       args.tier = next
       i += 1
     } else if (token === '--out-dir' && !next) {
