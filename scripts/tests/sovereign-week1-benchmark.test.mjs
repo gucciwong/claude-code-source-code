@@ -31,6 +31,19 @@ test('validateSamples rejects invalid numeric values', () => {
   )
 })
 
+test('validateSamples rejects empty array', () => {
+  assert.throws(
+    () => validateSamples([]),
+    /non-empty array/,
+  )
+})
+
+test('validateSamples rejects non-array input', () => {
+  assert.throws(() => validateSamples(null), /non-empty array/)
+  assert.throws(() => validateSamples({}), /non-empty array/)
+  assert.throws(() => validateSamples('data'), /non-empty array/)
+})
+
 test('buildReport computes target checks from PRD thresholds', () => {
   const report = buildReport({
     tier: '8GB',
@@ -44,6 +57,52 @@ test('buildReport computes target checks from PRD thresholds', () => {
   assert.equal(report.targets.throughputMinimumTps, 30)
   assert.equal(report.targets.latencyPass, true)
   assert.equal(report.targets.throughputPass, true)
+})
+
+test('buildReport marks latencyPass false when avg latency exceeds limit', () => {
+  const report = buildReport({
+    tier: '8GB',
+    samples: [
+      { firstTokenLatencyMs: 600, tokensPerSecond: 35 },
+      { firstTokenLatencyMs: 700, tokensPerSecond: 35 },
+    ],
+  })
+
+  assert.equal(report.targets.latencyPass, false)
+  assert.equal(report.targets.throughputPass, true)
+})
+
+test('buildReport marks throughputPass false when avg tps is below minimum', () => {
+  const report = buildReport({
+    tier: '8GB',
+    samples: [
+      { firstTokenLatencyMs: 400, tokensPerSecond: 20 },
+      { firstTokenLatencyMs: 400, tokensPerSecond: 25 },
+    ],
+  })
+
+  assert.equal(report.targets.latencyPass, true)
+  assert.equal(report.targets.throughputPass, false)
+})
+
+test('buildReport uses 1000ms latency limit for 6GB tier', () => {
+  const report = buildReport({
+    tier: '6GB',
+    samples: [{ firstTokenLatencyMs: 800, tokensPerSecond: 35 }],
+  })
+
+  assert.equal(report.targets.latencyLimitMs, 1000)
+  assert.equal(report.targets.latencyPass, true)
+})
+
+test('buildReport falls back to 500ms limit when tier is null', () => {
+  const report = buildReport({
+    tier: null,
+    samples: [{ firstTokenLatencyMs: 300, tokensPerSecond: 35 }],
+  })
+
+  assert.equal(report.targets.latencyLimitMs, 500)
+  assert.equal(report.profile.normalizedTier, null)
 })
 
 test('parseBenchmarkArgs throws when --file value is missing', () => {
