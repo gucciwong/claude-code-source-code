@@ -15,6 +15,8 @@ test('normalizeTier accepts supported tiers and normalizes casing/spacing', () =
 test('normalizeTier returns null for unsupported tiers', () => {
   assert.equal(normalizeTier('16GB'), null)
   assert.equal(normalizeTier(''), null)
+  assert.equal(normalizeTier(null), null)
+  assert.equal(normalizeTier(undefined), null)
 })
 
 test('parseRuntimeCheckArgs throws when --port value is missing', () => {
@@ -28,6 +30,27 @@ test('parseRuntimeCheckArgs throws when --port is invalid', () => {
   assert.throws(
     () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--port', 'abc']),
     /Invalid --port value/,
+  )
+})
+
+test('parseRuntimeCheckArgs throws when --host value is missing', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--host']),
+    /Missing value for --host/,
+  )
+})
+
+test('parseRuntimeCheckArgs throws when --vram value is missing', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--vram']),
+    /Missing value for --vram/,
+  )
+})
+
+test('parseRuntimeCheckArgs throws when --timeout-ms value is missing', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--timeout-ms']),
+    /Missing value for --timeout-ms/,
   )
 })
 
