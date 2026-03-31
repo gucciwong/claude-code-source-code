@@ -76,3 +76,17 @@ test('parseStatusPackArgs throws on unknown options', () => {
     /Unknown option for status-pack CLI/,
   )
 })
+
+test('parseStatusPackArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '-x']),
+    /Unknown option for status-pack CLI/,
+  )
+})
+
+test('parseStatusPackArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
