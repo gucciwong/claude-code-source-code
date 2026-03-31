@@ -44,6 +44,21 @@ test('parseCiArgs throws on unknown wrapper options', () => {
   )
 })
 
+test('parseCiArgs forwards args after -- separator without wrapper validation', () => {
+  const parsed = parseCiArgs([
+    'node',
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--mode',
+    'soft',
+    '--',
+    '--future-flag',
+    'x',
+  ])
+
+  assert.equal(parsed.mode, 'soft')
+  assert.deepEqual(parsed.forwardArgs, ['--future-flag', 'x'])
+})
+
 test('buildDailyRunArgs always enforces strict gate once', () => {
   const args = buildDailyRunArgs(['--date', '2026-04-01'])
   const strictGateArgs = args.filter(value => value === '--strict-gate')

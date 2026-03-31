@@ -26,6 +26,11 @@ export function parseCiArgs(argv) {
     const token = argv[i]
     const next = argv[i + 1]
 
+    if (token === '--') {
+      result.forwardArgs.push(...argv.slice(i + 1))
+      break
+    }
+
     if (token === '--mode' && !next) {
       throw new Error('Missing value for --mode. Use soft or hard.')
     }
