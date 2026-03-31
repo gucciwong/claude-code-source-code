@@ -1,5 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   computeMetrics,
@@ -7,6 +12,8 @@ import {
   buildReport,
   parseBenchmarkArgs,
 } from '../sovereign-week1-benchmark.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('computeMetrics returns mean first token latency and mean throughput', () => {
   const metrics = computeMetrics([
@@ -160,5 +167,64 @@ test('parseBenchmarkArgs throws on positional arguments', () => {
   assert.throws(
     () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', 'unexpected']),
     /Unexpected positional argument/,
+  )
+})
+
+test('benchmark CLI emits JSON report when --json is provided', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-benchmark-'))
+  const file = join(dir, 'samples.json')
+
+  await writeFile(
+    file,
+    JSON.stringify([
+      { firstTokenLatencyMs: 420, tokensPerSecond: 35 },
+      { firstTokenLatencyMs: 480, tokensPerSecond: 33 },
+    ]),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-benchmark.mjs',
+    '--file',
+    file,
+    '--tier',
+    '8GB',
+    '--json',
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.profile.normalizedTier, '8GB')
+  assert.equal(payload.targets.latencyPass, true)
+  assert.equal(payload.targets.throughputPass, true)
+})
+
+test('benchmark CLI prints human output and exits 2 when gate fails', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-benchmark-fail-'))
+  const file = join(dir, 'samples.json')
+
+  await writeFile(
+    file,
+    JSON.stringify([
+      { firstTokenLatencyMs: 900, tokensPerSecond: 20 },
+      { firstTokenLatencyMs: 950, tokensPerSecond: 22 },
+    ]),
+    'utf8',
+  )
+
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-benchmark.mjs',
+      '--file',
+      file,
+      '--tier',
+      '8GB',
+    ]),
+    error => {
+      assert.equal(error.code, 2)
+      assert.match(error.stdout, /Sovereign Week 1 Benchmark Report/)
+      assert.match(error.stdout, /Latency target .*FAIL/)
+      assert.match(error.stdout, /Throughput target .*FAIL/)
+      return true
+    },
   )
 })
