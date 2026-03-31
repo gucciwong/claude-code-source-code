@@ -66,3 +66,17 @@ test('parseReportArgs throws on unknown options', () => {
     /Unknown option for report CLI/,
   )
 })
+
+test('parseReportArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '-x']),
+    /Unknown option for report CLI/,
+  )
+})
+
+test('parseReportArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
