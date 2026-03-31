@@ -22,9 +22,38 @@ test('buildEvidenceBundle composes runtime and benchmark evidence', () => {
 
   assert.equal(bundle.date, '2026-04-01')
   assert.equal(bundle.runtimeReachable, true)
+  assert.equal(bundle.runtimeEndpoint, '127.0.0.1:11434')
   assert.equal(bundle.modelCount, 2)
   assert.equal(bundle.metrics.firstTokenLatencyMsAvg, 490)
   assert.equal(bundle.targets.throughputPass, true)
+})
+
+test('buildEvidenceBundle throws when date is missing', () => {
+  assert.throws(
+    () => buildEvidenceBundle({ runtime: {}, benchmark: {} }),
+    /date is required/,
+  )
+})
+
+test('buildEvidenceBundle applies null/zero defaults when runtime or benchmark fields are missing', () => {
+  const bundle = buildEvidenceBundle({
+    date: '2026-04-01',
+    runtime: null,
+    benchmark: {},
+  })
+
+  assert.equal(bundle.runtimeReachable, false)
+  assert.equal(bundle.runtimeEndpoint, null)
+  assert.equal(bundle.runtimeError, null)
+  assert.equal(bundle.modelCount, 0)
+  assert.deepStrictEqual(bundle.modelNames, [])
+  assert.equal(bundle.metrics.sampleCount, 0)
+  assert.equal(bundle.metrics.firstTokenLatencyMsAvg, null)
+  assert.equal(bundle.metrics.tokensPerSecondAvg, null)
+  assert.equal(bundle.targets.latencyPass, false)
+  assert.equal(bundle.targets.throughputPass, false)
+  assert.equal(bundle.targets.latencyLimitMs, null)
+  assert.equal(bundle.targets.throughputMinimumTps, null)
 })
 
 test('summarizeGateSignals returns fail when runtime is unreachable', () => {
@@ -86,6 +115,25 @@ test('parseEvidenceBundleArgs throws when --date value is missing', () => {
     () => parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--date']),
     /Missing value for --date/,
   )
+})
+
+test('parseEvidenceBundleArgs parses explicit args and json flag', () => {
+  const args = parseEvidenceBundleArgs([
+    'node',
+    'scripts/sovereign-week1-evidence-bundle.mjs',
+    '--date',
+    '2026-04-01',
+    '--runtime-file',
+    'artifacts/week1-runtime.json',
+    '--benchmark-file',
+    'artifacts/week1-benchmark.json',
+    '--json',
+  ])
+
+  assert.equal(args.date, '2026-04-01')
+  assert.equal(args.runtimeFile, 'artifacts/week1-runtime.json')
+  assert.equal(args.benchmarkFile, 'artifacts/week1-benchmark.json')
+  assert.equal(args.json, true)
 })
 
 test('parseEvidenceBundleArgs throws on unknown options', () => {
