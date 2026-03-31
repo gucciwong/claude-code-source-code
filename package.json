@@ -12,6 +12,7 @@
     "sovereign:week1:check": "node scripts/sovereign-week1-runtime-check.mjs",
     "sovereign:week1:benchmark": "node scripts/sovereign-week1-benchmark.mjs",
     "sovereign:week1:evidence": "node scripts/sovereign-week1-evidence-bundle.mjs",
+    "sovereign:week1:run": "node scripts/sovereign-week1-daily-run.mjs",
     "test:sovereign": "node --test scripts/tests/*.test.mjs"
   },
   "engines": {
