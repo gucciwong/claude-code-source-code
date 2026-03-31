@@ -31,7 +31,12 @@ docs/
 │   ├── [02-hidden-features-and-codenames.md]  # Codenames (Capybara/Tengu/Numbat), feature flags, internal vs external
 │   ├── [03-undercover-mode.md]                # Undercover Mode — hiding AI authorship in open-source repos
 │   ├── [04-remote-control-and-killswitches.md]# Remote Control — managed settings, killswitches, model overrides
-│   └── [05-future-roadmap.md]                 # Future Roadmap — Numbat, KAIROS, voice mode, unreleased tools
+│   ├── [05-future-roadmap.md]                 # Future Roadmap — Numbat, KAIROS, voice mode, unreleased tools
+│   ├── [06-prd-v2-improvements-and-innovation.md] # Sovereign Coder PRD mirror — canonical product requirements
+│   ├── [07-prd-v2-execution-tracker.md]       # Sovereign execution tracker — phase streams, milestones, risks
+│   ├── [08-prd-v2-epics-and-tickets.md]       # Sovereign backlog — roadmap-aligned epics and tickets
+│   ├── [09-prd-v2-kpi-instrumentation-spec.md]# Sovereign KPI spec — product, technical, and business metrics
+│   └── [10-prd-v2-sprint-1-deliverables.md]   # Sovereign Sprint 1 package — Month 1 foundation scope
 │
 └── zh/                                        # 中文
     ├── [01-遥测与隐私分析.md]                    # 遥测与隐私 — 收集了什么，为什么无法退出
