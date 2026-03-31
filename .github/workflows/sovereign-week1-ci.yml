@@ -1,0 +1,87 @@
+name: Sovereign Week1 CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Gate mode (soft = warning, hard = fail on gate block)
+        required: false
+        default: soft
+        type: choice
+        options:
+          - soft
+          - hard
+      tier:
+        description: Benchmark tier
+        required: false
+        default: 8GB
+        type: choice
+        options:
+          - 6GB
+          - 8GB
+          - 12GB
+          - 24GB
+  schedule:
+    - cron: '15 1 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/sovereign-week1-*.mjs
+      - scripts/tests/sovereign-week1-*.test.mjs
+      - package.json
+      - .github/workflows/sovereign-week1-ci.yml
+
+jobs:
+  sovereign-week1:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      RUN_DATE: ${{ github.run_id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run sovereign test suite
+        run: npm run test:sovereign
+
+      - name: Determine run settings
+        id: settings
+        shell: bash
+        run: |
+          MODE="soft"
+          TIER="8GB"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MODE="${{ inputs.mode }}"
+            TIER="${{ inputs.tier }}"
+          fi
+
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "tier=$TIER" >> "$GITHUB_OUTPUT"
+
+      - name: Run sovereign week1 pipeline
+        run: |
+          npm run sovereign:week1:ci -- \
+            --mode ${{ steps.settings.outputs.mode }} \
+            --date ${{ github.run_number }} \
+            --tier ${{ steps.settings.outputs.tier }} \
+            --out-dir artifacts
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovereign-week1-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: warn

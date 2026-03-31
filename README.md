@@ -17,6 +17,35 @@
 - [Tool System & Permissions](#tool-system-architecture) — 40+ tools, permission flow, sub-agents
 - [The 12 Progressive Harness Mechanisms](#the-12-progressive-harness-mechanisms) — How Claude Code layers production features on the agent loop
 - [Build Notes](#build-notes) — Why this source isn't directly compilable
+- [Sovereign Week1 Automation](#sovereign-week1-automation) — Daily run scripts, strict gate behavior, and CI wrapper modes
+
+---
+
+## Sovereign Week1 Automation
+
+Week 1 delivery now includes a script bundle that generates runtime checks, benchmark metrics, evidence JSON, markdown reports, and checkpoint text.
+
+### Local commands
+
+- `npm run sovereign:week1:run -- --date 2026-04-01 --tier 8GB --out-dir artifacts`
+- `npm run sovereign:week1:run -- --strict-gate --date 2026-04-01 --tier 8GB --out-dir artifacts`
+- `npm run sovereign:week1:ci -- --mode soft --date 2026-04-01 --tier 8GB --out-dir artifacts`
+- `npm run sovereign:week1:ci -- --mode hard --date 2026-04-01 --tier 8GB --out-dir artifacts`
+
+### Gate semantics
+
+- Exit `0`: run completed and gate policy is satisfied for the selected mode.
+- Exit `2`: readiness gate blocked in strict/hard mode.
+- Exit `1`: unexpected execution error.
+
+### GitHub Actions
+
+- Workflow: `.github/workflows/sovereign-week1-ci.yml`
+- Triggers:
+    - scheduled daily run (soft mode)
+    - manual run with selectable `mode` and `tier`
+    - push to `main` when sovereign week1 scripts/tests/workflow change
+- Artifacts are uploaded from `artifacts/` on every run.
 
 ---
 
