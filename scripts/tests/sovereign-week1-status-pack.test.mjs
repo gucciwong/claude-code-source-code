@@ -12,6 +12,16 @@ test('deriveOverallStatus returns green at high readiness', () => {
   assert.equal(status, 'GREEN')
 })
 
+test('deriveOverallStatus returns red when totalDays is zero', () => {
+  const status = deriveOverallStatus({ readinessRate: 1.0, blockedDays: 0, totalDays: 0 })
+  assert.equal(status, 'RED')
+})
+
+test('deriveOverallStatus returns yellow when readinessRate is high but blockedDays exceeds threshold', () => {
+  const status = deriveOverallStatus({ readinessRate: 0.8, blockedDays: 3, totalDays: 5 })
+  assert.equal(status, 'YELLOW')
+})
+
 test('deriveOverallStatus returns yellow at moderate readiness', () => {
   const status = deriveOverallStatus({ readinessRate: 0.5, blockedDays: 2, totalDays: 4 })
   assert.equal(status, 'YELLOW')
@@ -54,6 +64,26 @@ test('buildExecutiveSummary renders concise weekly snapshot markdown', () => {
   assert.match(markdown, /Latest blocked streak: 2 day\(s\)/)
   assert.match(markdown, /Latest day: 2026-04-04 \(blocked\)/)
   assert.match(markdown, /Runtime is unreachable: 2/)
+})
+
+test('buildExecutiveSummary renders ready state for latest day', () => {
+  const markdown = buildExecutiveSummary({
+    overallStatus: 'GREEN',
+    trend: {
+      totalDays: 3,
+      readyDays: 3,
+      blockedDays: 0,
+      readinessRate: 1.0,
+      readinessTargetPass: true,
+      latestBlockedStreak: 0,
+      window: { startDate: '2026-04-01', endDate: '2026-04-03' },
+      blockedReasonCounts: {},
+    },
+    latest: { date: '2026-04-03', readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+  })
+
+  assert.match(markdown, /Latest day: 2026-04-03 \(ready\)/)
+  assert.match(markdown, /- None/)
 })
 
 test('parseStatusPackArgs throws when out-file value is missing', () => {

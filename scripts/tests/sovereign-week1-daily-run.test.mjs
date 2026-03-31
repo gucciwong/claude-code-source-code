@@ -84,6 +84,31 @@ test('buildRunSummary returns compact machine-readable status object', () => {
   assert.equal(summary.output.evidenceFile, 'c.json')
 })
 
+test('buildRunSummary returns readyForDemo true when gate is satisfied', () => {
+  const summary = buildRunSummary({
+    date: '2026-04-01',
+    tier: '8GB',
+    evidence: {
+      gate: { readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+    },
+    output: {},
+  })
+
+  assert.equal(summary.readyForDemo, true)
+})
+
+test('buildRunSummary uses fallback reason when evidence gate reason is absent', () => {
+  const summary = buildRunSummary({
+    date: '2026-04-01',
+    tier: '8GB',
+    evidence: null,
+    output: {},
+  })
+
+  assert.equal(summary.readyForDemo, false)
+  assert.match(summary.reason, /No gate reason available/)
+})
+
 test('evaluateExitCode returns 2 only when strict gate mode is enabled and run is blocked', () => {
   assert.equal(evaluateExitCode({ strictGate: false, readyForDemo: false }), 0)
   assert.equal(evaluateExitCode({ strictGate: true, readyForDemo: true }), 0)

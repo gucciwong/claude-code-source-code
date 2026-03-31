@@ -81,6 +81,21 @@ test('buildTrendReport includes high-level metrics and top blocked reasons', () 
   assert.match(report, /Runtime is unreachable: 1/)
 })
 
+test('buildTrendReport renders None when there are no blocked reasons', () => {
+  const report = buildTrendReport({
+    totalDays: 3,
+    readyDays: 3,
+    blockedDays: 0,
+    readinessRate: 1.0,
+    readinessTargetPass: true,
+    latestBlockedStreak: 0,
+    window: { startDate: '2026-04-01', endDate: '2026-04-03' },
+    blockedReasonCounts: {},
+  })
+
+  assert.match(report, /- None/)
+})
+
 test('parseTrendArgs throws when readiness-threshold value is missing', () => {
   assert.throws(
     () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--readiness-threshold']),
