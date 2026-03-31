@@ -1,11 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile, readFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   buildMarkdownReport,
   summarizeReadiness,
   parseReportArgs,
 } from '../sovereign-week1-report.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('summarizeReadiness maps gate state to readable summary', () => {
   const summary = summarizeReadiness({
@@ -149,4 +156,39 @@ test('parseReportArgs throws on positional arguments', () => {
     () => parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', 'unexpected']),
     /Unexpected positional argument/,
   )
+})
+
+test('report CLI reads evidence and writes markdown report file', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-report-'))
+  const evidenceFile = join(dir, 'evidence.json')
+  const outFile = join(dir, 'report.md')
+
+  await writeFile(
+    evidenceFile,
+    JSON.stringify({
+      date: '2026-04-02',
+      runtimeReachable: true,
+      modelCount: 2,
+      metrics: { sampleCount: 2, firstTokenLatencyMsAvg: 470, tokensPerSecondAvg: 34 },
+      targets: { latencyPass: true, throughputPass: true, latencyLimitMs: 500, throughputMinimumTps: 30 },
+      gate: { readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+    }),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-report.mjs',
+    '--evidence-file',
+    evidenceFile,
+    '--out-file',
+    outFile,
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.evidenceFile, evidenceFile)
+  assert.equal(payload.outFile, outFile)
+
+  const markdown = await readFile(outFile, 'utf8')
+  assert.match(markdown, /Date: 2026-04-02/)
+  assert.match(markdown, /Overall readiness: Ready/)
 })

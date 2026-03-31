@@ -1,11 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtemp, writeFile, readFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import {
   buildCheckpointSummary,
   toCheckpointText,
   parseCheckpointArgs,
 } from '../sovereign-week1-checkpoint.mjs'
+
+const execFileAsync = promisify(execFile)
 
 test('buildCheckpointSummary maps evidence to checkpoint fields', () => {
   const summary = buildCheckpointSummary({
@@ -129,4 +136,36 @@ test('parseCheckpointArgs throws on positional arguments', () => {
     () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', 'unexpected']),
     /Unexpected positional argument/,
   )
+})
+
+test('checkpoint CLI reads evidence and writes checkpoint text file', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-checkpoint-'))
+  const evidenceFile = join(dir, 'evidence.json')
+  const outFile = join(dir, 'checkpoint.txt')
+
+  await writeFile(
+    evidenceFile,
+    JSON.stringify({
+      date: '2026-04-02',
+      metrics: { firstTokenLatencyMsAvg: 470, tokensPerSecondAvg: 34 },
+      gate: { readyForDemo: true, reason: 'All Week 1 gate signals are green' },
+    }),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-checkpoint.mjs',
+    '--evidence-file',
+    evidenceFile,
+    '--out-file',
+    outFile,
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.evidenceFile, evidenceFile)
+  assert.equal(payload.outFile, outFile)
+
+  const text = await readFile(outFile, 'utf8')
+  assert.match(text, /Week 1 Checkpoint \(2026-04-02\)/)
+  assert.match(text, /Readiness: Ready/)
 })
