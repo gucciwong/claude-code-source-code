@@ -66,3 +66,17 @@ test('parseCheckpointArgs throws on unknown options', () => {
     /Unknown option for checkpoint CLI/,
   )
 })
+
+test('parseCheckpointArgs throws on unknown short options', () => {
+  assert.throws(
+    () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '-x']),
+    /Unknown option for checkpoint CLI/,
+  )
+})
+
+test('parseCheckpointArgs throws on positional arguments', () => {
+  assert.throws(
+    () => parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', 'unexpected']),
+    /Unexpected positional argument/,
+  )
+})
