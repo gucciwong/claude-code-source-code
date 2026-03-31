@@ -86,6 +86,42 @@ test('buildExecutiveSummary renders ready state for latest day', () => {
   assert.match(markdown, /- None/)
 })
 
+test('buildExecutiveSummary falls back to N/A for missing latest reason and window bounds', () => {
+  const markdown = buildExecutiveSummary({
+    overallStatus: 'RED',
+    trend: {
+      totalDays: 0,
+      readyDays: 0,
+      blockedDays: 0,
+      readinessRate: 0,
+      readinessTargetPass: false,
+      latestBlockedStreak: 0,
+      window: { startDate: null, endDate: null },
+      blockedReasonCounts: {},
+    },
+    latest: { date: 'N/A', readyForDemo: false },
+  })
+
+  assert.match(markdown, /Window: N\/A to N\/A/)
+  assert.match(markdown, /Latest reason: N\/A/)
+})
+
+test('parseStatusPackArgs parses explicit values and json flag', () => {
+  const args = parseStatusPackArgs([
+    'node',
+    'scripts/sovereign-week1-status-pack.mjs',
+    '--dir',
+    'custom-artifacts',
+    '--out-file',
+    'custom-artifacts/status.md',
+    '--json',
+  ])
+
+  assert.equal(args.dir, 'custom-artifacts')
+  assert.equal(args.outFile, 'custom-artifacts/status.md')
+  assert.equal(args.json, true)
+})
+
 test('parseStatusPackArgs throws when out-file value is missing', () => {
   assert.throws(
     () => parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '--out-file']),
