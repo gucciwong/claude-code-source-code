@@ -60,6 +60,13 @@ test('parseBenchmarkArgs throws when --tier value is missing', () => {
   )
 })
 
+test('parseBenchmarkArgs throws when --tier value is unsupported', () => {
+  assert.throws(
+    () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--tier', '16GB']),
+    /Unsupported --tier value/,
+  )
+})
+
 test('parseBenchmarkArgs throws on unknown options', () => {
   assert.throws(
     () => parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--unknown']),
