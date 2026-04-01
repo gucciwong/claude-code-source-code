@@ -87,6 +87,30 @@ test('parseCiArgs throws on positional arguments', () => {
   )
 })
 
+test('parseCiArgs treats token after value-taking flag as forwarded value even if it starts with dash', () => {
+  const parsed = parseCiArgs([
+    'node',
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--out-dir',
+    '-tmp-artifacts',
+    '--sample-file',
+    'samples.json',
+  ])
+
+  assert.deepEqual(parsed.forwardArgs, ['--out-dir', '-tmp-artifacts', '--sample-file', 'samples.json'])
+})
+
+test('parseCiArgs consumes value slot for forward flags before wrapper validation', () => {
+  const parsed = parseCiArgs([
+    'node',
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--date',
+    '--tier',
+  ])
+
+  assert.deepEqual(parsed.forwardArgs, ['--date', '--tier'])
+})
+
 test('buildDailyRunArgs always enforces strict gate once', () => {
   const args = buildDailyRunArgs(['--date', '2026-04-01'])
   const strictGateArgs = args.filter(value => value === '--strict-gate')
@@ -187,4 +211,33 @@ test('ci-run soft mode downgrades gate block to warning and exits zero', async (
   ])
 
   assert.match(stderr, /treated as warning in soft mode/)
+})
+
+test('ci-run propagates non-gate child failure exit code and stderr', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-ci-invalid-tier-'))
+  const sampleFile = join(dir, 'samples.json')
+  await writeFile(
+    sampleFile,
+    JSON.stringify([{ firstTokenLatencyMs: 450, tokensPerSecond: 33 }]),
+    'utf8',
+  )
+
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-ci-run.mjs',
+      '--mode',
+      'soft',
+      '--tier',
+      '16GB',
+      '--sample-file',
+      sampleFile,
+      '--out-dir',
+      dir,
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /Unsupported --tier value/)
+      return true
+    },
+  )
 })
