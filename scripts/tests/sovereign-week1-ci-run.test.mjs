@@ -111,6 +111,38 @@ test('parseCiArgs consumes value slot for forward flags before wrapper validatio
   assert.deepEqual(parsed.forwardArgs, ['--date', '--tier'])
 })
 
+test('parseCiArgs forwards --dry-run without consuming a value slot', () => {
+  const parsed = parseCiArgs([
+    'node',
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--dry-run',
+  ])
+
+  assert.deepEqual(parsed.forwardArgs, ['--dry-run'])
+})
+
+test('parseCiArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try {
+    parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs', '--help'])
+  } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseCiArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try {
+    parseCiArgs(['node', 'scripts/sovereign-week1-ci-run.mjs', '-h'])
+  } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
 test('buildDailyRunArgs always enforces strict gate once', () => {
   const args = buildDailyRunArgs(['--date', '2026-04-01'])
   const strictGateArgs = args.filter(value => value === '--strict-gate')
