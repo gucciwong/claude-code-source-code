@@ -572,7 +572,244 @@ The Figma output (React + Tailwind reference) must be adapted to this project's 
 
 ---
 
-## Part 5: Key File Locations
+## Part 5: VibeVoice Integration
+
+### 5.1 Architecture
+
+VibeVoice adds voice I/O (speech-to-text + text-to-speech) to Sovereign Coder. The desktop app communicates with a Python FastAPI backend service for audio processing.
+
+```
+Desktop App (Electron + React)
+    ↓ (useVoiceService hook)
+    ↓ HTTP POST /transcribe, /synthesize
+    ↓
+Voice Service (FastAPI + Python)
+    ├─ Whisper ASR (speech-to-text)
+    ├─ Google TTS (text-to-speech)
+    └─ Audio processing utilities
+```
+
+### 5.2 Voice Service Location
+
+Located at `services/voice-service/`:
+
+```
+services/voice-service/
+  main.py                    # FastAPI server (port 8000)
+  voice_service/
+    models/
+      whisper.py            # Whisper ASR wrapper
+      tts.py                # Google TTS wrapper
+    audio/
+      processor.py          # Audio utilities (librosa)
+  requirements.txt          # Python dependencies
+  pyproject.toml            # Build config
+  .env.example              # Configuration template
+```
+
+### 5.3 Desktop App Voice Components
+
+Located at `apps/desktop/src/renderer/components/voice/`:
+
+```
+voice/
+  Waveform.tsx              # Real-time audio visualization (Web Audio API + Canvas)
+  VoiceSettings.tsx         # Model/language selector panel
+  TranscriptionHistory.tsx  # Searchable history with export/delete
+  VoiceInput.tsx            # Mic recording + file upload
+  VoiceOutput.tsx           # TTS synthesis + playback
+  VoicePanel.tsx            # Unified voice controls
+  index.ts                  # Component exports
+```
+
+Voice state management: `apps/desktop/src/renderer/store/voiceStore.ts` (Zustand)
+
+Voice service client: `apps/desktop/src/renderer/hooks/useVoiceService.ts`
+
+### 5.4 Getting Started with VibeVoice
+
+**Option 1: Docker Compose (Recommended)**
+
+```bash
+# Start voice service + Redis cache
+docker-compose up -d
+
+# Verify health
+curl http://localhost:8000/health
+```
+
+**Option 2: Local Python**
+
+```bash
+cd services/voice-service
+python3.10 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python -m uvicorn main:app --reload --port 8000
+```
+
+### 5.5 Voice API Endpoints
+
+All endpoints respond with JSON and support CORS.
+
+**POST /transcribe** — Audio to text
+```bash
+curl -X POST http://localhost:8000/transcribe \
+  -F "file=@audio.wav" \
+  -F "language=en"
+
+# Response:
+# {"text": "...", "language": "en", "confidence": 0.95, "duration": 2.5}
+```
+
+**POST /synthesize** — Text to audio
+```bash
+curl -X POST http://localhost:8000/synthesize \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello world", "language": "en"}'
+
+# Response:
+# {"audio_url": "data:audio/wav;base64,...", "duration": 1.5}
+```
+
+**GET /health** — Service status
+```bash
+curl http://localhost:8000/health
+
+# Response:
+# {"status": "ok", "version": "0.1.0", "asr_loaded": true, "tts_loaded": true}
+```
+
+### 5.6 Voice Integration Pattern (in Desktop Components)
+
+```typescript
+import { useVoiceService } from '@/hooks/useVoiceService'
+import { useVoiceStore } from '@/store/voiceStore'
+
+function VoiceCapableComponent() {
+  const { transcribeAudio, synthesizeText } = useVoiceService()
+  const { isRecording, addTranscription } = useVoiceStore()
+
+  // Transcribe audio blob to text
+  const handleTranscribe = async (audioBlob: Blob) => {
+    const result = await transcribeAudio(audioBlob, 'en')
+    if (result) {
+      addTranscription({
+        id: crypto.randomUUID(),
+        text: result.text,
+        language: result.language,
+        confidence: result.confidence,
+        duration: result.duration,
+        timestamp: Date.now(),
+      })
+    }
+  }
+
+  // Synthesize text to audio
+  const handleSpeak = async (text: string) => {
+    const result = await synthesizeText(text, 'en')
+    if (result && result.audio_url) {
+      const audio = new Audio(result.audio_url)
+      await audio.play()
+    }
+  }
+
+  return (
+    <div>
+      {/* Voice UI */}
+    </div>
+  )
+}
+```
+
+### 5.7 Testing Voice Integration
+
+**Unit tests** (mock backend):
+```bash
+npm test -- useVoiceService.test.ts
+```
+
+**E2E tests** (requires live service):
+```bash
+# Terminal 1: Start voice service
+docker-compose up voice-service
+
+# Terminal 2: Run E2E tests
+npm test -- useVoiceService.e2e.test.ts
+```
+
+**Manual testing**:
+```bash
+# Verify service responds
+curl http://localhost:8000/health
+
+# Check documentation
+cat VOICE_INTEGRATION.md
+```
+
+### 5.8 Configuration
+
+Voice service respects these environment variables:
+
+```bash
+# Service
+PORT=8000                   # Listen port
+LOG_LEVEL=INFO             # Logging verbosity
+
+# Audio Processing
+VAD_AGGRESSIVENESS=2       # Voice Activity Detection (0-3)
+SILENCE_THRESHOLD_MS=800   # Silence duration before finalizing
+MIN_UTTERANCE_DURATION_MS=500  # Minimum speech duration
+
+# Models
+WHISPER_MODEL_SIZE=base    # tiny, base, small, medium, large
+TTS_DEFAULT_LANG=en
+
+# Optimization
+DEVICE=cpu                 # cpu, cuda, mps, auto
+ENABLE_GPU_OPTIMIZATION=false  # Use float16 for faster inference
+```
+
+See `services/voice-service/.env.example` for full config.
+
+### 5.9 Performance Notes
+
+- **First request latency**: ~500ms (models load on first use, then cached)
+- **Subsequent requests**: ~50-100ms (CPU), ~10-20ms (GPU with CUDA)
+- **Memory usage**: ~1.5GB (ASR + TTS models)
+- **GPU memory**: ~4GB (with float16 optimization, ~2GB)
+
+GPU acceleration requires NVIDIA CUDA 11.8+ installed locally.
+
+### 5.10 Troubleshooting
+
+**Service won't start**
+```
+Address already in use port 8000
+→ Change PORT in .env or: lsof -ti:8000 | xargs kill -9
+```
+
+**Transcription fails**
+```
+CUDA device not available
+→ Set DEVICE=cpu in .env
+```
+
+**Long latency on first request**
+```
+Models loading for first time (normal)
+→ First request: wait 5-10s. Subsequent: <100ms
+```
+
+**Out of memory**
+```
+CUDA out of memory
+→ Use smaller model or CPU: DEVICE=cpu WHISPER_MODEL_SIZE=tiny
+```
+
+---
+
+## Part 6: Key File Locations
 
 | File | Purpose |
 |---|---|
@@ -584,3 +821,9 @@ The Figma output (React + Tailwind reference) must be adapted to this project's 
 | `docs/plans/2026-04-01-figma-keyframes-spec.md` | Figma frame specs (exact px values) |
 | `docs/plans/2026-04-01-figma-tokens.json` | W3C DTCG design tokens (import via Tokens Studio) |
 | `docs/en/Sovereign-Coder-PRD.md` | Full product requirements |
+| `services/voice-service/main.py` | FastAPI voice service (ASR + TTS) |
+| `services/voice-service/requirements.txt` | Python dependencies |
+| `apps/desktop/src/renderer/store/voiceStore.ts` | Voice state management (Zustand) |
+| `apps/desktop/src/renderer/hooks/useVoiceService.ts` | Voice service API client |
+| `VOICE_INTEGRATION.md` | Complete voice integration guide |
+| `docker-compose.yml` | Docker setup for voice service + Redis |
