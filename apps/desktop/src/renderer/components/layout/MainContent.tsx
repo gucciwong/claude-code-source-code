@@ -1,0 +1,26 @@
+import { useNavigationStore } from '../../store/navigationStore'
+import { Dashboard } from '../../screens/Dashboard'
+import { Models } from '../../screens/Models'
+import { Chat } from '../../screens/Chat'
+import { Training } from '../../screens/Training'
+import { Federation } from '../../screens/Federation'
+import { Settings } from '../../screens/Settings'
+
+const screens = {
+  dashboard: Dashboard,
+  models: Models,
+  chat: Chat,
+  training: Training,
+  federation: Federation,
+  settings: Settings,
+}
+
+export function MainContent() {
+  const active = useNavigationStore(s => s.active)
+  const Screen = screens[active]
+  return (
+    <main className="flex-1 bg-bg-base overflow-auto">
+      <Screen />
+    </main>
+  )
+}
