@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sovereign-voice-service"
+version = "0.1.0"
+description = "Voice AI service for Sovereign Coder using VibeVoice"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio", "black", "ruff"]
