@@ -1,3 +1,6 @@
 node_modules/
 build-src/
 dist/
+coverage/
+.playwright-mcp/
+*.log
