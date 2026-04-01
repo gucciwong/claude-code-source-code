@@ -311,3 +311,42 @@ test('runtime-check CLI exits with parse error for unknown option', async () => 
     },
   )
 })
+
+test('runtime-check CLI reports non-OK HTTP status from endpoint', async () => {
+  const server = createServer((req, res) => {
+    if (req.url === '/api/tags') {
+      res.statusCode = 500
+      res.statusMessage = 'Internal Server Error'
+      res.end('boom')
+      return
+    }
+    res.statusCode = 404
+    res.end('not found')
+  })
+
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const address = server.address()
+  const port = typeof address === 'object' && address ? address.port : 0
+
+  try {
+    await assert.rejects(
+      execFileAsync(process.execPath, [
+        'scripts/sovereign-week1-runtime-check.mjs',
+        '--host',
+        '127.0.0.1',
+        '--port',
+        String(port),
+        '--json',
+      ]),
+      error => {
+        assert.equal(error.code, 2)
+        const payload = JSON.parse(error.stdout)
+        assert.equal(payload.runtime.reachable, false)
+        assert.match(payload.runtime.error, /500 Internal Server Error/)
+        return true
+      },
+    )
+  } finally {
+    await new Promise(resolve => server.close(resolve))
+  }
+})

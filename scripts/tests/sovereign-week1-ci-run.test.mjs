@@ -251,3 +251,18 @@ test('ci-run --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-ci-run\.mjs/)
   assert.match(stdout, /--mode <soft\|hard>/)
 })
+
+test('ci-run exits with parse error when wrapper arguments are invalid', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-ci-run.mjs',
+      '--mode',
+      'invalid',
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /Unsupported mode: invalid/)
+      return true
+    },
+  )
+})
