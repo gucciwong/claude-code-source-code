@@ -1,8 +1,11 @@
 import { AppShell } from './components/layout/AppShell'
 import { Sidebar } from './components/layout/Sidebar'
+import { StatusBar } from './components/layout/StatusBar'
 import { CommandPalette } from './components/CommandPalette'
+import { useOllamaStatus } from './hooks/useOllamaStatus'
 
 export default function App() {
+  useOllamaStatus()
   return (
     <AppShell>
       <div className="flex flex-1 overflow-hidden">
@@ -11,8 +14,7 @@ export default function App() {
           <p className="p-6 text-text-primary">Sovereign Coder — Main Content</p>
         </main>
       </div>
-      {/* StatusBar placeholder */}
-      <div className="h-[28px] bg-bg-surface-1 border-t border-border-subtle" />
+      <StatusBar />
       <CommandPalette />
     </AppShell>
   )
