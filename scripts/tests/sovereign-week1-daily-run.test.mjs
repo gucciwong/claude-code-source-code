@@ -228,3 +228,14 @@ test('daily-run CLI --dry-run prints planned output paths and commands', async (
   assert.equal(Array.isArray(payload.commands), true)
   assert.equal(payload.commands.length, 5)
 })
+
+test('daily-run --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-daily-run.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-daily-run\.mjs/)
+  assert.match(stdout, /--tier <tier>/)
+  assert.match(stdout, /--dry-run/)
+})

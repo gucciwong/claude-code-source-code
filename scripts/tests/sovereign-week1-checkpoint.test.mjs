@@ -179,3 +179,18 @@ test('checkpoint --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-checkpoint\.mjs/)
   assert.match(stdout, /--evidence-file <path>/)
 })
+
+test('checkpoint CLI exits with error when required arguments are missing', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-checkpoint.mjs',
+      '--evidence-file',
+      'some-file.json',
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /both --evidence-file and --out-file are required/)
+      return true
+    },
+  )
+})
