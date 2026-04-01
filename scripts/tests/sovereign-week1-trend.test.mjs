@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtemp, writeFile } from 'node:fs/promises'
+import { mkdtemp, mkdir, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { execFile } from 'node:child_process'
@@ -192,6 +192,38 @@ test('parseTrendArgs throws on unknown options', () => {
   )
 })
 
+test('parseTrendArgs throws when readiness-threshold value is non-numeric', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--readiness-threshold', 'abc']),
+    /Invalid --readiness-threshold/,
+  )
+})
+
+test('parseTrendArgs throws when readiness-threshold is negative', () => {
+  assert.throws(
+    () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--readiness-threshold', '-0.1']),
+    /Invalid --readiness-threshold/,
+  )
+})
+
+test('parseTrendArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseTrendArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
 test('parseTrendArgs throws on unknown short options', () => {
   assert.throws(
     () => parseTrendArgs(['node', 'scripts/sovereign-week1-trend.mjs', '-x']),
@@ -286,4 +318,54 @@ test('trend CLI exits with error when directory does not exist', async () => {
       return true
     },
   )
+})
+
+test('buildTrendReport uses N/A when window dates are null', () => {
+  const report = buildTrendReport({
+    totalDays: 0,
+    readyDays: 0,
+    blockedDays: 0,
+    readinessRate: 0,
+    readinessTargetPass: false,
+    latestBlockedStreak: 0,
+    window: { startDate: null, endDate: null },
+    blockedReasonCounts: {},
+  })
+
+  assert.match(report, /Window: N\/A to N\/A/)
+})
+
+test('buildTrendReport uses 0 when latestBlockedStreak is nullish', () => {
+  const report = buildTrendReport({
+    totalDays: 1,
+    readyDays: 1,
+    blockedDays: 0,
+    readinessRate: 1.0,
+    readinessTargetPass: true,
+    latestBlockedStreak: null,
+    window: { startDate: '2026-04-01', endDate: '2026-04-01' },
+    blockedReasonCounts: {},
+  })
+
+  assert.match(report, /Latest blocked streak: 0 day\(s\)/)
+})
+
+test('trend CLI skips subdirectory entries when scanning for summary files', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-trend-subdir-'))
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-05.json'),
+    JSON.stringify({ date: '2026-04-05', readyForDemo: true, reason: 'Ready' }),
+    'utf8',
+  )
+  await mkdir(join(dir, 'subdir'))
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-trend.mjs',
+    '--dir',
+    dir,
+    '--json',
+  ])
+
+  const metrics = JSON.parse(stdout)
+  assert.equal(metrics.totalDays, 1)
 })

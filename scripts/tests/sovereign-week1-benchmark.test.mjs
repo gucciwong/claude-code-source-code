@@ -38,6 +38,20 @@ test('validateSamples rejects invalid numeric values', () => {
   )
 })
 
+test('validateSamples rejects non-number firstTokenLatencyMs', () => {
+  assert.throws(
+    () => validateSamples([{ firstTokenLatencyMs: 'fast', tokensPerSecond: 35 }]),
+    /firstTokenLatencyMs/,
+  )
+})
+
+test('validateSamples rejects non-number tokensPerSecond', () => {
+  assert.throws(
+    () => validateSamples([{ firstTokenLatencyMs: 300, tokensPerSecond: null }]),
+    /tokensPerSecond/,
+  )
+})
+
 test('validateSamples rejects empty array', () => {
   assert.throws(
     () => validateSamples([]),
@@ -252,4 +266,56 @@ test('benchmark CLI exits with error when --file argument is missing', async () 
       return true
     },
   )
+})
+
+test('buildReport uses 1000ms latency limit for 24GB tier', () => {
+  const report = buildReport({
+    tier: '24GB',
+    samples: [{ firstTokenLatencyMs: 800, tokensPerSecond: 35 }],
+  })
+
+  assert.equal(report.targets.latencyLimitMs, 1000)
+  assert.equal(report.profile.normalizedTier, '24GB')
+})
+
+test('benchmark CLI prints human output with PASS labels and default tier when targets are met', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-benchmark-pass-'))
+  const file = join(dir, 'samples.json')
+
+  await writeFile(
+    file,
+    JSON.stringify([
+      { firstTokenLatencyMs: 300, tokensPerSecond: 40 },
+      { firstTokenLatencyMs: 350, tokensPerSecond: 38 },
+    ]),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-benchmark.mjs',
+    '--file',
+    file,
+  ])
+
+  assert.match(stdout, /Tier: default/)
+  assert.match(stdout, /Latency target .* PASS/)
+  assert.match(stdout, /Throughput target .* PASS/)
+})
+
+test('parseBenchmarkArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseBenchmarkArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseBenchmarkArgs(['node', 'scripts/sovereign-week1-benchmark.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
 })
