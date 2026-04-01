@@ -35,9 +35,16 @@ export const StatusBarAlignment = {
   Right: 2,
 } as const
 
+export const ConfigurationTarget = {
+  Global: 1,
+  Workspace: 2,
+  WorkspaceFolder: 3,
+} as const
+
 export const workspace = {
   getConfiguration: vi.fn().mockReturnValue({
     get: vi.fn().mockImplementation((_key: string, defaultValue: unknown) => defaultValue),
+    update: vi.fn(),
   }),
 }
 
