@@ -1,6 +1,7 @@
 fastapi==0.104.1
 uvicorn==0.24.0
 python-multipart==0.0.6
+websockets==12.0  # WebSocket support for streaming
 # Note: For CUDA support, install: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 torch==2.1.0
 transformers==4.36.0
@@ -10,3 +11,5 @@ librosa==0.10.0
 pytest==7.4.3
 pytest-asyncio==0.21.1
 psutil==5.9.0  # For GPU/CPU monitoring
+webrtcvad==2.0.10  # Voice Activity Detection for streaming
+python-dotenv==1.0.0  # Environment variable management

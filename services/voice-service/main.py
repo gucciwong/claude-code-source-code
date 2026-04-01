@@ -1,6 +1,6 @@
 """FastAPI voice service for VSCode + Desktop."""
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import logging
@@ -9,6 +9,9 @@ from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
 import tempfile
+import json
+import numpy as np
+import asyncio
 
 # Load environment
 load_dotenv()
@@ -25,6 +28,7 @@ from voice_service.models.whisper import WhisperASR
 from voice_service.models.tts import GTTSAPI
 from voice_service.audio.processor import AudioProcessor
 from voice_service.config.device_config import DeviceConfig
+from voice_service.stream.streaming_transcriber import StreamingTranscriber
 
 # FastAPI app
 app = FastAPI(
@@ -52,6 +56,7 @@ app.add_middleware(
 # Model instances (singleton pattern)
 asr_model: Optional[WhisperASR] = None
 tts_model: Optional[GTTSAPI] = None
+streaming_transcriber: Optional[StreamingTranscriber] = None
 
 
 # Models
@@ -84,7 +89,7 @@ class SpeakResponse(BaseModel):
 @app.on_event("startup")
 async def startup():
     """Initialize models on startup."""
-    global asr_model, tts_model
+    global asr_model, tts_model, streaming_transcriber
     
     logger.info("Initializing models...")
     
@@ -114,6 +119,20 @@ async def startup():
         logger.info(f"TTS model initialized: {tts_model.is_loaded}")
     except Exception as e:
         logger.error(f"Failed to initialize TTS: {e}")
+    
+    try:
+        # Initialize streaming transcriber for WebSocket
+        streaming_transcriber = StreamingTranscriber(
+            model_size=os.getenv("WHISPER_MODEL_SIZE", "base"),
+            device=device,
+            compute_type=os.getenv("WHISPER_COMPUTE_TYPE", "default"),
+            vad_aggressiveness=int(os.getenv("VAD_AGGRESSIVENESS", "2")),
+            silence_threshold_ms=float(os.getenv("SILENCE_THRESHOLD_MS", "800")),
+            min_utterance_duration_ms=float(os.getenv("MIN_UTTERANCE_DURATION_MS", "500"))
+        )
+        logger.info("Streaming transcriber initialized for WebSocket support")
+    except Exception as e:
+        logger.error(f"Failed to initialize streaming transcriber: {e}")
 
 
 @app.on_event("shutdown")
@@ -269,6 +288,135 @@ async def get_tts_info():
 async def get_device_info():
     """Get GPU/device information."""
     return DeviceConfig.get_device_info()
+
+
+@app.websocket("/ws/transcribe")
+async def websocket_transcribe(websocket: WebSocket):
+    """
+    WebSocket endpoint for streaming transcription with VAD.
+    
+    Expected protocol:
+    - Client sends: {"type": "audio_chunk", "data": "<base64-encoded-pcm>"}
+    - Server responds: {"type": "transcript", "text": "...", "is_final": false, "confidence": 0.92}
+    - Client sends: {"type": "close"} to close connection
+    """
+    global streaming_transcriber
+    
+    if not streaming_transcriber:
+        await websocket.close(code=1011, reason="Streaming transcriber not initialized")
+        return
+    
+    await websocket.accept()
+    logger.info("WebSocket connection established")
+    
+    try:
+        connection_start_time = asyncio.get_event_loop().time()
+        chunks_received = 0
+        total_audio_bytes = 0
+        
+        # Send initial status
+        await websocket.send_json({
+            "type": "status",
+            "message": "Connected to streaming transcriber",
+            "device": streaming_transcriber.device,
+        })
+        
+        while True:
+            try:
+                # Receive message from client
+                message = await asyncio.wait_for(websocket.receive_json(), timeout=30.0)
+                
+                if message.get("type") == "close":
+                    logger.info("Client initiated connection close")
+                    break
+                
+                if message.get("type") != "audio_chunk":
+                    await websocket.send_json({
+                        "type": "error",
+                        "message": f"Unknown message type: {message.get('type')}"
+                    })
+                    continue
+                
+                # Decode audio chunk
+                import base64
+                try:
+                    audio_bytes = base64.b64decode(message.get("data", ""))
+                    audio_np = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
+                    total_audio_bytes += len(audio_bytes)
+                    chunks_received += 1
+                except Exception as e:
+                    logger.error(f"Audio decode error: {e}")
+                    await websocket.send_json({
+                        "type": "error",
+                        "message": f"Audio decode error: {str(e)}"
+                    })
+                    continue
+                
+                # Process chunk
+                result = await streaming_transcriber.process_chunk(audio_np)
+                
+                # Send result if text is available
+                if result.get("text"):
+                    await websocket.send_json({
+                        "type": "transcript",
+                        "text": result["text"],
+                        "is_final": result.get("is_final", False),
+                        "confidence": result.get("confidence", 0.0),
+                        "duration_ms": result.get("duration", 0.0),
+                    })
+                    logger.info(
+                        f"Sent transcript: '{result['text'][:50]}...' "
+                        f"(final={result.get('is_final')}, "
+                        f"confidence={result.get('confidence', 0.0):.2f})"
+                    )
+                
+                # Send periodic status updates
+                if chunks_received % 10 == 0:
+                    status = streaming_transcriber.get_status()
+                    await websocket.send_json({
+                        "type": "status",
+                        "chunks_received": chunks_received,
+                        "total_audio_ms": status["total_audio_received_ms"],
+                        "in_speech": status["in_speech"],
+                    })
+                
+            except asyncio.TimeoutError:
+                logger.warning("WebSocket receive timeout, closing connection")
+                await websocket.send_json({
+                    "type": "status",
+                    "message": "Timeout - no data received for 30s"
+                })
+                break
+            except WebSocketDisconnect:
+                logger.info("WebSocket disconnected")
+                break
+            except Exception as e:
+                logger.error(f"WebSocket error: {e}")
+                await websocket.send_json({
+                    "type": "error",
+                    "message": f"Processing error: {str(e)}"
+                })
+                break
+    
+    except Exception as e:
+        logger.error(f"WebSocket connection error: {e}")
+        try:
+            await websocket.send_json({
+                "type": "error",
+                "message": f"Connection error: {str(e)}"
+            })
+        except:
+            pass
+    finally:
+        # Connection cleanup
+        connection_duration = asyncio.get_event_loop().time() - connection_start_time
+        streaming_transcriber.reset()
+        logger.info(
+            f"WebSocket connection closed: "
+            f"duration={connection_duration:.1f}s, "
+            f"chunks={chunks_received}, "
+            f"total_audio={total_audio_bytes} bytes"
+        )
 
 
 if __name__ == "__main__":
