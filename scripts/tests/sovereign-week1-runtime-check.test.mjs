@@ -173,3 +173,48 @@ test('runtime-check CLI exits with code 2 when runtime is unreachable', async ()
     },
   )
 })
+
+test('runtime-check --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-runtime-check.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-runtime-check\.mjs/)
+  assert.match(stdout, /--timeout-ms <ms>/)
+})
+
+test('runtime-check CLI prints human-readable output and invalid VRAM hint', async () => {
+  const server = createServer((req, res) => {
+    if (req.url === '/api/tags') {
+      res.setHeader('content-type', 'application/json')
+      res.end(JSON.stringify({ models: [{ name: 'model-a' }] }))
+      return
+    }
+    res.statusCode = 404
+    res.end('not found')
+  })
+
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const address = server.address()
+  const port = typeof address === 'object' && address ? address.port : 0
+
+  try {
+    const { stdout } = await execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-runtime-check.mjs',
+      '--host',
+      '127.0.0.1',
+      '--port',
+      String(port),
+      '--vram',
+      '16GB',
+    ])
+
+    assert.match(stdout, /Sovereign Week 1 Runtime Check/)
+    assert.match(stdout, /Reachable: yes/)
+    assert.match(stdout, /Models discovered: 1/)
+    assert.match(stdout, /VRAM tier '16GB' is invalid/)
+  } finally {
+    await new Promise(resolve => server.close(resolve))
+  }
+})

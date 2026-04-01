@@ -241,3 +241,13 @@ test('ci-run propagates non-gate child failure exit code and stderr', async () =
     },
   )
 })
+
+test('ci-run --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-ci-run.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-ci-run\.mjs/)
+  assert.match(stdout, /--mode <soft\|hard>/)
+})
