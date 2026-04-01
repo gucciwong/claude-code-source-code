@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import { SovereignCompletionProvider } from '../completionProvider'
 import * as ollamaClient from '../ollamaClient'
+import type { Retriever } from '../rag/retriever'
 
 vi.mock('../ollamaClient')
 
@@ -99,3 +100,70 @@ test('passes correct params to getCompletion', async () => {
     expect.any(AbortSignal),
   )
 })
+
+describe('RAG context injection', () => {
+  test('prepends retrieved context when ragEnabled is true', async () => {
+    const mockChunk = { filePath: 'src/foo.ts', startLine: 1, endLine: 5, content: 'const x = 1' }
+    const mockRetriever = {
+      query: vi.fn().mockResolvedValue([mockChunk]),
+    } as unknown as Retriever
+    vi.mocked(vscode.workspace.getConfiguration).mockReturnValue({
+      get: vi.fn().mockImplementation((key: string) => {
+        const cfg: Record<string, unknown> = {
+          enabled: true,
+          ollamaUrl: 'http://localhost:11434',
+          model: 'qwen2.5-coder:7b',
+          maxTokens: 64,
+          triggerOnTyping: true,
+          ragEnabled: true,
+          ragTopK: 3,
+          ragMaxContextChars: 2000,
+        }
+        return cfg[key]
+      }),
+    } as unknown as vscode.WorkspaceConfiguration)
+    const ragProvider = new SovereignCompletionProvider(mockRetriever)
+    const doc = makeDoc('const greeting = ')
+    await ragProvider.provideInlineCompletionItems(doc, makePos(0, 18), ctx, liveToken)
+    expect(mockRetriever.query).toHaveBeenCalled()
+    expect(ollamaClient.getCompletion).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.stringContaining('// Context from workspace:'),
+      expect.any(Number),
+      expect.any(AbortSignal),
+    )
+  })
+
+  test('skips RAG when ragEnabled is false', async () => {
+    const mockRetriever = {
+      query: vi.fn().mockResolvedValue([]),
+    } as unknown as Retriever
+    vi.mocked(vscode.workspace.getConfiguration).mockReturnValue({
+      get: vi.fn().mockImplementation((key: string) => {
+        const cfg: Record<string, unknown> = {
+          enabled: true,
+          ollamaUrl: 'http://localhost:11434',
+          model: 'qwen2.5-coder:7b',
+          maxTokens: 64,
+          triggerOnTyping: true,
+          ragEnabled: false,
+        }
+        return cfg[key]
+      }),
+    } as unknown as vscode.WorkspaceConfiguration)
+    const ragProvider = new SovereignCompletionProvider(mockRetriever)
+    const doc = makeDoc('const x = ')
+    await ragProvider.provideInlineCompletionItems(doc, makePos(0, 10), ctx, liveToken)
+    expect(mockRetriever.query).not.toHaveBeenCalled()
+  })
+
+  test('completion still works when retriever is null', async () => {
+    const nullProvider = new SovereignCompletionProvider(null)
+    const doc = makeDoc('const x = ')
+    const result = await nullProvider.provideInlineCompletionItems(doc, makePos(0, 10), ctx, liveToken)
+    expect(result).toBeInstanceOf(Array)
+    expect((result as vscode.InlineCompletionItem[]).length).toBe(1)
+  })
+})
+

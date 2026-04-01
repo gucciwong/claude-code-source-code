@@ -1,7 +1,12 @@
 import * as vscode from 'vscode'
+import * as fs from 'fs'
+import * as path from 'path'
 import { SovereignCompletionProvider } from './completionProvider'
 import { createStatusBar } from './statusBar'
 import { checkOllamaOnline } from './ollamaClient'
+import { ChunkStore } from './rag/store'
+import { Retriever } from './rag/retriever'
+import { Indexer } from './rag/indexer'
 
 const POLL_INTERVAL_MS = 30_000
 
@@ -9,8 +14,25 @@ export function activate(context: vscode.ExtensionContext): void {
   const statusBar = createStatusBar()
   statusBar.setLoading()
 
+  // Set up RAG index if a workspace folder is open
+  let retriever: Retriever | null = null
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
+  if (workspaceRoot) {
+    const dbDir = path.join(workspaceRoot, '.sovereign-coder')
+    fs.mkdirSync(dbDir, { recursive: true })
+    const dbPath = path.join(dbDir, 'rag.db')
+    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const ollamaUrl = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
+    const embeddingModel = cfg.get<string>('embeddingModel', 'nomic-embed-text')
+    const store = new ChunkStore(dbPath)
+    retriever = new Retriever(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
+    const indexer = new Indexer(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
+    void indexer.start(workspaceRoot)
+    context.subscriptions.push({ dispose: () => { indexer.stop(); store.dispose() } })
+  }
+
   // Register inline completion provider for all files
-  const provider = new SovereignCompletionProvider()
+  const provider = new SovereignCompletionProvider(retriever)
   const providerDisposable = vscode.languages.registerInlineCompletionItemProvider(
     { pattern: '**' },
     provider,
@@ -53,3 +75,4 @@ export function activate(context: vscode.ExtensionContext): void {
 export function deactivate(): void {
   // All cleanup handled by context.subscriptions
 }
+
