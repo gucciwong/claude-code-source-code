@@ -46,14 +46,14 @@ export const workspace = {
     get: vi.fn().mockImplementation((_key: string, defaultValue: unknown) => defaultValue),
     update: vi.fn(),
   }),
-  findFiles: vi.fn().mockResolvedValue([]),
+  findFiles: vi.fn(() => Promise.resolve([])),
   workspaceFolders: undefined as unknown as Array<{ uri: Uri; name: string; index: number }> | undefined,
-  createFileSystemWatcher: vi.fn().mockReturnValue({
+  createFileSystemWatcher: vi.fn(() => ({
     onDidCreate: vi.fn().mockReturnValue({ dispose: vi.fn() }),
     onDidChange: vi.fn().mockReturnValue({ dispose: vi.fn() }),
     onDidDelete: vi.fn().mockReturnValue({ dispose: vi.fn() }),
     dispose: vi.fn(),
-  }),
+  })),
 }
 
 export const window = {
