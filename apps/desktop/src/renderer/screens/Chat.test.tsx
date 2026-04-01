@@ -4,6 +4,7 @@ import { Chat } from './Chat'
 import { useChatStore } from '../store/chatStore'
 import { useSystemStore } from '../store/systemStore'
 import { useAgentStore } from '../store/agentStore'
+import { useVoiceStore } from '../store/voiceStore'
 
 // Mock streamChat to avoid real HTTP calls
 vi.mock('../services/ollamaClient', () => ({
@@ -22,6 +23,7 @@ beforeEach(() => {
     fileChanges: [],
     dryRun: false,
   })
+  useVoiceStore.setState({ isProcessing: false })
 })
 
 test('renders chat screen', () => {
@@ -117,6 +119,48 @@ test('does not show tool trace when agent mode is off', () => {
 
   render(<Chat />)
   expect(screen.queryByText('Tool Calls')).not.toBeInTheDocument()
+})
+
+test('renders voice panel toggle button', () => {
+  render(<Chat />)
+  expect(screen.getByRole('button', { name: /toggle voice panel/i })).toBeInTheDocument()
+})
+
+test('expands voice panel when toggle is clicked', async () => {
+  const user = userEvent.setup()
+  render(<Chat />)
+
+  const voiceToggle = screen.getByRole('button', { name: /toggle voice panel/i })
+  await user.click(voiceToggle)
+
+  expect(voiceToggle).toHaveAttribute('aria-expanded', 'true')
+})
+
+test('collapses voice panel when toggle is clicked again', async () => {
+  const user = userEvent.setup()
+  render(<Chat />)
+
+  const voiceToggle = screen.getByRole('button', { name: /toggle voice panel/i })
+  await user.click(voiceToggle)
+  await user.click(voiceToggle)
+
+  expect(voiceToggle).toHaveAttribute('aria-expanded', 'false')
+})
+
+test('disables textarea when voice is processing', () => {
+  useVoiceStore.setState({ isProcessing: true })
+  render(<Chat />)
+
+  const textarea = screen.getByRole('textbox', { name: /chat message input/i })
+  expect(textarea).toBeDisabled()
+})
+
+test('disables send button when voice is processing', () => {
+  useVoiceStore.setState({ isProcessing: true })
+  render(<Chat />)
+
+  const sendButton = screen.getByRole('button', { name: 'Send message' })
+  expect(sendButton).toBeDisabled()
 })
 
 test('shows diff viewer when agent mode is active', () => {

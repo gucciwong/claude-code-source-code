@@ -6,6 +6,8 @@ import { useAgentStore } from '../store/agentStore'
 import { streamChat } from '../services/ollamaClient'
 import { ToolTrace } from '../components/chat/ToolTrace'
 import { DiffViewer } from '../components/chat/DiffViewer'
+import { VoicePanel } from '../components/common/VoicePanel'
+import { useVoiceStore } from '../store/voiceStore'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -30,9 +32,11 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 export function Chat() {
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
+  const [voicePanelExpanded, setVoicePanelExpanded] = useState(false)
   const { messages, addMessage, appendToLast, setLastStreaming, clear } = useChatStore()
   const activeModel = useSystemStore(s => s.activeModel)
   const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
+  const { isProcessing } = useVoiceStore()
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -155,17 +159,39 @@ export function Chat() {
             onKeyDown={handleKeyDown}
             rows={1}
             aria-label="Chat message input"
-            disabled={isStreaming}
+            disabled={isStreaming || isProcessing}
           />
           <button
             className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary rounded-lg p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSend}
-            disabled={isStreaming || !input.trim()}
+            disabled={isStreaming || isProcessing || !input.trim()}
             aria-label="Send message"
           >
             <Send size={16} aria-hidden="true" />
           </button>
         </div>
+      </div>
+
+      {/* Voice Panel - Collapsible */}
+      <div className="shrink-0 border-t border-border-default bg-bg-surface-1">
+        <button
+          className="w-full flex items-center justify-between px-6 py-3 hover:bg-bg-surface-2 transition-colors text-sm font-medium text-text-secondary cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          onClick={() => setVoicePanelExpanded(!voicePanelExpanded)}
+          aria-expanded={voicePanelExpanded}
+          aria-label="Toggle voice panel"
+        >
+          <span>🎤 Voice Commands</span>
+          <ChevronDown
+            size={16}
+            className={`transition-transform ${voicePanelExpanded ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          />
+        </button>
+        {voicePanelExpanded && (
+          <div className="px-6 py-4 border-t border-border-subtle bg-bg-surface-2 max-h-96 overflow-y-auto">
+            <VoicePanel />
+          </div>
+        )}
       </div>
     </div>
   )
