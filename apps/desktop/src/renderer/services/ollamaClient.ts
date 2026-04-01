@@ -34,30 +34,41 @@ export const ollamaClient = {
     model: string,
     messages: { role: string; content: string }[]
   ): AsyncGenerator<string> {
-    const res = await fetch(`${BASE}/v1/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, stream: true }),
-    })
+    let res: Response
+    try {
+      res = await fetch(`${BASE}/v1/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, messages, stream: true }),
+      })
+    } catch {
+      return
+    }
     if (!res.body) return
     const reader = res.body.getReader()
     const decoder = new TextDecoder()
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      const chunk = decoder.decode(value)
-      for (const line of chunk.split('\n')) {
-        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-        try {
-          const json = JSON.parse(line.slice(6)) as {
-            choices?: Array<{ delta?: { content?: string } }>
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value)
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
+          try {
+            const json = JSON.parse(line.slice(6)) as {
+              choices?: Array<{ delta?: { content?: string } }>
+            }
+            const delta = json.choices?.[0]?.delta?.content
+            if (delta) yield delta
+          } catch {
+            // skip malformed lines
           }
-          const delta = json.choices?.[0]?.delta?.content
-          if (delta) yield delta
-        } catch {
-          // skip malformed lines
         }
       }
+    } catch {
+      // stream interrupted — stop iteration cleanly
+    } finally {
+      reader.releaseLock()
     }
   },
 }
