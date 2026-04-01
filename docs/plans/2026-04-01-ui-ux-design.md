@@ -175,49 +175,87 @@ Use **Lucide React** icon set throughout. Key icons mapped to features:
 
 ### 3.2 Sidebar
 
+All icons: **Lucide React**. Never use emoji as icon substitutes.
+Icon map: Dashboard=`LayoutDashboard`, Models=`Cpu`, Chat=`MessageSquare`, Training=`Zap`, Federation=`Network`, Settings=`Settings`, Help=`HelpCircle`.
+
 ```
-┌──────┐
-│  ≡   │  ← Collapse/expand toggle (tooltip: "Collapse sidebar")
-├──────┤
-│  ⊞   │  Dashboard      (active: accent-500 bg tint, left 2px accent bar)
-│  🖥   │  Models
-│  💬   │  Chat / Agent
-│  ⚡   │  Training
-│  🌐   │  Federation
-├──────┤  ← Separator
-│  ⚙   │  Settings       (pinned to bottom)
-│  ?   │  Help & Docs
-└──────┘
+┌────────────────────────────────────────────┐
+│  ≡                                         │  ← Collapse/expand toggle
+├────────────────────────────────────────────┤
+│  <LayoutDashboard>   Dashboard             │  ← active: accent tint, left 2px bar
+│  <Cpu>               Models               │
+│  <MessageSquare>     Chat / Agent         │
+│  <Zap>               Training             │
+│  <Network>           Federation           │
+├────────────────────────────────────────────┤
+│  <Settings>          Settings             │  ← pinned to bottom
+│  <HelpCircle>        Help & Docs          │
+└────────────────────────────────────────────┘
 
 Expanded sidebar (220px):
-┌────────────────────┐
-│  ≡  Sovereign      │  ← Logo + app name
-├────────────────────┤
-│  ⊞  Dashboard      │  ← Active: accent bg, bold text
-│  🖥  Models         │
-│  💬  Chat / Agent   │
-│  ⚡  Training       │  ← Yellow dot if training is running
-│  🌐  Federation     │  ← Green dot if peers connected
-├────────────────────┤
-│  ⚙  Settings       │
-│  ?  Help           │
-└────────────────────┘
+┌────────────────────────────────────────┐
+│  ≡  Sovereign                          │  ← Logo + app name
+├────────────────────────────────────────┤
+│  <LayoutDashboard>  Dashboard          │  ← Active: accent bg, bold text
+│  <Cpu>              Models             │
+│  <MessageSquare>    Chat / Agent       │
+│  <Zap>              Training           │  ← Yellow dot if training running
+│  <Network>          Federation         │  ← Green dot if peers connected
+├────────────────────────────────────────┤
+│  <Settings>         Settings           │
+│  <HelpCircle>       Help               │
+└────────────────────────────────────────┘
 ```
 
 ### 3.3 Status Bar (persistent, bottom)
 
-Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
+Always visible. 28px height. Background `bg-surface-1`.
+
+**MVP — 4 fixed segments, 2 conditional:**
 
 ```
-● Running Locally  │  [MODEL] Qwen2.5-Coder-32B Q4_K_M  │  GPU 18.2/24 GB  │  72°C  │  45 tok/s  │  Training: Idle  │  Fed: Offline
+[Lock] Running Locally  │  Qwen2.5-Coder-32B  │  GPU 18.2/24 GB · 72°C  │  45 tok/s
 ```
 
-- **"Running Locally"** — green dot + lock icon + text. Clicking opens "Privacy Status" popover confirming zero network traffic.
-- **Model name** — clicking opens Quick Model Switcher (command palette style).
-- **GPU / VRAM** — clicking opens System Monitor panel.
-- **tok/s** — tokens-per-second for last inference. 
-- **Training** — "Idle" / "Running (iteration 12/48)" / "Completed ✓". Clicking opens Training Console.
-- **Fed** — "Offline" / "2 peers". Clicking opens Federation panel.
+Training and Federation segments appear **conditionally** — only when training is running or federation peers are connected. When idle/offline they are silent, keeping the bar uncluttered.
+
+- **"Running Locally"** — `<Lock>` icon + text badge. Clicking opens "Privacy Status" popover.
+- **Model name** — clicking opens the ⌘K Command Palette pre-filtered to installed models.
+- **GPU · temp** — VRAM used/total combined with temperature in one segment. Compact.
+- **tok/s** — tokens per second; hidden when no model is loaded.
+- **Training** *(conditional)* — visible only when `trainingStatus === 'running'`. Shows "Training: Running".
+- **Fed** *(conditional)* — visible only when `federationPeers > 0`. Shows "N peers".
+
+---
+
+### 3.4 Command Palette (⌘K / Ctrl+K)
+
+Global overlay accessible from anywhere. Triggered by `⌘K` (macOS) / `Ctrl+K` (Windows/Linux), by clicking the model name in the status bar, or by the "Switch Model ▾" button on the Dashboard.
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│  > Type a model name or command...                    [Esc close] │
+├───────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  ── Models ──────────────────────────────────────────────────  │
+│  <CheckCircle2> (green)  qwen2.5-coder:32b          Active       │
+│                          deepseek-coder:33b                       │
+│                          starcoder2:15b                           │
+│                                                                   │
+│  ── Actions ─────────────────────────────────────────────────  │
+│  <MessageSquare>  Open Chat                                       │
+│  <Zap>            Start Training                                  │
+│  <Download>       Browse Models                                   │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+**Behaviour:**
+- Implemented as a Radix `Dialog` — traps focus, `Escape` closes.
+- Input auto-focuses on open. Arrow keys navigate. Enter selects.
+- Fuzzy search filters installed models first, then static actions.
+- Global `keydown` listener registered once in `App.tsx`, not per-screen.
+- All icons: Lucide React. Never emoji.
 
 ---
 
@@ -225,57 +263,45 @@ Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
 
 ### 4.1 Dashboard / Home
 
-**Purpose:** At-a-glance system health, recent activity, quick actions.
+**Purpose:** Show the user what is running right now and get them to their next action in one click.
+
+**Visual hierarchy decision:** Active Model is the **hero** (120 pts) — it answers "What is running?" without a click. System Health is a compact single-line strip, not three equal cards. Quick Actions are small secondary buttons. Recent Activity and Benchmark Summary are **Phase 2** — present in MVP would produce the "five equal sections = AI-generated feeling" failure.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  Dashboard                               [Search... ⌘K]                 │
+│  Dashboard                                             [⌘K Search...]   │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌─── System Health ────────────────────────────────────────────────┐   │
-│  │                                                                   │   │
-│  │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐      │   │
-│  │  │ ● Inference    │  │ ● GPU Health   │  │ ● Training     │      │   │
-│  │  │   Ready        │  │   72°C / 85%   │  │   Idle         │      │   │
-│  │  │   45 tok/s     │  │   ████████░░   │  │   Last: 2h ago │      │   │
-│  │  │                │  │   18.2/24 GB   │  │                │      │   │
-│  │  └────────────────┘  └────────────────┘  └────────────────┘      │   │
-│  │                                                                   │   │
-│  └───────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
 │  ┌─── Active Model ─────────────────────────────────────────────────┐   │
 │  │                                                                   │   │
-│  │  [Qwen2.5-Coder-32B]  Q4_K_M · 24GB VRAM · 128K ctx             │   │
-│  │  ████████████████████░░  18.2 GB loaded   [Switch Model ▾]       │   │
+│  │  Qwen2.5-Coder-32B-Instruct  Q4_K_M        [Switch Model ▾]      │   │
+│  │  ──────────────────────────────────────────────────────────────  │   │
 │  │                                                                   │   │
-│  │  Version: base  |  Fine-tunes: 3 available  |  Last trained: 2d  │   │
+│  │  VRAM   ████████████████████░░░░  18.2 / 24 GB                   │   │
+│  │                                                                   │   │
+│  │  45.3 tok/s  ·  128K context  ·  First token: 380ms              │   │
+│  │                                                                   │   │
+│  │  [<MessageSquare> Open Chat]                                      │   │
 │  │                                                                   │   │
 │  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│  ── System Health ──────────────────────────────────────────────────── │
+│  ● Inference: Ready  ·  ● GPU: 72°C  ·  ○ Training: Idle              │
+│  ──────────────────────────────────────────────────────────────────── │
 │                                                                         │
 │  ┌─── Quick Actions ────────────────────────────────────────────────┐   │
-│  │  [💬 Open Chat]  [⚡ Start Training]  [📥 Browse Models]          │   │
-│  └───────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-│  ┌─── Recent Activity ──────────────────────────────────────────────┐   │
-│  │  ⚡  Training completed — v1.4 (+3.2% HumanEval)          2h ago  │   │
-│  │  💬  Chat session — 24 messages, 3 files modified          3h ago  │   │
-│  │  📥  DeepSeek-Coder-33B downloaded (26 GB)                 8h ago  │   │
-│  │  ⚡  Training started — iteration 1/48                    10h ago  │   │
-│  └───────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-│  ┌─── Benchmark Summary  (Week 1 Sovereign Report) ────────────────┐   │
-│  │  Model Readiness: ✓ Ready  |  GPU: ✓ RTX 4090  |  RAM: ✓ 64 GB  │   │
-│  │  Baseline Tokens/sec: 45.3  |  HumanEval Pass@1: 72.4%          │   │
-│  │  [View Full Report →]                                            │   │
+│  │  [<MessageSquare> Open Chat]   [<Zap> Start Training]            │   │
+│  │  [<Download> Browse Models]    [<Activity> System Health]        │   │
 │  └───────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Key interactions:**
-- System health cards pulse with a subtle animation when GPU temp > 80°C or VRAM > 90%.
-- "Switch Model" opens a command-palette style modal with fuzzy search.
-- Benchmark Summary surfaces the Week 1 sovereign-check scripts output (runtime-check, benchmark, report).
+- "Switch Model ▾" opens the ⌘K command palette pre-filtered to installed models.
+- Clicking a System Health indicator navigates to the relevant screen (GPU → Settings, Training → Training console).
+- System Health strip pulses only when GPU temp > 80°C or VRAM > 90% — not by default.
+- "Open Chat" is the primary CTA — styled as a filled accent button, not a ghost button.
 
 ---
 
@@ -285,7 +311,7 @@ Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  Models                  [🔍 Search models...]     [+ Add Custom Model]  │
+│  Models                  [<Search> Search models...]  [+ Add Custom Model]  │
 ├───────────────────┬─────────────────────────────────────────────────────┤
 │  INSTALLED        │                                                     │
 │  ──────────       │  Qwen2.5-Coder-32B-Instruct                        │
@@ -307,7 +333,7 @@ Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
 │                   │  │  MBPP:        68.1% pass@1                 │    │
 │                   │  └────────────────────────────────────────────┘    │
 │                   │                                                     │
-│                   │  [🟢 Set as Active]   [⚡ Fine-tune]   [🗑 Delete]  │
+│                   │  [<CheckCircle2> Set as Active]  [<Zap> Fine-tune]  [<Trash2> Delete]  │
 │                   │                                                     │
 └───────────────────┴─────────────────────────────────────────────────────┘
 ```
@@ -370,7 +396,7 @@ Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
 │  │  Ask Sovereign anything... (or press Tab to see suggestions)       │  │
 │  │                                                             [Send] │  │
 │  └────────────────────────────────────────────────────────────────────┘  │
-│  📎 Attach files  |  /commands  |  [Agent Task ▾]  |  Stream: ████░░░ │
+│  [<Paperclip> Attach]  |  /commands  |  [Agent Task ▾]  |  Stream: ████░░░ │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -722,7 +748,7 @@ The panel renders the parsed JSON output from `report.mjs` directly. The "Run No
 ```
 ┌───────────────────────────────────────────────────┐
 │                                                   │
-│          🖥                                        │
+│          <Cpu>                                    │
 │                                                   │
 │          No model loaded                          │
 │                                                   │
