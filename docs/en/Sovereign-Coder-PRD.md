@@ -153,6 +153,9 @@ Addressable Market Analysis (2026)
 | P2 | Self-Improvement Loop | Automated model enhancement | High |
 | P2 | Enterprise Integration | SSO, audit logs, compliance features | High |
 | P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium |
+| P2 | Live Execution Trace Injection | Feed real runtime traces into model context during completions | High |
+| P2 | Temporal Decision Graph | Queryable causal history of why the codebase evolved as it did | High |
+| P3 | Adversarial Persona Council | Parallel specialized LoRA adapters that surface model disagreements | Very High |
 
 ### 4.2 Detailed Feature Specifications
 
@@ -452,6 +455,145 @@ Collaborative model training where teams share knowledge without sharing code.
 │  • Weighted contribution based on data quality score              │
 │  • Reputation system for reliable nodes                           │
 │  • Byzantine fault tolerance                                      │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+#### 4.2.8 Live Execution Trace Injection
+
+**Description:**
+Every AI coding tool today reasons about static source code. This feature runs code continuously in a lightweight sandbox (WASM/V8 isolate) as the developer edits, captures the real runtime trace — variable values per line, call frequencies, memory deltas, branch coverage — and injects that structured trace alongside the source into the model's context window. The model reasons about *what the code actually does* rather than only what it says.
+
+**Requirements:**
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  LIVE EXECUTION TRACE INJECTION SPECIFICATIONS                    │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Sandbox:                                                         │
+│  • WASM isolate for JavaScript/TypeScript projects               │
+│  • Python subprocess sandbox (restricted builtins) for Python    │
+│  • V8 Isolate API for Node.js projects                           │
+│  • Execution budget: 200ms max per trace capture                 │
+│  • Sandboxed from filesystem and network                         │
+│                                                                   │
+│  Trace Capture:                                                   │
+│  • Variable values at each executed line                         │
+│  • Call frequency map (how often each function was called)       │
+│  • Branch coverage (which if/else arms were taken)               │
+│  • Memory delta per function (heap allocation change)            │
+│  • Exception paths (any thrown errors and their call sites)      │
+│                                                                   │
+│  Context Injection:                                               │
+│  • Structured trace serialized as annotated source comments      │
+│  • Budget: max 4K tokens of trace per completion request         │
+│  • Trace is prioritized to the current function + callers        │
+│  • Stale traces (>30s old) excluded from context                 │
+│                                                                   │
+│  Completions Impact:                                              │
+│  • Injected alongside standard RAG context                       │
+│  • Model instructed to reason about actual vs. intended behavior │
+│  • Bug detection: model flags lines where trace diverges from    │
+│    variable names / comments suggesting different values         │
+│                                                                   │
+│  Supported Languages (Phase 1):                                  │
+│  • JavaScript / TypeScript                                       │
+│  • Python                                                         │
+│  Planned: Rust (via WASM target), Go                             │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+#### 4.2.9 Temporal Decision Graph
+
+**Description:**
+A local, queryable causal graph that captures *why* the codebase evolved the way it did — not just *what* changed. As the developer codes, the system continuously builds a directed graph from git history, chat logs, accepted completions, and commit messages. Nodes are decisions (architectural choices, refactors, bug fixes). Edges are causality (this refactor was caused by that bug; that API was chosen because of this constraint). Queried via natural language: *"Why is auth structured this way?"*
+
+**Requirements:**
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  TEMPORAL DECISION GRAPH SPECIFICATIONS                           │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Graph Construction:                                              │
+│  • Sources: git log, chat history, accepted completions,         │
+│    commit messages, inline comments                              │
+│  • Node types: ArchitectureDecision, Refactor, BugFix,           │
+│    FeatureAdd, DependencyChange                                  │
+│  • Edge types: CausedBy, MotivatedBy, SupersededBy, RelatedTo    │
+│  • Graph updated incrementally on every commit                   │
+│                                                                   │
+│  Storage:                                                         │
+│  • Local SQLite with adjacency list schema                       │
+│  • Node embeddings stored alongside graph for semantic search    │
+│  • Encrypted at rest, portable with project                      │
+│  • Max graph size: 100K nodes before pruning old leaves          │
+│                                                                   │
+│  Query Interface:                                                 │
+│  • Natural language queries via RAG over graph                   │
+│  • "Why does X work this way?"                                   │
+│  • "What caused the refactor of Y module?"                       │
+│  • "Show the decision history for this file"                     │
+│  • Results include causal chain with timestamps and evidence     │
+│                                                                   │
+│  UI:                                                              │
+│  • Timeline view: decisions plotted on project age axis          │
+│  • Graph view: force-directed visualization of decision nodes    │
+│  • File annotation: blame-style view showing decision history    │
+│    per code region                                               │
+│                                                                   │
+│  Privacy:                                                         │
+│  • Graph never leaves local machine                              │
+│  • Sensitive values (secrets, passwords) stripped from nodes     │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+#### 4.2.10 Adversarial Persona Council
+
+**Description:**
+Instead of a single model answer, four specialized LoRA adapters run in parallel on the same base model, each trained to optimize for a different software quality dimension: Security (OWASP-trained), Performance (algorithmic complexity + profiling data), Maintainability (clean code + SOLID), and Correctness (test-driven, formal verification patterns). Their outputs are compared via logit divergence. When all four agree, the response is shown normally. When they disagree, the UI surfaces the *tension* — the tradeoff space — so the developer makes an informed decision rather than blindly accepting one answer.
+
+**Requirements:**
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  ADVERSARIAL PERSONA COUNCIL SPECIFICATIONS                       │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Personas (4 LoRA adapters):                                      │
+│  • Security  — trained on OWASP Top 10, CVE datasets,            │
+│    secure coding guides (CWE, CERT)                              │
+│  • Performance — trained on algorithmic complexity datasets,      │
+│    profiler output patterns, Big-O annotations                   │
+│  • Maintainability — trained on clean code, SOLID principles,    │
+│    code review feedback datasets                                 │
+│  • Correctness — trained on test-driven pairs, formal            │
+│    verification examples, verified-correct code                  │
+│                                                                   │
+│  Inference:                                                       │
+│  • All 4 adapters run in parallel (interleaved CUDA streams)     │
+│  • Base model loaded once; adapters hot-swapped per stream       │
+│  • Disagreement measured as cosine distance on output logits     │
+│  • Threshold: distance > 0.25 triggers conflict UI               │
+│  • VRAM overhead: ~400MB per adapter (Q4 LoRA weights)           │
+│  • Minimum GPU: 16GB VRAM for 7B base + 4 adapters               │
+│                                                                   │
+│  Conflict UI:                                                     │
+│  • Normal (agreement): single completion shown, no indicator     │
+│  • Conflict: inline pill shows which personas disagree           │
+│    e.g. "⚔ Security vs Performance" with expand button          │
+│  • Expanded view: side-by-side panel with each persona's         │
+│    alternative suggestion and a one-line rationale               │
+│  • User selects which suggestion to accept                       │
+│  • Selection logged as training signal (persona preference data) │
+│                                                                   │
+│  Training:                                                        │
+│  • Each adapter fine-tuned on domain-specific open datasets      │
+│  • Continuously refined on user's conflict resolution choices    │
+│  • QLoRA rank 32, same training pipeline as §4.2.5               │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
 ```

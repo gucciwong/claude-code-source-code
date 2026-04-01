@@ -1694,3 +1694,6 @@ These are deferred to the next implementation plan per phase gating in the desig
 - Federation Console
 - VSCode plugin sidebar panel
 - Light theme toggle
+- **Live Execution Trace Injection** (§4.2.8) — sandbox runtime, trace serializer, context injector
+- **Temporal Decision Graph** (§4.2.9) — graph builder, SQLite schema, natural language query UI
+- **Adversarial Persona Council** (§4.2.10) — 4 LoRA adapter training, parallel inference engine, conflict UI
