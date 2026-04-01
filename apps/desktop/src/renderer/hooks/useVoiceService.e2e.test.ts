@@ -13,11 +13,16 @@
  * To run locally:
  * 1. Start voice service: `cd services/voice-service && python -m uvicorn main:app --reload --port 8000`
  * 2. Run tests: `npm test -- useVoiceService.e2e.test.ts`
+ * 
+ * NOTE: Tests are skipped by default (CI environment). To enable:
+ * - Set environment variable: ENABLE_VOICE_E2E=true
+ * - Or start voice service before running tests
  */
 
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 
 const VOICE_SERVICE_URL = process.env.VOICE_SERVICE_URL || 'http://localhost:8000'
+const SKIP_E2E = process.env.ENABLE_VOICE_E2E !== 'true'
 
 /**
  * Helper: Create a test audio blob (WAV format, minimal)
@@ -58,7 +63,7 @@ function createTestAudioBlob(): Blob {
   return new Blob([wavHeader, silenceData], { type: 'audio/wav' })
 }
 
-describe('E2E: useVoiceService ↔ Voice Backend', () => {
+describe.skipIf(SKIP_E2E)('E2E: useVoiceService ↔ Voice Backend', () => {
   beforeAll(async () => {
     // Verify service is reachable before running tests
     try {
