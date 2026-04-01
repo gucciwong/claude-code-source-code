@@ -27,6 +27,7 @@ beforeEach(() => {
       if (key === 'ollamaUrl') return 'http://localhost:11434'
       return undefined
     }),
+    update: vi.fn(),
   } as unknown as vscode.WorkspaceConfiguration)
 })
 
@@ -51,7 +52,7 @@ test('activate registers toggleCompletions command', () => {
 test('activate pushes disposables to subscriptions', () => {
   const ctx = makeContext()
   activate(ctx)
-  expect(ctx.subscriptions.length).toBeGreaterThan(0)
+  expect(ctx.subscriptions.length).toBe(4)
 })
 
 test('activate creates status bar', () => {

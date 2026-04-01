@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext): void {
     () => {
       const config = vscode.workspace.getConfiguration('sovereign-coder')
       const current = config.get<boolean>('enabled', true)
-      config.update('enabled', !current, vscode.ConfigurationTarget.Global)
+      void config.update('enabled', !current, vscode.ConfigurationTarget.Global)
     },
   )
   context.subscriptions.push(commandDisposable)
