@@ -72,3 +72,5 @@ export const ollamaClient = {
     }
   },
 }
+
+export const streamChat = ollamaClient.streamChat.bind(ollamaClient)
