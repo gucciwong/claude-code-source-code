@@ -350,3 +350,23 @@ test('runtime-check CLI reports non-OK HTTP status from endpoint', async () => {
     await new Promise(resolve => server.close(resolve))
   }
 })
+
+test('runtime-check CLI prints error in human output when runtime is unreachable', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-runtime-check.mjs',
+      '--host',
+      '127.0.0.1',
+      '--port',
+      '1',
+      '--timeout-ms',
+      '20',
+    ]),
+    error => {
+      assert.equal(error.code, 2)
+      assert.match(error.stdout, /Reachable: no/)
+      assert.match(error.stdout, /Error:/)
+      return true
+    },
+  )
+})
