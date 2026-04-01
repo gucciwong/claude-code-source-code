@@ -20,6 +20,11 @@ test('renders installed models list', () => {
   expect(screen.getByText('mistral:7b')).toBeInTheDocument()
 })
 
+test('shows INSTALLED section header', () => {
+  render(<Models />)
+  expect(screen.getByText('Installed')).toBeInTheDocument()
+})
+
 test('shows empty state when no model selected', () => {
   render(<Models />)
   expect(screen.getByText('Select a model')).toBeInTheDocument()
@@ -28,23 +33,55 @@ test('shows empty state when no model selected', () => {
 test('selecting a model shows model detail', async () => {
   const user = userEvent.setup()
   render(<Models />)
-  await user.click(screen.getByRole('option', { name: 'llama3.1:8b' }))
+  await user.click(screen.getByRole('option', { name: /llama3.1:8b/ }))
   expect(screen.getByRole('heading', { name: 'llama3.1:8b' })).toBeInTheDocument()
 })
 
 test('model detail shows size formatted as GB', async () => {
   const user = userEvent.setup()
   render(<Models />)
-  await user.click(screen.getByRole('option', { name: 'llama3.1:8b' }))
+  await user.click(screen.getByRole('option', { name: /llama3.1:8b/ }))
   expect(screen.getByText('4.5 GB')).toBeInTheDocument()
 })
 
-test('Load Model button sets activeModel in systemStore', async () => {
+test('model detail shows info grid with Digest, Size, Status, Modified', async () => {
   const user = userEvent.setup()
   useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
   render(<Models />)
-  await user.click(screen.getByRole('button', { name: 'Load Model' }))
+  expect(screen.getByText('Digest')).toBeInTheDocument()
+  expect(screen.getByText('Size')).toBeInTheDocument()
+  expect(screen.getByText('Status')).toBeInTheDocument()
+  expect(screen.getByText('Modified')).toBeInTheDocument()
+})
+
+test('Set as Active button sets activeModel in systemStore', async () => {
+  const user = userEvent.setup()
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  const button = screen.getByText('Set as Active')
+  await user.click(button)
   expect(useSystemStore.getState().activeModel).toBe('llama3.1:8b')
+})
+
+test('shows Fine-tune button', async () => {
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getByRole('button', { name: /Fine-tune/ })).toBeInTheDocument()
+})
+
+test('shows Delete button', async () => {
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getByRole('button', { name: /Delete/ })).toBeInTheDocument()
+})
+
+test('shows active model indicator (checkmark) on selected model in detail', async () => {
+  useSystemStore.setState({ activeModel: 'llama3.1:8b' })
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  // Verify checkmark is shown in the detail panel when model is active
+  const checkmark = screen.getByLabelText('Active model')
+  expect(checkmark).toBeInTheDocument()
 })
 
 test('shows offline indicator when ollama is offline', () => {
@@ -57,4 +94,20 @@ test('shows no models installed when list empty', () => {
   useModelsStore.setState({ installed: [], selected: null })
   render(<Models />)
   expect(screen.getByText('No models installed')).toBeInTheDocument()
+})
+
+test('displays status as Active when model is activeModel', async () => {
+  useSystemStore.setState({ activeModel: 'llama3.1:8b' })
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getAllByText('Active')[0]).toBeInTheDocument()
+})
+
+test('displays status as Installed when model is not activeModel', async () => {
+  useSystemStore.setState({ activeModel: 'mistral:7b' })
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  // Find "Installed" in the status grid area (not the header)
+  const statusElements = screen.getAllByText('Installed')
+  expect(statusElements.length).toBeGreaterThan(1)
 })

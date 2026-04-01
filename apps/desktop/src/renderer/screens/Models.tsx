@@ -1,6 +1,6 @@
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
-import { Server, WifiOff } from 'lucide-react'
+import { Server, WifiOff, CheckCircle2, Zap, Trash2 } from 'lucide-react'
 
 function formatSize(bytes: number): string {
   return (bytes / 1e9).toFixed(1) + ' GB'
@@ -25,31 +25,66 @@ function EmptySelection() {
 }
 
 function ModelDetail({ model }: { model: OllamaModel }) {
-  const setActiveModel = () => useSystemStore.setState({ activeModel: model.name })
+  const activeModel = useSystemStore(s => s.activeModel)
+  const isActive = model.name === activeModel
 
   return (
-    <div className="p-6">
-      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4 max-w-2xl">
-        <h2 className="text-xl font-semibold text-text-primary">{model.name}</h2>
-        <dl className="space-y-2 text-sm">
-          <div className="flex gap-2">
-            <dt className="text-text-muted w-24 shrink-0">Size</dt>
-            <dd className="text-text-primary">{formatSize(model.size)}</dd>
-          </div>
-          <div className="flex gap-2">
-            <dt className="text-text-muted w-24 shrink-0">Modified</dt>
-            <dd className="text-text-primary">{formatDate(model.modified_at)}</dd>
-          </div>
-          <div className="flex gap-2">
-            <dt className="text-text-muted w-24 shrink-0">Digest</dt>
-            <dd className="text-text-primary font-mono text-xs truncate">{model.digest.slice(0, 12)}</dd>
-          </div>
-        </dl>
+    <div className="p-6 max-w-xl">
+      <div className="mb-6">
+        <div className="flex items-start gap-3 mb-2">
+          <h2 className="text-xl font-semibold text-text-primary">{model.name}</h2>
+          {isActive && (
+            <CheckCircle2 size={20} className="text-green-500 mt-0.5" aria-label="Active model" />
+          )}
+        </div>
+        <p className="text-xs text-text-muted">
+          {formatSize(model.size)} · Modified {formatDate(model.modified_at)}
+        </p>
+      </div>
+
+      {/* Info Grid */}
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Digest</p>
+          <p className="text-sm text-text-primary font-mono truncate">{model.digest.slice(0, 12)}...</p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Size</p>
+          <p className="text-sm text-text-primary font-mono">{formatSize(model.size)}</p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Status</p>
+          <p className="text-sm text-text-primary font-mono">{isActive ? 'Active' : 'Installed'}</p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Modified</p>
+          <p className="text-sm text-text-primary font-mono">{formatDate(model.modified_at)}</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-2 flex-wrap">
         <button
           className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
-          onClick={setActiveModel}
+          onClick={() => useSystemStore.setState({ activeModel: model.name })}
+          aria-label={`Set ${model.name} as active`}
         >
-          Load Model
+          <CheckCircle2 size={14} aria-hidden="true" />
+          Set as Active
+        </button>
+        <button
+          className="border border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-surface-3 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          aria-label={`Fine-tune ${model.name}`}
+        >
+          <Zap size={14} aria-hidden="true" />
+          Fine-tune
+        </button>
+        <button
+          className="border border-border-default text-red-400 hover:text-red-300 hover:border-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+          aria-label={`Delete ${model.name}`}
+        >
+          <Trash2 size={14} aria-hidden="true" />
+          Delete
         </button>
       </div>
     </div>
@@ -58,6 +93,7 @@ function ModelDetail({ model }: { model: OllamaModel }) {
 
 export function Models() {
   const { installed, selected, setSelected } = useModelsStore()
+  const activeModel = useSystemStore(s => s.activeModel)
   const ollamaOnline = useSystemStore(s => s.ollamaOnline)
   const selectedModel = installed.find(m => m.name === selected) ?? null
 
@@ -66,7 +102,7 @@ export function Models() {
       {/* Left panel */}
       <div className="w-[200px] shrink-0 bg-bg-surface-1 border-r border-border-default overflow-y-auto flex flex-col">
         <p className="px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide">
-          Installed Models
+          Installed
         </p>
         {installed.length === 0 ? (
           <p className="px-4 py-2 text-xs text-text-muted">No models installed</p>
@@ -74,19 +110,23 @@ export function Models() {
           <ul role="listbox" aria-label="Installed models">
             {installed.map(model => {
               const isSelected = model.name === selected
+              const isActive = model.name === activeModel
               return (
                 <li key={model.name}>
                   <button
                     role="option"
                     aria-selected={isSelected}
-                    className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500 ${
+                    className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
                       isSelected
                         ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-500'
                         : 'text-text-secondary hover:bg-bg-surface-3'
                     }`}
                     onClick={() => setSelected(model.name)}
                   >
-                    {model.name}
+                    {isActive && (
+                      <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
+                    )}
+                    <span className="truncate">{model.name}</span>
                   </button>
                 </li>
               )
