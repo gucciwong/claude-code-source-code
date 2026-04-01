@@ -1,0 +1,163 @@
+version: "3.8"
+
+services:
+  # Redis - Shared session store and model cache
+  redis:
+    image: redis:7-alpine
+    container_name: vibevoice-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    networks:
+      - vibevoice-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    environment:
+      - REDIS_ARGS=--verbosity verbose
+
+  # HAProxy - Load Balancer
+  haproxy:
+    image: haproxy:2.8-alpine
+    container_name: vibevoice-haproxy
+    ports:
+      - "8000:8000"    # Main API port
+      - "8001:8001"    # WebSocket port
+      - "8404:8404"    # Stats page
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - vibevoice-net
+    depends_on:
+      - vibevoice-1
+      - vibevoice-2
+      - vibevoice-3
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8404/stats"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Voice Service Instance 1
+  vibevoice-1:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: vibevoice-1
+    environment:
+      - INSTANCE_ID=instance-1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - WHISPER_MODEL_SIZE=base
+      - WHISPER_COMPUTE_TYPE=default
+      - DEVICE=auto
+      - LOG_LEVEL=INFO
+      - MAX_MODEL_MEMORY_GB=8
+      - VAD_AGGRESSIVENESS=2
+      - SILENCE_THRESHOLD_MS=800
+      - MIN_UTTERANCE_DURATION_MS=500
+    volumes:
+      - whisper_cache_1:/root/.cache/huggingface
+      - model_cache_1:/models
+    networks:
+      - vibevoice-net
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Voice Service Instance 2
+  vibevoice-2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: vibevoice-2
+    environment:
+      - INSTANCE_ID=instance-2
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - WHISPER_MODEL_SIZE=base
+      - WHISPER_COMPUTE_TYPE=default
+      - DEVICE=auto
+      - LOG_LEVEL=INFO
+      - MAX_MODEL_MEMORY_GB=8
+      - VAD_AGGRESSIVENESS=2
+      - SILENCE_THRESHOLD_MS=800
+      - MIN_UTTERANCE_DURATION_MS=500
+    volumes:
+      - whisper_cache_2:/root/.cache/huggingface
+      - model_cache_2:/models
+    networks:
+      - vibevoice-net
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Voice Service Instance 3
+  vibevoice-3:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: vibevoice-3
+    environment:
+      - INSTANCE_ID=instance-3
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - WHISPER_MODEL_SIZE=base
+      - WHISPER_COMPUTE_TYPE=default
+      - DEVICE=auto
+      - LOG_LEVEL=INFO
+      - MAX_MODEL_MEMORY_GB=8
+      - VAD_AGGRESSIVENESS=2
+      - SILENCE_THRESHOLD_MS=800
+      - MIN_UTTERANCE_DURATION_MS=500
+    volumes:
+      - whisper_cache_3:/root/.cache/huggingface
+      - model_cache_3:/models
+    networks:
+      - vibevoice-net
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+networks:
+  vibevoice-net:
+    driver: bridge
+
+volumes:
+  redis_data:
+  whisper_cache_1:
+  whisper_cache_2:
+  whisper_cache_3:
+  model_cache_1:
+  model_cache_2:
+  model_cache_3:

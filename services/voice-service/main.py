@@ -30,6 +30,11 @@ from voice_service.audio.processor import AudioProcessor
 from voice_service.config.device_config import DeviceConfig
 from voice_service.stream.streaming_transcriber import StreamingTranscriber
 
+# Import Redis and session management
+from voice_service.config.redis_config import redis_client
+from voice_service.cache import session_store, model_cache
+from voice_service.health.checks import router as health_router
+
 # FastAPI app
 app = FastAPI(
     title="VibeVoice Service",
@@ -52,6 +57,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include health check router
+app.include_router(health_router)
+
+# Instance ID for load balancing tracking
+INSTANCE_ID = os.getenv("INSTANCE_ID", "instance-1")
 
 # Model instances (singleton pattern)
 asr_model: Optional[WhisperASR] = None
@@ -91,7 +102,23 @@ async def startup():
     """Initialize models on startup."""
     global asr_model, tts_model, streaming_transcriber
     
+    logger.info(f"Starting VibeVoice service instance: {INSTANCE_ID}")
     logger.info("Initializing models...")
+    
+    # Initialize Redis and session management
+    try:
+        redis_health = redis_client.health_check()
+        if redis_health.get("connected"):
+            logger.info("Redis connected successfully")
+            
+            # Register this instance with model cache
+            max_memory_gb = float(os.getenv("MAX_MODEL_MEMORY_GB", "8"))
+            model_cache.register_instance(INSTANCE_ID, max_memory_gb)
+            logger.info(f"Registered instance {INSTANCE_ID} with {max_memory_gb}GB capacity")
+        else:
+            logger.warning("Redis not available - running in single-instance mode")
+    except Exception as e:
+        logger.warning(f"Failed to initialize Redis: {e}")
     
     # Log device info
     device_info = DeviceConfig.get_device_info()
@@ -143,6 +170,15 @@ async def shutdown():
     if asr_model:
         asr_model.unload()
         logger.info("ASR model unloaded")
+    
+    # Clean up Redis connection
+    try:
+        redis_client.close()
+        logger.info("Redis connection closed")
+    except:
+        pass
+    
+    logger.info(f"Instance {INSTANCE_ID} shutting down")
 
 
 # Routes
