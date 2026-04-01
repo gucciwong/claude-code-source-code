@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Sovereign Coder — Design Mockups</title>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0D0D0D;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #F5F5F5;
+  }
+  /* nav between frames */
+  .frame-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: #1A1A1A; border-bottom: 1px solid #363636;
+    display: flex; gap: 8px; padding: 8px 16px;
+  }
+  .frame-nav a {
+    color: #A3A3A3; text-decoration: none; font-size: 13px;
+    padding: 4px 10px; border-radius: 4px; border: 1px solid #363636;
+  }
+  .frame-nav a:hover, .frame-nav a.active { background: #8B5CF6; color: #fff; border-color: #8B5CF6; }
+  .screen { display: none; width: 1280px; height: 800px; position: relative; overflow: hidden; }
+  .screen.active { display: flex; flex-direction: column; }
+  body { padding-top: 44px; }
+
+  /* ── TOKENS ────────────────────────────── */
+  :root {
+    --bg-base:       #0D0D0D;
+    --bg-surface-1:  #161616;
+    --bg-surface-2:  #1E1E1E;
+    --bg-surface-3:  #252525;
+    --bg-elevated:   #2D2D2D;
+    --border-subtle: #2A2A2A;
+    --border-default:#363636;
+    --border-strong: #484848;
+    --text-primary:  #F5F5F5;
+    --text-secondary:#A3A3A3;
+    --text-muted:    #737373;
+    --accent-400:    #A78BFA;
+    --accent-500:    #8B5CF6;
+    --accent-600:    #7C3AED;
+    --green-400:     #4ADE80;
+    --green-500:     #22C55E;
+    --red-400:       #F87171;
+    --yellow-400:    #FACC15;
+    --blue-400:      #60A5FA;
+    --local-badge-bg:#1A2744;
+    --local-badge-fg:#60A5FA;
+  }
+
+  /* ── SHELL ──────────────────────────────── */
+  .title-bar {
+    height: 32px; min-height: 32px;
+    background: var(--bg-surface-1);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; flex-shrink: 0;
+  }
+  .title-bar .traffic-lights { display: flex; gap: 6px; align-items: center; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red    { background: #FF5F57; }
+  .dot-yellow { background: #FEBC2E; }
+  .dot-green  { background: #28C840; }
+  .title-bar .center { font-size: 13px; color: var(--text-secondary); }
+  .title-bar .win-controls { font-size: 13px; color: var(--text-muted); letter-spacing: 2px; }
+
+  .shell-body {
+    flex: 1; display: flex; overflow: hidden;
+  }
+
+  .sidebar {
+    width: 220px; min-width: 220px;
+    background: var(--bg-surface-1);
+    border-right: 1px solid var(--border-subtle);
+    display: flex; flex-direction: column;
+  }
+  .sidebar-logo {
+    height: 48px; display: flex; align-items: center; gap: 10px;
+    padding: 0 16px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .logo-mark {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: var(--accent-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .sidebar-logo span { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .sidebar-logo .lock-badge {
+    margin-left: auto; font-size: 10px; color: var(--blue-400);
+  }
+  .sidebar-nav { flex: 1; padding: 6px 0; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    height: 38px; padding: 0 16px; cursor: pointer;
+    font-size: 14px; color: var(--text-secondary);
+    position: relative; border-left: 2px solid transparent;
+    transition: background 0.1s;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.04); }
+  .nav-item.active {
+    background: rgba(139,92,246,0.08);
+    border-left-color: var(--accent-500);
+    color: var(--text-primary); font-weight: 600;
+  }
+  .nav-item .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .nav-item.active .icon path, .nav-item.active .icon rect,
+  .nav-item.active .icon circle, .nav-item.active .icon polyline,
+  .nav-item.active .icon line { stroke: var(--accent-500); }
+  .nav-badge { width: 6px; height: 6px; border-radius: 50%; margin-left: auto; }
+  .nav-badge.yellow { background: var(--yellow-400); }
+  .nav-badge.green  { background: var(--green-500); }
+  .sidebar-divider { border: none; border-top: 1px solid var(--border-subtle); margin: 4px 0; }
+  .sidebar-bottom { padding: 4px 0 8px; }
+
+  .main-content {
+    flex: 1; background: var(--bg-base); overflow-y: auto; padding: 24px;
+  }
+
+  .status-bar {
+    height: 28px; min-height: 28px;
+    background: var(--bg-surface-1);
+    border-top: 1px solid var(--border-subtle);
+    display: flex; align-items: center; padding: 0 16px; gap: 0;
+    font-size: 12px; color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .status-segment { display: flex; align-items: center; gap: 5px; }
+  .status-divider {
+    width: 1px; height: 14px; background: var(--border-subtle);
+    margin: 0 12px;
+  }
+  .local-badge {
+    background: var(--local-badge-bg); color: var(--local-badge-fg);
+    border-radius: 9999px; padding: 1px 8px; font-size: 11px; font-weight: 500;
+  }
+
+  /* ── COMMON COMPONENTS ──────────────────── */
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .page-title { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+
+  .search-pill {
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 9999px; padding: 4px 14px; font-size: 13px;
+    color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+    height: 28px; cursor: pointer;
+  }
+  .kbd { font-size: 11px; }
+
+  .card {
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 20px;
+  }
+  .card + .card { margin-top: 12px; }
+
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); margin-bottom: 10px;
+  }
+
+  .btn-primary {
+    background: var(--accent-500); color: #fff;
+    border: none; border-radius: 6px; padding: 7px 14px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary:hover { background: var(--accent-400); }
+
+  .btn-ghost {
+    background: transparent; color: var(--text-secondary);
+    border: 1px solid var(--border-default); border-radius: 6px;
+    padding: 6px 12px; font-size: 13px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-ghost:hover { background: var(--bg-surface-3); }
+
+  .btn-destructive {
+    background: transparent; color: var(--red-400);
+    border: 1px solid var(--border-default); border-radius: 6px;
+    padding: 6px 12px; font-size: 13px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-destructive:hover { background: rgba(248,113,113,0.1); }
+
+  .chip {
+    display: inline-flex; align-items: center;
+    border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 500;
+  }
+  .chip-surface { background: var(--bg-surface-3); color: var(--text-secondary); }
+  .chip-accent  { background: rgba(139,92,246,0.2); color: var(--accent-400); }
+  .chip-green   { background: rgba(34,197,94,0.15); color: var(--green-400); }
+  .chip-yellow  { background: rgba(250,204,21,0.15); color: var(--yellow-400); }
+  .chip-blue    { background: rgba(96,165,250,0.15); color: var(--blue-400); }
+
+  /* vram bar */
+  .vram-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .vram-bar-bg {
+    flex: 1; height: 6px; border-radius: 9999px; background: var(--bg-surface-3); overflow: hidden;
+  }
+  .vram-bar-fill { height: 100%; border-radius: 9999px; background: var(--accent-500); }
+  .vram-label { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+
+  /* stats row */
+  .stats-row { display: flex; gap: 16px; font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+  .stats-row .sep { color: var(--text-muted); }
+
+  /* health strip */
+  .health-strip {
+    display: flex; align-items: center; gap: 20px;
+    padding: 12px 0; font-size: 13px; color: var(--text-secondary);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 16px;
+  }
+  .health-item { display: flex; align-items: center; gap: 6px; }
+  .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* quick actions grid */
+  .quick-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .quick-action-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: transparent; border: 1px solid var(--border-default);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px;
+    color: var(--text-secondary); cursor: pointer;
+    transition: background 0.1s;
+  }
+  .quick-action-btn:hover { background: var(--bg-surface-3); }
+
+  /* icon svg inline helper */
+  svg.icon { width: 16px; height: 16px; stroke-width: 1.75; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  svg.icon-18 { width: 18px; height: 18px; }
+  svg.icon-12 { width: 12px; height: 12px; }
+  svg.icon-14 { width: 14px; height: 14px; }
+  svg.icon-20 { width: 20px; height: 20px; }
+  .text-accent { color: var(--accent-500); }
+  .text-accent-400 { color: var(--accent-400); }
+  .text-green { color: var(--green-500); }
+  .text-green-400 { color: var(--green-400); }
+  .text-yellow { color: var(--yellow-400); }
+  .text-blue { color: var(--blue-400); }
+  .text-muted { color: var(--text-muted); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-primary-c { color: var(--text-primary); }
+  .text-red { color: var(--red-400); }
+  .font-bold { font-weight: 700; }
+  .font-medium { font-weight: 500; }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .mt-1 { margin-top: 4px; }
+  .mt-2 { margin-top: 8px; }
+  .mt-3 { margin-top: 12px; }
+  .mt-4 { margin-top: 16px; }
+
+  /* ── MODEL HUB ─────────────────────────── */
+  .model-row {
+    display: flex; align-items: center;
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; gap: 12px;
+  }
+  .model-info { flex: 1; min-width: 0; }
+  .model-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .model-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .model-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .model-chips { display: flex; gap: 6px; align-items: center; margin-top: 4px; }
+
+  .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .download-card {
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 16px;
+  }
+  .download-card-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .download-card-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; margin-bottom: 12px; }
+
+  /* ── CHAT ──────────────────────────────── */
+  .chat-topbar {
+    height: 40px; background: var(--bg-surface-2); border-bottom: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; flex-shrink: 0;
+  }
+  .chat-area { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .chat-input-bar {
+    background: var(--bg-surface-2); border-top: 1px solid var(--border-subtle);
+    padding: 10px 16px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: var(--bg-surface-3); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 9px 14px; font-size: 14px; color: var(--text-primary);
+    outline: none;
+  }
+  .msg-user {
+    align-self: flex-end; max-width: 60%;
+    background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 10px; padding: 11px 15px; font-size: 14px; color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .msg-assistant { max-width: 100%; }
+  .msg-assistant-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+  .msg-assistant-body { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
+  .code-block {
+    background: var(--bg-surface-3); border: 1px solid var(--border-default);
+    border-radius: 6px; padding: 12px 16px; margin-top: 10px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px; color: #E5E5E5; line-height: 1.6; overflow-x: auto;
+  }
+  .send-btn {
+    width: 34px; height: 34px; background: var(--accent-500); border: none;
+    border-radius: 9999px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 30px; height: 30px; background: transparent; border: none;
+    color: var(--text-muted); cursor: pointer; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { background: var(--bg-surface-3); color: var(--text-secondary); }
+  .cursor-blink {
+    display: inline-block; width: 2px; height: 14px;
+    background: var(--accent-500); vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── COMMAND PALETTE ────────────────────── */
+  .palette-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(2px);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 100px; z-index: 100;
+  }
+  .palette-modal {
+    width: 640px; background: var(--bg-elevated);
+    border: 1px solid var(--border-strong); border-radius: 12px;
+    overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+  }
+  .palette-input-row {
+    display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .palette-input {
+    flex: 1; background: transparent; border: none; outline: none;
+    font-size: 14px; color: var(--text-muted);
+  }
+  .esc-chip {
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--text-muted);
+  }
+  .palette-results { padding: 8px; max-height: 380px; overflow-y: auto; }
+  .palette-section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); padding: 4px 8px; margin-bottom: 2px;
+  }
+  .palette-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 6px; cursor: pointer;
+    font-size: 14px; color: var(--text-secondary);
+  }
+  .palette-row:hover, .palette-row.active-row { background: rgba(139,92,246,0.1); color: var(--text-primary); }
+  .palette-row-right { margin-left: auto; }
+  .palette-divider { border: none; border-top: 1px solid var(--border-subtle); margin: 6px 0; }
+
+  /* ── TRAINING ───────────────────────────── */
+  .progress-bar-bg {
+    height: 8px; background: var(--bg-surface-3); border-radius: 9999px; overflow: hidden;
+  }
+  .progress-bar-fill { height: 100%; border-radius: 9999px; }
+  .progress-bar-fill.yellow { background: var(--yellow-400); }
+  .progress-bar-fill.accent { background: var(--accent-500); }
+
+  .loss-chart-placeholder {
+    background: var(--bg-surface-3); border-radius: 8px; height: 120px;
+    margin-top: 16px; position: relative; overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .loss-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .config-item {}
+  .config-key { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+  .config-val { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────────── -->
+<nav class="frame-nav">
+  <span style="color:#737373;font-size:12px;line-height:30px;margin-right:4px">Frame:</span>
+  <a href="#" onclick="show('dashboard')" class="active" id="nav-dashboard">1 · Dashboard</a>
+  <a href="#" onclick="show('models')" id="nav-models">2 · Models Hub</a>
+  <a href="#" onclick="show('chat')" id="nav-chat">3 · Chat</a>
+  <a href="#" onclick="show('palette')" id="nav-palette">4 · Command Palette</a>
+  <a href="#" onclick="show('training')" id="nav-training">5 · Training</a>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     FRAME 1 — DASHBOARD
+═══════════════════════════════════════════ -->
+<div class="screen active" id="screen-dashboard">
+  <!-- Title bar -->
+  <div class="title-bar">
+    <div class="traffic-lights">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    <div class="center">Sovereign Coder — Qwen2.5-Coder-32B ▾</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+
+  <!-- Body -->
+  <div class="shell-body">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">S</div>
+        <span>Sovereign</span>
+        <span class="lock-badge">
+          <!-- lock icon -->
+          <svg class="icon-12" viewBox="0 0 24 24" style="color:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </span>
+      </div>
+      <div class="sidebar-nav">
+        <!-- Dashboard active -->
+        <div class="nav-item active">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </div>
+        <div class="nav-item">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          Models
+        </div>
+        <div class="nav-item">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat
+        </div>
+        <div class="nav-item">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Training
+          <span class="nav-badge yellow" style="margin-left:auto"></span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+          Federation
+        </div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item">
+            <svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+          <div class="nav-item">
+            <svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+            Help
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="search-pill">
+          <svg class="icon" viewBox="0 0 24 24" style="color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span class="kbd" style="color:var(--text-muted)">⌘K</span>
+          <span>Search...</span>
+        </div>
+      </div>
+
+      <!-- Active Model Card -->
+      <div class="card">
+        <div class="flex items-center justify-between" style="margin-bottom:12px">
+          <span class="section-label" style="margin-bottom:0">Active Model</span>
+          <button class="btn-ghost" style="font-size:12px;padding:4px 10px">Switch Model ▾</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span style="font-size:17px;font-weight:700;color:var(--text-primary)">Qwen2.5-Coder-32B-Instruct</span>
+          <span class="chip chip-surface">Q4_K_M</span>
+        </div>
+        <div class="vram-row">
+          <span class="vram-label">VRAM</span>
+          <div class="vram-bar-bg"><div class="vram-bar-fill" style="width:76%"></div></div>
+          <span class="vram-label">18.2 / 24 GB</span>
+        </div>
+        <div class="stats-row">
+          <span>45.3 tok/s</span><span class="sep">·</span>
+          <span>128K context</span><span class="sep">·</span>
+          <span>First token: 380ms</span>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn-primary">
+            <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Open Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Health Strip -->
+      <div style="margin-top:14px">
+        <div class="section-label">System Health</div>
+        <div class="health-strip">
+          <div class="health-item">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            Inference: Ready
+          </div>
+          <div class="health-item">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            GPU: 72°C
+          </div>
+          <div class="health-item">
+            <div class="health-dot" style="background:var(--text-muted)"></div>
+            <span style="color:var(--text-muted)">Training: Idle</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:500;color:var(--text-secondary);margin-bottom:4px">Quick Actions</div>
+        <div class="quick-actions-grid">
+          <button class="quick-action-btn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Open Chat
+          </button>
+          <button class="quick-action-btn">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Start Training
+          </button>
+          <button class="quick-action-btn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Browse Models
+          </button>
+          <button class="quick-action-btn">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            System Health
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Status bar -->
+  <footer class="status-bar" role="status" aria-label="System status">
+    <div class="status-segment">
+      <svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <span class="local-badge">Running Locally</span>
+    </div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">
+      <span style="cursor:pointer">Qwen2.5-Coder-32B</span>
+    </div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">
+      <svg class="icon-12" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>GPU 18.2/24 GB · 72°C</span>
+    </div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">
+      <svg class="icon-12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>45 tok/s</span>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 2 — MODELS HUB
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-models">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Qwen2.5-Coder-32B ▾</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </div>
+        <div class="nav-item active">
+          <svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          Models
+        </div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training<span class="nav-badge yellow" style="margin-left:auto"></span></div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Models</h1>
+        <button class="btn-primary">
+          <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download New Model
+        </button>
+      </div>
+
+      <div class="section-label">Installed</div>
+
+      <!-- Model row 1 — Active -->
+      <div class="model-row">
+        <svg class="icon-18" viewBox="0 0 24 24" style="stroke:var(--green-500);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="model-info">
+          <div class="model-name">Qwen2.5-Coder-32B-Instruct</div>
+          <div class="model-chips">
+            <span class="chip chip-surface">Q4_K_M</span>
+            <span class="chip chip-accent">32B</span>
+            <span style="font-size:12px;color:var(--text-secondary);margin-left:4px">18.2 GB VRAM · 45 tok/s</span>
+          </div>
+        </div>
+        <div class="model-actions">
+          <span class="chip chip-green">Active</span>
+          <button class="btn-ghost" style="font-size:12px;padding:5px 10px">Open Chat</button>
+          <button class="icon-btn">⋮</button>
+        </div>
+      </div>
+
+      <!-- Model row 2 -->
+      <div class="model-row">
+        <svg class="icon-18" viewBox="0 0 24 24" style="stroke:var(--text-muted);flex-shrink:0"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <div class="model-info">
+          <div class="model-name">DeepSeek-Coder-V2-33B</div>
+          <div class="model-chips">
+            <span class="chip chip-surface">Q4_K_M</span>
+            <span class="chip chip-accent">33B</span>
+            <span style="font-size:12px;color:var(--text-secondary);margin-left:4px">16.8 GB VRAM · 38 tok/s</span>
+          </div>
+        </div>
+        <div class="model-actions">
+          <button class="btn-ghost" style="font-size:12px;padding:5px 10px">Load</button>
+          <button class="icon-btn">⋮</button>
+        </div>
+      </div>
+
+      <!-- Model row 3 -->
+      <div class="model-row">
+        <svg class="icon-18" viewBox="0 0 24 24" style="stroke:var(--text-muted);flex-shrink:0"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <div class="model-info">
+          <div class="model-name">Phi-4-Coder-14B</div>
+          <div class="model-chips">
+            <span class="chip chip-surface">Q5_K_M</span>
+            <span class="chip chip-accent">14B</span>
+            <span style="font-size:12px;color:var(--text-secondary);margin-left:4px">8.1 GB VRAM · 67 tok/s</span>
+          </div>
+        </div>
+        <div class="model-actions">
+          <button class="btn-ghost" style="font-size:12px;padding:5px 10px">Load</button>
+          <button class="btn-destructive" style="padding:5px 8px">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+          <button class="icon-btn">⋮</button>
+        </div>
+      </div>
+
+      <!-- Available to download -->
+      <div style="margin-top:20px">
+        <div class="section-label">Available to Download</div>
+        <div class="download-grid">
+          <div class="download-card">
+            <div class="download-card-name">Qwen2.5-Coder-72B</div>
+            <div class="download-card-meta">72B · Q4_K_M · 41 GB required</div>
+            <div class="progress-bar-bg" style="margin-bottom:12px"><div class="progress-bar-fill accent" style="width:0%"></div></div>
+            <button class="btn-primary" style="font-size:12px;padding:5px 12px">
+              <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+          <div class="download-card">
+            <div class="download-card-name">StarCoder2-15B</div>
+            <div class="download-card-meta">15B · Q4_K_M · 8.9 GB required</div>
+            <div class="progress-bar-bg" style="margin-bottom:12px"><div class="progress-bar-fill accent" style="width:0%"></div></div>
+            <button class="btn-primary" style="font-size:12px;padding:5px 12px">
+              <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="status-bar" role="status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 18.2/24 GB · 72°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 3 — CHAT
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-chat">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Chat</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Models</div>
+        <div class="nav-item active"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training<span class="nav-badge yellow" style="margin-left:auto"></span></div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-base)">
+      <!-- Chat top bar -->
+      <div class="chat-topbar">
+        <span style="font-size:14px;font-weight:600;color:var(--text-primary)">Chat with Qwen2.5-Coder-32B</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn-ghost" style="font-size:12px;padding:4px 10px">New Chat</button>
+          <button class="btn-ghost" style="font-size:12px;padding:4px 10px">Clear</button>
+          <button class="icon-btn" aria-label="Collapse panel">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-area">
+        <!-- User message -->
+        <div class="msg-user">
+          Can you explain how the QLoRA training pipeline works in Sovereign Coder?
+        </div>
+
+        <!-- Assistant message -->
+        <div class="msg-assistant">
+          <div class="msg-assistant-label">Qwen2.5-Coder-32B</div>
+          <div class="msg-assistant-body">
+            QLoRA (Quantized Low-Rank Adaptation) is a parameter-efficient fine-tuning approach that keeps the base model in 4-bit NF4 quantization while training small LoRA adapter weights. This lets you fine-tune a 32B model on a single 24 GB GPU.
+            <div class="code-block"><span style="color:var(--accent-400)">from</span> peft <span style="color:var(--accent-400)">import</span> get_peft_model, LoraConfig<br>
+<span style="color:var(--text-muted)"># rank=32, target attention projections</span><br>
+config = LoraConfig(r=<span style="color:var(--blue-400)">32</span>, lora_alpha=<span style="color:var(--blue-400)">64</span>, target_modules=[<span style="color:var(--green-400)">"q_proj"</span>, <span style="color:var(--green-400)">"v_proj"</span>])<br>
+model = get_peft_model(base_model, config)</div>
+          </div>
+        </div>
+
+        <!-- Second user message -->
+        <div class="msg-user">
+          How long does one training epoch take on an RTX 4090?
+        </div>
+
+        <!-- Streaming assistant response -->
+        <div class="msg-assistant">
+          <div class="msg-assistant-label">Qwen2.5-Coder-32B</div>
+          <div class="msg-assistant-body">
+            On an RTX 4090 (24 GB VRAM), training a 7B model for one epoch over ~5,000 code completion samples typically takes around 45–60 minutes with QLoRA at rank 32<span class="cursor-blink"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input-bar">
+        <button class="icon-btn" aria-label="Attach file">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <div class="chat-input" style="display:flex;align-items:center;color:var(--text-muted)">
+          Message Qwen2.5-Coder-32B...
+        </div>
+        <button class="send-btn" aria-label="Send message">
+          <svg style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer class="status-bar" role="status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 18.2/24 GB · 72°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 4 — COMMAND PALETTE OVERLAY
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-palette">
+  <!-- Re-use Dashboard as background -->
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Qwen2.5-Coder-32B ▾</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body" style="position:relative">
+    <!-- Dimmed background content -->
+    <nav class="sidebar" style="opacity:0.4"><div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div></nav>
+    <main class="main-content" style="opacity:0.3;pointer-events:none">
+      <div class="page-header"><h1 class="page-title">Dashboard</h1></div>
+      <div class="card"><div style="height:90px"></div></div>
+    </main>
+
+    <!-- Overlay -->
+    <div class="palette-overlay">
+      <div class="palette-modal">
+        <div class="palette-input-row">
+          <svg class="icon-20" viewBox="0 0 24 24" style="stroke:var(--text-muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="palette-input" placeholder="Type a model name or command..." readonly>
+          <span class="esc-chip">Esc</span>
+        </div>
+        <div class="palette-results">
+          <div class="palette-section-label">Models</div>
+          <div class="palette-row active-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--green-500)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            qwen2.5-coder:32b
+            <span class="palette-row-right"><span class="chip chip-green" style="font-size:11px">Active</span></span>
+          </div>
+          <div class="palette-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            deepseek-coder:33b
+          </div>
+          <div class="palette-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            starcoder2:15b
+          </div>
+          <hr class="palette-divider">
+          <div class="palette-section-label">Actions</div>
+          <div class="palette-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--accent-500)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Open Chat
+          </div>
+          <div class="palette-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--yellow-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Start Training
+          </div>
+          <div class="palette-row">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Browse Models
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="status-bar" role="status">
+    <div class="status-segment"><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 5 — TRAINING
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-training">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Training</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Models</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item active"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training<span class="nav-badge yellow" style="margin-left:auto"></span></div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Training</h1>
+        </div>
+        <button class="btn-primary">
+          <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Training Run
+        </button>
+      </div>
+
+      <!-- Active Run Card -->
+      <div class="card">
+        <div class="flex items-center justify-between" style="margin-bottom:12px">
+          <div class="flex items-center gap-2">
+            <span class="section-label" style="margin-bottom:0">Current Run</span>
+            <span class="chip chip-yellow">
+              <svg style="width:10px;height:10px;stroke:var(--yellow-400);fill:none;stroke-width:2;margin-right:4px" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Running
+            </span>
+          </div>
+          <button class="btn-destructive" style="font-size:12px;padding:4px 12px">Stop</button>
+        </div>
+        <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:12px">codebase-finetune-v3</div>
+
+        <div class="flex items-center justify-between" style="margin-bottom:6px">
+          <span style="font-size:13px;color:var(--text-secondary)">Epoch 2 / 5  ·  Step 420 / 1050</span>
+          <span style="font-size:13px;color:var(--text-secondary)">40%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill yellow" style="width:40%"></div>
+        </div>
+
+        <div class="stats-row" style="margin-top:12px">
+          <span>Loss: <strong style="color:var(--text-primary)">0.0342</strong></span>
+          <span class="sep">·</span>
+          <span>LR: <strong style="color:var(--text-primary)">2e-4</strong></span>
+          <span class="sep">·</span>
+          <span>Elapsed: <strong style="color:var(--text-primary)">38m</strong></span>
+          <span class="sep">·</span>
+          <span>ETA: <strong style="color:var(--text-primary)">57m</strong></span>
+        </div>
+
+        <!-- Loss chart placeholder -->
+        <div class="loss-chart-placeholder">
+          <svg class="loss-svg" viewBox="0 0 600 120" preserveAspectRatio="none">
+            <!-- grid lines -->
+            <line x1="0" y1="30" x2="600" y2="30" stroke="#2A2A2A" stroke-width="1"/>
+            <line x1="0" y1="60" x2="600" y2="60" stroke="#2A2A2A" stroke-width="1"/>
+            <line x1="0" y1="90" x2="600" y2="90" stroke="#2A2A2A" stroke-width="1"/>
+            <!-- loss curve (descending) -->
+            <polyline
+              points="0,10 40,18 80,30 120,42 160,52 200,58 250,65 300,70 350,74 400,77 450,79 500,81 550,82 600,83"
+              fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linejoin="round"/>
+            <!-- area fill -->
+            <polygon
+              points="0,10 40,18 80,30 120,42 160,52 200,58 250,65 300,70 350,74 400,77 450,79 500,81 550,82 600,83 600,120 0,120"
+              fill="rgba(139,92,246,0.08)"/>
+          </svg>
+          <!-- axis labels -->
+          <span style="position:absolute;bottom:6px;left:8px;font-size:11px;color:var(--text-muted)">Step 0</span>
+          <span style="position:absolute;bottom:6px;right:8px;font-size:11px;color:var(--text-muted)">Step 420</span>
+          <span style="position:absolute;top:6px;left:8px;font-size:11px;color:var(--text-muted)">Loss</span>
+        </div>
+      </div>
+
+      <!-- Config card -->
+      <div class="card mt-3">
+        <div style="font-size:14px;font-weight:500;color:var(--text-secondary);margin-bottom:4px">Configuration</div>
+        <div class="config-grid">
+          <div class="config-item"><div class="config-key">Base Model</div><div class="config-val">Qwen2.5-Coder-32B</div></div>
+          <div class="config-item"><div class="config-key">Method</div><div class="config-val">QLoRA (rank 32)</div></div>
+          <div class="config-item"><div class="config-key">Dataset</div><div class="config-val">codebase-completions-v3</div></div>
+          <div class="config-item"><div class="config-key">Batch Size</div><div class="config-val">4</div></div>
+          <div class="config-item"><div class="config-key">Learning Rate</div><div class="config-val">2e-4</div></div>
+          <div class="config-item"><div class="config-key">VRAM Usage</div><div class="config-val">19.1 / 24 GB</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="status-bar" role="status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 19.1/24 GB · 76°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment" style="color:var(--yellow-400)">
+      <svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--yellow-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Training: Running
+    </div>
+  </footer>
+</div>
+
+
+<script>
+function show(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.frame-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  return false;
+}
+// Auto-show based on ?s= query param or hash; hide nav in capture mode
+(function() {
+  const params = new URLSearchParams(location.search);
+  const s = params.get('s') || location.hash.replace('#','');
+  if (s) show(s);
+  if (params.get('capture') === '1') {
+    document.querySelector('.frame-nav').style.display = 'none';
+    document.body.style.paddingTop = '0';
+  }
+})();
+</script>
+</body>
+</html>
