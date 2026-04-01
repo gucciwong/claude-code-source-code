@@ -46,6 +46,14 @@ export const workspace = {
     get: vi.fn().mockImplementation((_key: string, defaultValue: unknown) => defaultValue),
     update: vi.fn(),
   }),
+  findFiles: vi.fn().mockResolvedValue([]),
+  workspaceFolders: undefined as unknown as Array<{ uri: Uri; name: string; index: number }> | undefined,
+  createFileSystemWatcher: vi.fn().mockReturnValue({
+    onDidCreate: vi.fn().mockReturnValue({ dispose: vi.fn() }),
+    onDidChange: vi.fn().mockReturnValue({ dispose: vi.fn() }),
+    onDidDelete: vi.fn().mockReturnValue({ dispose: vi.fn() }),
+    dispose: vi.fn(),
+  }),
 }
 
 export const window = {
@@ -79,4 +87,28 @@ export const CancellationToken = {
 
 export class ThemeColor {
   constructor(public id: string) {}
+}
+
+export class Uri {
+  constructor(
+    public readonly scheme: string,
+    public readonly authority: string,
+    public readonly path: string,
+    public readonly fsPath: string,
+  ) {}
+
+  static file(fsPath: string): Uri {
+    return new Uri('file', '', fsPath, fsPath)
+  }
+
+  toString(): string {
+    return `${this.scheme}://${this.fsPath}`
+  }
+}
+
+export class RelativePattern {
+  constructor(
+    public readonly base: string | { uri: Uri },
+    public readonly pattern: string,
+  ) {}
 }
