@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send } from 'lucide-react'
+import { Send, Zap, ChevronDown } from 'lucide-react'
 import { useChatStore, ChatMessage } from '../store/chatStore'
 import { useSystemStore } from '../store/systemStore'
+import { useAgentStore } from '../store/agentStore'
 import { streamChat } from '../services/ollamaClient'
+import { ToolTrace } from '../components/chat/ToolTrace'
+import { DiffViewer } from '../components/chat/DiffViewer'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -29,6 +32,7 @@ export function Chat() {
   const [isStreaming, setIsStreaming] = useState(false)
   const { messages, addMessage, appendToLast, setLastStreaming, clear } = useChatStore()
   const activeModel = useSystemStore(s => s.activeModel)
+  const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -83,13 +87,40 @@ export function Chat() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-border-default bg-bg-surface-1 shrink-0">
         <h2 className="text-sm font-semibold text-text-primary">{modelName}</h2>
-        <button
-          className="text-xs text-text-muted hover:text-text-secondary cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500 rounded px-2 py-1"
-          onClick={clear}
-          aria-label="Clear chat history"
-        >
-          Clear
-        </button>
+        <div className="flex items-center gap-3">
+          {agentMode && (
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={dryRun}
+                onChange={e => setDryRun(e.target.checked)}
+                aria-label="Dry run mode"
+                className="cursor-pointer"
+              />
+              <span className="text-xs text-text-secondary">Dry run</span>
+            </label>
+          )}
+          <button
+            className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500 ${
+              agentMode
+                ? 'bg-accent-500 text-text-primary'
+                : 'bg-bg-surface-2 text-text-secondary border border-border-default hover:bg-bg-surface-3'
+            }`}
+            onClick={() => setAgentMode(!agentMode)}
+            aria-pressed={agentMode}
+            aria-label="Toggle agent mode"
+          >
+            <Zap size={14} aria-hidden="true" />
+            Agent
+          </button>
+          <button
+            className="text-xs text-text-muted hover:text-text-secondary cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500 rounded px-2 py-1"
+            onClick={clear}
+            aria-label="Clear chat history"
+          >
+            Clear
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -104,6 +135,14 @@ export function Chat() {
         ))}
         <div ref={bottomRef} />
       </div>
+
+      {/* Agent Mode UI */}
+      {agentMode && (
+        <>
+          <ToolTrace />
+          <DiffViewer />
+        </>
+      )}
 
       {/* Input area */}
       <div className="shrink-0 px-6 py-4 border-t border-border-default bg-bg-surface-1">
