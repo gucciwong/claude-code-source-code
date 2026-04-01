@@ -386,6 +386,163 @@
   .config-item {}
   .config-key { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
   .config-val { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+
+  /* ── FEDERATION ─────────────────────────── */
+  .peer-node {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 8px;
+  }
+  .peer-avatar {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--bg-surface-3); border: 1px solid var(--border-default);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .peer-info { flex: 1; min-width: 0; }
+  .peer-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .peer-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .peer-status { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .fed-network-vis {
+    background: var(--bg-surface-3); border-radius: 8px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-default); position: relative; overflow: hidden;
+  }
+  .fed-node-dot {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent-500); opacity: 0.9;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; position: absolute;
+  }
+  .fed-node-dot.peer { background: var(--bg-elevated); border: 1px solid var(--border-strong); opacity: 1; }
+  .sync-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-subtle); }
+  .sync-row:last-child { border-bottom: none; }
+  .sync-label { font-size: 13px; color: var(--text-secondary); }
+  .sync-value { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+
+  /* ── SETTINGS ───────────────────────────── */
+  .settings-layout { display: grid; grid-template-columns: 200px 1fr; gap: 0; height: 100%; }
+  .settings-nav {
+    background: var(--bg-surface-2); border-right: 1px solid var(--border-subtle);
+    padding: 16px 0;
+  }
+  .settings-nav-item {
+    padding: 9px 20px; font-size: 13px; color: var(--text-secondary);
+    cursor: pointer; border-left: 2px solid transparent;
+  }
+  .settings-nav-item:hover { background: rgba(255,255,255,0.04); }
+  .settings-nav-item.active {
+    color: var(--text-primary); font-weight: 600;
+    border-left-color: var(--accent-500);
+    background: rgba(139,92,246,0.06);
+  }
+  .settings-nav-section {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); padding: 10px 20px 4px;
+  }
+  .settings-pane { flex: 1; padding: 24px; overflow-y: auto; }
+  .settings-group { margin-bottom: 28px; }
+  .settings-group-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid var(--border-subtle);
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-label { font-size: 14px; color: var(--text-primary); }
+  .setting-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .toggle-track {
+    width: 36px; height: 20px; border-radius: 9999px; position: relative;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .toggle-track.on { background: var(--accent-500); }
+  .toggle-track.off { background: var(--bg-surface-3); border: 1px solid var(--border-default); }
+  .toggle-thumb {
+    width: 14px; height: 14px; border-radius: 50%; background: #fff;
+    position: absolute; top: 3px; transition: left 0.15s;
+  }
+  .toggle-track.on .toggle-thumb { left: 19px; }
+  .toggle-track.off .toggle-thumb { left: 3px; }
+  .setting-input {
+    background: var(--bg-surface-3); border: 1px solid var(--border-default);
+    border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--text-primary);
+    min-width: 200px;
+  }
+  .setting-select {
+    background: var(--bg-surface-3); border: 1px solid var(--border-default);
+    border-radius: 6px; padding: 6px 28px 6px 12px; font-size: 13px;
+    color: var(--text-primary); appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23737373' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+
+  /* ── ONBOARDING ─────────────────────────── */
+  .onboarding-outer {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-base);
+  }
+  .onboarding-card {
+    width: 560px; background: var(--bg-surface-1);
+    border: 1px solid var(--border-default); border-radius: 16px;
+    padding: 40px; box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+  .onboarding-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .onboarding-logo-mark {
+    width: 42px; height: 42px; background: var(--accent-500); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #fff;
+  }
+  .onboarding-logo-text { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+  .onboarding-step-indicator {
+    display: flex; gap: 6px; margin-bottom: 28px;
+  }
+  .step-dot {
+    height: 4px; border-radius: 9999px;
+    flex: 1;
+  }
+  .step-dot.done { background: var(--accent-500); }
+  .step-dot.active { background: var(--accent-400); }
+  .step-dot.future { background: var(--border-default); }
+  .onboarding-title { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+  .onboarding-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.6; }
+  .hw-scan-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--bg-surface-2);
+    border: 1px solid var(--border-default); border-radius: 8px; margin-bottom: 8px;
+  }
+  .hw-scan-icon { width: 32px; height: 32px; border-radius: 6px; background: var(--bg-surface-3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .hw-scan-label { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+  .hw-scan-value { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .hw-scan-status { margin-left: auto; flex-shrink: 0; }
+  .onboarding-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+
+  /* ── SYSTEM HEALTH ──────────────────────── */
+  .health-metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .metric-card {
+    background: var(--bg-surface-2); border: 1px solid var(--border-default);
+    border-radius: 8px; padding: 16px;
+  }
+  .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 8px; }
+  .metric-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+  .metric-unit { font-size: 13px; color: var(--text-secondary); font-weight: 400; margin-left: 4px; }
+  .metric-sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .gauge-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .gauge-label { font-size: 13px; color: var(--text-secondary); width: 80px; flex-shrink: 0; }
+  .gauge-bar { flex: 1; height: 6px; background: var(--bg-surface-3); border-radius: 9999px; overflow: hidden; }
+  .gauge-fill { height: 100%; border-radius: 9999px; }
+  .gauge-fill.green  { background: var(--green-500); }
+  .gauge-fill.yellow { background: var(--yellow-400); }
+  .gauge-fill.blue   { background: var(--blue-400); }
+  .gauge-fill.accent { background: var(--accent-500); }
+  .gauge-pct { font-size: 12px; color: var(--text-secondary); width: 36px; text-align: right; flex-shrink: 0; }
+  .bench-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--border-subtle); font-size: 13px;
+  }
+  .bench-row:last-child { border-bottom: none; }
+  .bench-name { color: var(--text-secondary); }
+  .bench-val  { color: var(--text-primary); font-weight: 600; }
+  .bench-rating { font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
 </style>
 </head>
 <body>
@@ -398,6 +555,10 @@
   <a href="#" onclick="show('chat')" id="nav-chat">3 · Chat</a>
   <a href="#" onclick="show('palette')" id="nav-palette">4 · Command Palette</a>
   <a href="#" onclick="show('training')" id="nav-training">5 · Training</a>
+  <a href="#" onclick="show('federation')" id="nav-federation">6 · Federation</a>
+  <a href="#" onclick="show('settings')" id="nav-settings">7 · Settings</a>
+  <a href="#" onclick="show('onboarding')" id="nav-onboarding">8 · Onboarding</a>
+  <a href="#" onclick="show('health')" id="nav-health">9 · System Health</a>
 </nav>
 
 <!-- ══════════════════════════════════════════
@@ -991,6 +1152,485 @@ model = get_peft_model(base_model, config)</div>
       <svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--yellow-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       Training: Running
     </div>
+  </footer>
+</div>
+
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 6 — FEDERATION
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-federation">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Federation</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Models</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training</div>
+        <div class="nav-item active"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation<span class="nav-badge green" style="margin-left:auto"></span></div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Federation</h1>
+        <button class="btn-primary">
+          <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Peer
+        </button>
+      </div>
+
+      <!-- Network visualization -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="flex items-center justify-between" style="margin-bottom:12px">
+          <span class="section-label" style="margin-bottom:0">Network Topology</span>
+          <span class="chip chip-green">3 peers connected</span>
+        </div>
+        <div class="fed-network-vis">
+          <!-- SVG connections -->
+          <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 140">
+            <line x1="340" y1="70" x2="110" y2="40" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.5"/>
+            <line x1="340" y1="70" x2="570" y2="35" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.5"/>
+            <line x1="340" y1="70" x2="480" y2="105" stroke="#22C55E" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.5"/>
+          </svg>
+          <!-- Self node -->
+          <div class="fed-node-dot" style="left:323px;top:53px">S</div>
+          <!-- Peer nodes -->
+          <div class="fed-node-dot peer" style="left:93px;top:23px">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-secondary)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <div class="fed-node-dot peer" style="left:553px;top:18px">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-secondary)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <div class="fed-node-dot peer" style="left:463px;top:88px">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--yellow-400)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <!-- Labels -->
+          <span style="position:absolute;left:60px;top:62px;font-size:11px;color:var(--text-muted)">dev-workstation-A</span>
+          <span style="position:absolute;left:530px;top:57px;font-size:11px;color:var(--text-muted)">build-server-03</span>
+          <span style="position:absolute;left:438px;top:115px;font-size:11px;color:var(--yellow-400)">laptop-B (syncing)</span>
+          <span style="position:absolute;left:316px;top:95px;font-size:11px;color:var(--accent-400)">you</span>
+        </div>
+      </div>
+
+      <!-- Sync stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div class="card">
+          <div class="section-label">Gradient Sync</div>
+          <div class="sync-row"><span class="sync-label">Updates shared (today)</span><span class="sync-value">1,247</span></div>
+          <div class="sync-row"><span class="sync-label">Updates received</span><span class="sync-value">3,891</span></div>
+          <div class="sync-row"><span class="sync-label">Last sync</span><span class="sync-value">12s ago</span></div>
+          <div class="sync-row"><span class="sync-label">Sync interval</span><span class="sync-value">30s</span></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Privacy Controls</div>
+          <div class="sync-row">
+            <div><div class="sync-label">Gradient noise</div><div style="font-size:11px;color:var(--text-muted)">ε-differential privacy</div></div>
+            <span class="chip chip-green">ε = 0.1</span>
+          </div>
+          <div class="sync-row">
+            <div class="sync-label">Code sharing</div>
+            <span class="chip chip-surface">Disabled</span>
+          </div>
+          <div class="sync-row">
+            <div class="sync-label">Model sharing</div>
+            <span class="chip chip-surface">Gradients only</span>
+          </div>
+          <div class="sync-row">
+            <div class="sync-label">Encryption</div>
+            <span class="chip chip-blue">TLS 1.3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peer list -->
+      <div class="section-label">Connected Peers</div>
+      <div class="peer-node">
+        <div class="peer-avatar">A</div>
+        <div class="peer-info">
+          <div class="peer-name">dev-workstation-A</div>
+          <div class="peer-meta">RTX 4090 · Qwen2.5-Coder-32B · 52 tok/s</div>
+        </div>
+        <div class="peer-status">
+          <div class="health-dot" style="background:var(--green-500)"></div>
+          <span style="color:var(--green-400)">Syncing</span>
+        </div>
+      </div>
+      <div class="peer-node">
+        <div class="peer-avatar">B</div>
+        <div class="peer-info">
+          <div class="peer-name">build-server-03</div>
+          <div class="peer-meta">2× RTX 3090 · DeepSeek-Coder-33B · 38 tok/s</div>
+        </div>
+        <div class="peer-status">
+          <div class="health-dot" style="background:var(--green-500)"></div>
+          <span style="color:var(--green-400)">Syncing</span>
+        </div>
+      </div>
+      <div class="peer-node">
+        <div class="peer-avatar" style="color:var(--yellow-400)">C</div>
+        <div class="peer-info">
+          <div class="peer-name">laptop-B</div>
+          <div class="peer-meta">RTX 3060 · Phi-4-Coder-14B · 28 tok/s</div>
+        </div>
+        <div class="peer-status">
+          <div class="health-dot" style="background:var(--yellow-400)"></div>
+          <span style="color:var(--yellow-400)">Syncing…</span>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="status-bar" role="status" aria-label="System status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 18.2/24 GB · 72°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">
+      <svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+      <span style="color:var(--blue-400)">3 peers</span>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 7 — SETTINGS
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-settings">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — Settings</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Models</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item active"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+    <!-- Settings split layout -->
+    <div style="flex:1;display:flex;overflow:hidden">
+      <!-- Settings sub-nav -->
+      <div class="settings-nav">
+        <div class="settings-nav-section">General</div>
+        <div class="settings-nav-item active">Inference</div>
+        <div class="settings-nav-item">Models &amp; Storage</div>
+        <div class="settings-nav-item">Editor Integration</div>
+        <div class="settings-nav-section">AI &amp; Training</div>
+        <div class="settings-nav-item">Training Schedule</div>
+        <div class="settings-nav-item">Data Collection</div>
+        <div class="settings-nav-item">Self-Improvement</div>
+        <div class="settings-nav-section">Privacy</div>
+        <div class="settings-nav-item">Telemetry</div>
+        <div class="settings-nav-item">Federation</div>
+        <div class="settings-nav-section">System</div>
+        <div class="settings-nav-item">Hardware</div>
+        <div class="settings-nav-item">Updates</div>
+        <div class="settings-nav-item">Advanced</div>
+      </div>
+      <!-- Pane -->
+      <div class="settings-pane">
+        <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:20px">Inference</div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Engine</div>
+          <div class="card" style="padding:0">
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Backend</div><div class="setting-desc">Inference engine used to run models</div></div>
+              <select class="setting-select"><option>llama.cpp (GGUF)</option></select>
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">GPU layers</div><div class="setting-desc">Layers offloaded to GPU (−1 = all)</div></div>
+              <input class="setting-input" value="-1" style="width:80px">
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Context window</div><div class="setting-desc">Max token context length</div></div>
+              <select class="setting-select"><option>128K tokens</option></select>
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Flash attention</div><div class="setting-desc">Enable memory-efficient attention</div></div>
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Generation</div>
+          <div class="card" style="padding:0">
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Temperature</div><div class="setting-desc">Sampling temperature (0 = deterministic)</div></div>
+              <input class="setting-input" value="0.7" style="width:80px">
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Top-P</div><div class="setting-desc">Nucleus sampling threshold</div></div>
+              <input class="setting-input" value="0.95" style="width:80px">
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Max tokens</div><div class="setting-desc">Maximum tokens per generation</div></div>
+              <input class="setting-input" value="4096" style="width:80px">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Performance</div>
+          <div class="card" style="padding:0">
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Batch size</div><div class="setting-desc">Tokens processed per forward pass</div></div>
+              <input class="setting-input" value="512" style="width:80px">
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">KV cache quantization</div><div class="setting-desc">Reduce memory usage for KV cache</div></div>
+              <select class="setting-select"><option>Q8_0</option></select>
+            </div>
+            <div class="setting-row" style="padding:12px 16px">
+              <div><div class="setting-label">Speculative decoding</div><div class="setting-desc">Use draft model for faster generation</div></div>
+              <div class="toggle-track off"><div class="toggle-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="status-bar" role="status" aria-label="System status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 18.2/24 GB · 72°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
+  </footer>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 8 — ONBOARDING (first-run)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-onboarding">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Welcome to Sovereign Coder</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="onboarding-outer">
+    <div class="onboarding-card">
+      <div class="onboarding-logo">
+        <div class="onboarding-logo-mark">S</div>
+        <div>
+          <div class="onboarding-logo-text">Sovereign Coder</div>
+          <div style="font-size:12px;color:var(--text-muted)">Local AI · Your Machine · Your Model</div>
+        </div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="onboarding-step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot future"></div>
+        <div class="step-dot future"></div>
+      </div>
+
+      <div class="onboarding-title">Hardware Detected</div>
+      <div class="onboarding-subtitle">Sovereign Coder found your hardware. Here's what we can run on your system right now.</div>
+
+      <!-- Hardware scan results -->
+      <div class="hw-scan-row">
+        <div class="hw-scan-icon"><svg class="icon" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div>
+          <div class="hw-scan-label">NVIDIA RTX 4090</div>
+          <div class="hw-scan-value">24 GB VRAM — CUDA 12.4</div>
+        </div>
+        <div class="hw-scan-status"><span class="chip chip-green">Supported</span></div>
+      </div>
+      <div class="hw-scan-row">
+        <div class="hw-scan-icon"><svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-secondary)"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div>
+          <div class="hw-scan-label">System RAM</div>
+          <div class="hw-scan-value">64 GB DDR5</div>
+        </div>
+        <div class="hw-scan-status"><span class="chip chip-green">Sufficient</span></div>
+      </div>
+      <div class="hw-scan-row">
+        <div class="hw-scan-icon"><svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-secondary)"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div>
+          <div class="hw-scan-label">Recommended model</div>
+          <div class="hw-scan-value">Qwen2.5-Coder-32B-Instruct · Q4_K_M · 18.2 GB</div>
+        </div>
+        <div class="hw-scan-status"><span class="chip chip-accent">Best fit</span></div>
+      </div>
+
+      <div style="margin-top:20px;padding:14px 16px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:8px;font-size:13px;color:var(--text-secondary);line-height:1.6">
+        <strong style="color:var(--accent-400)">Privacy guarantee:</strong> Your code, completions, and model weights never leave this machine. Zero telemetry. Zero cloud calls.
+      </div>
+
+      <div class="onboarding-actions">
+        <button class="btn-ghost">← Back</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn-ghost">Choose different model</button>
+          <button class="btn-primary">
+            <svg class="icon" viewBox="0 0 24 24" style="color:#fff"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download &amp; Setup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FRAME 9 — SYSTEM HEALTH
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-health">
+  <div class="title-bar">
+    <div class="traffic-lights"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+    <div class="center">Sovereign Coder — System Health</div>
+    <div class="win-controls">− □ ✕</div>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-mark">S</div><span>Sovereign</span></div>
+      <div class="sidebar-nav">
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Models</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Training</div>
+        <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>Federation</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-bottom">
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.61 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+          <div class="nav-item"><svg class="icon icon-18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</div>
+        </div>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">System Health</h1>
+        <button class="btn-ghost">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+          Run Benchmark
+        </button>
+      </div>
+
+      <!-- Top metric cards -->
+      <div class="health-metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">GPU Utilization</div>
+          <div class="metric-value">94<span class="metric-unit">%</span></div>
+          <div class="metric-sub">RTX 4090 · CUDA 12.4</div>
+          <div style="margin-top:10px">
+            <div class="gauge-row"><span class="gauge-label">Utilization</span><div class="gauge-bar"><div class="gauge-fill green" style="width:94%"></div></div><span class="gauge-pct">94%</span></div>
+            <div class="gauge-row"><span class="gauge-label">Temperature</span><div class="gauge-bar"><div class="gauge-fill yellow" style="width:72%"></div></div><span class="gauge-pct">72°C</span></div>
+            <div class="gauge-row"><span class="gauge-label">Power</span><div class="gauge-bar"><div class="gauge-fill blue" style="width:58%"></div></div><span class="gauge-pct">230W</span></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">VRAM</div>
+          <div class="metric-value">18.2<span class="metric-unit">/ 24 GB</span></div>
+          <div class="metric-sub">4.8 GB free · GDDR6X</div>
+          <div style="margin-top:10px">
+            <div class="vram-bar-bg" style="height:8px"><div class="vram-bar-fill" style="width:76%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text-muted)">
+              <span>Model: 14.8 GB</span><span>KV: 3.4 GB</span><span>Free: 4.8 GB</span>
+            </div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Throughput</div>
+          <div class="metric-value">45.3<span class="metric-unit">tok/s</span></div>
+          <div class="metric-sub">380ms first token</div>
+          <div style="margin-top:10px">
+            <div class="gauge-row"><span class="gauge-label">Decode</span><div class="gauge-bar"><div class="gauge-fill accent" style="width:82%"></div></div><span class="gauge-pct">45t/s</span></div>
+            <div class="gauge-row"><span class="gauge-label">Prefill</span><div class="gauge-bar"><div class="gauge-fill accent" style="width:68%"></div></div><span class="gauge-pct">2.1k/s</span></div>
+            <div class="gauge-row"><span class="gauge-label">Latency</span><div class="gauge-bar"><div class="gauge-fill green" style="width:24%"></div></div><span class="gauge-pct">380ms</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CPU + RAM + Disk -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div class="card">
+          <div class="section-label">CPU &amp; Memory</div>
+          <div class="gauge-row"><span class="gauge-label">CPU</span><div class="gauge-bar"><div class="gauge-fill blue" style="width:34%"></div></div><span class="gauge-pct">34%</span></div>
+          <div class="gauge-row"><span class="gauge-label">RAM</span><div class="gauge-bar"><div class="gauge-fill blue" style="width:45%"></div></div><span class="gauge-pct">29 GB</span></div>
+          <div class="gauge-row"><span class="gauge-label">Swap</span><div class="gauge-bar"><div class="gauge-fill blue" style="width:2%"></div></div><span class="gauge-pct">0 GB</span></div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">AMD Ryzen 9 7950X · 16-core · 5.7GHz</div>
+        </div>
+        <div class="card">
+          <div class="section-label">Inference Benchmark</div>
+          <div class="bench-row"><span class="bench-name">Qwen2.5-32B Q4_K_M</span><span class="bench-val">45.3 tok/s<span class="bench-rating" style="background:rgba(34,197,94,0.15);color:var(--green-400)">A</span></span></div>
+          <div class="bench-row"><span class="bench-name">DeepSeek-33B Q4_K_M</span><span class="bench-val">38.1 tok/s<span class="bench-rating" style="background:rgba(34,197,94,0.15);color:var(--green-400)">A</span></span></div>
+          <div class="bench-row"><span class="bench-name">Phi-4-14B Q5_K_M</span><span class="bench-val">67.4 tok/s<span class="bench-rating" style="background:rgba(139,92,246,0.2);color:var(--accent-400)">S</span></span></div>
+          <div class="bench-row" style="color:var(--text-muted);font-size:12px">Last run: 2026-04-01 13:00</div>
+        </div>
+      </div>
+
+      <!-- Inference healthcheck -->
+      <div class="card">
+        <div class="section-label">Service Status</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">Inference engine</div><div style="font-size:11px;color:var(--text-muted)">llama.cpp v0.2.11</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">Model loaded</div><div style="font-size:11px;color:var(--text-muted)">Qwen2.5-Coder-32B</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--yellow-400)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">Training worker</div><div style="font-size:11px;color:var(--text-muted)">Idle — 0 runs queued</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">RAG indexer</div><div style="font-size:11px;color:var(--text-muted)">3 projects indexed</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">Federation</div><div style="font-size:11px;color:var(--text-muted)">3 peers · TLS 1.3</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg-surface-3);border-radius:6px">
+            <div class="health-dot" style="background:var(--green-500)"></div>
+            <div><div style="font-size:13px;color:var(--text-primary)">VS Code extension</div><div style="font-size:11px;color:var(--text-muted)">v1.2.0 connected</div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="status-bar" role="status" aria-label="System status">
+    <div class="status-segment"><svg class="icon-12" viewBox="0 0 24 24" style="stroke:var(--blue-400)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><span class="local-badge">Running Locally</span></div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">Qwen2.5-Coder-32B</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">GPU 18.2/24 GB · 72°C</div>
+    <div class="status-divider" aria-hidden="true"></div>
+    <div class="status-segment">45 tok/s</div>
   </footer>
 </div>
 
