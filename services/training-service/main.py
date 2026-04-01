@@ -319,6 +319,88 @@ async def cleanup_old_events(days_old: int = 90):
 
 
 # ============================================================================
+# UI Integration Endpoints (Desktop & VSCode)
+# ============================================================================
+
+@app.get("/api/v1/training/status")
+async def get_training_status():
+    """Get current training orchestrator status (for UI).
+    
+    Returns:
+    {
+      "model_id": "mistral-7b",
+      "active_cycle": "quick" | "full" | "idle",
+      "quick_train_count": 25,  # Quick trains since last full
+      "last_quick_train": "2026-04-02T12:30:00",
+      "next_full_train_in": 23,  # Quick trains until next full cycle (48 total)
+      "current_best_adapter": "mistral-7b_quick_24",
+      "is_training": true,  # Currently running training
+      "estimated_time_remaining_minutes": 45,
+    }
+    """
+    # TODO: Wire with actual orchestrator instance
+    # For now, return stub response
+    return {
+        "model_id": "mistral-7b",
+        "active_cycle": "idle",
+        "quick_train_count": 0,
+        "last_quick_train": None,
+        "next_full_train_in": 48,
+        "current_best_adapter": None,
+        "is_training": False,
+        "estimated_time_remaining_minutes": 0,
+    }
+
+
+@app.get("/api/v1/training/version/{model_id}")
+async def get_model_version(model_id: str):
+    """Get current active model version.
+    
+    Returns:
+    {
+      "version_id": "v_1712149200",
+      "adapter_id": "mistral-7b_full_0",
+      "status": "production" | "staging" | "draft",
+      "quality_score": 0.92,
+      "promoted_at": "2026-04-02T14:00:00",
+      "benchmark_results": {
+        "humaneval_pass_rate": 0.45,
+        "mbpp_pass_rate": 0.85,
+      }
+    }
+    """
+    # TODO: Wire with actual registry instance
+    # For now, return stub response
+    return {
+        "version_id": None,
+        "adapter_id": None,
+        "status": "none",
+        "quality_score": 0.0,
+        "promoted_at": None,
+        "benchmark_results": {},
+    }
+
+
+@app.get("/api/v1/training/versions/{model_id}")
+async def get_version_history(model_id: str, limit: int = 5):
+    """Get version history for display in UI.
+    
+    Returns: [
+      {
+        "version_id": "v_1712149200",
+        "created_at": "2026-04-02T14:00:00",
+        "action": "publish" | "promote" | "rollback",
+        "status": "production",
+        "quality_score": 0.92,
+      },
+      ...
+    ]
+    """
+    # TODO: Wire with actual registry instance
+    return []
+
+
+# ============================================================================
 # Root endpoint
 # ============================================================================
 
