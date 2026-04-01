@@ -198,3 +198,13 @@ test('status-pack CLI builds markdown and emits JSON payload', async () => {
   assert.match(markdown, /Sovereign Week1 Executive Status Pack/)
   assert.match(markdown, /Overall status: YELLOW/)
 })
+
+test('status-pack --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-status-pack.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-status-pack\.mjs/)
+  assert.match(stdout, /--out-file <path>/)
+})

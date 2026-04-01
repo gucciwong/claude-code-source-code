@@ -228,3 +228,13 @@ test('benchmark CLI prints human output and exits 2 when gate fails', async () =
     },
   )
 })
+
+test('benchmark --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-benchmark.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-benchmark\.mjs/)
+  assert.match(stdout, /--tier <tier>/)
+})

@@ -192,3 +192,13 @@ test('report CLI reads evidence and writes markdown report file', async () => {
   assert.match(markdown, /Date: 2026-04-02/)
   assert.match(markdown, /Overall readiness: Ready/)
 })
+
+test('report --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-report.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-report\.mjs/)
+  assert.match(stdout, /--out-file <path>/)
+})

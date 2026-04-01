@@ -242,3 +242,13 @@ test('trend CLI reads summary files from directory and emits JSON metrics', asyn
   assert.equal(metrics.window.startDate, '2026-04-01')
   assert.equal(metrics.window.endDate, '2026-04-02')
 })
+
+test('trend --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-trend.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-trend\.mjs/)
+  assert.match(stdout, /--readiness-threshold <0-1>/)
+})

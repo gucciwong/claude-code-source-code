@@ -169,3 +169,13 @@ test('checkpoint CLI reads evidence and writes checkpoint text file', async () =
   assert.match(text, /Week 1 Checkpoint \(2026-04-02\)/)
   assert.match(text, /Readiness: Ready/)
 })
+
+test('checkpoint --help prints usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-checkpoint.mjs',
+    '--help',
+  ])
+
+  assert.match(stdout, /Usage: node scripts\/sovereign-week1-checkpoint\.mjs/)
+  assert.match(stdout, /--evidence-file <path>/)
+})
