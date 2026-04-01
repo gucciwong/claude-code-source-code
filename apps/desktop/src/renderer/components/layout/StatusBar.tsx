@@ -1,5 +1,6 @@
-import { Lock, Zap, Network } from 'lucide-react'
+import { Lock, Zap, Network, Mic } from 'lucide-react'
 import { useSystemStore } from '../../store/systemStore'
+import { useVoiceStore } from '../../store/voiceStore'
 
 export function StatusBar() {
   const {
@@ -11,6 +12,7 @@ export function StatusBar() {
     trainingStatus,
     federationPeers,
   } = useSystemStore()
+  const { serviceReady, isRecording } = useVoiceStore()
 
   return (
     <footer
@@ -68,6 +70,19 @@ export function StatusBar() {
           <span className="flex items-center gap-1 text-green-400 flex-shrink-0">
             <Network size={10} aria-hidden={true} />
             {federationPeers} peers
+          </span>
+        </>
+      )}
+
+      {/* Conditional: Voice service status */}
+      {(serviceReady || isRecording) && (
+        <>
+          <span aria-hidden="true" className="text-border-default">|</span>
+          <span className={`flex items-center gap-1 flex-shrink-0 ${
+            isRecording ? 'text-red-400' : serviceReady ? 'text-green-400' : 'text-yellow-400'
+          }`}>
+            <Mic size={10} aria-hidden={true} />
+            {isRecording ? 'Recording' : serviceReady ? 'Voice Ready' : 'Voice Loading'}
           </span>
         </>
       )}

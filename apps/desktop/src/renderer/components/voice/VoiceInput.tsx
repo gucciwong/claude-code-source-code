@@ -1,7 +1,8 @@
-"""React Voice Input component for Sovereign Coder desktop."""
+// React Voice Input component for Sovereign Coder desktop.
 
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { Mic, Square, Upload, AlertCircle, Loader } from 'lucide-react'
+import { Waveform } from './Waveform'
 
 interface VoiceInputProps {
   onTranscribe: (text: string, language: string) => void
@@ -153,10 +154,13 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
 
       {/* Recording Indicator */}
       {isRecording && (
-        <div className="flex items-center gap-2 text-sm text-yellow-400">
-          <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" aria-hidden="true" />
-          Recording...
-        </div>
+        <>
+          <div className="flex items-center gap-2 text-sm text-yellow-400">
+            <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" aria-hidden="true" />
+            Recording...
+          </div>
+          <Waveform isRecording={isRecording} className="mx-auto" />
+        </>
       )}
     </div>
   )

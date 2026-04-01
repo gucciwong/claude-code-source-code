@@ -1,18 +1,22 @@
-"""Voice Panel component combining input and output."""
+// Voice Panel component combining input and output.
 
 import React, { useState, useCallback } from 'react'
-import { X, AlertCircle } from 'lucide-react'
+import { X, AlertCircle, Settings, History } from 'lucide-react'
 import { VoiceInput } from './VoiceInput'
 import { VoiceOutput } from './VoiceOutput'
 
 interface VoicePanelProps {
   onClose?: () => void
   onTranscriptChange?: (text: string) => void
+  onSettingsClick?: () => void
+  onHistoryClick?: () => void
 }
 
 export const VoicePanel: React.FC<VoicePanelProps> = ({
   onClose,
   onTranscriptChange,
+  onSettingsClick,
+  onHistoryClick,
 }) => {
   const [transcript, setTranscript] = useState('')
   const [transcribedText, setTranscribedText] = useState('')
@@ -66,15 +70,35 @@ export const VoicePanel: React.FC<VoicePanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border-subtle">
         <h2 className="text-lg font-semibold text-text-primary">Voice I/O</h2>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-bg-surface-2 rounded cursor-pointer"
-            aria-label="Close voice panel"
-          >
-            <X size={18} className="text-text-secondary" aria-hidden="true" />
-          </button>
-        )}
+        <div className="flex gap-1">
+          {onHistoryClick && (
+            <button
+              onClick={onHistoryClick}
+              className="p-1 hover:bg-bg-surface-2 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+              aria-label="View history"
+            >
+              <History size={16} className="text-text-secondary" aria-hidden="true" />
+            </button>
+          )}
+          {onSettingsClick && (
+            <button
+              onClick={onSettingsClick}
+              className="p-1 hover:bg-bg-surface-2 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+              aria-label="Open settings"
+            >
+              <Settings size={16} className="text-text-secondary" aria-hidden="true" />
+            </button>
+          )}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-bg-surface-2 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+              aria-label="Close voice panel"
+            >
+              <X size={16} className="text-text-secondary" aria-hidden="true" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Service Status */}

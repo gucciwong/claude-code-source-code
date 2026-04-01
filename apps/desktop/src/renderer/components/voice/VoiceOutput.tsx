@@ -1,4 +1,4 @@
-"""React Voice Output component for text-to-speech."""
+// React Voice Output component for text-to-speech.
 
 import React, { useState, useRef, useCallback } from 'react'
 import { Volume2, Square, AlertCircle, Loader } from 'lucide-react'

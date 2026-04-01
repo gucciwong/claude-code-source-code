@@ -1,5 +1,6 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
+import { useVoiceStore } from '../../store/voiceStore'
 
 interface NavItem {
   id: NavSection
@@ -21,6 +22,7 @@ const bottomItems: NavItem[] = [
 
 export function Sidebar() {
   const { active, setActive } = useNavigationStore()
+  const { isPanelOpen, setPanelOpen } = useVoiceStore()
 
   const navButton = (item: NavItem) => {
     const isActive = active === item.id
@@ -58,8 +60,22 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom items */}
-      <div className="py-2 border-t border-border-subtle">
+      <div className="py-2 border-t border-border-subtle space-y-2">
         {bottomItems.map(navButton)}
+        {/* Voice Toggle Button */}
+        <button
+          onClick={() => setPanelOpen(!isPanelOpen)}
+          aria-label={isPanelOpen ? 'Close voice panel' : 'Open voice panel'}
+          className={[
+            'w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
+            isPanelOpen
+              ? 'bg-accent-500/10 text-accent-400 border-l-2 border-accent-500'
+              : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
+          ].join(' ')}
+        >
+          <Mic size={16} aria-hidden={true} />
+          <span>Voice</span>
+        </button>
       </div>
     </aside>
   )
