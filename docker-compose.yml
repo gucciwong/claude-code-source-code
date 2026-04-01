@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  voice-service:
+    build:
+      context: ./services/voice-service
+      dockerfile: Dockerfile
+    container_name: sovereign-voice-service
+    ports:
+      - "8000:8000"
+    environment:
+      # Service Configuration
+      PORT: 8000
+      LOG_LEVEL: INFO
+      
+      # Device Configuration
+      DEVICE: cpu  # Change to 'cuda' if GPU available
+      WHISPER_MODEL_SIZE: base
+      WHISPER_COMPUTE_TYPE: default
+      
+      #  TTS Configuration
+      TTS_DEFAULT_LANG: en
+      TTS_OUTPUT_DIR: /tmp/voice-service
+      
+      # Streaming Configuration
+      VAD_AGGRESSIVENESS: 2
+      SILENCE_THRESHOLD_MS: 800
+      MIN_UTTERANCE_DURATION_MS: 500
+      STREAMING_BUFFER_DURATION_MS: 4000
+      
+      # GPU Optimization
+      ENABLE_GPU_OPTIMIZATION: "false"
+    volumes:
+      - voice-cache:/root/.cache  # Cache models between runs
+      - ./services/voice-service:/app  # Hot reload for development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - sovereign-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: sovereign-redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sovereign-network
+    volumes:
+      - redis-data:/data
+
+volumes:
+  voice-cache:
+  redis-data:
+
+networks:
+  sovereign-network:
+    driver: bridge
