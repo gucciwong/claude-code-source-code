@@ -56,6 +56,16 @@ test('buildCheckpointSummary falls back to unknown and n/a defaults', () => {
   assert.equal(summary.reason, 'No gate reason available')
 })
 
+test('buildCheckpointSummary returns all defaults when evidence is null', () => {
+  const summary = buildCheckpointSummary(null)
+
+  assert.equal(summary.date, 'unknown')
+  assert.equal(summary.readiness, 'Blocked')
+  assert.equal(summary.latencyMs, 'n/a')
+  assert.equal(summary.throughputTps, 'n/a')
+  assert.equal(summary.reason, 'No gate reason available')
+})
+
 test('toCheckpointText renders concise 4-line checkpoint update', () => {
   const text = toCheckpointText({
     date: '2026-04-01',
@@ -168,6 +178,24 @@ test('checkpoint CLI reads evidence and writes checkpoint text file', async () =
   const text = await readFile(outFile, 'utf8')
   assert.match(text, /Week 1 Checkpoint \(2026-04-02\)/)
   assert.match(text, /Readiness: Ready/)
+})
+
+test('parseCheckpointArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseCheckpointArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseCheckpointArgs(['node', 'scripts/sovereign-week1-checkpoint.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
 })
 
 test('checkpoint --help prints usage text', async () => {

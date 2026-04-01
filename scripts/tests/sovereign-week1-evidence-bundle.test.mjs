@@ -315,3 +315,63 @@ test('evidence-bundle CLI exits with code 2 when gate is blocked', async () => {
     },
   )
 })
+
+test('parseEvidenceBundleArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseEvidenceBundleArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseEvidenceBundleArgs(['node', 'scripts/sovereign-week1-evidence-bundle.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('evidence-bundle CLI prints human output showing runtime unreachable and not ready', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-evidence-bundle-blocked-human-'))
+  const runtimeFile = join(dir, 'runtime.json')
+  const benchmarkFile = join(dir, 'benchmark.json')
+
+  await writeFile(
+    runtimeFile,
+    JSON.stringify({
+      runtime: { reachable: false, host: '127.0.0.1', port: 11434, error: 'Connection refused' },
+      models: { count: 0, names: [] },
+    }),
+    'utf8',
+  )
+
+  await writeFile(
+    benchmarkFile,
+    JSON.stringify({
+      metrics: { sampleCount: 0, firstTokenLatencyMsAvg: null, tokensPerSecondAvg: null },
+      targets: { latencyPass: false, throughputPass: false, latencyLimitMs: 500, throughputMinimumTps: 30 },
+    }),
+    'utf8',
+  )
+
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-evidence-bundle.mjs',
+      '--date',
+      '2026-04-01',
+      '--runtime-file',
+      runtimeFile,
+      '--benchmark-file',
+      benchmarkFile,
+    ]),
+    error => {
+      assert.equal(error.code, 2)
+      assert.match(error.stdout, /Runtime reachable: no/)
+      assert.match(error.stdout, /Ready for demo: no/)
+      return true
+    },
+  )
+})

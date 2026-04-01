@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtemp, writeFile, readFile } from 'node:fs/promises'
+import { mkdtemp, mkdir, writeFile, readFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { execFile } from 'node:child_process'
@@ -250,4 +250,66 @@ test('status-pack CLI exits with error when directory has no summary files', asy
       return true
     },
   )
+})
+
+test('parseStatusPackArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseStatusPackArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseStatusPackArgs(['node', 'scripts/sovereign-week1-status-pack.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('buildExecutiveSummary uses 0 when latestBlockedStreak is nullish', () => {
+  const markdown = buildExecutiveSummary({
+    overallStatus: 'RED',
+    trend: {
+      totalDays: 0,
+      readyDays: 0,
+      blockedDays: 0,
+      readinessRate: 0,
+      readinessTargetPass: false,
+      latestBlockedStreak: null,
+      window: { startDate: '2026-04-01', endDate: '2026-04-01' },
+      blockedReasonCounts: {},
+    },
+    latest: { date: '2026-04-01', readyForDemo: false, reason: 'Runtime is unreachable' },
+  })
+
+  assert.match(markdown, /Latest blocked streak: 0 day\(s\)/)
+})
+
+test('status-pack CLI skips subdirectory entries when scanning for summary files', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-status-pack-subdir-'))
+  const outFile = join(dir, 'status.md')
+
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-01.json'),
+    JSON.stringify({ date: '2026-04-01', readyForDemo: true, reason: 'Ready' }),
+    'utf8',
+  )
+  await mkdir(join(dir, 'subdir'))
+  await writeFile(join(dir, 'not-a-summary.json'), JSON.stringify({ ok: true }), 'utf8')
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-status-pack.mjs',
+    '--dir',
+    dir,
+    '--out-file',
+    outFile,
+    '--json',
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.trend.totalDays, 1)
 })

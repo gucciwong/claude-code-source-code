@@ -12,6 +12,7 @@ import {
 const execFileAsync = promisify(execFile)
 
 test('normalizeTier accepts supported tiers and normalizes casing/spacing', () => {
+  assert.equal(normalizeTier('6gb'), '6GB')
   assert.equal(normalizeTier('8gb'), '8GB')
   assert.equal(normalizeTier(' 12 GB '), '12GB')
   assert.equal(normalizeTier('24GB'), '24GB')
@@ -403,4 +404,22 @@ test('runtime-check CLI handles server response where models is not an array', a
   } finally {
     await new Promise(resolve => server.close(resolve))
   }
+})
+
+test('parseRuntimeCheckArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseRuntimeCheckArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
 })
