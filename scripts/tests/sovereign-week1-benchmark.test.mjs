@@ -238,3 +238,18 @@ test('benchmark --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-benchmark\.mjs/)
   assert.match(stdout, /--tier <tier>/)
 })
+
+test('benchmark CLI exits with error when --file argument is missing', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-benchmark.mjs',
+      '--tier',
+      '8GB',
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /missing required argument: --file/)
+      return true
+    },
+  )
+})

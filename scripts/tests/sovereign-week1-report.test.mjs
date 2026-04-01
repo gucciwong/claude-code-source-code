@@ -202,3 +202,18 @@ test('report --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-report\.mjs/)
   assert.match(stdout, /--out-file <path>/)
 })
+
+test('report CLI exits with error when required arguments are missing', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-report.mjs',
+      '--evidence-file',
+      'some-evidence.json',
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /both --evidence-file and --out-file are required/)
+      return true
+    },
+  )
+})
