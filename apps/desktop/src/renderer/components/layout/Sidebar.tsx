@@ -1,0 +1,66 @@
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings } from 'lucide-react'
+import { useNavigationStore, NavSection } from '../../store/navigationStore'
+
+interface NavItem {
+  id: NavSection
+  label: string
+  icon: React.ComponentType<{ size?: number; 'aria-hidden'?: boolean | 'true' | 'false' }>
+}
+
+const navItems: NavItem[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'models', label: 'Models', icon: Cpu },
+  { id: 'chat', label: 'Chat', icon: MessageSquare },
+  { id: 'training', label: 'Training', icon: Zap },
+  { id: 'federation', label: 'Federation', icon: Network },
+]
+
+const bottomItems: NavItem[] = [
+  { id: 'settings', label: 'Settings', icon: Settings },
+]
+
+export function Sidebar() {
+  const { active, setActive } = useNavigationStore()
+
+  const navButton = (item: NavItem) => {
+    const isActive = active === item.id
+    return (
+      <button
+        key={item.id}
+        onClick={() => setActive(item.id)}
+        aria-current={isActive ? 'page' : undefined}
+        className={[
+          'w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
+          isActive
+            ? 'bg-accent-500/10 text-accent-400 border-l-2 border-accent-500'
+            : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
+        ].join(' ')}
+      >
+        <item.icon size={16} aria-hidden={true} />
+        <span>{item.label}</span>
+      </button>
+    )
+  }
+
+  return (
+    <aside
+      className="w-[220px] flex flex-col bg-bg-surface-1 border-r border-border-subtle flex-shrink-0"
+      aria-label="Main navigation"
+    >
+      {/* Logo area */}
+      <div className="px-4 py-4 border-b border-border-subtle">
+        <span className="text-text-primary font-semibold text-sm">Sovereign Coder</span>
+      </div>
+
+      {/* Main navigation */}
+      <nav className="flex-1 py-2" aria-label="Primary navigation">
+        {navItems.map(navButton)}
+      </nav>
+
+      {/* Bottom items */}
+      <div className="py-2 border-t border-border-subtle">
+        {bottomItems.map(navButton)}
+      </div>
+    </aside>
+  )
+}
