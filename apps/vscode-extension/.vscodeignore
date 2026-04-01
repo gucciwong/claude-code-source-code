@@ -5,3 +5,4 @@ vitest.config.ts
 tsconfig.json
 .gitignore
 node_modules/
+.sovereign-coder/
