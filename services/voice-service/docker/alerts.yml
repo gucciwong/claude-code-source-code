@@ -1,0 +1,259 @@
+groups:
+  - name: vibevoice_alerts
+    interval: 30s
+    rules:
+      # ============================================================
+      # Service Availability Alerts
+      # ============================================================
+      - alert: VibeVoiceServiceDown
+        expr: up{job="vibevoice"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "VibeVoice service is down"
+          description: "Service {{ $labels.instance }} has been unavailable for 2 minutes"
+
+      - alert: HighErrorRate
+        expr: |
+          (sum(rate(vibevoice_errors_total[5m])) /
+           sum(rate(vibevoice_requests_total[5m]))) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+
+      # ============================================================
+      # ASR (Speech Recognition) Performance
+      # ============================================================
+      - alert: ASRModelNotLoaded
+        expr: vibevoice_asr_model_loaded == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "ASR model not loaded"
+          description: "ASR model failed to load or is not available"
+
+      - alert: HighASRLatency
+        expr: |
+          histogram_quantile(0.95, rate(vibevoice_asr_transcription_duration_seconds_bucket[5m])) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High ASR latency observed"
+          description: "95th percentile ASR latency is {{ $value | humanizeDuration }}"
+
+      - alert: LowASRConfidence
+        expr: vibevoice_asr_confidence_score < 0.7
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low ASR confidence score"
+          description: "Average confidence is {{ $value }}, below 0.7 threshold"
+
+      - alert: HighASRErrorRate
+        expr: |
+          (sum(rate(vibevoice_asr_errors_total[5m])) / sum(rate(vibevoice_asr_transcriptions_total[5m]))) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High ASR error rate"
+          description: "ASR error rate is {{ $value | humanizePercentage }}"
+
+      # ============================================================
+      # TTS (Text-to-Speech) Performance
+      # ============================================================
+      - alert: TTSModelNotLoaded
+        expr: vibevoice_tts_model_loaded == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "TTS model not loaded"
+          description: "TTS model failed to load or is not available"
+
+      - alert: HighTTSLatency
+        expr: |
+          histogram_quantile(0.95, rate(vibevoice_tts_synthesis_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High TTS latency observed"
+          description: "95th percentile TTS latency is {{ $value | humanizeDuration }}"
+
+      # ============================================================
+      # GPU/System Resource Alerts
+      # ============================================================
+      - alert: HighGPUMemoryUsage
+        expr: (vibevoice_gpu_memory_used_mb / vibevoice_gpu_memory_total_mb) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High GPU memory usage"
+          description: "GPU memory usage is {{ $value | humanizePercentage }} on device {{ $labels.device }}"
+
+      - alert: HighGPUTemperature
+        expr: vibevoice_gpu_temperature_celsius > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High GPU temperature"
+          description: "GPU temperature is {{ $value }}°C on device {{ $labels.device }}"
+
+      - alert: HighCPUUtilization
+        expr: vibevoice_cpu_utilization_percent > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU utilization"
+          description: "CPU utilization is {{ $value }}%"
+
+      - alert: HighSystemMemoryUsage
+        expr: vibevoice_system_memory_used_mb > 30000  # > 30GB
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High system memory usage"
+          description: "System memory usage is {{ $value }}MB"
+
+      - alert: CriticalGPUMemoryUsage
+        expr: (vibevoice_gpu_memory_used_mb / vibevoice_gpu_memory_total_mb) > 0.95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical GPU memory usage"
+          description: "GPU memory almost exhausted ({{ $value | humanizePercentage }}) on device {{ $labels.device }}"
+
+      # ============================================================
+      # WebSocket & Session Alerts
+      # ============================================================
+      - alert: HighWebSocketConnections
+        expr: vibevoice_websocket_connections_active > 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of active WebSocket connections"
+          description: "{{ $value }} active WebSocket connections"
+
+      - alert: HighQueueDepth
+        expr: vibevoice_request_queue_depth > 20
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request queue depth"
+          description: "Request queue has {{ $value }} pending items"
+
+      - alert: LongQueueWaitTime
+        expr: |
+          histogram_quantile(0.99, rate(vibevoice_queue_wait_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Long queue wait times observed"
+          description: "99th percentile queue wait time is {{ $value | humanizeDuration }}"
+
+      # ============================================================
+      # Load Balancing & Instance Health
+      # ============================================================
+      - alert: InstanceUnavailable
+        expr: vibevoice_instance_available == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance unavailable"
+          description: "Instance {{ $labels.instance_id }} is unavailable"
+
+      - alert: LowInstanceHealthScore
+        expr: vibevoice_instance_health_score < 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low instance health score"
+          description: "Instance {{ $labels.instance_id }} health score is {{ $value }}"
+
+      - alert: UnbalancedLoad
+        expr: |
+          abs(vibevoice_sessions_per_instance - avg(vibevoice_sessions_per_instance)) > 5
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "Unbalanced load distribution"
+          description: "Instance {{ $labels.instance_id }} has {{ $value }} deviations from average load"
+
+      # ============================================================
+      # Redis Cache Alerts
+      # ============================================================
+      - alert: RedisConnectionLost
+        expr: up{job="vibevoice_redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis connection lost"
+          description: "Cannot connect to Redis cache service"
+
+      - alert: LowCacheHitRate
+        expr: vibevoice_cache_hit_rate < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cache hit rate for model"
+          description: "Model {{ $labels.model_id }} cache hit rate is {{ $value | humanizePercentage }}"
+
+      # ============================================================
+      # Overall Service Health
+      # ============================================================
+      - alert: ServiceDegraded
+        expr: |
+          (vibevoice_asr_model_loaded == 0) or
+          (vibevoice_tts_model_loaded == 0) or
+          (count(vibevoice_instance_available == 1) < 1)
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service is degraded"
+          description: "One or more critical service components are unavailable"
+
+      # ============================================================
+      # Response Rate Alerts
+      # ============================================================
+      - alert: LowThroughput
+        expr: |
+          sum(rate(vibevoice_requests_total[5m])) < 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low request throughput"
+          description: "Service is receiving less than 1 request per second"
+
+      - alert: ResponseTimeIncreasing
+        expr: |
+          histogram_quantile(0.95, rate(vibevoice_request_duration_seconds_bucket[5m])) >
+          histogram_quantile(0.95, rate(vibevoice_request_duration_seconds_bucket[15m] offset 10m))
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Response time is increasing"
+          description: "95th percentile response time increased compared to 10 minutes ago"

@@ -35,6 +35,10 @@ from voice_service.config.redis_config import redis_client
 from voice_service.cache import session_store, model_cache
 from voice_service.health.checks import router as health_router
 
+# Import metrics and monitoring
+from voice_service.metrics import attach_metrics_middleware, MetricsTracker, registry
+from prometheus_client import generate_latest
+
 # FastAPI app
 app = FastAPI(
     title="VibeVoice Service",
@@ -60,6 +64,9 @@ app.add_middleware(
 
 # Include health check router
 app.include_router(health_router)
+
+# Attach metrics middleware for automatic collection
+attach_metrics_middleware(app)
 
 # Instance ID for load balancing tracking
 INSTANCE_ID = os.getenv("INSTANCE_ID", "instance-1")
@@ -179,6 +186,13 @@ async def shutdown():
         pass
     
     logger.info(f"Instance {INSTANCE_ID} shutting down")
+
+
+# Routes - Metrics
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint."""
+    return generate_latest(registry)
 
 
 # Routes
