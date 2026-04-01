@@ -46,6 +46,20 @@ test('parseRuntimeCheckArgs throws when --port is out of range', () => {
   )
 })
 
+test('parseRuntimeCheckArgs throws when --port is negative', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--port', '-1']),
+    /Invalid --port value/,
+  )
+})
+
+test('parseRuntimeCheckArgs throws when --timeout-ms value is non-numeric', () => {
+  assert.throws(
+    () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--timeout-ms', 'abc']),
+    /Invalid --timeout-ms value/,
+  )
+})
+
 test('parseRuntimeCheckArgs throws when --host value is missing', () => {
   assert.throws(
     () => parseRuntimeCheckArgs(['node', 'scripts/sovereign-week1-runtime-check.mjs', '--host']),
