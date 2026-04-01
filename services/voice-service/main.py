@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 from voice_service.models.whisper import WhisperASR
 from voice_service.models.tts import GTTSAPI
 from voice_service.audio.processor import AudioProcessor
+from voice_service.config.device_config import DeviceConfig
 
 # FastAPI app
 app = FastAPI(
@@ -87,13 +88,22 @@ async def startup():
     
     logger.info("Initializing models...")
     
+    # Log device info
+    device_info = DeviceConfig.get_device_info()
+    logger.info(f"Device Info: {device_info}")
+    
     try:
-        device = "cpu"  # or "cuda" if GPU available
+        # Auto-detect best device (CUDA → MPS → CPU)
+        device = DeviceConfig.get_device_with_fallback(
+            os.getenv("DEVICE", "auto")
+        )
         asr_model = WhisperASR(
             model_size=os.getenv("WHISPER_MODEL_SIZE", "base"),
-            device=device
+            device=device,
+            compute_type=os.getenv("WHISPER_COMPUTE_TYPE", "default")
         )
-        logger.info(f"ASR model loaded: {asr_model.is_loaded}")
+        logger.info(f"ASR model loaded: {asr_model.is_loaded} on {device}")
+        logger.info(f"Model device info: {asr_model.get_device_info()}")
     except Exception as e:
         logger.error(f"Failed to load ASR model: {e}")
 
@@ -117,16 +127,25 @@ async def shutdown():
 
 
 # Routes
-@app.get("/health", response_model=HealthResponse)
+@app.get("/health")
 async def health_check():
-    """Health check endpoint."""
-    return HealthResponse(
-        status="ok",
-        asr_loaded=bool(asr_model and asr_model.is_loaded),
-        tts_loaded=bool(tts_model and tts_model.is_loaded),
-        audio_capable=True,
-        version="0.1.0"
-    )
+    """Health check endpoint with device information."""
+    device_info = DeviceConfig.get_device_info()
+    
+    response = {
+        "status": "ok",
+        "version": "0.2.0",
+        "models": {
+            "asr_loaded": bool(asr_model and asr_model.is_loaded),
+            "tts_loaded": bool(tts_model and tts_model.is_loaded),
+        },
+        "device": device_info
+    }
+    
+    if asr_model and asr_model.is_loaded:
+        response["models"]["asr_info"] = asr_model.get_device_info()
+    
+    return response
 
 
 @app.post("/transcribe", response_model=TranscribeResponse)
@@ -227,6 +246,7 @@ async def get_asr_info():
         "model": f"Whisper {asr_model.model_size}",
         "loaded": asr_model.is_loaded,
         "device": asr_model.device,
+        "device_info": asr_model.get_device_info(),
         "supported_languages": asr_model.get_supported_languages()
     }
 
@@ -243,6 +263,12 @@ async def get_tts_info():
         "current_language": tts_model.lang,
         "supported_languages": tts_model.get_supported_languages()
     }
+
+
+@app.get("/device")
+async def get_device_info():
+    """Get GPU/device information."""
+    return DeviceConfig.get_device_info()
 
 
 if __name__ == "__main__":
