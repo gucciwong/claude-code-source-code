@@ -44,10 +44,10 @@ export function CommandPalette() {
   return (
     <Dialog.Root open={open} onOpenChange={(v) => !v && closePalette()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
+        <Dialog.Overlay className="fixed inset-0 bg-bg-base/60 z-50" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed top-[20%] left-1/2 -translate-x-1/2 w-[560px] max-h-[360px] bg-bg-elevated border border-border-strong rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
+          className="fixed top-[20%] left-1/2 -translate-x-1/2 w-[640px] max-h-[480px] bg-bg-elevated border border-border-strong rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
         >
           <Dialog.Title className="sr-only">Command Palette</Dialog.Title>
           <div className="px-4 py-3 border-b border-border-subtle">
@@ -56,7 +56,7 @@ export function CommandPalette() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type a model name or command..."
-              className="w-full bg-transparent text-sm text-text-primary placeholder-text-muted outline-none"
+              className="w-full bg-transparent text-sm text-text-primary placeholder-text-muted outline-none focus-visible:ring-1 focus-visible:ring-accent-500 rounded"
               aria-label="Command palette search"
             />
           </div>
