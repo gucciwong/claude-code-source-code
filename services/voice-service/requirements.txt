@@ -13,3 +13,6 @@ pytest-asyncio==0.21.1
 psutil==5.9.0  # For GPU/CPU monitoring
 webrtcvad==2.0.10  # Voice Activity Detection for streaming
 python-dotenv==1.0.0  # Environment variable management
+onnxruntime==1.17.0  # ONNX Runtime for optimized inference
+# Optional: onnxruntime[quantization]==1.17.0 for INT8/INT4 quantization support
+# Optional: onnxruntime-gpu==1.17.0 for NVIDIA GPU acceleration
