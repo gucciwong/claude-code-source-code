@@ -1,0 +1,814 @@
+# Sovereign Coder — Desktop App UI/UX Design Document
+
+**Version:** 1.0  
+**Date:** 2026-04-01  
+**Status:** Approved  
+**Author:** Sovereign AI Labs  
+
+---
+
+## 0. Decision Summary
+
+| Question | Decision | Rationale |
+|---|---|---|
+| Primary platform | **Electron desktop app** | Closest analogue to LM Studio; full feature access; works offline; direct GPU access |
+| Secondary surfaces | VSCode plugin panel (Phase 1), Web dashboard (Phase 2) | Same design system, simplified to fit surface |
+| Design language | **LM Studio-inspired dark theme** | Target users are technical; dark is standard for developer tools |
+| Scope | All 4 PRD phases, MVP-prioritized | Design full vision, build Phase 1 screens first |
+| Theme toggle | Dark only in MVP; light toggle in Phase 2 | Reduces scope; dark is appropriate default |
+
+---
+
+## 1. Design Principles
+
+1. **Zero Friction First Launch** — User should run their first inference within 5 minutes of installing. Model download, inference start, and first completion should feel effortless.
+2. **Status Transparency** — GPU VRAM, tokens/sec, model loaded, training progress — always visible. Developers need to know what is happening at all times.
+3. **LM Studio Familiarity** — Users migrating from LM Studio should feel at home. Left sidebar, dark theme, model selector, status bar. Muscle memory transfers.
+4. **Depth Without Overload** — Simple things are simple (click a model, start chatting). Complex things (QLoRA training, federation) are progressively disclosed behind expandable panels.
+5. **Local-First Visual Identity** — UI should subtly reinforce privacy: no cloud icons, "Running locally" badge, lock icons, hardware metrics front and center.
+
+---
+
+## 2. Design System
+
+### 2.1 Colour Tokens
+
+```
+Background Levels
+─────────────────────────────────────────────────────
+bg-base        #0D0D0D    App window background
+bg-surface-1   #161616    Sidebar background  
+bg-surface-2   #1E1E1E    Card / panel background
+bg-surface-3   #252525    Nested card, code block bg
+bg-elevated    #2D2D2D    Popover, dropdown, tooltip
+
+Border
+─────────────────────────────────────────────────────
+border-subtle  #2A2A2A    Low-contrast dividers
+border-default #363636    Standard borders
+border-strong  #484848    Active / focused state
+
+Text
+─────────────────────────────────────────────────────
+text-primary   #F5F5F5    Main body text
+text-secondary #A3A3A3    Labels, descriptions
+text-muted     #737373    Disabled, placeholder
+text-code      #E5E5E5    Monospace code text
+
+Accent — Sovereign Violet (brand primary)
+─────────────────────────────────────────────────────
+accent-400     #A78BFA    Hover states
+accent-500     #8B5CF6    Primary buttons, links, active nav
+accent-600     #7C3AED    Button active/pressed
+
+Semantic Colours
+─────────────────────────────────────────────────────
+green-400      #4ADE80    Online, accepted, success
+green-500      #22C55E    Running, healthy
+red-400        #F87171    Error state
+red-500        #EF4444    Critical error, offline
+yellow-400     #FACC15    Warning, training active
+yellow-500     #EAB308    Caution
+blue-400       #60A5FA    Info, streaming tokens
+blue-500       #3B82F6    Download progress
+
+Special
+─────────────────────────────────────────────────────
+local-badge-bg #1A2744    "Running Locally" badge bg (deep navy)
+local-badge-fg #60A5FA    "Running Locally" badge text (blue)
+```
+
+### 2.2 Typography
+
+```
+Font Stack (system-ui stack, no external fonts required)
+─────────────────────────────────────────────────────────────────
+UI Text:    -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+Code:       'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace
+
+Scale
+─────────────────────────────────────────────────────────────────
+xs      11px   Metadata, timestamps, status badges
+sm      13px   Secondary labels, table cells, descriptions
+base    14px   Body text, sidebar labels
+md      15px   Paragraph text in chat
+lg      17px   Panel headings
+xl      20px   Screen titles
+2xl     24px   Onboarding headings
+3xl     32px   Empty state headings
+```
+
+### 2.3 Spacing Scale
+
+```
+4px grid (all values multiples of 4)
+─────────────────────────────────────────
+xs   4px    Icon padding, tight spacing
+sm   8px    Component internal padding
+md  12px    Standard gap
+lg  16px    Section gap
+xl  24px    Panel padding
+2xl 32px    Section separation
+3xl 48px    Screen-level spacing
+```
+
+### 2.4 Border Radius
+
+```
+none    0px    Hard edge elements (progress bars, status bars)
+sm      4px    Badges, chips, small buttons
+md      6px    Buttons, inputs, small cards
+lg      8px    Cards, panels
+xl     12px    Modals, large cards
+full  9999px   Toggle pills, avatar circles
+```
+
+### 2.5 Iconography
+
+Use **Lucide React** icon set throughout. Key icons mapped to features:
+
+| Feature | Icon | 
+|---|---|
+| Dashboard | `LayoutDashboard` |
+| Models | `Cpu` |
+| Chat / Agent | `MessageSquare` |
+| Training | `Zap` |
+| Federation | `Network` |
+| Settings | `Settings` |
+| Download | `Download` |
+| Running/Online | `CheckCircle2` (green) |
+| Loading | `Loader2` (animated spin) |
+| Training active | `Zap` (yellow, animated pulse) |
+| Locally running | `Lock` + `Server` |
+| GPU | `Activity` |
+| VRAM | `MemoryStick` |
+| Tokens/sec | `Gauge` |
+
+---
+
+## 3. Layout Structure
+
+### 3.1 Outer Shell (always visible)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TITLEBAR (macOS traffic lights / Windows controls)                      │ 32px
+│ [●][●][●]         Sovereign Coder — Qwen2.5-Coder-32B ▾       [–][□][✕] │
+├──────┬──────────────────────────────────────────────┬────────────────────┤
+│      │                                              │                    │
+│  S   │                                              │                    │
+│  I   │         MAIN CONTENT AREA                    │   CONTEXT / INFO   │
+│  D   │                                              │      PANEL         │
+│  E   │                                              │    (optional,      │
+│  B   │                                              │  slides in/out)    │
+│  A   │                                              │                    │
+│  R   │                                              │                    │
+│      │                                              │                    │
+│ 56px │         (fills remaining space)              │       280px        │
+│      │                                              │                    │
+├──────┴──────────────────────────────────────────────┴────────────────────┤
+│ STATUS BAR                                                               │ 28px
+│ ● Running Locally  |  Qwen2.5-32B  |  GPU: RTX 4090 (18.2/24 GB VRAM)  │
+│ Temp: 72°C  |  45.3 tok/s  |  Training: Idle  |  Fed: 0 active peers   │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.2 Sidebar
+
+```
+┌──────┐
+│  ≡   │  ← Collapse/expand toggle (tooltip: "Collapse sidebar")
+├──────┤
+│  ⊞   │  Dashboard      (active: accent-500 bg tint, left 2px accent bar)
+│  🖥   │  Models
+│  💬   │  Chat / Agent
+│  ⚡   │  Training
+│  🌐   │  Federation
+├──────┤  ← Separator
+│  ⚙   │  Settings       (pinned to bottom)
+│  ?   │  Help & Docs
+└──────┘
+
+Expanded sidebar (220px):
+┌────────────────────┐
+│  ≡  Sovereign      │  ← Logo + app name
+├────────────────────┤
+│  ⊞  Dashboard      │  ← Active: accent bg, bold text
+│  🖥  Models         │
+│  💬  Chat / Agent   │
+│  ⚡  Training       │  ← Yellow dot if training is running
+│  🌐  Federation     │  ← Green dot if peers connected
+├────────────────────┤
+│  ⚙  Settings       │
+│  ?  Help           │
+└────────────────────┘
+```
+
+### 3.3 Status Bar (persistent, bottom)
+
+Always visible. 28px height. Background `bg-surface-1`. Left-to-right:
+
+```
+● Running Locally  │  [MODEL] Qwen2.5-Coder-32B Q4_K_M  │  GPU 18.2/24 GB  │  72°C  │  45 tok/s  │  Training: Idle  │  Fed: Offline
+```
+
+- **"Running Locally"** — green dot + lock icon + text. Clicking opens "Privacy Status" popover confirming zero network traffic.
+- **Model name** — clicking opens Quick Model Switcher (command palette style).
+- **GPU / VRAM** — clicking opens System Monitor panel.
+- **tok/s** — tokens-per-second for last inference. 
+- **Training** — "Idle" / "Running (iteration 12/48)" / "Completed ✓". Clicking opens Training Console.
+- **Fed** — "Offline" / "2 peers". Clicking opens Federation panel.
+
+---
+
+## 4. Screen Designs
+
+### 4.1 Dashboard / Home
+
+**Purpose:** At-a-glance system health, recent activity, quick actions.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Dashboard                               [Search... ⌘K]                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─── System Health ────────────────────────────────────────────────┐   │
+│  │                                                                   │   │
+│  │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐      │   │
+│  │  │ ● Inference    │  │ ● GPU Health   │  │ ● Training     │      │   │
+│  │  │   Ready        │  │   72°C / 85%   │  │   Idle         │      │   │
+│  │  │   45 tok/s     │  │   ████████░░   │  │   Last: 2h ago │      │   │
+│  │  │                │  │   18.2/24 GB   │  │                │      │   │
+│  │  └────────────────┘  └────────────────┘  └────────────────┘      │   │
+│  │                                                                   │   │
+│  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│  ┌─── Active Model ─────────────────────────────────────────────────┐   │
+│  │                                                                   │   │
+│  │  [Qwen2.5-Coder-32B]  Q4_K_M · 24GB VRAM · 128K ctx             │   │
+│  │  ████████████████████░░  18.2 GB loaded   [Switch Model ▾]       │   │
+│  │                                                                   │   │
+│  │  Version: base  |  Fine-tunes: 3 available  |  Last trained: 2d  │   │
+│  │                                                                   │   │
+│  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│  ┌─── Quick Actions ────────────────────────────────────────────────┐   │
+│  │  [💬 Open Chat]  [⚡ Start Training]  [📥 Browse Models]          │   │
+│  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│  ┌─── Recent Activity ──────────────────────────────────────────────┐   │
+│  │  ⚡  Training completed — v1.4 (+3.2% HumanEval)          2h ago  │   │
+│  │  💬  Chat session — 24 messages, 3 files modified          3h ago  │   │
+│  │  📥  DeepSeek-Coder-33B downloaded (26 GB)                 8h ago  │   │
+│  │  ⚡  Training started — iteration 1/48                    10h ago  │   │
+│  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│  ┌─── Benchmark Summary  (Week 1 Sovereign Report) ────────────────┐   │
+│  │  Model Readiness: ✓ Ready  |  GPU: ✓ RTX 4090  |  RAM: ✓ 64 GB  │   │
+│  │  Baseline Tokens/sec: 45.3  |  HumanEval Pass@1: 72.4%          │   │
+│  │  [View Full Report →]                                            │   │
+│  └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key interactions:**
+- System health cards pulse with a subtle animation when GPU temp > 80°C or VRAM > 90%.
+- "Switch Model" opens a command-palette style modal with fuzzy search.
+- Benchmark Summary surfaces the Week 1 sovereign-check scripts output (runtime-check, benchmark, report).
+
+---
+
+### 4.2 Models Hub
+
+**Purpose:** Browse, download, switch, and manage models. The LM Studio centrepiece.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Models                  [🔍 Search models...]     [+ Add Custom Model]  │
+├───────────────────┬─────────────────────────────────────────────────────┤
+│  INSTALLED        │                                                     │
+│  ──────────       │  Qwen2.5-Coder-32B-Instruct                        │
+│  > Qwen2.5-32B  ● │  ─────────────────────────────────────────────────  │
+│    DeepSeek-33B   │  Parameters: 32B | Quant: Q4_K_M | VRAM: 24 GB     │
+│    StarCoder2-15B │  Context: 128K tokens | Format: GGUF               │
+│                   │                                                     │
+│  AVAILABLE        │  ┌─ Versions ─────────────────────────────────┐    │
+│  ──────────       │  │  ● base          [Active]                   │    │
+│    Phi-4-Coder    │  │  ○ fine-tune-v1  +3.2% HumanEval  2 days ago│    │
+│    Llama-3.1-70B  │  │  ○ fine-tune-v2  +5.1% HumanEval  18h ago   │    │
+│    Mistral-22B    │  │  [Load Fine-tune v2]                        │    │
+│                   │  └────────────────────────────────────────────┘    │
+│  DISCOVER         │                                                     │
+│  ──────────       │  ┌─ Performance ──────────────────────────────┐    │
+│    Browse HF Hub  │  │  Tokens/sec:  45.3 (streaming)             │    │
+│    Browse GGUF    │  │  First token: 380ms                         │    │
+│    Custom URL     │  │  HumanEval:   72.4% pass@1                 │    │
+│                   │  │  MBPP:        68.1% pass@1                 │    │
+│                   │  └────────────────────────────────────────────┘    │
+│                   │                                                     │
+│                   │  [🟢 Set as Active]   [⚡ Fine-tune]   [🗑 Delete]  │
+│                   │                                                     │
+└───────────────────┴─────────────────────────────────────────────────────┘
+```
+
+**Download flow:**
+- Clicking "Phi-4-Coder" in "Available" shows an info card with model card, VRAM requirement, and [Download Q4_K_M (10 GB)] / [Download Q8_0 (15 GB)] buttons.
+- Download shows a progress bar with speed (MB/s), ETA, and a [Cancel] link.
+- After download completes, model moves to "Installed" list automatically.
+
+**Model switcher (quick):**
+- `⌘K` anywhere opens a command palette.
+- Type a model name to switch instantly. No need to navigate to Models screen.
+
+---
+
+### 4.3 Chat / Agent Workspace
+
+**Purpose:** Primary LLM interaction. Streaming chat + autonomous agent task view.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Chat                                                [◑ Agent Mode]  [⋮] │
+├──────────────────────────────────────────────┬──────────────────────────┤
+│                                              │  CONTEXT PANEL           │
+│  ┌──────────────────────────────────────┐    │  ─────────────           │
+│  │  system                              │    │  Project: my-app/        │
+│  │  You are Sovereign Coder, a local... │    │                          │
+│  └──────────────────────────────────────┘    │  Indexed files: 1,247   │
+│                                              │  Last indexed: 2m ago    │
+│  ┌── User ──────────────────────────────┐    │                          │
+│  │  Fix the login bug in auth.py        │    │  ┌─ Context Used ──────┐ │
+│  └──────────────────────────────────────┘    │  │  auth.py (line 42)  │ │
+│                                              │  │  models/user.py     │ │
+│  ┌── Sovereign ─────────────────────────┐    │  │  tests/test_auth.py │ │
+│  │  I'll investigate the login bug.     │    │  └────────────────────┘ │
+│  │                                      │    │                          │
+│  │  📄 Reading auth.py...               │    │  ┌─ Tools Used ────────┐ │
+│  │  🔍 Found issue at line 42:          │    │  │  read_file ✓        │ │
+│  │  `if user.password == plain_text`    │    │  │  grep_search ✓      │ │
+│  │                                      │    │  │  edit_file ✓        │ │
+│  │  This compares plain text passwords  │    │  │  run_tests ✓        │ │
+│  │  directly. I'll fix this to use      │    │  └────────────────────┘ │
+│  │  bcrypt comparison.                  │    │                          │
+│  │                                      │    │  Tokens used: 4,821     │
+│  │  ```python                           │    │  Context: 12,440 / 128K │
+│  │  # Before:                           │    │                          │
+│  │  if user.password == password:       │    │  ┌─ Model ─────────────┐ │
+│  │                                      │    │  │  Qwen2.5-Coder-32B  │ │
+│  │  # After:                            │    │  │  45.3 tok/s         │ │
+│  │  if bcrypt.check(password,           │    │  │  temp: 0.2          │ │
+│  │      user.password_hash):            │    │  │  [Adjust ▾]         │ │
+│  │  ```                                 │    │  └────────────────────┘ │
+│  │                                      │    │                          │
+│  │  ✅ Changes applied. Running tests..│    │                          │
+│  │  ✅ 12/12 tests passed               │    │                          │
+│  └──────────────────────────────────────┘    │                          │
+│                                              │                          │
+├──────────────────────────────────────────────┴──────────────────────────┤
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │  Ask Sovereign anything... (or press Tab to see suggestions)       │  │
+│  │                                                             [Send] │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+│  📎 Attach files  |  /commands  |  [Agent Task ▾]  |  Stream: ████░░░ │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Agent mode toggle:**
+When "Agent Mode" is active, the interface shifts slightly:
+- Tool calls are shown as expandable rows with status indicators (thinking → executing → done).
+- A "Pause Agent" button appears at the top.  
+- File diffs are shown inline with [Accept] / [Reject] controls per change.
+- A "Dry Run" switch prevents actual file writes (for review mode).
+
+**Slash commands:**
+- `/compress` — compress context
+- `/save` — save chat session
+- `/clear` — clear history
+- `/model` — switch model mid-conversation
+- `/temp 0.7` — adjust temperature
+
+---
+
+### 4.4 Training Console
+
+**Purpose:** Observe, schedule, and manage QLoRA training runs.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Training                                          [▶ Start Training]   │
+├────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─── Current Run ──────────────────────────────────────────────────┐  │
+│  │  ⚡ RUNNING  |  Iteration 23/48  |  Elapsed: 02:18:34  |  ETA: 04:01h │
+│  │                                                                   │  │
+│  │  Progress:  ████████████░░░░░░░░░░░░░  48%                       │  │
+│  │                                                                   │  │
+│  │  Train Loss:  0.312  ↓  |  Val Loss:  0.341  ↓                   │  │
+│  │  Learning Rate:  1.2e-4  |  Batch Size:  4  |  LoRA Rank: 16     │  │
+│  │                                                                   │  │
+│  │  GPU: RTX 4090  |  VRAM: 22.1/24 GB  |  Temp: 78°C  |  TDP: 310W │  │
+│  │                                                                   │  │
+│  │  [Pause]   [Stop]   [View Logs ▾]                                 │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Data Collection ──────────────────────────────────────────────┐  │
+│  │  Collected this session:                                          │  │
+│  │  • 847  completion pairs  (tab-accepted suggestions)              │  │
+│  │  • 12   agent trajectories  (completed tasks)                     │  │
+│  │  • 203  correction pairs  (user edits to model output)            │  │
+│  │                                                                   │  │
+│  │  Total training samples: 14,820  |  Est. training time: 4.2h     │  │
+│  │                                                                   │  │
+│  │  [🗑 Clear Dataset]  [👁 Preview Samples]  [📤 Export Dataset]   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Schedule ─────────────────────────────────────────────────────┐  │
+│  │  ○ Manual (start manually)                                        │  │
+│  │  ● Auto (train when GPU idle > 10 min)                            │  │
+│  │  ○ Scheduled — [Set Time...]                                      │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Version History ──────────────────────────────────────────────┐  │
+│  │                                                                   │  │
+│  │  v1.4  ───  +3.2% HumanEval  |  Apr 1, 02:14  [Load] [Export]    │  │
+│  │  v1.3  ───  +1.8% HumanEval  |  Mar 31, 22:00  [Load] [Export]   │  │
+│  │  v1.2  ───  +0.4% HumanEval  |  Mar 31, 14:00  [Load] [Export]   │  │
+│  │  v1.1  ───  -0.1% HumanEval  ← Rejected automatically            │  │
+│  │  v1.0  ───  Baseline         |  Mar 30, 10:00  [Load] [Export]   │  │
+│  │                                                                   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**10-minute loop visualisation:**
+A sub-panel (expandable) shows the 10-minute cycle as a circular progress ring with 4 segments: Collect → Prepare → Train → Validate.
+
+---
+
+### 4.5 Federation Console
+
+**Purpose:** Join federations, contribute gradients, monitor peer network.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Federation                                  [+ Join Federation]        │
+├────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─── My Federations ───────────────────────────────────────────────┐  │
+│  │                                                                   │  │
+│  │  ● Finance AI Consortium                   [Connected · 8 peers]  │  │
+│  │    Round: 127  |  My contribution: 0.42%  |  Epsilon: 0.1        │  │
+│  │    Last sync: 14 min ago  |  Bandwidth: ↑ 120 KB/s  ↓ 45 KB/s   │  │
+│  │    [Details]   [Pause]   [Leave]                                  │  │
+│  │                                                                   │  │
+│  │  ○ Open Source Coder Commons               [Offline — Resume]    │  │
+│  │    Last active: 3 days ago                                        │  │
+│  │                                                                   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Privacy Status ───────────────────────────────────────────────┐  │
+│  │  ✓ Differential Privacy: ON  (ε = 0.1, δ = 1e-5)                 │  │
+│  │  ✓ Secure Aggregation: ON                                         │  │
+│  │  ✓ Raw code transmitted: NONE                                     │  │
+│  │  ✓ Gradient encryption: TLS 1.3                                   │  │
+│  │                                                                   │  │
+│  │  What is transmitted: gradient updates only (encrypted)           │  │
+│  │  What stays local: all code, training data, chat history          │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Network Graph ────────────────────────────────────────────────┐  │
+│  │                                                                   │  │
+│  │   [●]─────[●]        Nodes: 8 active peers                       │  │
+│  │    │  ╲  ╱  │        Your node: Org-7af3 (anonymous)             │  │
+│  │   [●]  [●]  [●]      Aggregation server: agg.finai.network       │  │
+│  │    │       │          Latency: 42ms                               │  │
+│  │   [●]─────[●]                                                     │  │
+│  │         ^                                                         │  │
+│  │       You                                                         │  │
+│  │                                                                   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Contribution History ─────────────────────────────────────────┐  │
+│  │  Round 127: ✓ Submitted  |  Quality score: 0.91  |  Reward: +12  │  │
+│  │  Round 126: ✓ Submitted  |  Quality score: 0.88  |  Reward: +11  │  │
+│  │  Your reputation: 847 points  |  Top 15% contributor             │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 4.6 Settings
+
+Tabbed settings panel. Tabs: **General | Inference | Training | Federation | Privacy | About**
+
+#### General tab
+
+```
+Display
+  Theme:          [Dark ▾]  (Light coming in Phase 2)
+  Sidebar:        [Expanded ▾]
+  Status bar:     [Show ▾]
+  Font size:      [14px ▾]
+
+Editor Integration
+  VSCode extension:    [Connected ✓]  [Reconnect]
+  JetBrains plugin:    [Not installed]  [Get Plugin →]
+  Tab to accept:       [On ▾]
+  Ghost text:          [On ▾]
+
+Notifications
+  Training complete:   [✓] Desktop notification
+  Federation sync:     [✓] Status bar only
+  Model update:        [✓] Desktop notification
+```
+
+#### Inference tab
+
+```
+Active model:     Qwen2.5-Coder-32B  [Switch ▾]
+Backend:          [Ollama ▾]  (Ollama / llama.cpp / vLLM)
+Ollama host:      http://localhost:11434  [Test Connection]
+Max context:      [32768 ▾] tokens
+Temperature:      ────●──────  0.2
+Top-p:            ─────────●  0.95
+Max tokens:       [2048]
+Stream responses: [On ▾]
+GPU layers:       [All ▾]  (35/35 layers on GPU)
+```
+
+#### Privacy tab
+
+```
+┌─── Privacy Guarantees ─────────────────────────────────────────┐
+│  ✓ All inference is local                                       │
+│  ✓ No telemetry collected                                       │
+│  ✓ No API keys sent externally                                  │
+│  ✓ All data stored in ~/.sovereign-coder/ (encrypted)          │
+└─────────────────────────────────────────────────────────────────┘
+
+Data Storage
+  Chat history:    [Retain 30 days ▾]  [Clear Now]
+  Training data:   [Retain until trained ▾]  [Clear Now]
+  Embeddings:      [Keep with project ▾]
+
+Opt-in Telemetry
+  Usage analytics (no code):   [Off ▾]  ← default off
+  Crash reports (anonymised):  [Off ▾]  ← default off
+```
+
+---
+
+## 5. Key User Flows
+
+### 5.1 First-Time Setup (< 5 minutes target)
+
+```
+1. Install Sovereign Coder
+   ↓
+2. Launch → Welcome screen
+   "Welcome to Sovereign Coder — your private AI coding companion."
+   • Hardware check: GPU detected (RTX 4090 ✓), 64 GB RAM ✓
+   • Ollama check: [Install Ollama ▾] or [Ollama detected ✓]
+   ↓
+3. Choose first model
+   • Recommended for your GPU: Qwen2.5-Coder-32B (24 GB VRAM — Excellent)
+   • [Download Qwen2.5-Coder-32B Q4_K_M — 20 GB]
+   • Progress bar with speed + ETA
+   ↓
+4. Model loads → success banner
+   "Qwen2.5-Coder-32B loaded and ready. 45 tok/s"
+   ↓
+5. "Start your first chat →"
+   → Directed to Chat screen with starter prompt pre-filled
+```
+
+### 5.2 Daily Development Flow
+
+```
+Open project in VSCode → VSCode plugin activates
+↓
+Code as normal → ghost text completions appear
+↓
+Press Tab to accept → completion logged as training data
+↓
+Complex task needed → open Sovereign Coder sidebar in VSCode
+(or launch desktop app)
+↓
+Chat: "Refactor this function to use async/await"
+↓
+Agent reads codebase context → streams response → shows diff
+↓
+User clicks [Accept All] → changes applied
+↓
+At end of day → training data collected automatically
+Training console shows: "847 new samples ready"
+```
+
+### 5.3 Overnight Training
+
+```
+Training Console → Schedule tab
+↓
+Select "Scheduled — Tonight at 11:00 PM"
+↓
+Configure: Base model, LoRA rank, epochs
+↓
+Confirm → Desktop notification cleared for overnight
+↓
+Morning: Desktop notification
+"Training complete. Fine-tune v1.5 ready. +4.1% HumanEval."
+↓
+Dashboard shows: "New model version available"
+[Load v1.5] button prominent on dashboard
+```
+
+### 5.4 Joining a Federation
+
+```
+Federation Console → [+ Join Federation]
+↓
+Enter federation ID or browse public federations
+↓
+Review federation terms:
+• Industry: Financial Services
+• Privacy: ε = 0.1 DP, secure aggregation
+• Contribution: gradient updates only
+• Schedule: Every 2 hours
+↓
+[Join Federation]
+↓
+First round begins → status bar shows "Fed: 8 peers"
+↓
+Federation Console shows network graph, contribution history
+```
+
+---
+
+## 6. VSCode Plugin Panel (Phase 1, Simplified Surface)
+
+The VSCode plugin uses the same design language but simplified.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  SOVEREIGN CODER        ● Connected  v1.4           │
+│  ─────────────────────────────────────────────────  │
+│                                                     │
+│  Model: Qwen2.5-32B  Q4_K_M  45 tok/s  [Switch ▾]  │
+│                                                     │
+│  ┌─── Chat ──────────────────────────────────────┐  │
+│  │                                               │  │
+│  │  ...conversation history...                   │  │
+│  │                                               │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  ┌────────────────────────────────────────────────┐ │
+│  │  Ask about the current file...                 │ │
+│  │                                       [Send ↵] │ │
+│  └────────────────────────────────────────────────┘ │
+│                                                     │
+│  Context: auth.py (428 lines) · 3 related files    │
+│                                                     │
+│  ── Quick Actions ─────────────────────────────── │
+│  [Explain selection]  [Fix error]  [Write tests]   │
+│  [Refactor]  [Document]  [Agent Mode →]            │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## 7. System Health / Benchmark Panel (Sovereign Week 1 Integration)
+
+The Week 1 health check scripts (`runtime-check.mjs`, `benchmark.mjs`, `report.mjs`) integrate directly into the Dashboard's **"Benchmark Summary"** card and a full-screen expandable **System Health** panel.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  System Health Report           Last run: 2 min ago  [▶ Run Now]        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─── Runtime Check ────────────────────────────────────────────────┐  │
+│  │  Port 11434:        ✓ Open (Ollama reachable)                    │  │
+│  │  Timeout:           ✓ 30s configured                              │  │
+│  │  Backend:           ✓ Ollama v0.3.12                              │  │
+│  │  GPU detected:      ✓ NVIDIA RTX 4090 (24 GB)                    │  │
+│  │  CUDA:              ✓ 12.4                                        │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Benchmark ────────────────────────────────────────────────────┐  │
+│  │  Tokens/sec:        45.3 (target: 30+) ✓                         │  │
+│  │  First token:       380 ms (target: < 500ms) ✓                   │  │
+│  │  Context 32K:       ✓ loaded in 1.4s                              │  │
+│  │  HumanEval pass@1:  72.4% (target: 70%+) ✓                       │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  ┌─── Readiness ────────────────────────────────────────────────────┐  │
+│  │  Tier: EXCELLENT  |  Gate: ✓ Satisfied  |  Demo Ready: ✓         │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+The panel renders the parsed JSON output from `report.mjs` directly. The "Run Now" button executes `node scripts/sovereign-week1-benchmark.mjs` and streams the output.
+
+---
+
+## 8. Empty States
+
+### No model installed
+```
+┌───────────────────────────────────────────────────┐
+│                                                   │
+│          🖥                                        │
+│                                                   │
+│          No model loaded                          │
+│                                                   │
+│          Download your first model to start       │
+│          using Sovereign Coder.                   │
+│                                                   │
+│          [Browse Models →]                        │
+│                                                   │
+│          Recommended: Qwen2.5-Coder-7B (6 GB)    │
+│          for 6–8 GB VRAM systems                  │
+│                                                   │
+└───────────────────────────────────────────────────┘
+```
+
+### No training data yet
+```
+Start using Chat and code completions.
+Training data is collected automatically.
+When you have 50+ samples, training becomes available.
+(Current: 0 samples)
+```
+
+---
+
+## 9. Accessibility & Interaction
+
+- **Keyboard navigation**: Full keyboard nav. Tab order follows visual order. `⌘K` for command palette everywhere.
+- **Focus management**: Modals trap focus. Escape closes modals and dropdowns.
+- **Contrast ratios**: All text combinations exceed WCAG AA (4.5:1 for body text, 3:1 for large text).
+- **Reduced motion**: Respect `prefers-reduced-motion`. Disable spinning loaders and animations when set.
+- **Screen readers**: All icons have accessible labels. Status indicators use both colour and text.
+- **Zoom**: UI tested at 125% and 150% zoom factors in Electron.
+
+---
+
+## 10. Phase Gating (What to Build First)
+
+### MVP (Phase 1 — Month 1–2)
+- [ ] App shell: titlebar, sidebar (collapsed + expanded), status bar
+- [ ] Dashboard screen (system health cards, active model, quick actions)
+- [ ] Models Hub (installed view, download flow, model switcher)
+- [ ] Chat screen (basic chat, streaming, context panel)
+- [ ] Settings (General + Inference tabs only)
+- [ ] VSCode plugin sidebar panel
+
+### Phase 2 (Month 3–5)
+- [ ] Agent mode UI (tool call trace, diff viewer, Accept/Reject, Dry Run)
+- [ ] Training Console (progress view, data collection stats, version history)
+- [ ] System Health / Benchmark panel (Week 1 script integration)
+- [ ] Settings (Training tab, Privacy tab)
+- [ ] Light theme toggle
+
+### Phase 3 (Month 10–12)
+- [ ] Federation Console
+- [ ] Settings (Federation tab)
+- [ ] Mobile companion app (out of scope for desktop design doc — separate spec)
+
+---
+
+## 11. Technology Stack for UI
+
+```
+Electron + React + TypeScript
+├── Bundler:      Vite + electron-vite
+├── UI Library:   React 18 + TypeScript
+├── Styling:      Tailwind CSS v4 (utility-first, design tokens as CSS vars)
+├── Components:   Radix UI primitives (accessible, unstyled)
+├── Icons:        Lucide React
+├── State:        Zustand (lightweight, no boilerplate)
+├── IPC:          electron.ipcRenderer ↔ electron.ipcMain (typed)
+├── Backend IPC:  gRPC (core engine layer)
+├── Charts:       Recharts (training loss curves, GPU metrics)
+└── Code blocks:  highlight.js with custom dark theme
+```
+
+Design tokens live in `src/styles/tokens.css` as CSS custom properties, consumed by Tailwind. This creates a single source of truth shared across the Desktop app and (Phase 2) the Web dashboard.
+
+---
+
+## 12. Next Steps (→ Writing Plans)
+
+1. **Scaffold Electron project** (`electron-vite` + React + Tailwind + Zustand)
+2. **Implement design tokens** (`tokens.css`, Tailwind config)
+3. **Build app shell** (titlebar, sidebar, status bar) as pure-layout components
+4. **Wire status bar** to Ollama health check endpoint (`GET /api/tags`)
+5. **Models Hub** — connect to Ollama model list + download API
+6. **Chat screen** — connect to `POST /v1/chat/completions` with streaming
+7. **Dashboard** — wire `sovereign-week1-benchmark.mjs` output to System Health panel
+8. **VSCode plugin** — reuse component library in VSCode Webview API
