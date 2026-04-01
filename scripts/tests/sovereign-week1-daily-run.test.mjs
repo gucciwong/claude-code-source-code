@@ -239,3 +239,25 @@ test('daily-run --help prints usage text', async () => {
   assert.match(stdout, /--tier <tier>/)
   assert.match(stdout, /--dry-run/)
 })
+
+test('extractStdoutFromExecError returns null for truthy non-object error', () => {
+  assert.equal(extractStdoutFromExecError('string-error'), null)
+})
+
+test('parseDailyRunArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseDailyRunArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseDailyRunArgs(['node', 'scripts/sovereign-week1-daily-run.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})

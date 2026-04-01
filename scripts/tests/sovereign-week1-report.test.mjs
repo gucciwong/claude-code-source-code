@@ -217,3 +217,33 @@ test('report CLI exits with error when required arguments are missing', async ()
     },
   )
 })
+
+test('parseReportArgs handles --help by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '--help']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('parseReportArgs handles -h by calling process.exit', () => {
+  const originalExit = process.exit
+  let exitCalled = false
+  process.exit = () => { exitCalled = true; throw new Error('exit') }
+  try { parseReportArgs(['node', 'scripts/sovereign-week1-report.mjs', '-h']) } catch {}
+  finally { process.exit = originalExit }
+  assert.equal(exitCalled, true)
+})
+
+test('summarizeReadiness handles null evidence gracefully', () => {
+  const summary = summarizeReadiness(null)
+  assert.equal(summary.status, 'Blocked')
+  assert.match(summary.message, /Gate not satisfied/)
+})
+
+test('buildMarkdownReport handles null evidence gracefully', () => {
+  const report = buildMarkdownReport(null)
+  assert.match(report, /Date: unknown/)
+  assert.match(report, /Runtime reachable: no/)
+})
