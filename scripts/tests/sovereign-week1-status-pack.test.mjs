@@ -208,3 +208,46 @@ test('status-pack --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-status-pack\.mjs/)
   assert.match(stdout, /--out-file <path>/)
 })
+
+test('status-pack CLI emits JSON output when running without --json flag', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-status-pack-nojson-'))
+  const outFile = join(dir, 'status.md')
+
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-01.json'),
+    JSON.stringify({ date: '2026-04-01', readyForDemo: true, reason: 'Ready for demo' }),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-status-pack.mjs',
+    '--dir',
+    dir,
+    '--out-file',
+    outFile,
+  ])
+
+  const payload = JSON.parse(stdout)
+  assert.equal(payload.overallStatus, 'GREEN')
+  assert.equal(payload.trend.totalDays, 1)
+})
+
+test('status-pack CLI exits with error when directory has no summary files', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-status-pack-empty-'))
+  const outFile = join(dir, 'status.md')
+
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-status-pack.mjs',
+      '--dir',
+      dir,
+      '--out-file',
+      outFile,
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /No summary files found/)
+      return true
+    },
+  )
+})

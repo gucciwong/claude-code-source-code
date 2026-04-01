@@ -252,3 +252,38 @@ test('trend --help prints usage text', async () => {
   assert.match(stdout, /Usage: node scripts\/sovereign-week1-trend\.mjs/)
   assert.match(stdout, /--readiness-threshold <0-1>/)
 })
+
+test('trend CLI prints human-readable report when run without --json flag', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'week1-trend-human-'))
+
+  await writeFile(
+    join(dir, 'week1-summary-2026-04-01.json'),
+    JSON.stringify({ date: '2026-04-01', readyForDemo: true, reason: 'All Week 1 gate signals are green' }),
+    'utf8',
+  )
+
+  const { stdout } = await execFileAsync(process.execPath, [
+    'scripts/sovereign-week1-trend.mjs',
+    '--dir',
+    dir,
+  ])
+
+  assert.match(stdout, /Sovereign Week1 Trend Report/)
+  assert.match(stdout, /Total days: 1/)
+})
+
+test('trend CLI exits with error when directory does not exist', async () => {
+  await assert.rejects(
+    execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-trend.mjs',
+      '--dir',
+      '/tmp/nonexistent-dir-week1-trend-xyz',
+      '--json',
+    ]),
+    error => {
+      assert.equal(error.code, 1)
+      assert.match(error.stderr, /no such file|ENOENT/i)
+      return true
+    },
+  )
+})
