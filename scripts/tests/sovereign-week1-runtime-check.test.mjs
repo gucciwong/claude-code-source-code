@@ -370,3 +370,37 @@ test('runtime-check CLI prints error in human output when runtime is unreachable
     },
   )
 })
+
+test('runtime-check CLI handles server response where models is not an array', async () => {
+  const server = createServer((req, res) => {
+    if (req.url === '/api/tags') {
+      res.setHeader('content-type', 'application/json')
+      res.end(JSON.stringify({ models: null }))
+      return
+    }
+    res.statusCode = 404
+    res.end('not found')
+  })
+
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const address = server.address()
+  const port = typeof address === 'object' && address ? address.port : 0
+
+  try {
+    const { stdout } = await execFileAsync(process.execPath, [
+      'scripts/sovereign-week1-runtime-check.mjs',
+      '--host',
+      '127.0.0.1',
+      '--port',
+      String(port),
+      '--json',
+    ])
+
+    const payload = JSON.parse(stdout)
+    assert.equal(payload.runtime.reachable, true)
+    assert.equal(payload.models.count, 0)
+    assert.deepEqual(payload.models.names, [])
+  } finally {
+    await new Promise(resolve => server.close(resolve))
+  }
+})
