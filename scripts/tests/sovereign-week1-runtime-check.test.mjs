@@ -291,6 +291,9 @@ test('runtime-check CLI reports timeout error when endpoint hangs beyond timeout
       },
     )
   } finally {
+    if (typeof server.closeAllConnections === 'function') {
+      server.closeAllConnections()
+    }
     await new Promise(resolve => server.close(resolve))
   }
 })

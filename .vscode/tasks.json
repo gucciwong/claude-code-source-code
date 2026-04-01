@@ -10,16 +10,6 @@
 				"test:sovereign"
 			],
 			"isBackground": false
-		},
-		{
-			"label": "run-sovereign-tests-fixed",
-			"type": "shell",
-			"command": "npm",
-			"args": [
-				"run",
-				"test:sovereign"
-			],
-			"isBackground": false
 		}
 	]
 }
