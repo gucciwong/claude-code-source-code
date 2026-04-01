@@ -66,5 +66,9 @@ test('navigating to Chat shows Chat screen', async () => {
 
 test('status bar is present in the document', () => {
   render(<App />)
-  expect(screen.getByRole('status')).toBeInTheDocument()
+  // Get all status elements and find the main StatusBar footer (likely first one or check aria-label)
+  const statusElements = screen.getAllByRole('status')
+  expect(statusElements.length).toBeGreaterThan(0)
+  // Check that at least one status element is in document (tagName is uppercase in jsdom)
+  expect(statusElements.some(el => el.tagName === 'FOOTER')).toBe(true)
 })

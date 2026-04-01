@@ -1,6 +1,7 @@
 import { useSystemStore } from '../store/systemStore'
 import { useNavigationStore } from '../store/navigationStore'
 import { MessageSquare, Zap, BookOpen, Activity } from 'lucide-react'
+import { SystemPanel } from '../components/common/SystemPanel'
 
 function VramBar({ used, total }: { used: number | null; total: number | null }) {
   const pct = used != null && total != null && total > 0 ? Math.min((used / total) * 100, 100) : 0
@@ -119,6 +120,9 @@ export function Dashboard() {
           System Health
         </button>
       </div>
+
+      {/* System panel with health and benchmark tabs */}
+      <SystemPanel />
     </div>
   )
 }

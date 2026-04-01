@@ -25,7 +25,10 @@ test('renders active model name', () => {
 
 test('renders tok/s', () => {
   render(<Dashboard />)
-  expect(screen.getByText('45 tok/s')).toBeInTheDocument()
+  // Get the first match (in hero card), not the one in SystemPanel
+  const tokElements = screen.getAllByText('45 tok/s')
+  expect(tokElements.length).toBeGreaterThan(0)
+  expect(tokElements[0]).toBeInTheDocument()
 })
 
 test('renders VRAM bar with aria role', () => {
@@ -58,4 +61,9 @@ test('Browse Models button navigates to models', async () => {
   render(<Dashboard />)
   await user.click(screen.getByRole('button', { name: /Browse Models/i }))
   expect(useNavigationStore.getState().active).toBe('models')
+})
+
+test('renders system panel with health and benchmark', () => {
+  render(<Dashboard />)
+  expect(screen.getByText('System Information')).toBeInTheDocument()
 })
