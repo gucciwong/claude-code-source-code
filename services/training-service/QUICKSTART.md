@@ -35,35 +35,38 @@ Invoke-WebRequest -Uri http://localhost:8001/health -UseBasicParsing | Select-Ob
 ## API Endpoints
 
 ### Get Training Statistics
+
+**PowerShell:**
+```powershell
+Invoke-RestMethod -Uri http://localhost:8001/api/v1/training/stats -UseBasicParsing | ConvertTo-Json -Depth 2
+```
+
+**Python:**
 ```bash
 python -c "import urllib.request, json; r = urllib.request.urlopen('http://localhost:8001/api/v1/training/stats'); print(json.dumps(json.loads(r.read().decode()), indent=2))"
 ```
 
 ### Log a Completion Event
+
+**PowerShell (Recommended):**
+```powershell
+$json = '{"prompt":"def hello():","completion":"    print(\"Hello\")","event_type":"completion_accepted","language":"python"}'
+Invoke-RestMethod -Uri http://localhost:8001/api/v1/training/event -Method POST -Body $json -ContentType "application/json"
+```
+
+**Python:**
 ```bash
-python << 'EOF'
-import urllib.request, json
-
-data = json.dumps({
-    "prompt": "def hello():",
-    "completion": "    print('Hello')",
-    "event_type": "completion_accepted",
-    "language": "python",
-    "source": "test"
-}).encode('utf-8')
-
-req = urllib.request.Request(
-    'http://localhost:8001/api/v1/training/event',
-    data=data,
-    headers={'Content-Type': 'application/json'},
-    method='POST'
-)
-response = urllib.request.urlopen(req)
-print(json.loads(response.read().decode()))
-EOF
+python -c "import urllib.request, json; data = json.dumps({'prompt': 'def hello():', 'completion': '    print(\"Hello\")', 'event_type': 'completion_accepted', 'language': 'python'}).encode(); req = urllib.request.Request('http://localhost:8001/api/v1/training/event', data=data, headers={'Content-Type': 'application/json'}, method='POST'); print(json.loads(urllib.request.urlopen(req).read().decode()))"
 ```
 
 ### Get Training Status
+
+**PowerShell:**
+```powershell
+Invoke-RestMethod -Uri http://localhost:8001/api/v1/training/status -UseBasicParsing | ConvertTo-Json -Depth 2
+```
+
+**Python:**
 ```bash
 python -c "import urllib.request, json; r = urllib.request.urlopen('http://localhost:8001/api/v1/training/status'); print(json.dumps(json.loads(r.read().decode()), indent=2))"
 ```
@@ -71,6 +74,19 @@ python -c "import urllib.request, json; r = urllib.request.urlopen('http://local
 ---
 
 ## Troubleshooting
+
+### PowerShell Heredoc Error (`<<`)
+
+PowerShell doesn't support Python's heredoc syntax. Use these alternatives:
+
+**Error:**
+```
+python << 'EOF'
+    ^   ^
+    Missing file specification after redirection operator.
+```
+
+**Solution:** Use single-line PowerShell commands above instead. All PowerShell examples in this guide work directly.
 
 ### Service Not Responding?
 
@@ -112,31 +128,37 @@ http://localhost:8001/
 ## Next Steps
 
 ### 1. Send Test Data
+
+**PowerShell (Recommended):**
+```powershell
+# Send 5 test completions
+for ($i = 1; $i -le 5; $i++) {
+    $json = "{`"prompt`":`"def func_$i():`",`"completion`":`"    return $i`",`"event_type`":`"completion_accepted`",`"language`":`"python`"}"
+    Invoke-RestMethod -Uri http://localhost:8001/api/v1/training/event -Method POST -Body $json -ContentType "application/json" | Out-Null
+}
+Write-Host "✓ 5 test events logged"
+```
+
+**Python:**
 ```bash
-# Generate 10 test completions
 python << 'EOF'
 import urllib.request, json
-
-for i in range(10):
-    data = json.dumps({
-        "prompt": f"def test_{i}():",
-        "completion": f"    return {i}",
-        "event_type": "completion_accepted",
-        "language": "python"
-    }).encode()
-    
-    req = urllib.request.Request(
-        'http://localhost:8001/api/v1/training/event',
-        data=data,
-        headers={'Content-Type': 'application/json'},
-        method='POST'
-    )
+for i in range(5):
+    data = json.dumps({"prompt": f"def func_{i}():", "completion": f"    return {i}", "event_type": "completion_accepted", "language": "python"}).encode()
+    req = urllib.request.Request('http://localhost:8001/api/v1/training/event', data=data, headers={'Content-Type': 'application/json'}, method='POST')
     urllib.request.urlopen(req)
-print("✓ 10 test events logged")
+print("✓ 5 test events logged")
 EOF
 ```
 
 ### 2. Check Stats
+
+**PowerShell:**
+```powershell
+Invoke-RestMethod -Uri http://localhost:8001/api/v1/training/stats -UseBasicParsing | ConvertTo-Json -Depth 2
+```
+
+**Python:**
 ```bash
 python -c "import urllib.request, json; r = urllib.request.urlopen('http://localhost:8001/api/v1/training/stats'); print(json.dumps(json.loads(r.read().decode()), indent=2))"
 ```
