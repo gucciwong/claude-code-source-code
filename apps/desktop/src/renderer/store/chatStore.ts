@@ -9,14 +9,17 @@ export interface ChatMessage {
 
 type ChatStore = {
   messages: ChatMessage[]
+  knowledgeContext: string
   addMessage: (msg: ChatMessage) => void
   appendToLast: (chunk: string) => void
   setLastStreaming: (streaming: boolean) => void
+  setKnowledgeContext: (ctx: string) => void
   clear: () => void
 }
 
 export const useChatStore = create<ChatStore>(set => ({
   messages: [],
+  knowledgeContext: '',
   addMessage: msg => set(state => ({ messages: [...state.messages, msg] })),
   appendToLast: chunk =>
     set(state => {
@@ -34,5 +37,6 @@ export const useChatStore = create<ChatStore>(set => ({
       messages[messages.length - 1] = { ...last, streaming }
       return { messages }
     }),
+  setKnowledgeContext: ctx => set({ knowledgeContext: ctx }),
   clear: () => set({ messages: [] }),
 }))
