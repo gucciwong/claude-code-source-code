@@ -100,8 +100,10 @@ The desktop application is actively in development with the following milestones
 | Voice I/O (VibeVoice) | ✅ Built | Whisper ASR + Google TTS |
 | China mirror support | ✅ Built | hf-mirror.com toggle in Settings |
 | Windows EXE packaging | ✅ Built | electron-builder, 70MB installer |
-| Personal Knowledge Library | 🔜 v0.4.0 | Q2 2026 |
+| Personal Knowledge Library | ✅ Built | PKL system, knowledge-service, 408 tests |
 | Enterprise Data Integration | 🔜 v0.5.0 | Q3 2026 |
+| Live Execution Trace Injection | 🔜 v0.5.0 | Q3 2026 |
+| Temporal Decision Graph | 🔜 v0.5.0 | Q3 2026 |
 
 ---
 
@@ -184,7 +186,7 @@ Addressable Market Analysis (2026)
 | P1 | Agent Mode | Autonomous task execution | Very High | v0.3 ✅ |
 | P1 | Local Training | QLoRA fine-tuning on user data | Very High | v0.3 ✅ |
 | P1 | Voice I/O (VibeVoice) | Hands-free coding via Whisper ASR + TTS | High | v0.3 ✅ |
-| P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 🔜 |
+| P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 ✅ |
 | P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 🔜 |
 | P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 🔜 |
 | P2 | Federated Learning | Collaborative training without data sharing | Very High | v0.7 🔜 |
@@ -1342,16 +1344,17 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 │  • Voice panel, waveform visualization, transcription history          │
 │  • MirrorSelector component in Settings                                │
 │                                                                          │
+│  v0.4.0 — Personal Knowledge Library  [✅ COMPLETED April 2026]        │
+│  • ~/.sovereign-code/knowledge/ local storage, KnowledgeStorage.ts    │
+│  • Auto-learning pipeline: PatternExtractor, QualityScorer, Dedup     │
+│  • Semantic search — knowledge-service FastAPI (port 8003, e5-small)  │
+│  • Context injection: ContextInjector, RelevanceFilter, TokenBudget   │
+│  • Knowledge Screen UI (4 tabs), useKnowledgeLibrary hook             │
+│  • Memory.md editor, snippet browser, decision log, domain expertise  │
+│  • 408 unit tests passing                                              │
+│                                                                          │
 │  🔜 IN PROGRESS / PLANNED                                               │
 │  ─────────────────────────────────────────────────────────────────────  │
-│  v0.4.0 — Personal Knowledge Library  [Q2 2026, June 30]              │
-│  • ~/.sovereign-code/knowledge/ local storage system                   │
-│  • Auto-learning from accepted completions, task completions           │
-│  • Semantic search (e5-small-v2 embeddings + SQLite)                   │
-│  • Knowledge UI screen in desktop app                                  │
-│  • Context injection into model prompts                                │
-│  • Memory.md editor, snippet browser, decision log                     │
-│                                                                          │
 │  v0.5.0 — Enterprise Data Integration  [Q3 2026, Sept 30]             │
 │  • 4 enterprise connectors (SAP, Salesforce, PostgreSQL, REST)        │
 │  • PII detection & masking (Presidio)                                  │
