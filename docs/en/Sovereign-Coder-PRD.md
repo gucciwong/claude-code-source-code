@@ -87,9 +87,11 @@ Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Code ensures
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.4 Current Status (v0.3.x — April 2026)
+### 1.4 Current Status (v0.7.x — April 2026)
 
-The desktop application is actively in development with the following milestones completed:
+Sovereign Code has completed core platform milestones from v0.1 through v0.7, with v1.0 now the primary forward target.
+
+The desktop application and service ecosystem are production-oriented with broad feature coverage across local inference, training, voice, knowledge, enterprise integration, federated learning, and advanced developer tooling.
 
 | Component | Status | Notes |
 |-----------|--------|-------|
@@ -1397,52 +1399,27 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 11.2 v0.4.0 Sprint Plan (Active — April 2026)
+### 11.2 Archived Execution Summary (v0.4.0-v0.7.0)
 
-```
-WEEK 1-2: Storage Foundation
-  ├── knowledge/ directory structure + config.json schema
-  ├── markdown-it parser for memory.md read/write
-  ├── SQLite embeddings database schema
-  └── knowledgeLibraryStore.ts (Zustand)
+The v0.4.0 sprint plan listed in prior revisions has been completed and is retained as historical context.
 
-WEEK 3-4: Auto-Learning Pipeline
-  ├── Completion event hook → pattern extraction
-  ├── Task completion event → methodology extraction
-  ├── Snippet deduplication + quality scoring
-  └── Background indexing worker
+Implementation outcomes now reflected as completed:
+- v0.4.0: Personal Knowledge Library
+- v0.5.0: Enterprise Data Integration + Live Execution Trace Injection + Temporal Decision Graph
+- v0.6.0: Organization Intelligence + Adversarial Persona Council + IM bridge
+- v0.7.0: Semantic Search + Plugin System + PR Review Agent + Federated Learning Core
 
-WEEK 5-6: Semantic Search
-  ├── e5-small-v2 embedding generation (Python service)
-  ├── Cosine similarity search over SQLite vectors
-  ├── Hybrid ranking (semantic + keyword + recency)
-  └── Search API: GET /api/v1/knowledge/search
-
-WEEK 7-8: Context Injection
-  ├── Prompt builder: inject PKL context before model call
-  ├── Token budget manager (8K max PKL context)
-  ├── Relevance filtering (threshold: 0.7 similarity)
-  └── Negative example filtering (rejected patterns)
-
-WEEK 9-10: UI + Beta Testing
-  ├── Knowledge screen: Memory.md editor
-  ├── Snippet browser with filters
-  ├── Decision log timeline view
-  ├── Domain expertise visualization
-  └── Internal beta (10-15 users), bug fixes, GA
-
-v0.4.0 GA → June 30, 2026
-```
+Current planning focus should remain on v1.0 deliverables and hardening work.
 
 ### 11.3 Key Milestones
 
-| Milestone | Target Date | Success Criteria |
-|-----------|-------------|------------------|
-| v0.4.0 GA | June 30, 2026 | PKL active for 50%+ users |
-| v0.5.0 GA | Sept 30, 2026 | 20+ enterprise deployments |
-| v0.6.0 GA | Dec 31, 2026 | 500+ team members sharing patterns |
-| v0.7.0 GA | Mar 31, 2027 | First consortium operational |
-| v1.0 GA | June 30, 2027 | Plugin ecosystem live |
+| Milestone | Status | Notes |
+|-----------|--------|-------|
+| v0.4.0 GA | ✅ Achieved | PKL shipped |
+| v0.5.0 GA | ✅ Achieved | Enterprise integrations + trace/graph shipped |
+| v0.6.0 GA | ✅ Achieved | Org intelligence suite shipped |
+| v0.7.0 GA | ✅ Achieved | Advanced dev tools shipped |
+| v1.0 GA | 🔜 Planned | Plugin ecosystem + consortium operations + public platform APIs |
 
 ---
 

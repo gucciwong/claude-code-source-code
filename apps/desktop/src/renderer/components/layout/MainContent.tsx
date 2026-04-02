@@ -1,4 +1,5 @@
 import { useNavigationStore } from '../../store/navigationStore'
+import { ErrorBoundary } from '../common/ErrorBoundary'
 import { Dashboard } from '../../screens/Dashboard'
 import { Models } from '../../screens/Models'
 import { Chat } from '../../screens/Chat'
@@ -50,7 +51,9 @@ export function MainContent() {
   const Screen = screens[active]
   return (
     <main className="flex-1 bg-bg-base overflow-auto">
-      <Screen />
+      <ErrorBoundary label={active}>
+        <Screen />
+      </ErrorBoundary>
     </main>
   )
 }

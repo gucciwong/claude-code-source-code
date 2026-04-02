@@ -60,4 +60,13 @@ describe('MirrorSelector', () => {
       expect(screen.getByText(/Failed to switch/i)).toBeInTheDocument()
     })
   })
+
+  test('shows error feedback when switch API throws', async () => {
+    mockGetSwitchMirrorInstructions.mockRejectedValue(new Error('network'))
+    render(<MirrorSelector />)
+    fireEvent.click(screen.getByText('HF-Mirror (China)'))
+    await waitFor(() => {
+      expect(screen.getByText(/Failed to switch/i)).toBeInTheDocument()
+    })
+  })
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Settings, X } from 'lucide-react'
-import { useVoiceStore, VoiceSettings } from '../../store/voiceStore'
+import { useVoiceStore, type VoiceSettings as VoiceSettingsType } from '../../store/voiceStore'
 
 interface VoiceSettingsProps {
   onClose?: () => void
@@ -11,13 +11,13 @@ export const VoiceSettings: React.FC<VoiceSettingsProps> = ({ onClose }) => {
 
   const handleModelSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateSettings({
-      modelSize: e.target.value as VoiceSettings['modelSize'],
+      modelSize: e.target.value as VoiceSettingsType['modelSize'],
     })
   }
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateSettings({
-      language: e.target.value as VoiceSettings['language'],
+      language: e.target.value as VoiceSettingsType['language'],
     })
   }
 

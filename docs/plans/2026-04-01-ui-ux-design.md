@@ -784,27 +784,27 @@ When you have 50+ samples, training becomes available.
 
 ---
 
-## 10. Phase Gating (What to Build First)
+## 10. Phase Status (Design Scope vs Implementation)
 
-### MVP (Phase 1 — Month 1–2)
-- [ ] App shell: titlebar, sidebar (collapsed + expanded), status bar
-- [ ] Dashboard screen (system health cards, active model, quick actions)
-- [ ] Models Hub (installed view, download flow, model switcher)
-- [ ] Chat screen (basic chat, streaming, context panel)
-- [ ] Settings (General + Inference tabs only)
-- [ ] VSCode plugin sidebar panel
+### MVP (Phase 1 — Month 1-2)
+- [x] App shell: titlebar, sidebar (collapsed + expanded), status bar
+- [x] Dashboard screen (system health cards, active model, quick actions)
+- [x] Models Hub (installed view, download flow, model switcher)
+- [x] Chat screen (basic chat, streaming, context panel)
+- [x] Settings (General + Inference tabs baseline)
+- [x] VSCode plugin sidebar panel (available in extension workspace)
 
-### Phase 2 (Month 3–5)
-- [ ] Agent mode UI (tool call trace, diff viewer, Accept/Reject, Dry Run)
-- [ ] Training Console (progress view, data collection stats, version history)
-- [ ] System Health / Benchmark panel (Week 1 script integration)
-- [ ] Settings (Training tab, Privacy tab)
-- [ ] Light theme toggle
+### Phase 2 (Month 3-5)
+- [x] Agent mode UI (tool call trace, diff viewer, Accept/Reject, Dry Run)
+- [x] Training Console (progress view, data collection stats, version history)
+- [x] System Health / Benchmark panel (Week 1 integration path present)
+- [x] Settings (Training tab, Privacy tab)
+- [ ] Light theme toggle (remaining)
 
-### Phase 3 (Month 10–12)
-- [ ] Federation Console
-- [ ] Settings (Federation tab)
-- [ ] Mobile companion app (out of scope for desktop design doc — separate spec)
+### Phase 3 (Month 10-12)
+- [x] Federation Console
+- [ ] Settings (Federation tab hardening, if not fully aligned)
+- [ ] Mobile companion app (separate product track)
 
 ---
 
@@ -828,13 +828,10 @@ Design tokens live in `src/styles/tokens.css` as CSS custom properties, consumed
 
 ---
 
-## 12. Next Steps (→ Writing Plans)
+## 12. Next Steps (Documentation + Hardening)
 
-1. **Scaffold Electron project** (`electron-vite` + React + Tailwind + Zustand)
-2. **Implement design tokens** (`tokens.css`, Tailwind config)
-3. **Build app shell** (titlebar, sidebar, status bar) as pure-layout components
-4. **Wire status bar** to Ollama health check endpoint (`GET /api/tags`)
-5. **Models Hub** — connect to Ollama model list + download API
-6. **Chat screen** — connect to `POST /v1/chat/completions` with streaming
-7. **Dashboard** — wire `sovereign-week1-benchmark.mjs` output to System Health panel
-8. **VSCode plugin** — reuse component library in VSCode Webview API
+1. Reconcile status language across PRD/spec/implementation plans (single source of truth)
+2. Finalize remaining light-theme and federation-settings hardening items
+3. Convert skipped E2E voice tests into opt-in CI lane with explicit evidence artifacts
+4. Refresh acceptance checklist with completed vs remaining tags and owners
+5. Maintain this design doc as canonical UI contract for v1.0 polish

@@ -1666,34 +1666,20 @@ git commit -m "a11y(desktop): add aria-current to sidebar nav, role=status to st
 
 ---
 
-## Completion Checklist
+## Completion Checklist (Status as of 2026-04-03)
 
-After all tasks, verify:
-
-- [ ] `npm test` in `apps/desktop/` passes with 0 failures
-- [ ] `npm run dev` runs without console errors
-- [ ] Status bar shows "Running Locally" always
-- [ ] Sidebar navigation switches screens correctly
-- [ ] Dashboard shows health cards (even if all show unknown/offline)
-- [ ] Models screen lists installed Ollama models when Ollama is running at localhost:11434
-- [ ] Chat screen: type a message, press Enter, see streaming response
-- [ ] Design tokens match `docs/plans/2026-04-01-ui-ux-design.md` Section 2 (dark theme, Sovereign Violet accent)
-- [ ] All nav buttons have `aria-current="page"` on the active item
-- [ ] `StatusBar` has `role="status"`
-- [ ] Lighthouse Accessibility score ≥ 95 in Electron DevTools
+- [x] Desktop tests pass in `apps/desktop` baseline suites
+- [x] App shell + navigation + status bar implemented
+- [x] Dashboard / Models / Chat wired and renderable
+- [x] Core tokenized styling aligned with design system
+- [x] Accessibility essentials present (`aria-current`, `role="status"`, decorative icon rules)
+- [ ] Voice E2E integration tests enabled in CI by default (currently opt-in/skip controlled)
+- [ ] Lighthouse accessibility evidence refreshed for latest branch state
 
 ---
 
-## What is NOT in this plan (Phase 2+)
+## Historical Scope Note
 
-These are deferred to the next implementation plan per phase gating in the design doc:
+This file is a Phase 1 implementation artifact and should be treated as archived planning context.
 
-- Agent mode UI (tool call trace, diff viewer, Accept/Reject)
-- Training Console (progress bars, version history)
-- System Health / Benchmark panel (Week 1 script integration)
-- Federation Console
-- VSCode plugin sidebar panel
-- Light theme toggle
-- **Live Execution Trace Injection** (§4.2.8) — sandbox runtime, trace serializer, context injector
-- **Temporal Decision Graph** (§4.2.9) — graph builder, SQLite schema, natural language query UI
-- **Adversarial Persona Council** (§4.2.10) — 4 LoRA adapter training, parallel inference engine, conflict UI
+Features originally listed as deferred (for example agent mode, training console, federation console, trace/graph) are now implemented in later phases. Keep this document for historical traceability only.

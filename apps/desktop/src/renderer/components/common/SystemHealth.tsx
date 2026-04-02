@@ -17,30 +17,38 @@ export function SystemHealth() {
     const newMetrics: HealthMetric[] = []
 
     // GPU Temperature
-    const tempStatus = gpuTemp > 85 ? 'critical' : gpuTemp > 75 ? 'warning' : 'healthy'
+    const tempStatus =
+      gpuTemp == null ? 'healthy' : gpuTemp > 85 ? 'critical' : gpuTemp > 75 ? 'warning' : 'healthy'
     newMetrics.push({
       name: 'GPU Temperature',
       status: tempStatus,
-      value: `${gpuTemp}°C`,
+      value: gpuTemp != null ? `${gpuTemp}°C` : 'N/A',
       icon: <Thermometer size={16} aria-hidden="true" />,
     })
 
     // VRAM Usage
-    const vramPercent = (vramUsed / vramTotal) * 100
-    const vramStatus = vramPercent > 90 ? 'critical' : vramPercent > 75 ? 'warning' : 'healthy'
+    const vramPercent =
+      vramUsed != null && vramTotal != null && vramTotal > 0
+        ? (vramUsed / vramTotal) * 100
+        : null
+    const vramStatus =
+      vramPercent == null ? 'healthy' : vramPercent > 90 ? 'critical' : vramPercent > 75 ? 'warning' : 'healthy'
     newMetrics.push({
       name: 'VRAM Usage',
       status: vramStatus,
-      value: `${vramUsed}/${vramTotal} GB (${Math.round(vramPercent)}%)`,
+      value:
+        vramUsed != null && vramTotal != null && vramPercent != null
+          ? `${vramUsed}/${vramTotal} GB (${Math.round(vramPercent)}%)`
+          : 'N/A',
       icon: <HardDrive size={16} aria-hidden="true" />,
     })
 
     // Inference Performance
-    const tokStatus = tokensPerSec < 10 ? 'warning' : 'healthy'
+    const tokStatus = tokensPerSec != null && tokensPerSec < 10 ? 'warning' : 'healthy'
     newMetrics.push({
       name: 'Inference Speed',
       status: tokStatus,
-      value: `${tokensPerSec} tok/s`,
+      value: tokensPerSec != null ? `${tokensPerSec} tok/s` : 'N/A',
       icon: <Zap size={16} aria-hidden="true" />,
     })
 

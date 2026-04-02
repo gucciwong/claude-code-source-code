@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useSystemStore } from '../store/systemStore'
-import { useNavigationStore } from '../store/navigationStore'
 import { MirrorSelector } from '../components/common/MirrorSelector'
 
 export function Settings() {

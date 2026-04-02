@@ -41,11 +41,15 @@ export function MirrorSelector() {
   const handleChange = async (value: string) => {
     if (value === selected) return
     setStatus('switching')
-    const result = await getSwitchMirrorInstructions(value)
-    if (result !== null) {
-      setSelected(value)
-      setStatus('success')
-    } else {
+    try {
+      const result = await getSwitchMirrorInstructions(value)
+      if (result !== null) {
+        setSelected(value)
+        setStatus('success')
+      } else {
+        setStatus('error')
+      }
+    } catch {
       setStatus('error')
     }
   }

@@ -7106,6 +7106,27 @@ const Archive = createLucideIcon("Archive", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const ArrowRight = createLucideIcon("ArrowRight", [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const BarChart2 = createLucideIcon("BarChart2", [
+  ["line", { x1: "18", x2: "18", y1: "20", y2: "10", key: "1xfpm4" }],
+  ["line", { x1: "12", x2: "12", y1: "20", y2: "4", key: "be30l9" }],
+  ["line", { x1: "6", x2: "6", y1: "20", y2: "14", key: "1r4le6" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const BookOpen = createLucideIcon("BookOpen", [
   ["path", { d: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z", key: "vv98re" }],
   ["path", { d: "M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z", key: "1cyq3y" }]
@@ -7116,8 +7137,46 @@ const BookOpen = createLucideIcon("BookOpen", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Brain = createLucideIcon("Brain", [
+  [
+    "path",
+    {
+      d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
+      key: "l5xja"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z",
+      key: "ep3f8r"
+    }
+  ],
+  ["path", { d: "M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4", key: "1p4c4q" }],
+  ["path", { d: "M17.599 6.5a3 3 0 0 0 .399-1.375", key: "tmeiqw" }],
+  ["path", { d: "M6.003 5.125A3 3 0 0 0 6.401 6.5", key: "105sqy" }],
+  ["path", { d: "M3.477 10.896a4 4 0 0 1 .585-.396", key: "ql3yin" }],
+  ["path", { d: "M19.938 10.5a4 4 0 0 1 .585.396", key: "1qfode" }],
+  ["path", { d: "M6 18a4 4 0 0 1-1.967-.516", key: "2e4loj" }],
+  ["path", { d: "M19.967 17.484A4 4 0 0 1 18 18", key: "159ez6" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const ChevronDown = createLucideIcon("ChevronDown", [
   ["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const ChevronRight = createLucideIcon("ChevronRight", [
+  ["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7164,6 +7223,26 @@ const CircleX = createLucideIcon("CircleX", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Clock = createLucideIcon("Clock", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Code = createLucideIcon("Code", [
+  ["polyline", { points: "16 18 22 12 16 6", key: "z7tu5w" }],
+  ["polyline", { points: "8 6 2 12 8 18", key: "1eg1df" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const Copy = createLucideIcon("Copy", [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
@@ -7192,6 +7271,17 @@ const Cpu = createLucideIcon("Cpu", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Database = createLucideIcon("Database", [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const Download = createLucideIcon("Download", [
   ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
   ["polyline", { points: "7 10 12 15 17 10", key: "2ggqvy" }],
@@ -7203,9 +7293,75 @@ const Download = createLucideIcon("Download", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const FileCode = createLucideIcon("FileCode", [
+  ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
+  ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z", key: "1mlx9k" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const FileText = createLucideIcon("FileText", [
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const FlaskConical = createLucideIcon("FlaskConical", [
+  [
+    "path",
+    {
+      d: "M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2",
+      key: "pzvekw"
+    }
+  ],
+  ["path", { d: "M8.5 2h7", key: "csnxdl" }],
+  ["path", { d: "M7 16h10", key: "wp8him" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const Gauge = createLucideIcon("Gauge", [
   ["path", { d: "m12 14 4-4", key: "9kzdfg" }],
   ["path", { d: "M3.34 19a10 10 0 1 1 17.32 0", key: "19p75a" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const GitBranch = createLucideIcon("GitBranch", [
+  ["line", { x1: "6", x2: "6", y1: "3", y2: "15", key: "17qcm7" }],
+  ["circle", { cx: "18", cy: "6", r: "3", key: "1h7g24" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
+  ["path", { d: "M18 9a9 9 0 0 1-9 9", key: "n2h4wq" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const GitPullRequest = createLucideIcon("GitPullRequest", [
+  ["circle", { cx: "18", cy: "18", r: "3", key: "1xkwt0" }],
+  ["circle", { cx: "6", cy: "6", r: "3", key: "1lh9wr" }],
+  ["path", { d: "M13 6h3a2 2 0 0 1 2 2v7", key: "1yeb86" }],
+  ["line", { x1: "6", x2: "6", y1: "9", y2: "21", key: "rroup" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7235,6 +7391,17 @@ const History = createLucideIcon("History", [
   ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
   ["path", { d: "M3 3v5h5", key: "1xhq8a" }],
   ["path", { d: "M12 7v5l4 2", key: "1fdv2h" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Info = createLucideIcon("Info", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7351,9 +7518,53 @@ const Plus = createLucideIcon("Plus", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Puzzle = createLucideIcon("Puzzle", [
+  [
+    "path",
+    {
+      d: "M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z",
+      key: "i0oyt7"
+    }
+  ]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const RefreshCw = createLucideIcon("RefreshCw", [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const RotateCw = createLucideIcon("RotateCw", [
   ["path", { d: "M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8", key: "1p45f6" }],
   ["path", { d: "M21 3v5h-5", key: "1q7to0" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Save = createLucideIcon("Save", [
+  [
+    "path",
+    {
+      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+      key: "1c8476"
+    }
+  ],
+  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7409,6 +7620,64 @@ const Settings$1 = createLucideIcon("Settings", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const ShieldAlert = createLucideIcon("ShieldAlert", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "M12 8v4", key: "1got3b" }],
+  ["path", { d: "M12 16h.01", key: "1drbdi" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const ShieldCheck = createLucideIcon("ShieldCheck", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Shield = createLucideIcon("Shield", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Smartphone = createLucideIcon("Smartphone", [
+  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+  ["path", { d: "M12 18h.01", key: "mhygvu" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const Square = createLucideIcon("Square", [
   ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
 ]);
@@ -7418,8 +7687,44 @@ const Square = createLucideIcon("Square", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Tag = createLucideIcon("Tag", [
+  [
+    "path",
+    {
+      d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+      key: "vktsd0"
+    }
+  ],
+  ["circle", { cx: "7.5", cy: "7.5", r: ".5", fill: "currentColor", key: "kqv944" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const Thermometer = createLucideIcon("Thermometer", [
   ["path", { d: "M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z", key: "17jzev" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const ToggleLeft = createLucideIcon("ToggleLeft", [
+  ["rect", { width: "20", height: "12", x: "2", y: "6", rx: "6", ry: "6", key: "f2vt7d" }],
+  ["circle", { cx: "8", cy: "12", r: "2", key: "1nvbw3" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const ToggleRight = createLucideIcon("ToggleRight", [
+  ["rect", { width: "20", height: "12", x: "2", y: "6", rx: "6", ry: "6", key: "f2vt7d" }],
+  ["circle", { cx: "16", cy: "12", r: "2", key: "4ma0v8" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7440,9 +7745,36 @@ const Trash2 = createLucideIcon("Trash2", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const TrendingDown = createLucideIcon("TrendingDown", [
+  ["polyline", { points: "22 17 13.5 8.5 8.5 13.5 2 7", key: "1r2t7k" }],
+  ["polyline", { points: "16 17 22 17 22 11", key: "11uiuu" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const TrendingUp = createLucideIcon("TrendingUp", [
   ["polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17", key: "126l90" }],
   ["polyline", { points: "16 7 22 7 22 13", key: "kwv8wd" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const TriangleAlert = createLucideIcon("TriangleAlert", [
+  [
+    "path",
+    {
+      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+      key: "wmoenq"
+    }
+  ],
+  ["path", { d: "M12 9v4", key: "juzpu7" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7454,6 +7786,18 @@ const Upload = createLucideIcon("Upload", [
   ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
   ["polyline", { points: "17 8 12 3 7 8", key: "t8dd8p" }],
   ["line", { x1: "12", x2: "12", y1: "3", y2: "15", key: "widbto" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Users = createLucideIcon("Users", [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["path", { d: "M16 3.13a4 4 0 0 1 0 7.75", key: "1da9ce" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7480,6 +7824,17 @@ const WifiOff = createLucideIcon("WifiOff", [
   ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
   ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
   ["path", { d: "m2 2 20 20", key: "1ooewy" }]
+]);
+/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Workflow = createLucideIcon("Workflow", [
+  ["rect", { width: "8", height: "8", x: "3", y: "3", rx: "2", key: "by2w9f" }],
+  ["path", { d: "M7 11v4a2 2 0 0 0 2 2h4", key: "xkn7yn" }],
+  ["rect", { width: "8", height: "8", x: "13", y: "13", rx: "2", key: "1cgmvn" }]
 ]);
 /**
  * @license lucide-react v0.378.0 - ISC
@@ -7759,7 +8114,22 @@ const navItems = [
   { id: "models", label: "Models", icon: Cpu },
   { id: "chat", label: "Chat", icon: MessageSquare },
   { id: "training", label: "Training", icon: Zap },
-  { id: "federation", label: "Federation", icon: Network }
+  { id: "federation", label: "Federation", icon: Network },
+  { id: "knowledge", label: "Knowledge", icon: BookOpen },
+  { id: "enterprise", label: "Enterprise", icon: Database },
+  { id: "decisiongraph", label: "Decision Graph", icon: GitBranch },
+  { id: "orchestration", label: "Orchestration", icon: Workflow },
+  { id: "orgintelligence", label: "Org Intel", icon: Users },
+  { id: "personacouncil", label: "Code Council", icon: Shield },
+  { id: "analytics", label: "Analytics", icon: BarChart2 },
+  { id: "messaging", label: "IM Bridge", icon: Smartphone },
+  { id: "semanticsearch", label: "Code Search", icon: Search },
+  { id: "plugins", label: "Plugins", icon: Puzzle },
+  { id: "prreview", label: "PR Review", icon: GitPullRequest },
+  { id: "finetune", label: "Fine-tune", icon: FlaskConical },
+  { id: "federationcore", label: "Fed Core", icon: Network },
+  { id: "codecompletion", label: "Completions", icon: Code },
+  { id: "memory", label: "Memory", icon: Brain }
 ];
 const bottomItems = [
   { id: "settings", label: "Settings", icon: Settings$1 }
@@ -7829,6 +8199,29 @@ const useSystemStore = create((set) => ({
   theme: "dark",
   setTheme: (theme) => set({ theme })
 }));
+const useKnowledgeLibraryStore = create((set) => ({
+  // Initial state
+  snippets: [],
+  decisions: [],
+  memoryMarkdown: "",
+  domainStats: [],
+  totalItems: 0,
+  isIndexing: false,
+  searchQuery: "",
+  searchResults: [],
+  injectionEnabled: true,
+  // Actions
+  setSnippets: (snippets) => set({ snippets }),
+  setDecisions: (decisions) => set({ decisions }),
+  setSearchResults: (results) => set({ searchResults: results }),
+  setMemoryMarkdown: (content) => set({ memoryMarkdown: content }),
+  setDomainStats: (stats) => set({ domainStats: stats }),
+  setTotalItems: (count2) => set({ totalItems: count2 }),
+  setIsIndexing: (indexing) => set({ isIndexing: indexing }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  setInjectionEnabled: (enabled) => set({ injectionEnabled: enabled }),
+  removeSnippet: (id2) => set((state) => ({ snippets: state.snippets.filter((s) => s.id !== id2) }))
+}));
 function StatusBar() {
   const {
     activeModel,
@@ -7840,6 +8233,7 @@ function StatusBar() {
     federationPeers
   } = useSystemStore();
   const { serviceReady, isRecording } = useVoiceStore();
+  const { totalItems } = useKnowledgeLibraryStore();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "footer",
     {
@@ -7884,6 +8278,13 @@ function StatusBar() {
             /* @__PURE__ */ jsxRuntimeExports.jsx(Network, { size: 10, "aria-hidden": true }),
             federationPeers,
             " peers"
+          ] })
+        ] }),
+        totalItems > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { "aria-hidden": "true", className: "text-border-default", children: "|" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex-shrink-0", children: [
+            totalItems,
+            " snippets"
           ] })
         ] }),
         (serviceReady || isRecording) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -8426,7 +8827,7 @@ function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
 }
 var AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
 var AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
-var EVENT_OPTIONS = { bubbles: false, cancelable: true };
+var EVENT_OPTIONS$1 = { bubbles: false, cancelable: true };
 var FOCUS_SCOPE_NAME = "FocusScope";
 var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
   const {
@@ -8491,11 +8892,11 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
       const previouslyFocusedElement = document.activeElement;
       const hasFocusedCandidate = container.contains(previouslyFocusedElement);
       if (!hasFocusedCandidate) {
-        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS);
+        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS$1);
         container.addEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
         container.dispatchEvent(mountEvent);
         if (!mountEvent.defaultPrevented) {
-          focusFirst(removeLinks(getTabbableCandidates(container)), { select: true });
+          focusFirst$1(removeLinks(getTabbableCandidates(container)), { select: true });
           if (document.activeElement === previouslyFocusedElement) {
             focus(container);
           }
@@ -8504,7 +8905,7 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
       return () => {
         container.removeEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
         setTimeout(() => {
-          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS);
+          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS$1);
           container.addEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
           container.dispatchEvent(unmountEvent);
           if (!unmountEvent.defaultPrevented) {
@@ -8544,7 +8945,7 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { tabIndex: -1, ...scopeProps, ref: composedRefs, onKeyDown: handleKeyDown });
 });
 FocusScope.displayName = FOCUS_SCOPE_NAME;
-function focusFirst(candidates, { select = false } = {}) {
+function focusFirst$1(candidates, { select = false } = {}) {
   const previouslyFocusedElement = document.activeElement;
   for (const candidate of candidates) {
     focus(candidate, { select });
@@ -9596,11 +9997,11 @@ var Dialog = (props) => {
   );
 };
 Dialog.displayName = DIALOG_NAME;
-var TRIGGER_NAME = "DialogTrigger";
+var TRIGGER_NAME$1 = "DialogTrigger";
 var DialogTrigger = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...triggerProps } = props;
-    const context = useDialogContext(TRIGGER_NAME, __scopeDialog);
+    const context = useDialogContext(TRIGGER_NAME$1, __scopeDialog);
     const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.button,
@@ -9609,7 +10010,7 @@ var DialogTrigger = reactExports.forwardRef(
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
         "aria-controls": context.contentId,
-        "data-state": getState(context.open),
+        "data-state": getState$1(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
         onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -9617,7 +10018,7 @@ var DialogTrigger = reactExports.forwardRef(
     );
   }
 );
-DialogTrigger.displayName = TRIGGER_NAME;
+DialogTrigger.displayName = TRIGGER_NAME$1;
 var PORTAL_NAME = "DialogPortal";
 var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME, {
   forceMount: void 0
@@ -9649,7 +10050,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
       /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Primitive.div,
         {
-          "data-state": getState(context.open),
+          "data-state": getState$1(context.open),
           ...overlayProps,
           ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
@@ -9658,19 +10059,19 @@ var DialogOverlayImpl = reactExports.forwardRef(
     );
   }
 );
-var CONTENT_NAME = "DialogContent";
+var CONTENT_NAME$1 = "DialogContent";
 var DialogContent = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext(CONTENT_NAME, props.__scopeDialog);
+    const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
   }
 );
-DialogContent.displayName = CONTENT_NAME;
+DialogContent.displayName = CONTENT_NAME$1;
 var DialogContentModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
     reactExports.useEffect(() => {
@@ -9704,7 +10105,7 @@ var DialogContentModal = reactExports.forwardRef(
 );
 var DialogContentNonModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
     const hasInteractedOutsideRef = reactExports.useRef(false);
     const hasPointerDownOutsideRef = reactExports.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -9745,7 +10146,7 @@ var DialogContentNonModal = reactExports.forwardRef(
 var DialogContentImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME, __scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$1, __scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef);
     useFocusGuards();
@@ -9765,7 +10166,7 @@ var DialogContentImpl = reactExports.forwardRef(
               id: context.contentId,
               "aria-describedby": context.descriptionId,
               "aria-labelledby": context.titleId,
-              "data-state": getState(context.open),
+              "data-state": getState$1(context.open),
               ...contentProps,
               ref: composedRefs,
               onDismiss: () => context.onOpenChange(false)
@@ -9815,12 +10216,12 @@ var DialogClose = reactExports.forwardRef(
   }
 );
 DialogClose.displayName = CLOSE_NAME;
-function getState(open) {
+function getState$1(open) {
   return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-  contentName: CONTENT_NAME,
+  contentName: CONTENT_NAME$1,
   titleName: TITLE_NAME,
   docsSlug: "dialog"
 });
@@ -9852,11 +10253,13 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
   }, [MESSAGE, contentRef, descriptionId]);
   return null;
 };
-var Root = Dialog;
+var Root$1 = Dialog;
+var Trigger$1 = DialogTrigger;
 var Portal = DialogPortal;
 var Overlay = DialogOverlay;
-var Content = DialogContent;
+var Content$1 = DialogContent;
 var Title = DialogTitle;
+var Close = DialogClose;
 const useCommandPaletteStore = create((set) => ({
   open: false,
   openPalette: () => set({ open: true }),
@@ -9899,10 +10302,10 @@ function CommandPalette() {
   const q2 = query.toLowerCase();
   const filteredModels = installed.filter((m2) => m2.name.toLowerCase().includes(q2));
   const filteredActions = ACTIONS.filter((a) => a.label.toLowerCase().includes(q2));
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root, { open, onOpenChange: (v2) => !v2 && closePalette(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Portal, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$1, { open, onOpenChange: (v2) => !v2 && closePalette(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Portal, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { className: "fixed inset-0 bg-bg-base/60 z-50" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      Content,
+      Content$1,
       {
         "aria-describedby": void 0,
         className: "fixed top-[20%] left-1/2 -translate-x-1/2 w-[640px] max-h-[480px] bg-bg-elevated border border-border-strong rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col",
@@ -9967,31 +10370,68 @@ function CommandPalette() {
     )
   ] }) });
 }
+class ErrorBoundary extends React$2.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    console.error("[ErrorBoundary]", this.props.label ?? "Unnamed", error, info.componentStack);
+  }
+  handleReset = () => {
+    this.setState({ hasError: false, error: null });
+  };
+  render() {
+    if (this.state.hasError) {
+      if (this.props.fallback) return this.props.fallback;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-full p-8 text-center gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { size: 40, className: "text-red-400", "aria-hidden": "true" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary font-semibold text-lg", children: "Something went wrong" }),
+          this.props.label && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm mt-1", children: this.props.label }),
+          this.state.error && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-xs mt-2 font-mono max-w-md break-words", children: this.state.error.message })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: this.handleReset,
+            className: "px-4 py-2 text-sm bg-accent-500 hover:bg-accent-400 text-text-primary rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            children: "Try again"
+          }
+        )
+      ] });
+    }
+    return this.props.children;
+  }
+}
 function SystemHealth() {
   const { gpuTemp, vramUsed, vramTotal, tokensPerSec, activeModel } = useSystemStore();
   const [metrics, setMetrics] = reactExports.useState([]);
   reactExports.useEffect(() => {
     const newMetrics = [];
-    const tempStatus = gpuTemp > 85 ? "critical" : gpuTemp > 75 ? "warning" : "healthy";
+    const tempStatus = gpuTemp == null ? "healthy" : gpuTemp > 85 ? "critical" : gpuTemp > 75 ? "warning" : "healthy";
     newMetrics.push({
       name: "GPU Temperature",
       status: tempStatus,
-      value: `${gpuTemp}°C`,
+      value: gpuTemp != null ? `${gpuTemp}°C` : "N/A",
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Thermometer, { size: 16, "aria-hidden": "true" })
     });
-    const vramPercent = vramUsed / vramTotal * 100;
-    const vramStatus = vramPercent > 90 ? "critical" : vramPercent > 75 ? "warning" : "healthy";
+    const vramPercent = vramUsed != null && vramTotal != null && vramTotal > 0 ? vramUsed / vramTotal * 100 : null;
+    const vramStatus = vramPercent == null ? "healthy" : vramPercent > 90 ? "critical" : vramPercent > 75 ? "warning" : "healthy";
     newMetrics.push({
       name: "VRAM Usage",
       status: vramStatus,
-      value: `${vramUsed}/${vramTotal} GB (${Math.round(vramPercent)}%)`,
+      value: vramUsed != null && vramTotal != null && vramPercent != null ? `${vramUsed}/${vramTotal} GB (${Math.round(vramPercent)}%)` : "N/A",
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(HardDrive, { size: 16, "aria-hidden": "true" })
     });
-    const tokStatus = tokensPerSec < 10 ? "warning" : "healthy";
+    const tokStatus = tokensPerSec != null && tokensPerSec < 10 ? "warning" : "healthy";
     newMetrics.push({
       name: "Inference Speed",
       status: tokStatus,
-      value: `${tokensPerSec} tok/s`,
+      value: tokensPerSec != null ? `${tokensPerSec} tok/s` : "N/A",
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 16, "aria-hidden": "true" })
     });
     const modelStatus = activeModel ? "healthy" : "warning";
@@ -10393,6 +10833,832 @@ function Dashboard() {
     /* @__PURE__ */ jsxRuntimeExports.jsx(SystemPanel, {})
   ] });
 }
+function createCollection(name) {
+  const PROVIDER_NAME = name + "CollectionProvider";
+  const [createCollectionContext, createCollectionScope2] = createContextScope(PROVIDER_NAME);
+  const [CollectionProviderImpl, useCollectionContext] = createCollectionContext(
+    PROVIDER_NAME,
+    { collectionRef: { current: null }, itemMap: /* @__PURE__ */ new Map() }
+  );
+  const CollectionProvider = (props) => {
+    const { scope, children } = props;
+    const ref = React$2.useRef(null);
+    const itemMap = React$2.useRef(/* @__PURE__ */ new Map()).current;
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionProviderImpl, { scope, itemMap, collectionRef: ref, children });
+  };
+  CollectionProvider.displayName = PROVIDER_NAME;
+  const COLLECTION_SLOT_NAME = name + "CollectionSlot";
+  const CollectionSlotImpl = /* @__PURE__ */ createSlot(COLLECTION_SLOT_NAME);
+  const CollectionSlot = React$2.forwardRef(
+    (props, forwardedRef) => {
+      const { scope, children } = props;
+      const context = useCollectionContext(COLLECTION_SLOT_NAME, scope);
+      const composedRefs = useComposedRefs(forwardedRef, context.collectionRef);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionSlotImpl, { ref: composedRefs, children });
+    }
+  );
+  CollectionSlot.displayName = COLLECTION_SLOT_NAME;
+  const ITEM_SLOT_NAME = name + "CollectionItemSlot";
+  const ITEM_DATA_ATTR = "data-radix-collection-item";
+  const CollectionItemSlotImpl = /* @__PURE__ */ createSlot(ITEM_SLOT_NAME);
+  const CollectionItemSlot = React$2.forwardRef(
+    (props, forwardedRef) => {
+      const { scope, children, ...itemData } = props;
+      const ref = React$2.useRef(null);
+      const composedRefs = useComposedRefs(forwardedRef, ref);
+      const context = useCollectionContext(ITEM_SLOT_NAME, scope);
+      React$2.useEffect(() => {
+        context.itemMap.set(ref, { ref, ...itemData });
+        return () => void context.itemMap.delete(ref);
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionItemSlotImpl, { ...{ [ITEM_DATA_ATTR]: "" }, ref: composedRefs, children });
+    }
+  );
+  CollectionItemSlot.displayName = ITEM_SLOT_NAME;
+  function useCollection2(scope) {
+    const context = useCollectionContext(name + "CollectionConsumer", scope);
+    const getItems = React$2.useCallback(() => {
+      const collectionNode = context.collectionRef.current;
+      if (!collectionNode) return [];
+      const orderedNodes = Array.from(collectionNode.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
+      const items = Array.from(context.itemMap.values());
+      const orderedItems = items.sort(
+        (a, b) => orderedNodes.indexOf(a.ref.current) - orderedNodes.indexOf(b.ref.current)
+      );
+      return orderedItems;
+    }, [context.collectionRef, context.itemMap]);
+    return getItems;
+  }
+  return [
+    { Provider: CollectionProvider, Slot: CollectionSlot, ItemSlot: CollectionItemSlot },
+    useCollection2,
+    createCollectionScope2
+  ];
+}
+var DirectionContext = reactExports.createContext(void 0);
+function useDirection(localDir) {
+  const globalDir = reactExports.useContext(DirectionContext);
+  return localDir || globalDir || "ltr";
+}
+var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
+var EVENT_OPTIONS = { bubbles: false, cancelable: true };
+var GROUP_NAME = "RovingFocusGroup";
+var [Collection, useCollection, createCollectionScope] = createCollection(GROUP_NAME);
+var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope(
+  GROUP_NAME,
+  [createCollectionScope]
+);
+var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME);
+var RovingFocusGroup = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection.Provider, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection.Slot, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RovingFocusGroupImpl, { ...props, ref: forwardedRef }) }) });
+  }
+);
+RovingFocusGroup.displayName = GROUP_NAME;
+var RovingFocusGroupImpl = reactExports.forwardRef((props, forwardedRef) => {
+  const {
+    __scopeRovingFocusGroup,
+    orientation,
+    loop = false,
+    dir,
+    currentTabStopId: currentTabStopIdProp,
+    defaultCurrentTabStopId,
+    onCurrentTabStopIdChange,
+    onEntryFocus,
+    preventScrollOnEntryFocus = false,
+    ...groupProps
+  } = props;
+  const ref = reactExports.useRef(null);
+  const composedRefs = useComposedRefs(forwardedRef, ref);
+  const direction = useDirection(dir);
+  const [currentTabStopId, setCurrentTabStopId] = useControllableState({
+    prop: currentTabStopIdProp,
+    defaultProp: defaultCurrentTabStopId ?? null,
+    onChange: onCurrentTabStopIdChange,
+    caller: GROUP_NAME
+  });
+  const [isTabbingBackOut, setIsTabbingBackOut] = reactExports.useState(false);
+  const handleEntryFocus = useCallbackRef$1(onEntryFocus);
+  const getItems = useCollection(__scopeRovingFocusGroup);
+  const isClickFocusRef = reactExports.useRef(false);
+  const [focusableItemsCount, setFocusableItemsCount] = reactExports.useState(0);
+  reactExports.useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
+      return () => node.removeEventListener(ENTRY_FOCUS, handleEntryFocus);
+    }
+  }, [handleEntryFocus]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    RovingFocusProvider,
+    {
+      scope: __scopeRovingFocusGroup,
+      orientation,
+      dir: direction,
+      loop,
+      currentTabStopId,
+      onItemFocus: reactExports.useCallback(
+        (tabStopId) => setCurrentTabStopId(tabStopId),
+        [setCurrentTabStopId]
+      ),
+      onItemShiftTab: reactExports.useCallback(() => setIsTabbingBackOut(true), []),
+      onFocusableItemAdd: reactExports.useCallback(
+        () => setFocusableItemsCount((prevCount) => prevCount + 1),
+        []
+      ),
+      onFocusableItemRemove: reactExports.useCallback(
+        () => setFocusableItemsCount((prevCount) => prevCount - 1),
+        []
+      ),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive.div,
+        {
+          tabIndex: isTabbingBackOut || focusableItemsCount === 0 ? -1 : 0,
+          "data-orientation": orientation,
+          ...groupProps,
+          ref: composedRefs,
+          style: { outline: "none", ...props.style },
+          onMouseDown: composeEventHandlers(props.onMouseDown, () => {
+            isClickFocusRef.current = true;
+          }),
+          onFocus: composeEventHandlers(props.onFocus, (event) => {
+            const isKeyboardFocus = !isClickFocusRef.current;
+            if (event.target === event.currentTarget && isKeyboardFocus && !isTabbingBackOut) {
+              const entryFocusEvent = new CustomEvent(ENTRY_FOCUS, EVENT_OPTIONS);
+              event.currentTarget.dispatchEvent(entryFocusEvent);
+              if (!entryFocusEvent.defaultPrevented) {
+                const items = getItems().filter((item) => item.focusable);
+                const activeItem = items.find((item) => item.active);
+                const currentItem = items.find((item) => item.id === currentTabStopId);
+                const candidateItems = [activeItem, currentItem, ...items].filter(
+                  Boolean
+                );
+                const candidateNodes = candidateItems.map((item) => item.ref.current);
+                focusFirst(candidateNodes, preventScrollOnEntryFocus);
+              }
+            }
+            isClickFocusRef.current = false;
+          }),
+          onBlur: composeEventHandlers(props.onBlur, () => setIsTabbingBackOut(false))
+        }
+      )
+    }
+  );
+});
+var ITEM_NAME$1 = "RovingFocusGroupItem";
+var RovingFocusGroupItem = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRovingFocusGroup,
+      focusable = true,
+      active = false,
+      tabStopId,
+      children,
+      ...itemProps
+    } = props;
+    const autoId = useId();
+    const id2 = tabStopId || autoId;
+    const context = useRovingFocusContext(ITEM_NAME$1, __scopeRovingFocusGroup);
+    const isCurrentTabStop = context.currentTabStopId === id2;
+    const getItems = useCollection(__scopeRovingFocusGroup);
+    const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
+    reactExports.useEffect(() => {
+      if (focusable) {
+        onFocusableItemAdd();
+        return () => onFocusableItemRemove();
+      }
+    }, [focusable, onFocusableItemAdd, onFocusableItemRemove]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Collection.ItemSlot,
+      {
+        scope: __scopeRovingFocusGroup,
+        id: id2,
+        focusable,
+        active,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Primitive.span,
+          {
+            tabIndex: isCurrentTabStop ? 0 : -1,
+            "data-orientation": context.orientation,
+            ...itemProps,
+            ref: forwardedRef,
+            onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
+              if (!focusable) event.preventDefault();
+              else context.onItemFocus(id2);
+            }),
+            onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id2)),
+            onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+              if (event.key === "Tab" && event.shiftKey) {
+                context.onItemShiftTab();
+                return;
+              }
+              if (event.target !== event.currentTarget) return;
+              const focusIntent = getFocusIntent(event, context.orientation, context.dir);
+              if (focusIntent !== void 0) {
+                if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+                event.preventDefault();
+                const items = getItems().filter((item) => item.focusable);
+                let candidateNodes = items.map((item) => item.ref.current);
+                if (focusIntent === "last") candidateNodes.reverse();
+                else if (focusIntent === "prev" || focusIntent === "next") {
+                  if (focusIntent === "prev") candidateNodes.reverse();
+                  const currentIndex = candidateNodes.indexOf(event.currentTarget);
+                  candidateNodes = context.loop ? wrapArray(candidateNodes, currentIndex + 1) : candidateNodes.slice(currentIndex + 1);
+                }
+                setTimeout(() => focusFirst(candidateNodes));
+              }
+            }),
+            children: typeof children === "function" ? children({ isCurrentTabStop, hasTabStop: currentTabStopId != null }) : children
+          }
+        )
+      }
+    );
+  }
+);
+RovingFocusGroupItem.displayName = ITEM_NAME$1;
+var MAP_KEY_TO_FOCUS_INTENT = {
+  ArrowLeft: "prev",
+  ArrowUp: "prev",
+  ArrowRight: "next",
+  ArrowDown: "next",
+  PageUp: "first",
+  Home: "first",
+  PageDown: "last",
+  End: "last"
+};
+function getDirectionAwareKey(key, dir) {
+  if (dir !== "rtl") return key;
+  return key === "ArrowLeft" ? "ArrowRight" : key === "ArrowRight" ? "ArrowLeft" : key;
+}
+function getFocusIntent(event, orientation, dir) {
+  const key = getDirectionAwareKey(event.key, dir);
+  if (orientation === "vertical" && ["ArrowLeft", "ArrowRight"].includes(key)) return void 0;
+  if (orientation === "horizontal" && ["ArrowUp", "ArrowDown"].includes(key)) return void 0;
+  return MAP_KEY_TO_FOCUS_INTENT[key];
+}
+function focusFirst(candidates, preventScroll = false) {
+  const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
+  for (const candidate of candidates) {
+    if (candidate === PREVIOUSLY_FOCUSED_ELEMENT) return;
+    candidate.focus({ preventScroll });
+    if (document.activeElement !== PREVIOUSLY_FOCUSED_ELEMENT) return;
+  }
+}
+function wrapArray(array, startIndex) {
+  return array.map((_, index) => array[(startIndex + index) % array.length]);
+}
+var Root = RovingFocusGroup;
+var Item = RovingFocusGroupItem;
+var TABS_NAME = "Tabs";
+var [createTabsContext] = createContextScope(TABS_NAME, [
+  createRovingFocusGroupScope
+]);
+var useRovingFocusGroupScope$1 = createRovingFocusGroupScope();
+var [TabsProvider, useTabsContext] = createTabsContext(TABS_NAME);
+var Tabs = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeTabs,
+      value: valueProp,
+      onValueChange,
+      defaultValue,
+      orientation = "horizontal",
+      dir,
+      activationMode = "automatic",
+      ...tabsProps
+    } = props;
+    const direction = useDirection(dir);
+    const [value, setValue] = useControllableState({
+      prop: valueProp,
+      onChange: onValueChange,
+      defaultProp: defaultValue ?? "",
+      caller: TABS_NAME
+    });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      TabsProvider,
+      {
+        scope: __scopeTabs,
+        baseId: useId(),
+        value,
+        onValueChange: setValue,
+        orientation,
+        dir: direction,
+        activationMode,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Primitive.div,
+          {
+            dir: direction,
+            "data-orientation": orientation,
+            ...tabsProps,
+            ref: forwardedRef
+          }
+        )
+      }
+    );
+  }
+);
+Tabs.displayName = TABS_NAME;
+var TAB_LIST_NAME = "TabsList";
+var TabsList = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeTabs, loop = true, ...listProps } = props;
+    const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
+    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeTabs);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Root,
+      {
+        asChild: true,
+        ...rovingFocusGroupScope,
+        orientation: context.orientation,
+        dir: context.dir,
+        loop,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Primitive.div,
+          {
+            role: "tablist",
+            "aria-orientation": context.orientation,
+            ...listProps,
+            ref: forwardedRef
+          }
+        )
+      }
+    );
+  }
+);
+TabsList.displayName = TAB_LIST_NAME;
+var TRIGGER_NAME = "TabsTrigger";
+var TabsTrigger = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeTabs, value, disabled = false, ...triggerProps } = props;
+    const context = useTabsContext(TRIGGER_NAME, __scopeTabs);
+    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeTabs);
+    const triggerId = makeTriggerId(context.baseId, value);
+    const contentId = makeContentId(context.baseId, value);
+    const isSelected = value === context.value;
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Item,
+      {
+        asChild: true,
+        ...rovingFocusGroupScope,
+        focusable: !disabled,
+        active: isSelected,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Primitive.button,
+          {
+            type: "button",
+            role: "tab",
+            "aria-selected": isSelected,
+            "aria-controls": contentId,
+            "data-state": isSelected ? "active" : "inactive",
+            "data-disabled": disabled ? "" : void 0,
+            disabled,
+            id: triggerId,
+            ...triggerProps,
+            ref: forwardedRef,
+            onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
+              if (!disabled && event.button === 0 && event.ctrlKey === false) {
+                context.onValueChange(value);
+              } else {
+                event.preventDefault();
+              }
+            }),
+            onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+              if ([" ", "Enter"].includes(event.key)) context.onValueChange(value);
+            }),
+            onFocus: composeEventHandlers(props.onFocus, () => {
+              const isAutomaticActivation = context.activationMode !== "manual";
+              if (!isSelected && !disabled && isAutomaticActivation) {
+                context.onValueChange(value);
+              }
+            })
+          }
+        )
+      }
+    );
+  }
+);
+TabsTrigger.displayName = TRIGGER_NAME;
+var CONTENT_NAME = "TabsContent";
+var TabsContent = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeTabs, value, forceMount, children, ...contentProps } = props;
+    const context = useTabsContext(CONTENT_NAME, __scopeTabs);
+    const triggerId = makeTriggerId(context.baseId, value);
+    const contentId = makeContentId(context.baseId, value);
+    const isSelected = value === context.value;
+    const isMountAnimationPreventedRef = reactExports.useRef(isSelected);
+    reactExports.useEffect(() => {
+      const rAF = requestAnimationFrame(() => isMountAnimationPreventedRef.current = false);
+      return () => cancelAnimationFrame(rAF);
+    }, []);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || isSelected, children: ({ present }) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.div,
+      {
+        "data-state": isSelected ? "active" : "inactive",
+        "data-orientation": context.orientation,
+        role: "tabpanel",
+        "aria-labelledby": triggerId,
+        hidden: !present,
+        id: contentId,
+        tabIndex: 0,
+        ...contentProps,
+        ref: forwardedRef,
+        style: {
+          ...props.style,
+          animationDuration: isMountAnimationPreventedRef.current ? "0s" : void 0
+        },
+        children: present && children
+      }
+    ) });
+  }
+);
+TabsContent.displayName = CONTENT_NAME;
+function makeTriggerId(baseId, value) {
+  return `${baseId}-trigger-${value}`;
+}
+function makeContentId(baseId, value) {
+  return `${baseId}-content-${value}`;
+}
+var Root2$1 = Tabs;
+var List = TabsList;
+var Trigger = TabsTrigger;
+var Content = TabsContent;
+function ModelCard({
+  id: id2,
+  name,
+  params,
+  arch,
+  format,
+  description,
+  downloadStatus,
+  onDownload
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4 flex flex-col gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-accent-500/10 text-accent-400 text-xs px-2 py-0.5 rounded font-mono", children: params }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-bg-surface-3 text-text-secondary text-xs px-2 py-0.5 rounded", children: arch }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-text-primary", children: name })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-secondary line-clamp-2", children: description }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-bg-surface-3 text-text-secondary text-xs px-2 py-0.5 rounded", children: format }),
+      downloadStatus === "idle" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          className: "bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          onClick: () => onDownload(id2),
+          "aria-label": `Download ${name}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14, "aria-hidden": "true" }),
+            "Download"
+          ]
+        }
+      ),
+      downloadStatus === "downloading" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          className: "border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 cursor-not-allowed opacity-70",
+          disabled: true,
+          "aria-label": `Downloading ${name}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin", "aria-hidden": "true" }),
+            "Downloading…"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { role: "status", "aria-live": "polite", "aria-atomic": "true", className: "sr-only", children: downloadStatus === "done" ? `${name} downloaded` : "" }),
+      downloadStatus === "done" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, className: "text-green-400", "aria-hidden": "true" }),
+        "Downloaded"
+      ] }),
+      downloadStatus === "error" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          className: "border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          onClick: () => onDownload(id2),
+          "aria-label": `Retry downloading ${name}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { size: 14, className: "text-red-400", "aria-hidden": "true" }),
+            "Retry"
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+const MODEL_MANAGER_BASE_URL = "http://localhost:8002";
+function useModelManager() {
+  const [loading, setLoading] = reactExports.useState(false);
+  const [error, setError] = reactExports.useState(null);
+  const checkHealth = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/health`);
+      if (!response.ok) throw new Error(`Health check failed: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  const getMirrorInfo = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/mirror`);
+      if (!response.ok) throw new Error(`Failed to get mirror info: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  const getSwitchMirrorInstructions = reactExports.useCallback(
+    async (mirrorName) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/mirror/switch?mirror_name=${mirrorName}`, {
+          method: "POST"
+        });
+        if (!response.ok) throw new Error(`Failed to switch mirror: ${response.statusText}`);
+        return await response.json();
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        setError(message);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+  const listModels = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models`);
+      if (!response.ok) throw new Error(`Failed to list models: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  const downloadModel = reactExports.useCallback(async (modelId) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/${modelId}/download`, {
+        method: "POST"
+      });
+      if (!response.ok) throw new Error(`Failed to download model: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  const setActiveModel = reactExports.useCallback(async (modelId) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/${modelId}/set-active`, {
+        method: "POST"
+      });
+      if (!response.ok) throw new Error(`Failed to set active model: ${response.statusText}`);
+      return await response.json();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  return {
+    loading,
+    error,
+    checkHealth,
+    getMirrorInfo,
+    getSwitchMirrorInstructions,
+    listModels,
+    downloadModel,
+    setActiveModel
+  };
+}
+const STAFF_PICKS = [
+  {
+    id: "meta-llama/Llama-3.1-8B-Instruct",
+    name: "Llama 3.1 8B Instruct",
+    params: "8B",
+    arch: "llama",
+    format: "GGUF",
+    description: "Meta's latest instruction-tuned Llama model, excellent for coding and chat"
+  },
+  {
+    id: "mistralai/Mistral-7B-Instruct-v0.3",
+    name: "Mistral 7B Instruct v0.3",
+    params: "7B",
+    arch: "mistral",
+    format: "GGUF",
+    description: "Fast and capable instruction model from Mistral AI"
+  },
+  {
+    id: "Qwen/Qwen2.5-Coder-7B-Instruct",
+    name: "Qwen 2.5 Coder 7B",
+    params: "7B",
+    arch: "qwen2",
+    format: "GGUF",
+    description: "Specialized coding model with strong code generation"
+  },
+  {
+    id: "microsoft/Phi-3.5-mini-instruct",
+    name: "Phi-3.5 Mini Instruct",
+    params: "3.8B",
+    arch: "phi3",
+    format: "GGUF",
+    description: "Microsoft's compact model with surprisingly strong reasoning"
+  },
+  {
+    id: "google/gemma-2-9b-it",
+    name: "Gemma 2 9B Instruct",
+    params: "9B",
+    arch: "gemma2",
+    format: "GGUF",
+    description: "Google's latest efficient instruction model"
+  },
+  {
+    id: "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
+    name: "DeepSeek Coder V2 Lite",
+    params: "16B",
+    arch: "deepseek",
+    format: "GGUF",
+    description: "Powerful coding model with strong algorithmic reasoning"
+  },
+  {
+    id: "NousResearch/Hermes-3-Llama-3.1-8B",
+    name: "Hermes 3 Llama 3.1 8B",
+    params: "8B",
+    arch: "llama",
+    format: "GGUF",
+    description: "Fine-tuned for function calling and agentic tasks"
+  },
+  {
+    id: "codellama/CodeLlama-13b-Instruct-hf",
+    name: "Code Llama 13B Instruct",
+    params: "13B",
+    arch: "llama",
+    format: "GGUF",
+    description: "Meta's specialized code generation model"
+  }
+];
+function HuggingFacePanel() {
+  const { checkHealth, listModels, downloadModel } = useModelManager();
+  const [searchQuery, setSearchQuery] = reactExports.useState("");
+  const [debouncedQuery, setDebouncedQuery] = reactExports.useState("");
+  const [downloadStatuses, setDownloadStatuses] = reactExports.useState(/* @__PURE__ */ new Map());
+  const [isOffline, setIsOffline] = reactExports.useState(false);
+  const debounceRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    checkHealth().then((result) => {
+      setIsOffline(result === null);
+    });
+  }, [checkHealth]);
+  reactExports.useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchQuery]);
+  reactExports.useEffect(() => {
+    const poll = async () => {
+      const result = await listModels();
+      if (!result) return;
+      setDownloadStatuses((prev) => {
+        const next = new Map(prev);
+        result.cached_models.forEach((m2) => {
+          if (m2.cached && prev.get(m2.id) !== "done") {
+            next.set(m2.id, "done");
+          }
+        });
+        return next;
+      });
+    };
+    void poll();
+    const id2 = setInterval(poll, 3e3);
+    return () => clearInterval(id2);
+  }, [listModels]);
+  const handleDownload = reactExports.useCallback(
+    async (modelId) => {
+      setDownloadStatuses((prev) => new Map(prev).set(modelId, "downloading"));
+      try {
+        const result = await downloadModel(modelId);
+        if (!result) {
+          setDownloadStatuses((prev) => new Map(prev).set(modelId, "error"));
+        }
+      } catch {
+        setDownloadStatuses((prev) => new Map(prev).set(modelId, "error"));
+      }
+    },
+    [downloadModel]
+  );
+  const showSearchResults = debouncedQuery.trim().length > 0;
+  const displayedModels = showSearchResults ? STAFF_PICKS.filter(
+    (m2) => m2.name.toLowerCase().includes(debouncedQuery.toLowerCase()) || m2.id.toLowerCase().includes(debouncedQuery.toLowerCase()) || m2.arch.toLowerCase().includes(debouncedQuery.toLowerCase())
+  ) : STAFF_PICKS;
+  const activeDownloads = Array.from(downloadStatuses.entries()).filter(([, s]) => s === "downloading");
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex flex-col gap-6 max-w-3xl", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-semibold text-text-primary", children: "Download from HuggingFace" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-secondary mt-1", children: "Models are downloaded via the local Model Manager service" })
+    ] }),
+    isOffline && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        role: "alert",
+        className: "bg-yellow-400/10 border border-yellow-400/30 rounded-md px-4 py-3 flex items-center gap-3",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { size: 16, className: "text-yellow-400 flex-shrink-0", "aria-hidden": "true" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-yellow-400", children: "Model Manager service is offline (port 8002). Start it to enable HuggingFace downloads." })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Search,
+        {
+          size: 16,
+          className: "absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none",
+          "aria-hidden": "true"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "text",
+          placeholder: "Search HuggingFace models (e.g. mistral, llama, gemma)...",
+          value: searchQuery,
+          onChange: (e) => setSearchQuery(e.target.value),
+          className: "w-full bg-bg-surface-2 border border-border-default rounded-md pl-9 pr-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500",
+          "aria-label": "Search HuggingFace models"
+        }
+      )
+    ] }),
+    activeDownloads.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3", children: "Active Downloads" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "flex flex-col gap-2", children: activeDownloads.map(([modelId]) => {
+        const model = STAFF_PICKS.find((m2) => m2.id === modelId);
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "li",
+          {
+            className: "text-sm text-text-secondary flex items-center gap-2 bg-bg-surface-2 border border-border-default rounded-md px-4 py-2",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-2 h-2 rounded-full bg-accent-500 animate-pulse flex-shrink-0", "aria-hidden": "true" }),
+              model ? model.name : modelId,
+              " — downloading"
+            ]
+          },
+          modelId
+        );
+      }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3", children: showSearchResults ? "Search results" : "Staff Picks" }),
+      displayedModels.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-text-muted", children: [
+        "No models found for “",
+        debouncedQuery,
+        "”"
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { role: "list", className: "flex flex-col gap-3 list-none p-0 m-0", children: displayedModels.map((model) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ModelCard,
+        {
+          ...model,
+          downloadStatus: downloadStatuses.get(model.id) ?? "idle",
+          onDownload: handleDownload
+        }
+      ) }, model.id)) })
+    ] })
+  ] });
+}
 function formatSize(bytes) {
   return (bytes / 1e9).toFixed(1) + " GB";
 }
@@ -10413,43 +11679,54 @@ function EmptySelection() {
 function ModelDetail({ model }) {
   const activeModel = useSystemStore((s) => s.activeModel);
   const isActive = model.name === activeModel;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 max-w-xl", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3 mb-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-semibold text-text-primary", children: model.name }),
-        isActive && /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 20, className: "text-green-500 mt-0.5", "aria-label": "Active model" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6 max-w-2xl", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-3 mb-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "h2",
+          {
+            className: "text-2xl font-semibold text-text-primary break-words",
+            title: model.name,
+            children: model.name
+          }
+        ) }),
+        isActive && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 24, className: "text-green-500", role: "img", "aria-label": "Active model" }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-text-muted", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-text-muted", children: [
         formatSize(model.size),
-        " · Modified ",
+        " • Modified ",
         formatDate(model.modified_at)
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 mb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-0.5", children: "Digest" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-text-primary font-mono truncate", children: [
-          model.digest.slice(0, 12),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-4 gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold", children: "Digest" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-text-primary font-mono break-all flex-1", title: model.digest, children: [
+          model.digest.slice(0, 16),
           "..."
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-0.5", children: "Size" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-primary font-mono", children: formatSize(model.size) })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold", children: "Size" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-text-primary font-mono", children: formatSize(model.size) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-0.5", children: "Status" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-primary font-mono", children: isActive ? "Active" : "Installed" })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold", children: "Status" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `w-2 h-2 rounded-full ${isActive ? "bg-green-500" : "bg-yellow-500"}`, "aria-hidden": "true" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-text-primary font-mono", children: isActive ? "Active" : "Installed" })
+        ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-0.5", children: "Modified" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-primary font-mono", children: formatDate(model.modified_at) })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold", children: "Modified" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-text-primary font-mono", children: formatDate(model.modified_at) })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 flex-wrap", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
+          type: "button",
           className: "bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
           onClick: () => useSystemStore.setState({ activeModel: model.name }),
           "aria-label": `Set ${model.name} as active`,
@@ -10462,7 +11739,9 @@ function ModelDetail({ model }) {
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
-          className: "border border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-surface-3 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors",
+          type: "button",
+          disabled: true,
+          className: "border border-border-default text-text-secondary text-sm font-medium px-4 py-2 rounded-md cursor-not-allowed opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors",
           "aria-label": `Fine-tune ${model.name}`,
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 14, "aria-hidden": "true" }),
@@ -10473,7 +11752,9 @@ function ModelDetail({ model }) {
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
-          className: "border border-border-default text-red-400 hover:text-red-300 hover:border-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors",
+          type: "button",
+          disabled: true,
+          className: "border border-border-default text-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-not-allowed opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors",
           "aria-label": `Delete ${model.name}`,
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" }),
@@ -10489,36 +11770,71 @@ function Models() {
   const activeModel = useSystemStore((s) => s.activeModel);
   const ollamaOnline = useSystemStore((s) => s.ollamaOnline);
   const selectedModel = installed.find((m2) => m2.name === selected) ?? null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-testid": "screen-models", className: "flex h-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-[200px] shrink-0 bg-bg-surface-1 border-r border-border-default overflow-y-auto flex flex-col", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide", children: "Installed" }),
-      installed.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "px-4 py-2 text-xs text-text-muted", children: "No models installed" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { role: "listbox", "aria-label": "Installed models", children: installed.map((model) => {
-        const isSelected = model.name === selected;
-        const isActive = model.name === activeModel;
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            role: "option",
-            "aria-selected": isSelected,
-            className: `w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${isSelected ? "bg-accent-500/10 text-text-primary border-l-2 border-accent-500" : "text-text-secondary hover:bg-bg-surface-3"}`,
-            onClick: () => setSelected(model.name),
-            children: [
-              isActive && /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, className: "text-green-500 flex-shrink-0", "aria-hidden": "true" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: model.name })
-            ]
-          }
-        ) }, model.name);
-      }) }),
-      !ollamaOnline && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-2 text-xs text-text-muted flex items-center gap-1.5", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { size: 12, "aria-hidden": "true" }),
-        "Ollama offline"
-      ] })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-testid": "screen-models", className: "flex flex-col h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "installed", className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      List,
+      {
+        className: "flex shrink-0 border-b border-border-default bg-bg-surface-1 px-4 gap-1",
+        "aria-label": "Models navigation",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Trigger,
+            {
+              value: "installed",
+              className: "px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px",
+              children: [
+                "Installed (",
+                installed.length,
+                ")"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Trigger,
+            {
+              value: "download",
+              className: "px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px",
+              children: "Download from HuggingFace"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "installed", className: "flex flex-1 overflow-hidden", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-[200px] shrink-0 bg-bg-surface-1 border-r border-border-default overflow-y-auto flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide", children: "Installed" }),
+        installed.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "px-4 py-2 text-xs text-text-muted", children: "No models installed" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { role: "list", "aria-label": "Installed models", children: installed.map((model) => {
+          const isSelected = model.name === selected;
+          const isActive = model.name === activeModel;
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              "aria-pressed": isSelected,
+              "aria-label": isActive ? `${model.name} (active)` : model.name,
+              title: model.name,
+              className: `w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${isSelected ? "bg-accent-500/10 text-text-primary border-l-2 border-accent-500" : "text-text-secondary hover:bg-bg-surface-3"}`,
+              onClick: () => setSelected(model.name),
+              children: [
+                isActive && /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, className: "text-green-500 flex-shrink-0", "aria-hidden": "true" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate flex-1", title: model.name, children: model.name })
+              ]
+            }
+          ) }, model.name);
+        }) }),
+        !ollamaOnline && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-2 text-xs text-text-muted flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { size: 12, "aria-hidden": "true" }),
+          "Ollama offline"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-bg-base overflow-auto", children: selectedModel ? /* @__PURE__ */ jsxRuntimeExports.jsx(ModelDetail, { model: selectedModel }) : /* @__PURE__ */ jsxRuntimeExports.jsx(EmptySelection, {}) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-bg-base overflow-auto", children: selectedModel ? /* @__PURE__ */ jsxRuntimeExports.jsx(ModelDetail, { model: selectedModel }) : /* @__PURE__ */ jsxRuntimeExports.jsx(EmptySelection, {}) })
-  ] });
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "download", className: "flex-1 overflow-auto bg-bg-base", children: /* @__PURE__ */ jsxRuntimeExports.jsx(HuggingFacePanel, {}) })
+  ] }) });
 }
 const useChatStore = create((set) => ({
   messages: [],
+  knowledgeContext: "",
   addMessage: (msg) => set((state) => ({ messages: [...state.messages, msg] })),
   appendToLast: (chunk) => set((state) => {
     const messages = [...state.messages];
@@ -10534,6 +11850,7 @@ const useChatStore = create((set) => ({
     messages[messages.length - 1] = { ...last, streaming };
     return { messages };
   }),
+  setKnowledgeContext: (ctx) => set({ knowledgeContext: ctx }),
   clear: () => set({ messages: [] })
 }));
 const useAgentStore = create((set) => ({
@@ -11454,7 +12771,7 @@ class TrainingServiceClient {
     this.baseUrl = baseUrl || void 0 || "http://localhost:8001";
   }
   /**
-   * Log a completion event (code accepted, rejected, or edited)
+   * Log a completion event with full KPI envelope (§3.2 completion events)
    */
   async logCompletionEvent(payload) {
     try {
@@ -11471,6 +12788,23 @@ class TrainingServiceClient {
     } catch (error) {
       console.error("[Training] Error logging completion event:", error);
       return { event_id: "error", created_at: (/* @__PURE__ */ new Date()).toISOString() };
+    }
+  }
+  /**
+   * Log an inference event with full KPI envelope (§3.2 inference events)
+   * Fires-and-forgets — never throws, never blocks the UI.
+   */
+  async logInferenceEvent(payload) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/training/event`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, event_type: payload.event_name })
+      });
+      if (!response.ok) {
+        console.warn(`[Telemetry] inference event ${payload.event_name} → ${response.status}`);
+      }
+    } catch {
     }
   }
   /**
@@ -11580,6 +12914,13 @@ function useTrainingService() {
     },
     [client2, isServiceAvailable]
   );
+  const logInference = reactExports.useCallback(
+    async (payload) => {
+      if (!isServiceAvailable) return;
+      await client2.logInferenceEvent(payload);
+    },
+    [client2, isServiceAvailable]
+  );
   const getStatus = reactExports.useCallback(async () => {
     if (!isServiceAvailable) return null;
     const status = await client2.getStatus();
@@ -11595,6 +12936,7 @@ function useTrainingService() {
   return {
     // Methods
     logCompletion,
+    logInference,
     getStatus,
     getStats,
     // State
@@ -11602,6 +12944,38 @@ function useTrainingService() {
     isTraining: trainingStatus?.is_training ?? false,
     trainingStatus,
     eventCount
+  };
+}
+const TELEMETRY_VERSION = "1.0";
+function getOrCreateSessionId() {
+  const KEY = "sc_session_id";
+  const existing = sessionStorage.getItem(KEY);
+  if (existing) return existing;
+  const id2 = crypto.randomUUID();
+  sessionStorage.setItem(KEY, id2);
+  return id2;
+}
+function getInstallationIdHash() {
+  const KEY = "sc_installation_id_hash";
+  const existing = localStorage.getItem(KEY);
+  if (existing) return existing;
+  const id2 = crypto.randomUUID();
+  localStorage.setItem(KEY, id2);
+  return id2;
+}
+function buildEnvelope(eventName, modelId, runtimeBackend = "ollama", projectIdHash = "local", correlationId) {
+  return {
+    event_name: eventName,
+    event_version: TELEMETRY_VERSION,
+    timestamp_utc: (/* @__PURE__ */ new Date()).toISOString(),
+    session_id: getOrCreateSessionId(),
+    installation_id_hash: getInstallationIdHash(),
+    project_id_hash: projectIdHash,
+    client_version: "0.8.0",
+    platform: navigator.platform || "unknown",
+    runtime_backend: runtimeBackend,
+    model_id: modelId,
+    correlation_id: correlationId ?? crypto.randomUUID()
   };
 }
 function MessageBubble({ message }) {
@@ -11625,7 +12999,7 @@ function Chat() {
   const activeModel = useSystemStore((s) => s.activeModel);
   const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore();
   const { isProcessing } = useVoiceStore();
-  const { logCompletion: logTrainingCompletion, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService();
+  const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService();
   const bottomRef = reactExports.useRef(null);
   const lastUserPromptRef = reactExports.useRef("");
   reactExports.useEffect(() => {
@@ -11652,23 +13026,72 @@ function Chat() {
     setIsStreaming(true);
     const model = activeModel || "llama3.1:8b";
     const apiMessages = [...messages, userMsg].map((m2) => ({ role: m2.role, content: m2.content }));
+    const correlationId = crypto.randomUUID();
+    const inferenceStart = performance.now();
+    let firstTokenTime = null;
+    let chunkCount = 0;
+    let totalChars = 0;
+    void logInference({
+      ...buildEnvelope("inference_request_started", model, "ollama", "local", correlationId)
+    });
     try {
       for await (const chunk of streamChat(model, apiMessages)) {
+        if (chunkCount === 0) {
+          firstTokenTime = performance.now();
+          const firstTokenLatencyMs = firstTokenTime - inferenceStart;
+          void logInference({
+            ...buildEnvelope("inference_first_token_emitted", model, "ollama", "local", correlationId),
+            first_token_latency_ms: Math.round(firstTokenLatencyMs)
+          });
+          const lastMessage2 = useChatStore.getState().messages.at(-1);
+          if (lastMessage2 && lastUserPromptRef.current && isTrainingServiceAvailable) {
+            void logTrainingCompletion({
+              ...buildEnvelope("completion_suggested", model, "ollama", "local", correlationId),
+              prompt: lastUserPromptRef.current,
+              completion: chunk,
+              event_type: "completion_suggested",
+              language: "text",
+              completion_type: "chat",
+              accepted_boolean: void 0
+              // not yet known
+            });
+          }
+        }
+        chunkCount++;
+        totalChars += chunk.length;
         appendToLast(chunk);
       }
+      const totalMs = performance.now() - inferenceStart;
+      const estimatedTokens = Math.round(totalChars / 4);
+      const tokensPerSecond = totalMs > 0 ? estimatedTokens / totalMs * 1e3 : 0;
+      void logInference({
+        ...buildEnvelope("inference_request_completed", model, "ollama", "local", correlationId),
+        completion_tokens: estimatedTokens,
+        tokens_per_second: Math.round(tokensPerSecond * 10) / 10,
+        first_token_latency_ms: firstTokenTime != null ? Math.round(firstTokenTime - inferenceStart) : void 0
+      });
       const lastMessage = useChatStore.getState().messages.at(-1);
       if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
         try {
           await logTrainingCompletion({
+            ...buildEnvelope("completion_accepted", model, "ollama", "local", correlationId),
             prompt: lastUserPromptRef.current,
             completion: lastMessage.content,
             event_type: "completion_accepted",
-            language: "text"
+            language: "text",
+            completion_type: "chat",
+            suggestion_length_tokens: estimatedTokens,
+            accepted_boolean: true
           });
         } catch (err) {
           console.error("Failed to log training completion:", err);
         }
       }
+    } catch (err) {
+      void logInference({
+        ...buildEnvelope("inference_request_failed", model, "ollama", "local", correlationId),
+        error_message: err instanceof Error ? err.message : String(err)
+      });
     } finally {
       setLastStreaming(false);
       setIsStreaming(false);
@@ -12218,6 +13641,411 @@ function Federation() {
     ] })
   ] });
 }
+function useSize(element) {
+  const [size, setSize] = reactExports.useState(void 0);
+  useLayoutEffect2(() => {
+    if (element) {
+      setSize({ width: element.offsetWidth, height: element.offsetHeight });
+      const resizeObserver = new ResizeObserver((entries) => {
+        if (!Array.isArray(entries)) {
+          return;
+        }
+        if (!entries.length) {
+          return;
+        }
+        const entry = entries[0];
+        let width;
+        let height;
+        if ("borderBoxSize" in entry) {
+          const borderSizeEntry = entry["borderBoxSize"];
+          const borderSize = Array.isArray(borderSizeEntry) ? borderSizeEntry[0] : borderSizeEntry;
+          width = borderSize["inlineSize"];
+          height = borderSize["blockSize"];
+        } else {
+          width = element.offsetWidth;
+          height = element.offsetHeight;
+        }
+        setSize({ width, height });
+      });
+      resizeObserver.observe(element, { box: "border-box" });
+      return () => resizeObserver.unobserve(element);
+    } else {
+      setSize(void 0);
+    }
+  }, [element]);
+  return size;
+}
+function usePrevious(value) {
+  const ref = reactExports.useRef({ value, previous: value });
+  return reactExports.useMemo(() => {
+    if (ref.current.value !== value) {
+      ref.current.previous = ref.current.value;
+      ref.current.value = value;
+    }
+    return ref.current.previous;
+  }, [value]);
+}
+var RADIO_NAME = "Radio";
+var [createRadioContext, createRadioScope] = createContextScope(RADIO_NAME);
+var [RadioProvider, useRadioContext] = createRadioContext(RADIO_NAME);
+var Radio = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadio,
+      name,
+      checked = false,
+      required,
+      disabled,
+      value = "on",
+      onCheck,
+      form,
+      ...radioProps
+    } = props;
+    const [button, setButton] = reactExports.useState(null);
+    const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+    const hasConsumerStoppedPropagationRef = reactExports.useRef(false);
+    const isFormControl = button ? form || !!button.closest("form") : true;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(RadioProvider, { scope: __scopeRadio, checked, disabled, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive.button,
+        {
+          type: "button",
+          role: "radio",
+          "aria-checked": checked,
+          "data-state": getState(checked),
+          "data-disabled": disabled ? "" : void 0,
+          disabled,
+          value,
+          ...radioProps,
+          ref: composedRefs,
+          onClick: composeEventHandlers(props.onClick, (event) => {
+            if (!checked) onCheck?.();
+            if (isFormControl) {
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+            }
+          })
+        }
+      ),
+      isFormControl && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        RadioBubbleInput,
+        {
+          control: button,
+          bubbles: !hasConsumerStoppedPropagationRef.current,
+          name,
+          value,
+          checked,
+          required,
+          disabled,
+          form,
+          style: { transform: "translateX(-100%)" }
+        }
+      )
+    ] });
+  }
+);
+Radio.displayName = RADIO_NAME;
+var INDICATOR_NAME = "RadioIndicator";
+var RadioIndicator = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadio, forceMount, ...indicatorProps } = props;
+    const context = useRadioContext(INDICATOR_NAME, __scopeRadio);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.span,
+      {
+        "data-state": getState(context.checked),
+        "data-disabled": context.disabled ? "" : void 0,
+        ...indicatorProps,
+        ref: forwardedRef
+      }
+    ) });
+  }
+);
+RadioIndicator.displayName = INDICATOR_NAME;
+var BUBBLE_INPUT_NAME = "RadioBubbleInput";
+var RadioBubbleInput = reactExports.forwardRef(
+  ({
+    __scopeRadio,
+    control,
+    checked,
+    bubbles = true,
+    ...props
+  }, forwardedRef) => {
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(ref, forwardedRef);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    reactExports.useEffect(() => {
+      const input = ref.current;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        setChecked.call(input, checked);
+        input.dispatchEvent(event);
+      }
+    }, [prevChecked, checked, bubbles]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.input,
+      {
+        type: "radio",
+        "aria-hidden": true,
+        defaultChecked: checked,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0
+        }
+      }
+    );
+  }
+);
+RadioBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+  return checked ? "checked" : "unchecked";
+}
+var ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+var RADIO_GROUP_NAME = "RadioGroup";
+var [createRadioGroupContext] = createContextScope(RADIO_GROUP_NAME, [
+  createRovingFocusGroupScope,
+  createRadioScope
+]);
+var useRovingFocusGroupScope = createRovingFocusGroupScope();
+var useRadioScope = createRadioScope();
+var [RadioGroupProvider, useRadioGroupContext] = createRadioGroupContext(RADIO_GROUP_NAME);
+var RadioGroup = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadioGroup,
+      name,
+      defaultValue,
+      value: valueProp,
+      required = false,
+      disabled = false,
+      orientation,
+      dir,
+      loop = true,
+      onValueChange,
+      ...groupProps
+    } = props;
+    const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+    const direction = useDirection(dir);
+    const [value, setValue] = useControllableState({
+      prop: valueProp,
+      defaultProp: defaultValue ?? null,
+      onChange: onValueChange,
+      caller: RADIO_GROUP_NAME
+    });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      RadioGroupProvider,
+      {
+        scope: __scopeRadioGroup,
+        name,
+        required,
+        disabled,
+        value,
+        onValueChange: setValue,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Root,
+          {
+            asChild: true,
+            ...rovingFocusGroupScope,
+            orientation,
+            dir: direction,
+            loop,
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Primitive.div,
+              {
+                role: "radiogroup",
+                "aria-required": required,
+                "aria-orientation": orientation,
+                "data-disabled": disabled ? "" : void 0,
+                dir: direction,
+                ...groupProps,
+                ref: forwardedRef
+              }
+            )
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroup.displayName = RADIO_GROUP_NAME;
+var ITEM_NAME = "RadioGroupItem";
+var RadioGroupItem = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, disabled, ...itemProps } = props;
+    const context = useRadioGroupContext(ITEM_NAME, __scopeRadioGroup);
+    const isDisabled = context.disabled || disabled;
+    const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const checked = context.value === itemProps.value;
+    const isArrowKeyPressedRef = reactExports.useRef(false);
+    reactExports.useEffect(() => {
+      const handleKeyDown = (event) => {
+        if (ARROW_KEYS.includes(event.key)) {
+          isArrowKeyPressedRef.current = true;
+        }
+      };
+      const handleKeyUp = () => isArrowKeyPressedRef.current = false;
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      };
+    }, []);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Item,
+      {
+        asChild: true,
+        ...rovingFocusGroupScope,
+        focusable: !isDisabled,
+        active: checked,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Radio,
+          {
+            disabled: isDisabled,
+            required: context.required,
+            checked,
+            ...radioScope,
+            ...itemProps,
+            name: context.name,
+            ref: composedRefs,
+            onCheck: () => context.onValueChange(itemProps.value),
+            onKeyDown: composeEventHandlers((event) => {
+              if (event.key === "Enter") event.preventDefault();
+            }),
+            onFocus: composeEventHandlers(itemProps.onFocus, () => {
+              if (isArrowKeyPressedRef.current) ref.current?.click();
+            })
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroupItem.displayName = ITEM_NAME;
+var INDICATOR_NAME2 = "RadioGroupIndicator";
+var RadioGroupIndicator = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, ...indicatorProps } = props;
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioIndicator, { ...radioScope, ...indicatorProps, ref: forwardedRef });
+  }
+);
+RadioGroupIndicator.displayName = INDICATOR_NAME2;
+var Root2 = RadioGroup;
+var Item2 = RadioGroupItem;
+const MIRROR_OPTIONS = [
+  {
+    id: "huggingface",
+    name: "HuggingFace (Official)",
+    description: "huggingface.co — default, requires VPN in China"
+  },
+  {
+    id: "hf-mirror",
+    name: "HF-Mirror (China)",
+    description: "hf-mirror.com — fast access from mainland China"
+  },
+  {
+    id: "modelscope",
+    name: "ModelScope",
+    description: "modelscope.cn — Alibaba open-source model hub"
+  }
+];
+function MirrorSelector() {
+  const { getMirrorInfo, getSwitchMirrorInstructions } = useModelManager();
+  const [selected, setSelected] = reactExports.useState("huggingface");
+  const [status, setStatus] = reactExports.useState("idle");
+  reactExports.useEffect(() => {
+    getMirrorInfo().then((config) => {
+      if (config?.current_mirror) setSelected(config.current_mirror);
+    }).catch(() => {
+    });
+  }, [getMirrorInfo]);
+  const handleChange = async (value) => {
+    if (value === selected) return;
+    setStatus("switching");
+    const result = await getSwitchMirrorInstructions(value);
+    if (result !== null) {
+      setSelected(value);
+      setStatus("success");
+    } else {
+      setStatus("error");
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-medium", children: "HuggingFace Mirror" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mt-1", children: "Select the download mirror for HuggingFace models" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Root2,
+      {
+        value: selected,
+        onValueChange: handleChange,
+        disabled: status === "switching",
+        className: "flex flex-col gap-2",
+        "aria-label": "HuggingFace mirror selection",
+        children: MIRROR_OPTIONS.map((option) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Item2,
+          {
+            value: option.id,
+            type: "button",
+            "aria-label": option.name,
+            className: [
+              "flex items-center gap-3 p-3 rounded-md border cursor-pointer text-left w-full",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              "transition-colors",
+              selected === option.id ? "border-accent-500 bg-accent-500/10" : "border-border-default hover:border-border-strong"
+            ].join(" "),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "div",
+                {
+                  className: [
+                    "w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0",
+                    selected === option.id ? "border-accent-500" : "border-border-default"
+                  ].join(" "),
+                  "aria-hidden": "true",
+                  children: selected === option.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-2 h-2 rounded-full bg-accent-500" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col text-left", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-medium", children: option.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-xs", children: option.description })
+              ] })
+            ]
+          },
+          option.id
+        ))
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "aria-live": "polite", "aria-atomic": "true", className: "mt-3 min-h-[1.25rem]", children: [
+      status === "switching" && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2 text-text-secondary text-sm", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin", "aria-hidden": "true" }),
+        "Switching mirror..."
+      ] }),
+      status === "success" && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-green-400 text-sm", children: "Mirror updated. Restart may be required." }),
+      status === "error" && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-sm", children: "Failed to switch mirror. Is the model manager running?" })
+    ] })
+  ] });
+}
 function Settings() {
   const [activeTab, setActiveTab] = reactExports.useState("general");
   const { theme, setTheme } = useSystemStore();
@@ -12238,6 +14066,10 @@ function Settings() {
     )) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl space-y-8", children: [
       activeTab === "general" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-text-primary", children: "Model Source" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(MirrorSelector, {})
+        ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-text-primary", children: "Display" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
@@ -12436,18 +14268,3780 @@ function Settings() {
     ] })
   ] });
 }
+function KnowledgeCard({ snippet, onDelete }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-bg-surface-3 text-text-secondary text-xs px-2 py-0.5 rounded", children: snippet.language }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-bg-surface-3 text-text-secondary text-xs px-2 py-0.5 rounded", children: snippet.domain }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-auto text-text-muted text-xs", children: [
+        Math.round(snippet.qualityScore * 100),
+        "%"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-text-primary text-sm font-mono overflow-hidden max-h-[7.5rem] leading-5 whitespace-pre-wrap break-all", children: snippet.text }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mt-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: new Date(snippet.createdAt).toLocaleDateString() }),
+      onDelete && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onDelete(snippet.id),
+          "aria-label": "Delete snippet",
+          className: "text-red-400 hover:text-red-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 rounded",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" })
+        }
+      )
+    ] })
+  ] });
+}
+function SnippetBrowser({ snippets, onDelete }) {
+  const [searchQuery, setSearchQuery] = reactExports.useState("");
+  const [languageFilter, setLanguageFilter] = reactExports.useState("all");
+  const languages = Array.from(new Set(snippets.map((s) => s.language))).sort();
+  const filtered = snippets.filter((s) => {
+    const matchesQuery = searchQuery === "" || s.text.toLowerCase().includes(searchQuery.toLowerCase()) || s.domain.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLang = languageFilter === "all" || s.language === languageFilter;
+    return matchesQuery && matchesLang;
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Search,
+          {
+            size: 14,
+            "aria-hidden": "true",
+            className: "absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            placeholder: "Search snippets…",
+            value: searchQuery,
+            onChange: (e) => setSearchQuery(e.target.value),
+            className: "bg-bg-surface-3 border border-border-default text-text-primary placeholder-text-muted rounded-md pl-8 pr-3 py-2 text-sm w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "select",
+        {
+          value: languageFilter,
+          onChange: (e) => setLanguageFilter(e.target.value),
+          className: "bg-bg-surface-3 border border-border-default text-text-primary rounded-md px-3 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "all", children: "All Languages" }),
+            languages.map((lang) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: lang, children: lang }, lang))
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-secondary text-sm", children: [
+      filtered.length,
+      " snippets"
+    ] }),
+    filtered.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No snippets yet. Start coding to build your knowledge base." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 gap-3", children: filtered.map((snippet) => /* @__PURE__ */ jsxRuntimeExports.jsx(KnowledgeCard, { snippet, onDelete }, snippet.id)) })
+  ] });
+}
+function DecisionLog({ decisions }) {
+  if (decisions.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No decisions logged yet." });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: decisions.map((decision) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "bg-bg-surface-2 border border-border-default rounded-lg p-4",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs block mb-1", children: new Date(decision.timestamp).toLocaleString() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm mb-1 font-medium", children: decision.summary }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm mb-1", children: decision.rationale }),
+        decision.outcome && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-secondary text-sm mb-2", children: [
+          "Outcome: ",
+          decision.outcome
+        ] }),
+        decision.alternatives && decision.alternatives.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-1 mt-2", children: decision.alternatives.map((tag, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "bg-bg-surface-3 text-text-muted text-xs rounded px-2 py-0.5",
+            children: tag
+          },
+          idx
+        )) })
+      ]
+    },
+    decision.id
+  )) });
+}
+function DomainExpertise({ domains }) {
+  if (domains.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No domain expertise tracked yet." });
+  }
+  const maxCount = Math.max(...domains.map((d) => d.count), 1);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-3", children: domains.map((domain) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm", children: domain.domain }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: domain.count })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-surface-3 rounded-full h-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "bg-accent-500 rounded-full h-1.5 transition-all",
+        style: { width: `${domain.count / maxCount * 100}%` }
+      }
+    ) })
+  ] }, `${domain.domain}-${domain.language}`)) });
+}
+function MemoryEditor({ value, onChange, onSave }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-text-secondary text-sm font-medium", children: "Memory Markdown" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "textarea",
+      {
+        value,
+        onChange: (e) => onChange(e.target.value),
+        className: "bg-bg-surface-3 border border-border-default text-text-primary text-sm font-mono w-full h-64 rounded-md p-3 resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+        placeholder: "Write notes that will be injected into your AI context…"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: "This markdown is injected into your AI context automatically." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: onSave,
+          className: "bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 14, "aria-hidden": "true" }),
+            "Save Memory"
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+function Knowledge() {
+  const {
+    snippets,
+    decisions,
+    domainStats,
+    memoryMarkdown,
+    totalItems,
+    isIndexing,
+    setMemoryMarkdown,
+    removeSnippet
+  } = useKnowledgeLibraryStore();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex flex-col gap-6 h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Knowledge Library" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "flex items-center gap-1.5 text-text-muted text-sm mt-1", children: [
+        totalItems,
+        " items",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { "aria-hidden": "true", children: "·" }),
+        isIndexing ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, "aria-hidden": "true", className: "animate-spin" }),
+          "Indexing..."
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, "aria-hidden": "true", className: "text-green-500" }),
+          "Ready"
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "snippets", className: "flex flex-col gap-4 flex-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        List,
+        {
+          className: "flex border-b border-border-default",
+          "aria-label": "Knowledge sections",
+          children: ["snippets", "decisions", "domains", "memory"].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Trigger,
+            {
+              value: tab,
+              className: "px-4 py-2 text-sm text-text-secondary capitalize cursor-pointer\r\n                data-[state=active]:text-text-primary data-[state=active]:border-b-2\r\n                data-[state=active]:border-accent-500 -mb-px\r\n                hover:text-text-primary transition-colors\r\n                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: tab.charAt(0).toUpperCase() + tab.slice(1)
+            },
+            tab
+          ))
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "snippets", className: "flex-1 overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SnippetBrowser, { snippets, onDelete: removeSnippet }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "decisions", className: "flex-1 overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(DecisionLog, { decisions }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "domains", className: "flex-1 overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(DomainExpertise, { domains: domainStats }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "memory", className: "flex-1 overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MemoryEditor,
+        {
+          value: memoryMarkdown,
+          onChange: setMemoryMarkdown,
+          onSave: () => {
+          }
+        }
+      ) })
+    ] })
+  ] });
+}
+const useEnterpriseStore = create((set) => ({
+  connectors: [],
+  auditLog: [],
+  auditChainValid: null,
+  setConnectors: (connectors) => set({ connectors }),
+  addConnector: (connector) => set((s) => ({ connectors: [...s.connectors, connector] })),
+  removeConnector: (id2) => set((s) => ({ connectors: s.connectors.filter((c) => c.id !== id2) })),
+  setAuditLog: (auditLog) => set({ auditLog }),
+  setAuditChainValid: (valid) => set({ auditChainValid: valid }),
+  clearConnectors: () => set({ connectors: [] })
+}));
+const ENTERPRISE_SERVICE_URL = "http://localhost:8004";
+function useEnterpriseData() {
+  const [isLoading, setIsLoading] = reactExports.useState(false);
+  const [error, setError] = reactExports.useState(null);
+  const registerConnector = reactExports.useCallback(
+    async (config) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${ENTERPRISE_SERVICE_URL}/connectors`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(config)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+  const listConnectors = reactExports.useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${ENTERPRISE_SERVICE_URL}/connectors`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+  const removeConnector = reactExports.useCallback(async (id2) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${ENTERPRISE_SERVICE_URL}/connectors/${id2}`, { method: "DELETE" });
+      return res.ok;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+  const queryConnector = reactExports.useCallback(
+    async (id2, params) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${ENTERPRISE_SERVICE_URL}/connectors/${id2}/query`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(params)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+  const getSchema = reactExports.useCallback(async (id2) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${ENTERPRISE_SERVICE_URL}/connectors/${id2}/schema`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      return data.tables ?? [];
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+  const buildContext = reactExports.useCallback(
+    async (prompt, connectorIds) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${ENTERPRISE_SERVICE_URL}/context`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, connector_ids: connectorIds })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        return data.enterprise_context;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+        return "";
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+  const checkHealth = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${ENTERPRISE_SERVICE_URL}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  return {
+    isLoading,
+    error,
+    registerConnector,
+    listConnectors,
+    removeConnector,
+    queryConnector,
+    getSchema,
+    buildContext,
+    checkHealth
+  };
+}
+function ConnectorCard({ connector, onRemove }) {
+  const typeLabel = {
+    postgres: "PostgreSQL",
+    rest: "REST API",
+    sap: "SAP",
+    salesforce: "Salesforce"
+  }[connector.type];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4 flex items-center justify-between", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { size: 16, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium", children: connector.name }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: typeLabel })
+      ] }),
+      connector.enabled ? /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, "aria-hidden": "true", className: "text-green-500" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 14, "aria-hidden": "true", className: "text-red-400" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: () => onRemove(connector.id),
+        "aria-label": `Remove ${connector.name} connector`,
+        className: "text-text-muted hover:text-red-400 cursor-pointer",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" })
+      }
+    )
+  ] });
+}
+function ConnectorList() {
+  const { connectors, setConnectors, addConnector, removeConnector } = useEnterpriseStore();
+  const { listConnectors, registerConnector, removeConnector: apiRemove } = useEnterpriseData();
+  const [dialogOpen, setDialogOpen] = reactExports.useState(false);
+  const [form, setForm] = reactExports.useState({
+    name: "",
+    type: "postgres",
+    connectionString: "",
+    baseUrl: ""
+  });
+  reactExports.useEffect(() => {
+    listConnectors().then(setConnectors);
+  }, []);
+  const handleAdd = async () => {
+    const result = await registerConnector({
+      name: form.name,
+      type: form.type,
+      connectionString: form.connectionString || void 0,
+      baseUrl: form.baseUrl || void 0,
+      enabled: true
+    });
+    if (result) {
+      addConnector(result);
+      setDialogOpen(false);
+      setForm({ name: "", type: "postgres", connectionString: "", baseUrl: "" });
+    }
+  };
+  const handleRemove = async (id2) => {
+    await apiRemove(id2);
+    removeConnector(id2);
+  };
+  const addDialog = /* @__PURE__ */ jsxRuntimeExports.jsx(Root$1, { open: dialogOpen, onOpenChange: setDialogOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Portal, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { className: "fixed inset-0 bg-black/60 z-40" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Content$1, { className: "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] bg-bg-surface-2 border border-border-default rounded-lg p-6 flex flex-col gap-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Title, { className: "text-text-primary font-semibold", children: "Add Connector" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { "aria-label": "Close dialog", className: "text-text-muted hover:text-text-primary cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 16, "aria-hidden": "true" }) }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: "Name" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              value: form.name,
+              onChange: (e) => setForm((f2) => ({ ...f2, name: e.target.value })),
+              className: "bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: "Type" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "select",
+            {
+              value: form.type,
+              onChange: (e) => setForm((f2) => ({ ...f2, type: e.target.value })),
+              className: "bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-500",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "postgres", children: "PostgreSQL" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "rest", children: "REST API" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "sap", children: "SAP" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "salesforce", children: "Salesforce" })
+              ]
+            }
+          )
+        ] }),
+        form.type === "postgres" && /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: "Connection String" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              value: form.connectionString,
+              onChange: (e) => setForm((f2) => ({ ...f2, connectionString: e.target.value })),
+              placeholder: "postgresql://user:pass@host:5432/db",
+              className: "bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
+            }
+          )
+        ] }),
+        form.type === "rest" && /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: "Base URL" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              value: form.baseUrl,
+              onChange: (e) => setForm((f2) => ({ ...f2, baseUrl: e.target.value })),
+              placeholder: "https://api.example.com/v1",
+              className: "bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer", children: "Cancel" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: handleAdd,
+            disabled: !form.name,
+            className: "bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm px-4 py-2 rounded-md cursor-pointer",
+            children: "Add"
+          }
+        )
+      ] })
+    ] })
+  ] }) });
+  if (connectors.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center py-16 gap-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { size: 48, "aria-hidden": "true", className: "text-text-muted" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No connectors registered yet." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => setDialogOpen(true),
+          className: "bg-accent-500 hover:bg-accent-400 text-text-primary text-sm px-4 py-2 rounded-md cursor-pointer flex items-center gap-2",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16, "aria-hidden": "true" }),
+            "Add Connector"
+          ]
+        }
+      ),
+      addDialog
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-secondary text-sm", children: [
+        connectors.length,
+        " connector",
+        connectors.length !== 1 ? "s" : ""
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => setDialogOpen(true),
+          className: "bg-accent-500 hover:bg-accent-400 text-text-primary text-sm px-3 py-1.5 rounded-md cursor-pointer flex items-center gap-2",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14, "aria-hidden": "true" }),
+            " Add Connector"
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-3", children: connectors.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsx(ConnectorCard, { connector: c, onRemove: handleRemove }, c.id)) }),
+    addDialog
+  ] });
+}
+function AuditLogTable() {
+  const { auditLog, auditChainValid } = useEnterpriseStore();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+      auditChainValid === true && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 text-green-500 text-xs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { size: 14, "aria-hidden": "true" }),
+        "Chain valid"
+      ] }),
+      auditChainValid === false && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 text-red-400 text-xs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldAlert, { size: 14, "aria-hidden": "true" }),
+        "Chain TAMPERED"
+      ] }),
+      auditChainValid === null && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: "Chain status unknown" })
+    ] }),
+    auditLog.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm py-8 text-center", children: "No audit entries yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-sm", "aria-label": "Audit log", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border-default text-text-muted text-xs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3 font-medium", children: "Time" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3 font-medium", children: "Connector" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3 font-medium", children: "Rows" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 px-3 font-medium", children: "PII Masked" })
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: auditLog.map((entry) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border-subtle hover:bg-bg-surface-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-text-secondary", children: new Date(entry.timestamp).toLocaleTimeString() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-text-primary font-mono text-xs", children: entry.connectorId.slice(0, 8) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-text-secondary", children: entry.rowsReturned }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-text-secondary", children: entry.piiEntitiesMasked })
+      ] }, entry.id)) })
+    ] }) })
+  ] });
+}
+const PII_RULES = [
+  { entity: "EMAIL_ADDRESS", replacement: "[EMAIL]", example: "john@example.com → [EMAIL]" },
+  { entity: "PHONE_NUMBER", replacement: "[PHONE]", example: "555-867-5309 → [PHONE]" },
+  { entity: "US_SSN", replacement: "[SSN]", example: "123-45-6789 → [SSN]" },
+  { entity: "CREDIT_CARD", replacement: "[CARD]", example: "4111 1111 1111 1111 → [CARD]" },
+  { entity: "IP_ADDRESS", replacement: "[IP]", example: "192.168.1.1 → [IP]" },
+  { entity: "PERSON", replacement: "[NAME]", example: "John Smith → [NAME]" }
+];
+function PIIMaskingRules() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "All data from enterprise connectors is automatically masked before entering model context." }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-2", children: PII_RULES.map((rule) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "bg-bg-surface-2 border border-border-default rounded-md p-3 flex items-center justify-between",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-mono text-accent-400 bg-accent-500/10 px-2 py-0.5 rounded", children: rule.replacement }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: rule.entity })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs font-mono", children: rule.example })
+        ]
+      },
+      rule.entity
+    )) })
+  ] });
+}
+const tabTriggerClass = "px-3 py-2 text-sm font-medium text-text-muted hover:text-text-primary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500";
+function Enterprise() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex flex-col gap-6 h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-semibold text-text-primary", children: "Enterprise Data" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "connectors", className: "flex flex-col gap-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(List, { className: "flex gap-1 border-b border-border-default", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger, { value: "connectors", className: tabTriggerClass, children: "Connectors" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger, { value: "audit", className: tabTriggerClass, children: "Audit Log" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger, { value: "pii", className: tabTriggerClass, children: "PII Rules" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "connectors", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ConnectorList, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "audit", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AuditLogTable, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "pii", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PIIMaskingRules, {}) })
+    ] })
+  ] });
+}
+const TYPE_COLORS = {
+  ArchitectureDecision: "text-accent-400 bg-accent-500/10",
+  Refactor: "text-blue-400 bg-blue-500/10",
+  BugFix: "text-red-400 bg-red-500/10",
+  FeatureAdd: "text-green-500 bg-green-500/10",
+  DependencyChange: "text-yellow-400 bg-yellow-500/10"
+};
+function DecisionNodeCard({ node }) {
+  const colorClass = TYPE_COLORS[node.type];
+  const date = new Date(node.timestamp * 1e3).toLocaleDateString();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4 flex gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-1 pt-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-2 h-2 rounded-full bg-accent-500", "aria-hidden": "true" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-px flex-1 bg-border-subtle", "aria-hidden": "true" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col gap-1 min-w-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xs font-medium px-2 py-0.5 rounded ${colorClass}`, children: node.type }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: date }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", "aria-hidden": "true", children: "·" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs font-mono", children: node.commitHash.slice(0, 7) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium truncate", children: node.summary }),
+      node.rationale && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs", children: node.rationale }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: node.author })
+    ] })
+  ] });
+}
+function DecisionTimeline({ nodes }) {
+  if (nodes.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center py-16 gap-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(GitBranch, { size: 48, "aria-hidden": "true", className: "text-text-muted" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: 'No decision nodes. Click "Load History" to parse git log.' })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-3 overflow-y-auto", children: nodes.map((node) => /* @__PURE__ */ jsxRuntimeExports.jsx(DecisionNodeCard, { node }, node.id)) });
+}
+function GraphSearchBar({ value, onChange }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex items-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 14, "aria-hidden": "true", className: "absolute left-3 text-text-muted" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "search",
+        value,
+        onChange: (e) => onChange(e.target.value),
+        placeholder: "Search commits: 'bug fixes', 'last 10', 'refactors in auth'...",
+        "aria-label": "Search decision graph",
+        className: "w-full bg-bg-surface-2 border border-border-default rounded-md pl-9 pr-3 py-2 text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+      }
+    )
+  ] });
+}
+const useDecisionGraphStore = create((set) => ({
+  nodes: [],
+  filteredNodes: [],
+  searchQuery: "",
+  isLoading: false,
+  setNodes: (nodes) => set({ nodes, filteredNodes: nodes }),
+  setFilteredNodes: (filteredNodes) => set({ filteredNodes }),
+  setSearchQuery: (searchQuery) => set({ searchQuery }),
+  setIsLoading: (isLoading) => set({ isLoading }),
+  clearGraph: () => set({ nodes: [], filteredNodes: [], searchQuery: "" })
+}));
+function DecisionGraph() {
+  const { nodes, filteredNodes, setFilteredNodes, searchQuery, setSearchQuery } = useDecisionGraphStore();
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setFilteredNodes(nodes);
+      return;
+    }
+    const q2 = query.toLowerCase();
+    setFilteredNodes(nodes.filter(
+      (n2) => n2.summary.toLowerCase().includes(q2) || n2.type.toLowerCase().includes(q2) || n2.author.toLowerCase().includes(q2)
+    ));
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex flex-col gap-6 h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(GitBranch, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-semibold text-text-primary", children: "Decision Graph" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(GraphSearchBar, { value: searchQuery, onChange: handleSearch }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(DecisionTimeline, { nodes: filteredNodes })
+  ] });
+}
+const useOrchestrationStore = create((set) => ({
+  sessions: [],
+  activeSessionId: null,
+  isLoading: false,
+  error: null,
+  setSessions: (sessions) => set({ sessions }),
+  addSession: (session) => set((state) => ({ sessions: [...state.sessions, session] })),
+  updateSession: (session) => set((state) => ({
+    sessions: state.sessions.map((s) => s.id === session.id ? session : s)
+  })),
+  setActiveSession: (id2) => set({ activeSessionId: id2 }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$b = "http://localhost:8006";
+function useOrchestration() {
+  const { addSession, updateSession, setLoading, setError } = useOrchestrationStore();
+  const createSession = reactExports.useCallback(async (req) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$b}/sessions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const session = await res.json();
+      addSession(session);
+      return session;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [addSession, setLoading, setError]);
+  const getSession = reactExports.useCallback(async (sessionId) => {
+    try {
+      const res = await fetch(`${BASE_URL$b}/sessions/${sessionId}`);
+      if (!res.ok) return null;
+      const session = await res.json();
+      updateSession(session);
+      return session;
+    } catch {
+      return null;
+    }
+  }, [updateSession]);
+  const cancelSession = reactExports.useCallback(async (sessionId) => {
+    try {
+      const res = await fetch(`${BASE_URL$b}/sessions/${sessionId}`, { method: "DELETE" });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  const checkHealth = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$b}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  return { createSession, getSession, cancelSession, checkHealth };
+}
+const statusColors = {
+  pending: "text-text-muted",
+  running: "text-accent-400",
+  completed: "text-green-400",
+  failed: "text-red-400",
+  cancelled: "text-yellow-400"
+};
+function AgentCard({ session, isActive, onClick }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      onClick,
+      className: `w-full text-left bg-bg-surface-2 border rounded-lg p-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors ${isActive ? "border-accent-500" : "border-border-default hover:border-border-strong"}`,
+      "aria-pressed": isActive,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Cpu, { size: 16, "aria-hidden": "true", className: "text-text-muted shrink-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-medium truncate", children: session.goal })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `text-xs font-medium ${statusColors[session.status] ?? "text-text-muted"}`, children: [
+          session.status.charAt(0).toUpperCase() + session.status.slice(1),
+          " · ",
+          session.tasks.length,
+          " tasks"
+        ] })
+      ]
+    }
+  );
+}
+const statusConfig = {
+  pending: { icon: Clock, color: "text-text-muted", bg: "bg-bg-surface-3" },
+  running: { icon: LoaderCircle, color: "text-accent-400", bg: "bg-bg-surface-3" },
+  completed: { icon: CircleCheck, color: "text-green-400", bg: "bg-green-500/10" },
+  failed: { icon: CircleX, color: "text-red-400", bg: "bg-red-500/10" },
+  cancelled: { icon: CircleAlert, color: "text-yellow-400", bg: "bg-yellow-500/10" }
+};
+function TaskNode({ task }) {
+  const { icon: Icon2, color, bg: bg2 } = statusConfig[task.status];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `${bg2} border border-border-default rounded-lg p-4`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Icon2,
+      {
+        size: 18,
+        className: `${color} mt-0.5 shrink-0 ${task.status === "running" ? "animate-spin" : ""}`,
+        "aria-hidden": "true"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium truncate", children: task.title }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs mt-1 line-clamp-2", children: task.description }),
+      task.result && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mt-2 line-clamp-2", children: task.result }),
+      task.error && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-xs mt-2", children: task.error })
+    ] })
+  ] }) });
+}
+function ProgressFeed({ session }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-text-secondary text-xs font-medium uppercase tracking-wide mb-3", children: [
+      "Tasks (",
+      session.tasks.filter((t2) => t2.status === "completed").length,
+      "/",
+      session.tasks.length,
+      ")"
+    ] }),
+    session.tasks.map((task) => /* @__PURE__ */ jsxRuntimeExports.jsx(TaskNode, { task }, task.id))
+  ] });
+}
+function Orchestration() {
+  const [goal, setGoal] = reactExports.useState("");
+  const [context, setContext] = reactExports.useState("");
+  const { createSession } = useOrchestration();
+  const { sessions, activeSessionId, setActiveSession, isLoading } = useOrchestrationStore();
+  const activeSession = sessions.find((s) => s.id === activeSessionId) ?? null;
+  const handleCreate = async () => {
+    if (!goal.trim()) return;
+    const session = await createSession({ goal, context });
+    if (session) {
+      setActiveSession(session.id);
+      setGoal("");
+      setContext("");
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Workflow, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Multi-Agent Orchestration" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Decompose complex goals into parallel sub-agent tasks" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-72 border-r border-border-subtle flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 border-b border-border-subtle", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              value: goal,
+              onChange: (e) => setGoal(e.target.value),
+              placeholder: "Enter a goal to orchestrate…",
+              rows: 3,
+              className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm placeholder-text-muted resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              "aria-label": "Orchestration goal"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              value: context,
+              onChange: (e) => setContext(e.target.value),
+              placeholder: "Optional context…",
+              rows: 2,
+              className: "w-full mt-2 bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm placeholder-text-muted resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              "aria-label": "Orchestration context"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: handleCreate,
+              disabled: isLoading || !goal.trim(),
+              className: "mt-3 w-full flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-400 active:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16, "aria-hidden": "true" }),
+                isLoading ? "Creating…" : "Create Session"
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto p-4 space-y-2", children: sessions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm text-center py-8", children: "No sessions yet" }) : sessions.map((session) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          AgentCard,
+          {
+            session,
+            isActive: session.id === activeSessionId,
+            onClick: () => setActiveSession(session.id)
+          },
+          session.id
+        )) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto p-6", children: activeSession ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-text-primary text-lg font-semibold mb-1", children: activeSession.goal }),
+          activeSession.context && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: activeSession.context })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ProgressFeed, { session: activeSession }),
+        activeSession.merged_result && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-secondary text-xs font-medium uppercase tracking-wide mb-3", children: "Merged Result" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-text-primary text-sm whitespace-pre-wrap", children: activeSession.merged_result })
+        ] })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-full text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Workflow, { size: 48, "aria-hidden": "true", className: "text-text-muted mb-4" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-lg font-medium mb-2", children: "No session selected" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Create a session to decompose a goal into parallel tasks" })
+      ] }) })
+    ] })
+  ] });
+}
+const useOrgIntelligenceStore = create((set) => ({
+  sharedPatterns: [],
+  skillGapReport: null,
+  bottlenecks: [],
+  searchResults: [],
+  isLoading: false,
+  error: null,
+  setSharedPatterns: (sharedPatterns) => set({ sharedPatterns }),
+  addPattern: (pattern) => set((state) => ({ sharedPatterns: [...state.sharedPatterns, pattern] })),
+  setSkillGapReport: (skillGapReport) => set({ skillGapReport }),
+  setBottlenecks: (bottlenecks) => set({ bottlenecks }),
+  setSearchResults: (searchResults) => set({ searchResults }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$a = "http://localhost:8007";
+function useOrgIntelligence() {
+  const { addPattern, setSharedPatterns, setSkillGapReport, setBottlenecks, setSearchResults, setLoading, setError } = useOrgIntelligenceStore();
+  const contributePattern = reactExports.useCallback(async (req) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$a}/patterns/contribute`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const pattern = await res.json();
+      addPattern(pattern);
+      return pattern;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [addPattern, setLoading, setError]);
+  const listPatterns = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$a}/patterns/shared`);
+      if (!res.ok) return [];
+      const patterns = await res.json();
+      setSharedPatterns(patterns);
+      return patterns;
+    } catch {
+      return [];
+    }
+  }, [setSharedPatterns]);
+  const searchPatterns = reactExports.useCallback(async (query) => {
+    try {
+      const res = await fetch(`${BASE_URL$a}/patterns/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
+      });
+      if (!res.ok) return [];
+      const results = await res.json();
+      setSearchResults(results);
+      return results;
+    } catch {
+      return [];
+    }
+  }, [setSearchResults]);
+  const getSkillGaps = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$a}/analytics/skill-gaps`);
+      if (!res.ok) return null;
+      const report = await res.json();
+      setSkillGapReport(report);
+      return report;
+    } catch {
+      return null;
+    }
+  }, [setSkillGapReport]);
+  const getBottlenecks = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$a}/analytics/bottlenecks`);
+      if (!res.ok) return [];
+      const bottlenecks = await res.json();
+      setBottlenecks(bottlenecks);
+      return bottlenecks;
+    } catch {
+      return [];
+    }
+  }, [setBottlenecks]);
+  return { contributePattern, listPatterns, searchPatterns, getSkillGaps, getBottlenecks };
+}
+function PatternCard({ pattern }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs font-mono bg-bg-surface-3 px-2 py-0.5 rounded", children: pattern.language }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 text-text-muted text-xs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 12, "aria-hidden": "true" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pattern.contributor_count })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-text-primary text-xs font-mono overflow-x-auto whitespace-pre-wrap line-clamp-5", children: pattern.pattern_text })
+  ] });
+}
+function SkillGapChart({ report }) {
+  if (report.gaps.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "No skill gaps detected — great coverage!" }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: report.gaps.map((gap) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingDown, { size: 16, "aria-hidden": "true", className: "text-yellow-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-medium capitalize", children: gap.topic.replace("_", " ") })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-yellow-400 text-sm font-medium", children: [
+        Math.round(gap.adoption_rate * 100),
+        "% adoption"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full bg-bg-surface-3 rounded-full h-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-yellow-400 h-1.5 rounded-full", style: { width: `${gap.adoption_rate * 100}%` } }) })
+  ] }, gap.topic)) });
+}
+const severityColors = {
+  high: "text-red-400",
+  medium: "text-yellow-400",
+  low: "text-text-muted"
+};
+function BottleneckList({ bottlenecks }) {
+  if (bottlenecks.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm text-center py-8", children: "No bottlenecks detected" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: bottlenecks.map((b) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4 flex items-center gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { size: 16, "aria-hidden": "true", className: severityColors[b.severity] ?? "text-text-muted" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium capitalize", children: b.area.replace("_", " ") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs", children: b.description })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xs font-medium ${severityColors[b.severity]}`, children: b.severity })
+  ] }, b.area)) });
+}
+function ContributePatternDialog() {
+  const [open, setOpen] = reactExports.useState(false);
+  const [patternText, setPatternText] = reactExports.useState("");
+  const [language, setLanguage] = reactExports.useState("typescript");
+  const { contributePattern } = useOrgIntelligence();
+  const { isLoading } = useOrgIntelligenceStore();
+  const handleSubmit = async () => {
+    if (!patternText.trim()) return;
+    await contributePattern({
+      pattern_text: patternText,
+      language,
+      contributor_id: "anonymous"
+    });
+    setPatternText("");
+    setOpen(false);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Root$1, { open, onOpenChange: setOpen, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$1, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16, "aria-hidden": "true" }),
+      "Contribute Pattern"
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Portal, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { className: "fixed inset-0 bg-black/60 z-50" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Content$1, { className: "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg-surface-2 border border-border-default rounded-xl p-6 w-[540px] z-50 focus:outline-none", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Title, { className: "text-text-primary text-lg font-semibold", children: "Contribute Pattern" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "text-text-muted hover:text-text-primary cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 rounded", "aria-label": "Close", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 18, "aria-hidden": "true" }) }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-text-secondary text-sm mb-2", htmlFor: "pattern-lang", children: "Language" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "select",
+              {
+                id: "pattern-lang",
+                value: language,
+                onChange: (e) => setLanguage(e.target.value),
+                className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 cursor-pointer",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "typescript", children: "TypeScript" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "python", children: "Python" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "javascript", children: "JavaScript" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "rust", children: "Rust" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "go", children: "Go" })
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-text-secondary text-sm mb-2", htmlFor: "pattern-text", children: "Pattern Code" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                id: "pattern-text",
+                value: patternText,
+                onChange: (e) => setPatternText(e.target.value),
+                placeholder: "Paste a reusable code pattern…",
+                rows: 8,
+                className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm font-mono placeholder-text-muted resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-3 mt-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-4 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500", children: "Cancel" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: handleSubmit,
+              disabled: isLoading || !patternText.trim(),
+              className: "bg-accent-500 hover:bg-accent-400 disabled:opacity-50 disabled:cursor-not-allowed text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: isLoading ? "Contributing…" : "Contribute"
+            }
+          )
+        ] })
+      ] })
+    ] })
+  ] });
+}
+function OrgIntelligence() {
+  const [searchQuery, setSearchQuery] = reactExports.useState("");
+  const { listPatterns, searchPatterns, getSkillGaps, getBottlenecks } = useOrgIntelligence();
+  const { sharedPatterns, skillGapReport, bottlenecks, searchResults } = useOrgIntelligenceStore();
+  reactExports.useEffect(() => {
+    listPatterns();
+    getSkillGaps();
+    getBottlenecks();
+  }, [listPatterns, getSkillGaps, getBottlenecks]);
+  const handleSearch = async () => {
+    if (searchQuery.trim()) {
+      await searchPatterns(searchQuery);
+    }
+  };
+  const displayPatterns = searchResults.length > 0 ? searchResults : sharedPatterns;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-6 py-5 border-b border-border-subtle", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Org Intelligence" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Share anonymized patterns and discover team insights" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ContributePatternDialog, {})
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "patterns", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 border-b border-border-subtle bg-bg-surface-1", "aria-label": "Org intelligence tabs", children: ["patterns", "skill-gaps", "bottlenecks"].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: tab,
+          className: "px-4 py-3 text-sm text-text-secondary hover:text-text-primary data-[state=active]:text-text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-500 -mb-px cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 capitalize",
+          children: tab.replace("-", " ")
+        },
+        tab
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "patterns", className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 14, "aria-hidden": "true", className: "absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "search",
+                value: searchQuery,
+                onChange: (e) => setSearchQuery(e.target.value),
+                onKeyDown: (e) => e.key === "Enter" && handleSearch(),
+                placeholder: "Search patterns…",
+                className: "w-full bg-bg-surface-3 border border-border-default rounded-md pl-9 pr-3 py-2 text-text-primary text-sm placeholder-text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Search patterns"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: handleSearch,
+              className: "bg-accent-500 hover:bg-accent-400 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: "Search"
+            }
+          )
+        ] }),
+        displayPatterns.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-12", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 48, "aria-hidden": "true", className: "text-text-muted mx-auto mb-4" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-lg font-medium mb-2", children: "No patterns yet" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Contribute your first anonymized code pattern to get started" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4", children: displayPatterns.map((pattern) => /* @__PURE__ */ jsxRuntimeExports.jsx(PatternCard, { pattern }, pattern.id)) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "skill-gaps", className: "flex-1 overflow-y-auto p-6", children: skillGapReport ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkillGapChart, { report: skillGapReport }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm text-center py-8", children: "Loading skill gaps…" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "bottlenecks", className: "flex-1 overflow-y-auto p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(BottleneckList, { bottlenecks }) })
+    ] })
+  ] });
+}
+const usePersonaCouncilStore = create((set) => ({
+  reports: [],
+  activeReport: null,
+  isReviewing: false,
+  error: null,
+  addReport: (report) => set((state) => ({ reports: [report, ...state.reports] })),
+  setActiveReport: (activeReport) => set({ activeReport }),
+  setReviewing: (isReviewing) => set({ isReviewing }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$9 = "http://localhost:8008";
+function usePersonaCouncil() {
+  const { addReport, setActiveReport, setReviewing, setError } = usePersonaCouncilStore();
+  const reviewCode = reactExports.useCallback(async (req) => {
+    setReviewing(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$9}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const report = await res.json();
+      addReport(report);
+      setActiveReport(report);
+      return report;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return null;
+    } finally {
+      setReviewing(false);
+    }
+  }, [addReport, setActiveReport, setReviewing, setError]);
+  const checkHealth = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$9}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  return { reviewCode, checkHealth };
+}
+function getRiskColor(score) {
+  if (score >= 7) return "text-red-400 bg-red-500/10 border-red-500/30";
+  if (score >= 4) return "text-yellow-400 bg-yellow-500/10 border-yellow-500/30";
+  if (score > 0) return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+  return "text-green-400 bg-green-500/10 border-green-500/30";
+}
+function RiskScoreBadge({ score, size = "sm" }) {
+  const color = getRiskColor(score);
+  const label = score >= 7 ? "High" : score >= 4 ? "Medium" : score > 0 ? "Low" : "Clean";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "span",
+    {
+      className: `inline-flex items-center gap-1 border rounded-full font-medium ${color} ${size === "lg" ? "px-3 py-1 text-sm" : "px-2 py-0.5 text-xs"}`,
+      children: [
+        score.toFixed(1),
+        " · ",
+        label
+      ]
+    }
+  );
+}
+const severityConfig = {
+  critical: { icon: CircleX, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
+  error: { icon: CircleAlert, color: "text-red-400", bg: "bg-red-500/5 border-red-500/15" },
+  warning: { icon: TriangleAlert, color: "text-yellow-400", bg: "bg-yellow-500/5 border-yellow-500/20" },
+  info: { icon: Info, color: "text-blue-400", bg: "bg-blue-500/5 border-blue-500/15" }
+};
+function CritiqueList({ critiques }) {
+  if (critiques.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm italic", children: "No issues found by this reviewer." });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: critiques.map((item, i) => {
+    const { icon: Icon2, color, bg: bg2 } = severityConfig[item.severity];
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `border rounded-lg p-3 ${bg2}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 15, "aria-hidden": "true", className: `${color} mt-0.5 shrink-0` }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-primary text-sm font-medium", children: [
+          item.title,
+          item.line_hint ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted font-normal ml-1 text-xs", children: [
+            "(line ",
+            item.line_hint,
+            ")"
+          ] }) : null
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mt-0.5", children: item.description })
+      ] })
+    ] }) }, i);
+  }) });
+}
+function PersonaCard({ review }) {
+  const [expanded, setExpanded] = reactExports.useState(true);
+  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        onClick: () => setExpanded((e) => !e),
+        className: "w-full flex items-center justify-between p-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+        "aria-expanded": expanded,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronIcon, { size: 16, "aria-hidden": "true", className: "text-text-muted shrink-0" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium", children: review.persona_name }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs", children: [
+                review.critiques.length,
+                " issue",
+                review.critiques.length !== 1 ? "s" : ""
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RiskScoreBadge, { score: review.risk_score })
+        ]
+      }
+    ),
+    expanded && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 pb-4 border-t border-border-subtle pt-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mb-3", children: review.persona_description }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(CritiqueList, { critiques: review.critiques })
+    ] })
+  ] });
+}
+function ConsensusPanel({ report }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-5 mb-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-semibold", children: "Council Consensus" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(RiskScoreBadge, { score: report.risk_score.overall, size: "lg" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm mb-4", children: report.consensus_summary }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-2", children: Object.entries(report.risk_score.breakdown).map(([name, score]) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex items-center justify-between bg-bg-surface-3 rounded-md px-3 py-2",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs truncate", children: name.split(" ")[0] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RiskScoreBadge, { score })
+        ]
+      },
+      name
+    )) })
+  ] });
+}
+const LANGUAGES = ["python", "typescript", "javascript", "rust", "go", "java", "cpp"];
+function PersonaCouncil() {
+  const [code, setCode] = reactExports.useState("");
+  const [language, setLanguage] = reactExports.useState("python");
+  const [context, setContext] = reactExports.useState("");
+  const { reviewCode } = usePersonaCouncil();
+  const { activeReport, isReviewing, error } = usePersonaCouncilStore();
+  const handleReview = async () => {
+    if (!code.trim()) return;
+    await reviewCode({ code, language, context });
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Adversarial Persona Council" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "4 expert reviewers stress-test your code before you commit" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-1/2 border-r border-border-subtle flex flex-col p-6 gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "council-lang", className: "text-text-secondary text-sm shrink-0", children: "Language:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "select",
+            {
+              id: "council-lang",
+              value: language,
+              onChange: (e) => setLanguage(e.target.value),
+              className: "bg-bg-surface-3 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 cursor-pointer",
+              children: LANGUAGES.map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: l2, children: l2 }, l2))
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "textarea",
+          {
+            value: code,
+            onChange: (e) => setCode(e.target.value),
+            placeholder: "Paste code to review…",
+            className: "flex-1 bg-bg-surface-3 border border-border-default rounded-md p-3 text-text-primary text-sm font-mono placeholder-text-muted resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            "aria-label": "Code to review"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "textarea",
+          {
+            value: context,
+            onChange: (e) => setContext(e.target.value),
+            placeholder: "Optional context (e.g., 'this handles user auth')…",
+            rows: 3,
+            className: "bg-bg-surface-3 border border-border-default rounded-md p-3 text-text-primary text-sm placeholder-text-muted resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            "aria-label": "Optional context"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: handleReview,
+            disabled: isReviewing || !code.trim(),
+            className: "flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-400 active:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed text-text-primary text-sm font-medium px-4 py-2.5 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Play, { size: 16, "aria-hidden": "true" }),
+              isReviewing ? "Reviewing…" : "Review with Council"
+            ]
+          }
+        ),
+        error && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { role: "alert", className: "text-red-400 text-sm", children: error })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-1/2 overflow-y-auto p-6", children: activeReport ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ConsensusPanel, { report: activeReport }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: activeReport.reviews.map((review) => /* @__PURE__ */ jsxRuntimeExports.jsx(PersonaCard, { review }, review.persona_name)) })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-full text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { size: 48, "aria-hidden": "true", className: "text-text-muted mb-4" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-lg font-medium mb-2", children: "No review yet" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Paste code on the left and click Review to get critiques from 4 expert personas" })
+      ] }) })
+    ] })
+  ] });
+}
+const useAnalyticsStore = create((set) => ({
+  report: null,
+  isLoading: false,
+  error: null,
+  setReport: (report) => set({ report }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$8 = "http://localhost:8009";
+function useAnalytics() {
+  const { setReport, setLoading, setError } = useAnalyticsStore();
+  const ingestEvent = reactExports.useCallback(async (event) => {
+    try {
+      const res = await fetch(`${BASE_URL$8}/events`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(event)
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  const fetchReport = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [prodRes, qualRes, roiRes] = await Promise.all([
+        fetch(`${BASE_URL$8}/metrics/productivity`),
+        fetch(`${BASE_URL$8}/metrics/quality-trends`),
+        fetch(`${BASE_URL$8}/metrics/training-roi`)
+      ]);
+      if (!prodRes.ok || !qualRes.ok || !roiRes.ok) throw new Error("Failed to fetch metrics");
+      const [productivity, quality_trends, training_roi] = await Promise.all([
+        prodRes.json(),
+        qualRes.json(),
+        roiRes.json()
+      ]);
+      const report = {
+        generated_at: Date.now() / 1e3,
+        total_events: 0,
+        productivity,
+        quality_trends,
+        training_roi
+      };
+      setReport(report);
+      return report;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [setReport, setLoading, setError]);
+  const exportReport = reactExports.useCallback(async (format = "json") => {
+    try {
+      const res = await fetch(`${BASE_URL$8}/reports/export?format=${format}`);
+      if (!res.ok) return null;
+      return await res.text();
+    } catch {
+      return null;
+    }
+  }, []);
+  return { ingestEvent, fetchReport, exportReport };
+}
+function MetricCard({ label, value, subtext, accent }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `bg-bg-surface-2 border rounded-lg p-5 ${accent ? "border-accent-500/40" : "border-border-default"}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs font-medium uppercase tracking-wide mb-2", children: label }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `text-2xl font-bold ${accent ? "text-accent-400" : "text-text-primary"}`, children: value }),
+    subtext && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mt-1", children: subtext })
+  ] });
+}
+function TrendChart({ trends }) {
+  if (trends.length === 0 || trends.every((t2) => t2.avg_quality_score === 0)) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-32 flex items-center justify-center bg-bg-surface-2 border border-border-default rounded-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No quality data yet" }) });
+  }
+  const max = Math.max(...trends.map((t2) => t2.avg_quality_score), 1);
+  const width = 600;
+  const height = 120;
+  const padding = 20;
+  const plotWidth = width - padding * 2;
+  const plotHeight = height - padding * 2;
+  const points = trends.map((t2, i) => {
+    const x2 = padding + i / Math.max(trends.length - 1, 1) * plotWidth;
+    const y2 = padding + plotHeight - t2.avg_quality_score / max * plotHeight;
+    return `${x2},${y2}`;
+  }).join(" ");
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-secondary text-xs font-medium uppercase tracking-wide mb-3", children: "Quality Score Trend" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: `0 0 ${width} ${height}`, className: "w-full", "aria-label": "Quality trend chart", role: "img", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("polyline", { points, fill: "none", stroke: "#8B5CF6", strokeWidth: "2" }),
+      trends.map((t2, i) => {
+        const x2 = padding + i / Math.max(trends.length - 1, 1) * plotWidth;
+        const y2 = padding + plotHeight - t2.avg_quality_score / max * plotHeight;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: x2, cy: y2, r: "3", fill: "#8B5CF6" }, i);
+      })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between mt-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: trends[0]?.date_label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: trends[trends.length - 1]?.date_label })
+    ] })
+  ] });
+}
+function ROITable({ roi }) {
+  const rows = [
+    { label: "Total Training Runs", value: roi.total_training_runs.toString() },
+    { label: "Avg Quality Improvement", value: `${roi.avg_improvement_pct.toFixed(1)}%` },
+    { label: "Estimated Time Saved", value: `${roi.time_saved_hours.toFixed(1)}h` },
+    { label: "ROI Multiplier", value: `${roi.estimated_roi_multiplier.toFixed(1)}x` }
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("caption", { className: "sr-only", children: "Training ROI metrics" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: rows.map(({ label, value }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border-subtle last:border-b-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-text-secondary text-sm", children: label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-text-primary text-sm font-medium text-right", children: value })
+    ] }, label)) })
+  ] }) });
+}
+function ExportPanel() {
+  const [format, setFormat] = reactExports.useState("json");
+  const { exportReport } = useAnalytics();
+  const handleExport = async () => {
+    const data = await exportReport(format);
+    if (!data) return;
+    const blob = new Blob([data], { type: format === "json" ? "application/json" : "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `analytics-report.${format}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-5", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-semibold mb-4", children: "Export Report" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-4 mb-4", children: ["json", "csv"].map((f2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 cursor-pointer", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: "radio",
+          name: "export-format",
+          value: f2,
+          checked: format === f2,
+          onChange: () => setFormat(f2),
+          className: "accent-accent-500"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm uppercase", children: f2 })
+    ] }, f2)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        onClick: handleExport,
+        className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+        "aria-label": `Export analytics report as ${format.toUpperCase()}`,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 16, "aria-hidden": "true" }),
+          "Export as ",
+          format.toUpperCase()
+        ]
+      }
+    )
+  ] });
+}
+function Analytics() {
+  const { fetchReport } = useAnalytics();
+  const { report, isLoading, error } = useAnalyticsStore();
+  reactExports.useEffect(() => {
+    fetchReport();
+  }, [fetchReport]);
+  const prod = report?.productivity;
+  const roi = report?.training_roi;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-6 py-5 border-b border-border-subtle", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(BarChart2, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Analytics" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Local productivity metrics, quality trends, and training ROI" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => fetchReport(),
+          disabled: isLoading,
+          className: "flex items-center gap-2 border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50",
+          "aria-label": "Refresh analytics",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true", className: isLoading ? "animate-spin" : "" }),
+            "Refresh"
+          ]
+        }
+      )
+    ] }) }),
+    error && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { role: "alert", className: "mx-6 mt-4 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-sm", children: error }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "productivity", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 border-b border-border-subtle bg-bg-surface-1", "aria-label": "Analytics tabs", children: ["productivity", "quality", "roi", "export"].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: tab,
+          className: "px-4 py-3 text-sm text-text-secondary hover:text-text-primary data-[state=active]:text-text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-500 -mb-px cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 capitalize",
+          children: tab === "roi" ? "Training ROI" : tab
+        },
+        tab
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "productivity", className: "flex-1 overflow-y-auto p-6", children: prod ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Total Sessions", value: prod.total_sessions }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Total Tokens", value: prod.total_tokens.toLocaleString() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Avg Tokens / Session", value: prod.avg_tokens_per_session.toFixed(0) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Acceptance Rate", value: `${(prod.acceptance_rate * 100).toFixed(0)}%`, accent: true }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Code Reviews", value: prod.total_code_reviews }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(MetricCard, { label: "Training Runs", value: prod.total_training_runs })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-48", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: isLoading ? "Loading metrics…" : "No data yet" }) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "quality", className: "flex-1 overflow-y-auto p-6", children: report?.quality_trends ? /* @__PURE__ */ jsxRuntimeExports.jsx(TrendChart, { trends: report.quality_trends }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-48", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: isLoading ? "Loading trends…" : "No trend data" }) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "roi", className: "flex-1 overflow-y-auto p-6", children: roi ? /* @__PURE__ */ jsxRuntimeExports.jsx(ROITable, { roi }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-48", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: isLoading ? "Loading ROI…" : "No ROI data" }) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "export", className: "flex-1 overflow-y-auto p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExportPanel, {}) })
+    ] })
+  ] });
+}
+const useMessagingStore = create((set) => ({
+  platforms: [],
+  messageLog: [],
+  isLoading: false,
+  error: null,
+  setPlatforms: (platforms) => set({ platforms }),
+  addLogEntry: (entry) => set((state) => ({ messageLog: [entry, ...state.messageLog].slice(0, 100) })),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$7 = "http://localhost:8010";
+function useMessaging() {
+  const { setPlatforms, setLoading, setError, addLogEntry } = useMessagingStore();
+  const configurePlatform = reactExports.useCallback(
+    async (config) => {
+      try {
+        const res = await fetch(`${BASE_URL$7}/platforms/configure`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(config)
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+    []
+  );
+  const listPlatforms = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$7}/platforms`);
+      if (!res.ok) throw new Error("Failed to fetch platforms");
+      const data = await res.json();
+      const withStatus = data.map((p2) => ({
+        ...p2,
+        connected: !!(p2.bot_token || p2.webhook_url)
+      }));
+      setPlatforms(withStatus);
+      return withStatus;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, [setPlatforms, setLoading, setError]);
+  const removePlatform = reactExports.useCallback(async (platform) => {
+    try {
+      const res = await fetch(`${BASE_URL$7}/platforms/${platform}`, { method: "DELETE" });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  const fetchMessageLog = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$7}/messages/log`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch {
+      return [];
+    }
+  }, []);
+  const checkHealth = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$7}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  return { configurePlatform, listPlatforms, removePlatform, fetchMessageLog, checkHealth };
+}
+const IM_PLATFORM_LABELS = {
+  telegram: "Telegram",
+  slack: "Slack",
+  discord: "Discord",
+  feishu: "Feishu / Lark",
+  dingtalk: "DingTalk",
+  wechat_work: "WeChat Work",
+  whatsapp: "WhatsApp Business",
+  line: "LINE"
+};
+const AVAILABLE_COMMANDS = [
+  { name: "status", description: "Get system status", usage: "status" },
+  { name: "models", description: "List installed models", usage: "models" },
+  { name: "metrics", description: "Get productivity metrics", usage: "metrics" },
+  { name: "health", description: "Check all services health", usage: "health" },
+  { name: "chat", description: "Chat with AI", usage: "chat <message>" },
+  { name: "help", description: "Show available commands", usage: "help" }
+];
+function PlatformCard({ platform, onRemove, onConfigure }) {
+  const label = IM_PLATFORM_LABELS[platform.platform] ?? platform.platform;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4 flex items-center justify-between", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      platform.connected ? /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 16, "aria-hidden": "true", className: "text-green-500" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 16, "aria-hidden": "true", className: "text-text-muted" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium", children: label }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs", children: [
+          platform.connected ? "Connected" : "Not configured",
+          platform.allowed_user_ids.length > 0 && ` · ${platform.allowed_user_ids.length} authorized user(s)`
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onConfigure(platform.platform),
+          className: "p-2 text-text-muted hover:text-text-primary hover:bg-bg-surface-3 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          "aria-label": `Configure ${label}`,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Settings$1, { size: 14, "aria-hidden": "true" })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onRemove(platform.platform),
+          className: "p-2 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          "aria-label": `Remove ${label}`,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" })
+        }
+      )
+    ] })
+  ] });
+}
+function PlatformConfigDialog({
+  open,
+  platform,
+  onClose,
+  onSaved
+}) {
+  const [botToken, setBotToken] = reactExports.useState("");
+  const [webhookUrl, setWebhookUrl] = reactExports.useState("");
+  const [allowedIds, setAllowedIds] = reactExports.useState("");
+  const { configurePlatform } = useMessaging();
+  const label = platform ? IM_PLATFORM_LABELS[platform] ?? platform : "";
+  const handleSave = async () => {
+    if (!platform) return;
+    const config = {
+      platform,
+      bot_token: botToken || void 0,
+      webhook_url: webhookUrl || void 0,
+      allowed_user_ids: allowedIds.split(",").map((id2) => id2.trim()).filter(Boolean),
+      enabled: true
+    };
+    const ok2 = await configurePlatform(config);
+    if (ok2) {
+      onSaved();
+      onClose();
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$1, { open, onOpenChange: (v2) => {
+    if (!v2) onClose();
+  }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Portal, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { className: "fixed inset-0 bg-black/60 z-40" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Content$1,
+      {
+        className: "fixed inset-0 flex items-center justify-center z-50 p-4",
+        "aria-labelledby": "config-dialog-title",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-xl w-full max-w-md p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Title,
+              {
+                id: "config-dialog-title",
+                className: "text-text-primary text-lg font-semibold",
+                children: [
+                  "Configure ",
+                  label
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: onClose,
+                className: "p-1 text-text-muted hover:text-text-primary rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Close dialog",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 16, "aria-hidden": "true" })
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "label",
+                {
+                  htmlFor: "bot-token",
+                  className: "block text-text-secondary text-xs font-medium mb-1",
+                  children: "Bot Token (optional)"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  id: "bot-token",
+                  type: "password",
+                  value: botToken,
+                  onChange: (e) => setBotToken(e.target.value),
+                  placeholder: "Enter bot token…",
+                  className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "label",
+                {
+                  htmlFor: "webhook-url",
+                  className: "block text-text-secondary text-xs font-medium mb-1",
+                  children: "Outbound Webhook URL (optional)"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  id: "webhook-url",
+                  type: "url",
+                  value: webhookUrl,
+                  onChange: (e) => setWebhookUrl(e.target.value),
+                  placeholder: "https://…",
+                  className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "label",
+                {
+                  htmlFor: "allowed-ids",
+                  className: "block text-text-secondary text-xs font-medium mb-1",
+                  children: "Authorized User IDs (comma-separated, leave blank for open access)"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  id: "allowed-ids",
+                  type: "text",
+                  value: allowedIds,
+                  onChange: (e) => setAllowedIds(e.target.value),
+                  placeholder: "user123, user456",
+                  className: "w-full bg-bg-surface-3 border border-border-default rounded-md px-3 py-2 text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-3 mt-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: onClose,
+                className: "border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-4 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                children: "Cancel"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: handleSave,
+                className: "bg-accent-500 hover:bg-accent-400 text-text-primary rounded-md px-4 py-2 text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                children: "Save"
+              }
+            )
+          ] })
+        ] })
+      }
+    )
+  ] }) });
+}
+function MessageLog({ entries }) {
+  if (entries.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-32 gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { size: 24, "aria-hidden": "true", className: "text-text-muted" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No messages yet" })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", role: "log", "aria-label": "Message history", children: entries.map((entry, idx) => {
+    const platformLabel = IM_PLATFORM_LABELS[entry.platform] ?? entry.platform;
+    const date = new Date(entry.timestamp * 1e3);
+    const timeStr = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-subtle rounded-lg p-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-text-muted", children: timeStr }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs bg-bg-surface-3 text-text-secondary px-2 py-0.5 rounded-full", children: platformLabel }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-text-muted", children: [
+          "from ",
+          entry.sender_id
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-accent-400 text-xs bg-bg-surface-3 px-2 py-1 rounded flex-shrink-0", children: entry.command }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { size: 12, "aria-hidden": "true", className: "text-text-muted mt-1 flex-shrink-0" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-secondary text-xs", children: [
+          entry.response.slice(0, 120),
+          entry.response.length > 120 ? "…" : ""
+        ] })
+      ] })
+    ] }, idx);
+  }) });
+}
+function CommandReference() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-semibold", children: "Available Commands" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs mt-0.5", children: "Send these commands from your IM platform" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full", "aria-label": "Available IM commands", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "bg-bg-surface-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-2 text-left text-text-muted text-xs font-medium uppercase tracking-wide", children: "Command" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-2 text-left text-text-muted text-xs font-medium uppercase tracking-wide", children: "Usage" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-2 text-left text-text-muted text-xs font-medium uppercase tracking-wide", children: "Description" })
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: AVAILABLE_COMMANDS.map((cmd) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-t border-border-subtle", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-accent-400 text-xs", children: cmd.name }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-text-secondary text-xs", children: cmd.usage }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2 text-text-secondary text-sm", children: cmd.description })
+      ] }, cmd.name)) })
+    ] })
+  ] });
+}
+const ALL_PLATFORMS = [
+  "telegram",
+  "slack",
+  "discord",
+  "feishu",
+  "dingtalk",
+  "wechat_work",
+  "whatsapp",
+  "line"
+];
+function Messaging() {
+  const { listPlatforms, removePlatform, fetchMessageLog } = useMessaging();
+  const { platforms, messageLog, isLoading } = useMessagingStore();
+  const [dialogOpen, setDialogOpen] = reactExports.useState(false);
+  const [selectedPlatform, setSelectedPlatform] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    listPlatforms();
+    fetchMessageLog().then((entries) => {
+      const { addLogEntry } = useMessagingStore.getState();
+      entries.forEach((e) => addLogEntry(e));
+    });
+  }, [listPlatforms, fetchMessageLog]);
+  const handleConfigurePlatform = (platform) => {
+    setSelectedPlatform(platform);
+    setDialogOpen(true);
+  };
+  const handleRemovePlatform = async (platform) => {
+    await removePlatform(platform);
+    listPlatforms();
+  };
+  const webhookBase = "http://localhost:8010/webhooks";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-6 py-5 border-b border-border-subtle", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Smartphone, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "IM Bridge" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Monitor and remote-control Sovereign Code via Telegram, Slack, Discord and more" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => listPlatforms(),
+            disabled: isLoading,
+            className: "flex items-center gap-2 border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50",
+            "aria-label": "Refresh platform list",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                RefreshCw,
+                {
+                  size: 14,
+                  "aria-hidden": "true",
+                  className: isLoading ? "animate-spin" : ""
+                }
+              ),
+              "Refresh"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => {
+              setSelectedPlatform("telegram");
+              setDialogOpen(true);
+            },
+            className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14, "aria-hidden": "true" }),
+              "Add Platform"
+            ]
+          }
+        )
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "platforms", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        List,
+        {
+          className: "flex gap-1 px-6 border-b border-border-subtle bg-bg-surface-1",
+          "aria-label": "IM Bridge tabs",
+          children: [
+            { value: "platforms", label: "Platforms" },
+            { value: "log", label: "Message Log" },
+            { value: "commands", label: "Commands" },
+            { value: "setup", label: "Setup Guide" }
+          ].map(({ value, label }) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Trigger,
+            {
+              value,
+              className: "px-4 py-3 text-sm text-text-secondary hover:text-text-primary data-[state=active]:text-text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-500 -mb-px cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: label
+            },
+            value
+          ))
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "platforms", className: "flex-1 overflow-y-auto p-6", children: platforms.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-48 gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Smartphone, { size: 36, "aria-hidden": "true", className: "text-text-muted" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No platforms configured" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: () => {
+              setSelectedPlatform("telegram");
+              setDialogOpen(true);
+            },
+            className: "text-accent-400 text-sm hover:underline cursor-pointer",
+            children: "Add your first platform"
+          }
+        )
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: platforms.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        PlatformCard,
+        {
+          platform: p2,
+          onRemove: handleRemovePlatform,
+          onConfigure: handleConfigurePlatform
+        },
+        p2.platform
+      )) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "log", className: "flex-1 overflow-y-auto p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MessageLog, { entries: messageLog }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "commands", className: "flex-1 overflow-y-auto p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CommandReference, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "setup", className: "flex-1 overflow-y-auto p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-5 space-y-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-semibold", children: "Setup Instructions" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-secondary text-sm", children: [
+          "This service runs locally at",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-accent-400", children: "http://localhost:8010" }),
+          ". Configure your IM bot to send webhook events to:"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-surface-3 rounded-md p-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("code", { className: "text-text-code text-sm", children: [
+          webhookBase,
+          "/{platform}"
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2 text-text-secondary text-sm list-disc list-inside", children: ALL_PLATFORMS.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary font-medium", children: p2 }),
+          " — ",
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("code", { className: "text-accent-400 text-xs", children: [
+            webhookBase,
+            "/",
+            p2
+          ] })
+        ] }, p2)) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: "For ngrok or public tunneling: expose port 8010 and update your bot webhook URL accordingly." })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      PlatformConfigDialog,
+      {
+        open: dialogOpen,
+        platform: selectedPlatform,
+        onClose: () => setDialogOpen(false),
+        onSaved: () => listPlatforms()
+      }
+    )
+  ] });
+}
+const useSemanticSearchStore = create((set) => ({
+  results: [],
+  indexStatus: null,
+  isSearching: false,
+  isIndexing: false,
+  error: null,
+  query: "",
+  setResults: (results) => set({ results }),
+  setIndexStatus: (indexStatus) => set({ indexStatus }),
+  setSearching: (isSearching) => set({ isSearching }),
+  setIndexing: (isIndexing) => set({ isIndexing }),
+  setError: (error) => set({ error }),
+  setQuery: (query) => set({ query })
+}));
+const BASE_URL$6 = "http://localhost:8011";
+function useSemanticSearch() {
+  const { setResults, setIndexStatus, setSearching, setIndexing, setError } = useSemanticSearchStore();
+  const search = reactExports.useCallback(async (query, topK = 5) => {
+    if (!query.trim()) return [];
+    setSearching(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$6}/search?q=${encodeURIComponent(query)}&top_k=${topK}`);
+      if (!res.ok) throw new Error("Search failed");
+      const data = await res.json();
+      setResults(data);
+      return data;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Search error");
+      return [];
+    } finally {
+      setSearching(false);
+    }
+  }, [setResults, setSearching, setError]);
+  const indexContent = reactExports.useCallback(async (req) => {
+    setIndexing(true);
+    try {
+      const res = await fetch(`${BASE_URL$6}/index`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req)
+      });
+      return res.ok;
+    } catch {
+      return false;
+    } finally {
+      setIndexing(false);
+    }
+  }, [setIndexing]);
+  const clearIndex = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$6}/index`, { method: "DELETE" });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  const fetchStatus = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$6}/index/status`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      setIndexStatus(data);
+      return data;
+    } catch {
+      return null;
+    }
+  }, [setIndexStatus]);
+  return { search, indexContent, clearIndex, fetchStatus };
+}
+function SearchResultCard({ result, rank }) {
+  const scorePercent = Math.round(Math.max(0, result.score) * 100);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-xs font-mono", children: [
+          "#",
+          rank
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FileCode, { size: 14, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-medium truncate max-w-xs", children: result.file_path }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-xs", children: [
+          "L",
+          result.start_line,
+          "–",
+          result.end_line
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-text-muted bg-bg-surface-3 px-2 py-0.5 rounded-full", children: result.language }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `text-xs font-medium px-2 py-0.5 rounded-full ${scorePercent >= 70 ? "text-green-500 bg-green-500/10" : scorePercent >= 40 ? "text-yellow-400 bg-yellow-400/10" : "text-text-muted bg-bg-surface-3"}`, children: [
+          scorePercent,
+          "% match"
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("pre", { className: "text-text-code text-xs bg-bg-surface-3 rounded-md p-3 overflow-x-auto max-h-24", children: [
+      result.chunk_text.slice(0, 300),
+      result.chunk_text.length > 300 ? "…" : ""
+    ] })
+  ] });
+}
+function IndexStatusBadge({ status }) {
+  if (!status) return null;
+  const color = status.status === "ready" ? "text-green-500" : status.status === "indexing" ? "text-yellow-400" : "text-text-muted";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { size: 12, "aria-hidden": "true", className: color }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: color, children: [
+      status.total_chunks,
+      " chunks"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted", children: "·" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted", children: [
+      status.indexed_files,
+      " files"
+    ] })
+  ] });
+}
+function EmptySearchState() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-64 gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 40, "aria-hidden": "true", className: "text-text-muted" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "Search your codebase by meaning" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs max-w-sm text-center", children: 'Index your code files, then type a natural language query like "function that handles authentication"' })
+  ] });
+}
+function SemanticSearch() {
+  const { search, clearIndex, fetchStatus } = useSemanticSearch();
+  const { results, indexStatus, isSearching, query, setQuery } = useSemanticSearchStore();
+  const [hasSearched, setHasSearched] = reactExports.useState(false);
+  const inputRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
+  const handleSearch = reactExports.useCallback(async () => {
+    if (!query.trim()) return;
+    setHasSearched(true);
+    await search(query);
+  }, [query, search]);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+  };
+  const handleClear = async () => {
+    await clearIndex();
+    await fetchStatus();
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Code Search" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IndexStatusBadge, { status: indexStatus }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: () => fetchStatus(),
+              className: "p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-surface-3 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              "aria-label": "Refresh index status",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true" })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: handleClear,
+              className: "p-1.5 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              "aria-label": "Clear search index",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" })
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm mb-4", children: "Search your codebase semantically — by meaning, not just keywords" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 16, "aria-hidden": "true", className: "absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              ref: inputRef,
+              type: "search",
+              value: query,
+              onChange: (e) => setQuery(e.target.value),
+              onKeyDown: handleKeyDown,
+              placeholder: "Search by intent, e.g. 'authentication middleware' …",
+              className: "w-full bg-bg-surface-2 border border-border-default rounded-lg pl-9 pr-4 py-2 text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500",
+              "aria-label": "Semantic search query"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: handleSearch,
+            disabled: isSearching || !query.trim(),
+            className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm font-medium px-4 py-2 rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            children: [
+              isSearching ? /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, className: "animate-spin", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 14, "aria-hidden": "true" }),
+              isSearching ? "Searching…" : "Search"
+            ]
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto p-6", children: !hasSearched ? /* @__PURE__ */ jsxRuntimeExports.jsx(EmptySearchState, {}) : results.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-48", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-sm", children: [
+      'No results found for "',
+      query,
+      '"'
+    ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs mb-3", children: [
+        results.length,
+        ' result(s) for "',
+        query,
+        '"'
+      ] }),
+      results.map((r2, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(SearchResultCard, { result: r2, rank: i + 1 }, `${r2.file_path}-${r2.start_line}`))
+    ] }) })
+  ] });
+}
+const usePluginStore = create((set) => ({
+  plugins: [],
+  isLoading: false,
+  error: null,
+  setPlugins: (plugins) => set({ plugins }),
+  addPlugin: (plugin) => set((state) => ({ plugins: [...state.plugins, plugin] })),
+  removePlugin: (id2) => set((state) => ({ plugins: state.plugins.filter((p2) => p2.id !== id2) })),
+  setEnabled: (id2, enabled) => set((state) => ({
+    plugins: state.plugins.map((p2) => p2.id === id2 ? { ...p2, enabled } : p2)
+  })),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$5 = "http://localhost:8012";
+function usePluginSystem() {
+  const { setPlugins, addPlugin, removePlugin, setEnabled, setLoading, setError } = usePluginStore();
+  const fetchPlugins = reactExports.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$5}/plugins`);
+      if (!res.ok) throw new Error("Failed to fetch plugins");
+      const data = await res.json();
+      setPlugins(data);
+      return data;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, [setPlugins, setLoading, setError]);
+  const registerPlugin = reactExports.useCallback(async (manifest) => {
+    try {
+      const res = await fetch(`${BASE_URL$5}/plugins/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(manifest)
+      });
+      if (res.ok) addPlugin(manifest);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, [addPlugin]);
+  const unregisterPlugin = reactExports.useCallback(async (id2) => {
+    try {
+      const res = await fetch(`${BASE_URL$5}/plugins/${id2}`, { method: "DELETE" });
+      if (res.ok) removePlugin(id2);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, [removePlugin]);
+  const togglePlugin = reactExports.useCallback(async (id2, enabled) => {
+    const endpoint = enabled ? "enable" : "disable";
+    try {
+      const res = await fetch(`${BASE_URL$5}/plugins/${id2}/${endpoint}`, { method: "PUT" });
+      if (res.ok) setEnabled(id2, enabled);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, [setEnabled]);
+  const dispatchHook = reactExports.useCallback(async (event) => {
+    try {
+      const res = await fetch(`${BASE_URL$5}/hooks/dispatch`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(event)
+      });
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.handled_by ?? [];
+    } catch {
+      return [];
+    }
+  }, []);
+  return { fetchPlugins, registerPlugin, unregisterPlugin, togglePlugin, dispatchHook };
+}
+function PluginCard({ plugin, onToggle, onRemove }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Puzzle, { size: 20, "aria-hidden": "true", className: "text-accent-400 mt-0.5" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-semibold", children: plugin.name }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs bg-bg-surface-3 px-1.5 py-0.5 rounded", children: plugin.version })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-xs mb-2", children: plugin.description }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 flex-wrap", children: plugin.hooks.map((h) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 text-xs text-accent-400 bg-accent-500/10 px-1.5 py-0.5 rounded", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { size: 10, "aria-hidden": "true" }),
+          h
+        ] }, h)) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs mt-1", children: [
+          "by ",
+          plugin.author
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onToggle(plugin.id, !plugin.enabled),
+          className: "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 rounded",
+          "aria-label": plugin.enabled ? `Disable ${plugin.name}` : `Enable ${plugin.name}`,
+          children: plugin.enabled ? /* @__PURE__ */ jsxRuntimeExports.jsx(ToggleRight, { size: 22, "aria-hidden": "true", className: "text-green-500" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(ToggleLeft, { size: 22, "aria-hidden": "true", className: "text-text-muted" })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onRemove(plugin.id),
+          className: "p-1.5 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          "aria-label": `Remove ${plugin.name}`,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14, "aria-hidden": "true" })
+        }
+      )
+    ] })
+  ] }) });
+}
+const BUILTIN_HOOKS = [
+  "on_startup",
+  "on_chat_message",
+  "on_code_review",
+  "on_training_complete",
+  "on_search_query"
+];
+function HooksList() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-secondary text-sm font-medium mb-3", children: "Available Hooks" }),
+    BUILTIN_HOOKS.map((hook) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 bg-bg-surface-3 rounded-md px-3 py-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 14, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-text-code text-xs", children: hook })
+    ] }, hook))
+  ] });
+}
+function Plugins() {
+  const { fetchPlugins, unregisterPlugin, togglePlugin } = usePluginSystem();
+  const { plugins, isLoading } = usePluginStore();
+  reactExports.useEffect(() => {
+    fetchPlugins();
+  }, [fetchPlugins]);
+  const handleToggle = (id2, enabled) => togglePlugin(id2, enabled);
+  const handleRemove = (id2) => unregisterPlugin(id2);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Puzzle, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Plugin Extension System" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: () => fetchPlugins(),
+            className: "p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-surface-3 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            "aria-label": "Refresh plugins",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true" })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Extend Sovereign Coder with custom plugins" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "installed", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["installed", "hooks", "guide"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2 === "installed" ? `Installed (${plugins.length})` : t2.charAt(0).toUpperCase() + t2.slice(1)
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "installed", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-text-muted text-sm", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, className: "animate-spin", "aria-hidden": "true" }),
+          "Loading plugins…"
+        ] }) : plugins.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center h-48 gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Puzzle, { size: 40, "aria-hidden": "true", className: "text-text-muted" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No plugins installed" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: plugins.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsx(PluginCard, { plugin: p2, onToggle: handleToggle, onRemove: handleRemove }, p2.id)) }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "hooks", children: /* @__PURE__ */ jsxRuntimeExports.jsx(HooksList, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "guide", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-text-primary text-sm font-medium mb-3", children: "Plugin Development Guide" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-secondary text-sm", children: [
+            "Create a manifest JSON and POST to ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-text-code", children: "/plugins/register" }),
+            " to install a plugin."
+          ] })
+        ] }) })
+      ] })
+    ] })
+  ] });
+}
+const usePRReviewStore = create((set) => ({
+  result: null,
+  rules: [],
+  diff: "",
+  isReviewing: false,
+  error: null,
+  setResult: (result) => set({ result }),
+  setRules: (rules) => set({ rules }),
+  setDiff: (diff) => set({ diff }),
+  setReviewing: (isReviewing) => set({ isReviewing }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$4 = "http://localhost:8013";
+function usePRReview() {
+  const { setResult, setRules, setReviewing, setError } = usePRReviewStore();
+  const reviewDiff = reactExports.useCallback(
+    async (diff, language = "python", rules = []) => {
+      if (!diff.trim()) return null;
+      setReviewing(true);
+      setError(null);
+      try {
+        const res = await fetch(`${BASE_URL$4}/review`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ diff, language, rules })
+        });
+        if (!res.ok) throw new Error("Review failed");
+        const data = await res.json();
+        setResult(data);
+        return data;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Review error");
+        return null;
+      } finally {
+        setReviewing(false);
+      }
+    },
+    [setResult, setReviewing, setError]
+  );
+  const fetchRules = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$4}/rules`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setRules(data.rules ?? []);
+      return data.rules ?? [];
+    } catch {
+      return [];
+    }
+  }, [setRules]);
+  return { reviewDiff, fetchRules };
+}
+function ReviewSummaryCard({ summary, approved }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: `bg-bg-surface-2 border rounded-lg p-4 ${approved ? "border-green-500/50" : "border-red-500/50"}`,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+          approved ? /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 18, "aria-hidden": "true", className: "text-green-500" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 18, "aria-hidden": "true", className: "text-red-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-semibold", children: approved ? "Approved" : "Changes Required" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-auto text-xs font-medium px-2 py-0.5 rounded-full bg-bg-surface-3 text-text-secondary", children: [
+            "Score: ",
+            summary.score,
+            "/100"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-4 gap-3 text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: "Files" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-bold", children: summary.total_files })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-xs", children: "Errors" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-sm font-bold", children: summary.errors })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-yellow-400 text-xs", children: "Warnings" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-yellow-400 text-sm font-bold", children: summary.warnings })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: "Infos" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-bold", children: summary.infos })
+          ] })
+        ] })
+      ]
+    }
+  );
+}
+const severityIcon = (s) => {
+  if (s === "error") return /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 14, "aria-hidden": "true", className: "text-red-400" });
+  if (s === "warning")
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { size: 14, "aria-hidden": "true", className: "text-yellow-400" });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Info, { size: 14, "aria-hidden": "true", className: "text-blue-400" });
+};
+const severityClass = (s) => {
+  if (s === "error") return "border-l-2 border-red-400";
+  if (s === "warning") return "border-l-2 border-yellow-400";
+  return "border-l-2 border-blue-400";
+};
+function ReviewCommentList({ comments }) {
+  if (comments.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No comments — looking clean!" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: comments.map((c, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `bg-bg-surface-2 rounded-md p-3 ${severityClass(c.severity)}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-1", children: [
+      severityIcon(c.severity),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-secondary text-xs font-mono", children: [
+        c.file_path,
+        ":",
+        c.line
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs ml-auto", children: c.rule })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-xs", children: c.message })
+  ] }, i)) });
+}
+const SAMPLE_DIFF = `diff --git a/src/auth.py b/src/auth.py
+index 1234..5678 100644
+--- a/src/auth.py
++++ b/src/auth.py
+@@ -10,6 +10,9 @@ class Auth:
+ def login(self):
++    password = "hunter2"
++    print("Logging in...")
++    # TODO: add 2FA
+     return True`;
+function PRReview() {
+  const { reviewDiff, fetchRules } = usePRReview();
+  const { result, rules, diff, isReviewing, setDiff } = usePRReviewStore();
+  reactExports.useEffect(() => {
+    fetchRules();
+  }, [fetchRules]);
+  const handleReview = () => reviewDiff(diff || SAMPLE_DIFF);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(GitPullRequest, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "PR Review Agent" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Automated code review with configurable rules" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "review", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["review", "rules", "history"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2.charAt(0).toUpperCase() + t2.slice(1)
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "review", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-text-secondary text-xs block mb-1", children: "Paste git diff here" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                value: diff,
+                onChange: (e) => setDiff(e.target.value),
+                placeholder: SAMPLE_DIFF,
+                rows: 6,
+                "aria-label": "Git diff input",
+                className: "w-full bg-bg-surface-2 border border-border-default rounded-lg px-3 py-2 text-text-code text-xs font-mono resize-none focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: handleReview,
+              disabled: isReviewing,
+              className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm font-medium px-4 py-2 rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 mb-6",
+              children: [
+                isReviewing ? /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, className: "animate-spin", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Play, { size: 14, "aria-hidden": "true" }),
+                isReviewing ? "Reviewing…" : "Run Review"
+              ]
+            }
+          ),
+          result && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ReviewSummaryCard, { summary: result.summary, approved: result.approved }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-text-secondary text-sm font-medium mb-3", children: [
+                "Review Comments (",
+                result.comments.length,
+                ")"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ReviewCommentList, { comments: result.comments })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "rules", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-text-secondary text-sm font-medium mb-3", children: [
+            "Active Rules (",
+            rules.length,
+            ")"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: rules.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "bg-bg-surface-2 border border-border-default rounded-md px-3 py-2",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-text-code text-xs", children: r2.id }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "span",
+                    {
+                      className: `text-xs px-1.5 rounded ${r2.severity === "error" ? "text-red-400 bg-red-500/10" : r2.severity === "warning" ? "text-yellow-400 bg-yellow-400/10" : "text-blue-400 bg-blue-400/10"}`,
+                      children: r2.severity
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs mt-1", children: r2.message })
+              ]
+            },
+            r2.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "history", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "Review history coming soon." }) })
+      ] })
+    ] })
+  ] });
+}
+const useFinetuneStore = create((set) => ({
+  jobs: [],
+  checkpoints: [],
+  activeJobId: null,
+  isLoading: false,
+  error: null,
+  setJobs: (jobs) => set({ jobs }),
+  addJob: (job) => set((state) => ({ jobs: [...state.jobs, job] })),
+  updateJob: (job) => set((state) => ({
+    jobs: state.jobs.map((j) => j.job_id === job.job_id ? job : j)
+  })),
+  setCheckpoints: (checkpoints) => set({ checkpoints }),
+  setActiveJobId: (activeJobId) => set({ activeJobId }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$3 = "http://localhost:8001";
+function useFinetune() {
+  const { addJob, updateJob, setJobs, setCheckpoints, setActiveJobId, setLoading, setError } = useFinetuneStore();
+  const startJob = reactExports.useCallback(
+    async (config) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${BASE_URL$3}/finetune/start`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(config)
+        });
+        if (!res.ok) throw new Error("Failed to start fine-tune");
+        const data = await res.json();
+        const jobRes = await fetch(`${BASE_URL$3}/finetune/status/${data.job_id}`);
+        const job = await jobRes.json();
+        addJob(job);
+        setActiveJobId(job.job_id);
+        return job;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Error");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [addJob, setActiveJobId, setLoading, setError]
+  );
+  const fetchJobs = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$3}/finetune/jobs`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setJobs(data);
+      return data;
+    } catch {
+      return [];
+    }
+  }, [setJobs]);
+  const stopJob = reactExports.useCallback(
+    async (jobId) => {
+      try {
+        const res = await fetch(`${BASE_URL$3}/finetune/stop/${jobId}`, { method: "POST" });
+        if (res.ok) {
+          const updated = await fetch(`${BASE_URL$3}/finetune/status/${jobId}`);
+          if (updated.ok) updateJob(await updated.json());
+        }
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+    [updateJob]
+  );
+  const fetchCheckpoints = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$3}/finetune/checkpoints`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setCheckpoints(data);
+      return data;
+    } catch {
+      return [];
+    }
+  }, [setCheckpoints]);
+  return { startJob, fetchJobs, stopJob, fetchCheckpoints };
+}
+function LossCurve({ losses, width = 300, height = 80 }) {
+  if (losses.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-20 text-text-muted text-xs", children: "No loss data yet" });
+  }
+  const max = Math.max(...losses);
+  const min = Math.min(...losses);
+  const range = max - min || 1;
+  const pad = 8;
+  const w2 = width - pad * 2;
+  const h = height - pad * 2;
+  const points = losses.map((l2, i) => {
+    const x2 = pad + i / Math.max(losses.length - 1, 1) * w2;
+    const y2 = pad + (1 - (l2 - min) / range) * h;
+    return `${x2},${y2}`;
+  }).join(" ");
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "svg",
+    {
+      width,
+      height,
+      role: "img",
+      "aria-label": `Loss curve: ${losses.length} data points, current loss ${losses[losses.length - 1]?.toFixed(3)}`,
+      className: "w-full",
+      viewBox: `0 0 ${width} ${height}`,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "polyline",
+          {
+            points,
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: 2,
+            className: "text-accent-400"
+          }
+        ),
+        losses.map((l2, i) => {
+          const x2 = pad + i / Math.max(losses.length - 1, 1) * w2;
+          const y2 = pad + (1 - (l2 - min) / range) * h;
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: x2, cy: y2, r: 3, className: "fill-accent-500" }, i);
+        })
+      ]
+    }
+  );
+}
+function CheckpointTable({ checkpoints }) {
+  if (checkpoints.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No checkpoints yet." });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-text-muted border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 font-medium", children: "Name" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-center py-2 font-medium", children: "Epoch" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-center py-2 font-medium", children: "Loss" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left py-2 font-medium", children: "Path" })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: checkpoints.map((c, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border-subtle/50", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 text-text-primary font-medium", children: c.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 text-center text-text-secondary", children: c.epoch }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 text-center text-accent-400", children: c.loss.toFixed(3) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 text-text-muted font-mono", children: c.path })
+    ] }, i)) })
+  ] });
+}
+function StatusIcon({ status }) {
+  if (status === "running") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true", className: "text-yellow-400 animate-spin" });
+  }
+  if (status === "complete") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 14, "aria-hidden": "true", className: "text-green-500" });
+  }
+  if (status === "failed" || status === "stopped") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(CircleX, { size: 14, "aria-hidden": "true", className: "text-red-400" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { size: 14, "aria-hidden": "true", className: "text-text-muted" });
+}
+function JobStatusCard({ job, onStop }) {
+  const pct = Math.round(job.progress * 100);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatusIcon, { status: job.status }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-sm font-medium truncate max-w-xs font-mono", children: job.job_id.slice(0, 8) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs", children: job.status })
+      ] }),
+      job.status === "running" && onStop && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => onStop(job.job_id),
+          className: "flex items-center gap-1 text-xs text-red-400 hover:bg-red-500/10 rounded px-2 py-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          "aria-label": "Stop fine-tune job",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Square, { size: 10, "aria-hidden": "true" }),
+            "Stop"
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-bg-surface-3 rounded-full h-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-accent-500 h-1.5 rounded-full", style: { width: `${pct}%` } }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-xs", children: [
+        pct,
+        "%"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs", children: [
+      "Epoch ",
+      job.current_epoch,
+      "/",
+      job.total_epochs,
+      " · ",
+      pct,
+      "% complete"
+    ] })
+  ] });
+}
+const DEFAULT_CONFIG = {
+  base_model: "mistral-7b",
+  dataset_path: "./datasets/custom.jsonl",
+  learning_rate: 3e-4,
+  epochs: 3,
+  batch_size: 4,
+  lora_rank: 8,
+  output_dir: "./finetune-output"
+};
+function Finetune() {
+  const { startJob, fetchJobs, stopJob, fetchCheckpoints } = useFinetune();
+  const { jobs, checkpoints, activeJobId, isLoading } = useFinetuneStore();
+  const [config, setConfig] = reactExports.useState(DEFAULT_CONFIG);
+  reactExports.useEffect(() => {
+    fetchJobs();
+    fetchCheckpoints();
+  }, [fetchJobs, fetchCheckpoints]);
+  const activeJob = jobs.find((j) => j.job_id === activeJobId) ?? null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FlaskConical, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Local Model Fine-tuning" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Fine-tune local models with LoRA on custom datasets" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "configure", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["configure", "jobs", "checkpoints", "loss"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2 === "jobs" ? `Jobs (${jobs.length})` : t2 === "checkpoints" ? `Checkpoints (${checkpoints.length})` : t2.charAt(0).toUpperCase() + t2.slice(1)
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "configure", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-4 mb-6", children: [
+            { key: "base_model", label: "Base Model", type: "text" },
+            { key: "dataset_path", label: "Dataset Path", type: "text" },
+            { key: "learning_rate", label: "Learning Rate", type: "number" },
+            { key: "epochs", label: "Epochs", type: "number" },
+            { key: "batch_size", label: "Batch Size", type: "number" },
+            { key: "lora_rank", label: "LoRA Rank", type: "number" }
+          ].map(({ key, label, type }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-text-secondary text-xs block mb-1", children: label }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type,
+                value: config[key],
+                onChange: (e) => setConfig((c) => ({
+                  ...c,
+                  [key]: type === "number" ? parseFloat(e.target.value) : e.target.value
+                })),
+                className: "w-full bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500",
+                "aria-label": label
+              }
+            )
+          ] }, key)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: () => startJob(config),
+              disabled: isLoading,
+              className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm font-medium px-4 py-2 rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: [
+                isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, className: "animate-spin", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Play, { size: 14, "aria-hidden": "true" }),
+                isLoading ? "Starting…" : "Start Fine-tuning"
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "jobs", children: jobs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No fine-tune jobs yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: jobs.map((j) => /* @__PURE__ */ jsxRuntimeExports.jsx(JobStatusCard, { job: j, onStop: stopJob }, j.job_id)) }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "checkpoints", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CheckpointTable, { checkpoints }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "loss", children: activeJob && activeJob.loss_history.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs mb-3", children: [
+            "Loss curve for job ",
+            activeJob.job_id.slice(0, 8)
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LossCurve, { losses: activeJob.loss_history })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No active job with loss data. Start a fine-tune to see the curve." }) })
+      ] })
+    ] })
+  ] });
+}
+const useFederationCoreStore = create((set) => ({
+  peers: [],
+  currentRound: null,
+  roundHistory: [],
+  isLoading: false,
+  error: null,
+  setPeers: (peers) => set({ peers }),
+  addPeer: (peer) => set((state) => ({ peers: [...state.peers, peer] })),
+  removePeer: (id2) => set((state) => ({ peers: state.peers.filter((p2) => p2.peer_id !== id2) })),
+  setCurrentRound: (currentRound) => set({ currentRound }),
+  setRoundHistory: (roundHistory) => set({ roundHistory }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$2 = "http://localhost:8014";
+function useFederationCore() {
+  const { setPeers, addPeer, removePeer, setCurrentRound, setRoundHistory, setLoading, setError } = useFederationCoreStore();
+  const fetchPeers = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$2}/peers`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setPeers(data);
+      return data;
+    } catch {
+      return [];
+    }
+  }, [setPeers]);
+  const registerPeer = reactExports.useCallback(
+    async (peer) => {
+      try {
+        const res = await fetch(`${BASE_URL$2}/peers/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(peer)
+        });
+        if (res.ok) addPeer(peer);
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+    [addPeer]
+  );
+  const unregisterPeer = reactExports.useCallback(
+    async (id2) => {
+      try {
+        const res = await fetch(`${BASE_URL$2}/peers/${id2}`, { method: "DELETE" });
+        if (res.ok) removePeer(id2);
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+    [removePeer]
+  );
+  const startRound = reactExports.useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE_URL$2}/rounds/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}"
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      setCurrentRound(data);
+      return data;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [setCurrentRound, setLoading, setError]);
+  const fetchHistory = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL$2}/rounds/history`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setRoundHistory(data);
+      return data;
+    } catch {
+      return [];
+    }
+  }, [setRoundHistory]);
+  return { fetchPeers, registerPeer, unregisterPeer, startRound, fetchHistory };
+}
+function PeerCard({ peer, onRemove }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg px-4 py-3 flex items-center justify-between", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Server, { size: 16, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm font-medium", children: peer.peer_id }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs", children: [
+          peer.address,
+          " · ",
+          peer.data_size,
+          " samples"
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: () => onRemove(peer.peer_id),
+        className: "p-1.5 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+        "aria-label": `Remove peer ${peer.peer_id}`,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 13, "aria-hidden": "true" })
+      }
+    )
+  ] });
+}
+function RoundStatusCard({ round }) {
+  const pct = round.participating_peers.length > 0 ? Math.round(
+    round.submitted_peers.length / round.participating_peers.length * 100
+  ) : 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+      round.status === "complete" ? /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { size: 16, "aria-hidden": "true", className: "text-green-500" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, "aria-hidden": "true", className: "text-yellow-400 animate-spin" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-primary text-sm font-medium", children: [
+        "Round ",
+        round.round_id.slice(0, 8)
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-xs ml-auto", children: round.status })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-bg-surface-3 rounded-full h-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-accent-500 h-1.5 rounded-full", style: { width: `${pct}%` } }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-xs", children: [
+        round.submitted_peers.length,
+        "/",
+        round.participating_peers.length
+      ] })
+    ] }),
+    round.dp_noise_applied && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-blue-400", children: [
+      "DP noise applied (ε=",
+      1,
+      ")"
+    ] }),
+    round.aggregated_gradients && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-green-500", children: [
+      "Aggregated: ",
+      round.aggregated_gradients.length,
+      " gradient values"
+    ] })
+  ] });
+}
+function FederationCore() {
+  const { fetchPeers, registerPeer, unregisterPeer, startRound, fetchHistory } = useFederationCore();
+  const { peers, currentRound, roundHistory, isLoading } = useFederationCoreStore();
+  const [newPeerId, setNewPeerId] = reactExports.useState("");
+  const [newPeerAddr, setNewPeerAddr] = reactExports.useState("");
+  reactExports.useEffect(() => {
+    fetchPeers();
+    fetchHistory();
+  }, [fetchPeers, fetchHistory]);
+  const handleAddPeer = async () => {
+    if (!newPeerId.trim()) return;
+    const peer = {
+      peer_id: newPeerId,
+      address: newPeerAddr || "localhost",
+      data_size: 100
+    };
+    await registerPeer(peer);
+    setNewPeerId("");
+    setNewPeerAddr("");
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Network, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Federated Learning Core" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: () => {
+              fetchPeers();
+              fetchHistory();
+            },
+            className: "p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-surface-3 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            "aria-label": "Refresh federation data",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true" })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Federated Averaging with Differential Privacy (DP-SGD)" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "peers", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["peers", "rounds", "history"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2 === "peers" ? `Peers (${peers.length})` : t2 === "rounds" ? "Current Round" : `History (${roundHistory.length})`
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "peers", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: newPeerId,
+                onChange: (e) => setNewPeerId(e.target.value),
+                placeholder: "Peer ID",
+                "aria-label": "New peer ID",
+                className: "flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: newPeerAddr,
+                onChange: (e) => setNewPeerAddr(e.target.value),
+                placeholder: "Address",
+                "aria-label": "New peer address",
+                className: "flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: handleAddPeer,
+                className: "flex items-center gap-1 bg-accent-500 hover:bg-accent-400 text-text-primary text-sm px-3 py-1.5 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Add peer",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14, "aria-hidden": "true" }),
+                  "Add"
+                ]
+              }
+            )
+          ] }),
+          peers.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No peers registered." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: peers.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsx(PeerCard, { peer: p2, onRemove: unregisterPeer }, p2.peer_id)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "rounds", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: startRound,
+              disabled: isLoading || peers.length === 0,
+              className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm font-medium px-4 py-2 rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: [
+                isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, className: "animate-spin", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Play, { size: 14, "aria-hidden": "true" }),
+                "Start Federated Round"
+              ]
+            }
+          ) }),
+          currentRound ? /* @__PURE__ */ jsxRuntimeExports.jsx(RoundStatusCard, { round: currentRound }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No active round. Add peers and start a round." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "history", children: roundHistory.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No completed rounds yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: roundHistory.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(RoundStatusCard, { round: r2 }, r2.round_id)) }) })
+      ] })
+    ] })
+  ] });
+}
+const useCodeCompletionStore = create((set) => ({
+  completions: [],
+  activeIndex: 0,
+  isLoading: false,
+  prefix: "",
+  error: null,
+  setCompletions: (completions) => set({ completions, activeIndex: 0 }),
+  setActiveIndex: (activeIndex) => set({ activeIndex }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setPrefix: (prefix) => set({ prefix }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL$1 = "http://localhost:8015";
+function useCodeCompletion() {
+  const { setCompletions, setLoading, setError } = useCodeCompletionStore();
+  const getCompletions = reactExports.useCallback(async (req) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${BASE_URL$1}/complete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req)
+      });
+      if (!res.ok) return [];
+      const data = await res.json();
+      setCompletions(data.completions);
+      return data.completions;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, [setCompletions, setLoading, setError]);
+  const submitFeedback = reactExports.useCallback(async (fb2) => {
+    try {
+      const res = await fetch(`${BASE_URL$1}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fb2)
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+  return { getCompletions, submitFeedback };
+}
+function CompletionItem({ completion, isActive, onAccept }) {
+  const pct = Math.round(completion.confidence * 100);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      onClick: () => onAccept(completion.text),
+      className: `w-full flex items-center gap-3 px-3 py-2 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-left ${isActive ? "bg-accent-500/20 text-text-primary" : "text-text-secondary hover:bg-bg-surface-3"}`,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Code, { size: 14, "aria-hidden": "true", className: "text-accent-400 shrink-0" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-mono flex-1", children: completion.text }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-text-muted", children: [
+          pct,
+          "%"
+        ] })
+      ]
+    }
+  );
+}
+function CompletionDropdown({ onAccept }) {
+  const { completions, activeIndex } = useCodeCompletionStore();
+  if (completions.length === 0) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      role: "listbox",
+      "aria-label": "Code completions",
+      className: "bg-bg-elevated border border-border-default rounded-lg shadow-lg overflow-hidden",
+      children: completions.map((c, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        CompletionItem,
+        {
+          completion: c,
+          isActive: i === activeIndex,
+          onAccept
+        },
+        c.text
+      ))
+    }
+  );
+}
+function CodeCompletion() {
+  const { getCompletions, submitFeedback } = useCodeCompletion();
+  const { completions, isLoading, prefix, setPrefix } = useCodeCompletionStore();
+  const [context, setContext] = reactExports.useState("");
+  const handleGetCompletions = async () => {
+    if (prefix.trim()) {
+      await getCompletions({ prefix, context, max_results: 3 });
+    }
+  };
+  const handleAccept = async (text) => {
+    await submitFeedback({ completion: text, accepted: true });
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Code, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Code Completions" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "N-gram prefix model with feedback learning" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "editor", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["editor", "completions", "settings"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2 === "completions" ? `Completions (${completions.length})` : t2.charAt(0).toUpperCase() + t2.slice(1)
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "editor", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-text-secondary text-xs mb-1.5", htmlFor: "context-input", children: "Context (optional)" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                id: "context-input",
+                value: context,
+                onChange: (e) => setContext(e.target.value),
+                placeholder: "Paste code context here...",
+                rows: 6,
+                className: "w-full bg-bg-surface-2 border border-border-default rounded-lg px-3 py-2 text-text-primary text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted resize-none"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-text-secondary text-xs mb-1.5", htmlFor: "prefix-input", children: "Prefix / Current Word" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                id: "prefix-input",
+                type: "text",
+                value: prefix,
+                onChange: (e) => setPrefix(e.target.value),
+                placeholder: "e.g. def",
+                className: "w-full bg-bg-surface-2 border border-border-default rounded-lg px-3 py-2 text-text-primary text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: handleGetCompletions,
+              disabled: isLoading || !prefix.trim(),
+              className: "flex items-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm font-medium px-4 py-2 rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 14, "aria-hidden": "true" }),
+                "Get Completions"
+              ]
+            }
+          ),
+          completions.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CompletionDropdown, { onAccept: handleAccept }) })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "completions", children: completions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No completions yet. Enter a prefix in the Editor tab." }) : /* @__PURE__ */ jsxRuntimeExports.jsx(CompletionDropdown, { onAccept: handleAccept }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Content, { value: "settings", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Settings$1, { size: 16, "aria-hidden": "true", className: "text-accent-400" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-sm", children: "Model: N-gram (bigram)" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs", children: "Port: 8015 · Max results: 3 · Window: 10 lines" })
+        ] }) })
+      ] })
+    ] })
+  ] });
+}
+const useMemoryStore = create((set) => ({
+  memories: [],
+  searchResults: [],
+  contextSummary: null,
+  isLoading: false,
+  error: null,
+  setMemories: (memories) => set({ memories }),
+  addMemory: (memory) => set((state) => ({ memories: [...state.memories, memory] })),
+  removeMemory: (id2) => set((state) => ({ memories: state.memories.filter((m2) => m2.id !== id2) })),
+  setSearchResults: (searchResults) => set({ searchResults }),
+  setContextSummary: (contextSummary) => set({ contextSummary }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
+}));
+const BASE_URL = "http://localhost:8016";
+function useConversationMemory() {
+  const { setMemories, addMemory, removeMemory, setSearchResults, setContextSummary, setLoading, setError } = useMemoryStore();
+  const fetchMemories = reactExports.useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/memories`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setMemories(data.memories);
+      return data.memories;
+    } catch {
+      return [];
+    }
+  }, [setMemories]);
+  const addMemoryItem = reactExports.useCallback(async (text, tags = []) => {
+    try {
+      const res = await fetch(`${BASE_URL}/memories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, tags })
+      });
+      if (!res.ok) return null;
+      const mem = await res.json();
+      addMemory(mem);
+      return mem;
+    } catch {
+      return null;
+    }
+  }, [addMemory]);
+  const searchMemories = reactExports.useCallback(async (query, top_k = 5) => {
+    try {
+      const res = await fetch(`${BASE_URL}/memories/search?q=${encodeURIComponent(query)}&top_k=${top_k}`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      setSearchResults(data.results);
+      return data.results;
+    } catch {
+      return [];
+    }
+  }, [setSearchResults]);
+  const deleteMemory = reactExports.useCallback(async (id2) => {
+    try {
+      const res = await fetch(`${BASE_URL}/memories/${id2}`, { method: "DELETE" });
+      if (res.ok) removeMemory(id2);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, [removeMemory]);
+  const buildContext = reactExports.useCallback(async (query, top_k = 5) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE_URL}/context/build`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, top_k })
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      setContextSummary(data);
+      return data;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [setContextSummary, setLoading, setError]);
+  return { fetchMemories, addMemoryItem, searchMemories, deleteMemory, buildContext };
+}
+function MemoryCard({ memory, onDelete }) {
+  const date = new Date(memory.timestamp).toLocaleDateString();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg px-4 py-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 flex-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Brain, { size: 14, "aria-hidden": "true", className: "text-accent-400 mt-0.5 shrink-0" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-primary text-sm flex-1 line-clamp-3", children: memory.text })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          onClick: () => onDelete(memory.id),
+          className: "p-1 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          "aria-label": `Delete memory ${memory.id}`,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 12, "aria-hidden": "true" })
+        }
+      )
+    ] }),
+    memory.tags.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 mt-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { size: 11, "aria-hidden": "true", className: "text-text-muted" }),
+      memory.tags.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-text-muted bg-bg-surface-3 px-1.5 py-0.5 rounded", children: t2 }, t2))
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-xs mt-1", children: date })
+  ] });
+}
+function ContextViewer({ summary }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-surface-2 border border-border-default rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 14, "aria-hidden": "true", className: "text-accent-400" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-primary text-sm font-medium", children: [
+        'Context for: "',
+        summary.query,
+        '"'
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-xs ml-auto", children: [
+        "~",
+        summary.token_estimate,
+        " tokens"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-text-secondary text-xs bg-bg-surface-3 rounded p-3 overflow-x-auto whitespace-pre-wrap font-mono", children: summary.compressed_context || "(empty)" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-text-muted text-xs mt-2", children: [
+      summary.relevant_memories.length,
+      " relevant memories"
+    ] })
+  ] });
+}
+function ConversationMemory() {
+  const { fetchMemories, addMemoryItem, searchMemories, deleteMemory, buildContext } = useConversationMemory();
+  const { memories, searchResults, contextSummary, isLoading } = useMemoryStore();
+  const [newText, setNewText] = reactExports.useState("");
+  const [searchQuery, setSearchQuery] = reactExports.useState("");
+  const [contextQuery, setContextQuery] = reactExports.useState("");
+  reactExports.useEffect(() => {
+    fetchMemories();
+  }, [fetchMemories]);
+  const handleAdd = async () => {
+    if (newText.trim()) {
+      await addMemoryItem(newText);
+      setNewText("");
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-5 border-b border-border-subtle", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Brain, { size: 20, "aria-hidden": "true", className: "text-accent-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-text-primary text-xl font-semibold", children: "Conversation Memory" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: fetchMemories,
+            className: "p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-surface-3 rounded cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+            "aria-label": "Refresh memories",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 14, "aria-hidden": "true" })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "TF-IDF relevance ranking · context compression" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "memories", className: "flex flex-col flex-1 min-h-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["memories", "search", "context"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Trigger,
+        {
+          value: t2,
+          className: "text-sm px-3 py-1.5 rounded-t capitalize text-text-secondary data-[state=active]:text-text-primary data-[state=active]:bg-bg-surface-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+          children: t2 === "memories" ? `Memories (${memories.length})` : t2 === "search" ? `Search (${searchResults.length})` : "Context"
+        },
+        t2
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "memories", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: newText,
+                onChange: (e) => setNewText(e.target.value),
+                placeholder: "Add a new memory...",
+                "aria-label": "New memory text",
+                className: "flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: handleAdd,
+                className: "flex items-center gap-1 bg-accent-500 hover:bg-accent-400 text-text-primary text-sm px-3 py-1.5 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Add memory",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 14, "aria-hidden": "true" }),
+                  "Add"
+                ]
+              }
+            )
+          ] }),
+          memories.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "No memories yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: memories.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsx(MemoryCard, { memory: m2, onDelete: deleteMemory }, m2.id)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "search", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: searchQuery,
+                onChange: (e) => setSearchQuery(e.target.value),
+                placeholder: "Search memories...",
+                "aria-label": "Search query",
+                className: "flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => searchMemories(searchQuery),
+                className: "flex items-center gap-1 border border-border-default text-text-secondary hover:bg-bg-surface-3 text-sm px-3 py-1.5 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Search",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 14, "aria-hidden": "true" }),
+                  "Search"
+                ]
+              }
+            )
+          ] }),
+          searchResults.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-muted text-sm", children: "Enter a query to search memories." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: searchResults.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(MemoryCard, { memory: r2.memory, onDelete: deleteMemory }, r2.memory.id)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, { value: "context", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: contextQuery,
+                onChange: (e) => setContextQuery(e.target.value),
+                placeholder: "Build context for query...",
+                "aria-label": "Context query",
+                className: "flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-1.5 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 placeholder:text-text-muted"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: () => buildContext(contextQuery),
+                disabled: isLoading,
+                className: "flex items-center gap-1 bg-accent-500 hover:bg-accent-400 disabled:opacity-50 text-text-primary text-sm px-3 py-1.5 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500",
+                "aria-label": "Build context",
+                children: "Build Context"
+              }
+            )
+          ] }),
+          contextSummary && /* @__PURE__ */ jsxRuntimeExports.jsx(ContextViewer, { summary: contextSummary })
+        ] })
+      ] })
+    ] })
+  ] });
+}
 const screens = {
   dashboard: Dashboard,
   models: Models,
   chat: Chat,
   training: Training,
   federation: Federation,
+  knowledge: Knowledge,
+  enterprise: Enterprise,
+  decisiongraph: DecisionGraph,
+  orchestration: Orchestration,
+  orgintelligence: OrgIntelligence,
+  personacouncil: PersonaCouncil,
+  analytics: Analytics,
+  messaging: Messaging,
+  semanticsearch: SemanticSearch,
+  plugins: Plugins,
+  prreview: PRReview,
+  finetune: Finetune,
+  federationcore: FederationCore,
+  codecompletion: CodeCompletion,
+  memory: ConversationMemory,
   settings: Settings
 };
 function MainContent() {
   const active = useNavigationStore((s) => s.active);
   const Screen = screens[active];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 bg-bg-base overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Screen, {}) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 bg-bg-base overflow-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { label: active, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Screen, {}) }) });
 }
 const Waveform = ({ isRecording, confidence, className = "" }) => {
   const canvasRef = reactExports.useRef(null);
@@ -13261,7 +18855,7 @@ function App() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(AppShell, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 overflow-hidden", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(MainContent, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { label: "Main content", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MainContent, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(VoicePanelDrawer, {})
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(StatusBar, {}),
