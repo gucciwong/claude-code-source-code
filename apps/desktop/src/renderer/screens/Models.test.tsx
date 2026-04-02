@@ -111,3 +111,14 @@ test('displays status as Installed when model is not activeModel', async () => {
   const statusElements = screen.getAllByText('Installed')
   expect(statusElements.length).toBeGreaterThan(1)
 })
+
+test('renders tab bar with Installed and Download from HuggingFace tabs', () => {
+  render(<Models />)
+  expect(screen.getByRole('tab', { name: /Installed/ })).toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: /Download from HuggingFace/ })).toBeInTheDocument()
+})
+
+test('Installed tab shows installed model count', () => {
+  render(<Models />)
+  expect(screen.getByRole('tab', { name: /Installed \(2\)/ })).toBeInTheDocument()
+})

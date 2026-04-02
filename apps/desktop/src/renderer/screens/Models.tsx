@@ -1,6 +1,8 @@
+import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
 import { Server, WifiOff, CheckCircle2, Zap, Trash2 } from 'lucide-react'
+import { HuggingFacePanel } from '../components/models/HuggingFacePanel'
 
 function formatSize(bytes: number): string {
   return (bytes / 1e9).toFixed(1) + ' GB'
@@ -113,54 +115,83 @@ export function Models() {
   const selectedModel = installed.find(m => m.name === selected) ?? null
 
   return (
-    <div data-testid="screen-models" className="flex h-full">
-      {/* Left panel */}
-      <div className="w-[200px] shrink-0 bg-bg-surface-1 border-r border-border-default overflow-y-auto flex flex-col">
-        <p className="px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide">
-          Installed
-        </p>
-        {installed.length === 0 ? (
-          <p className="px-4 py-2 text-xs text-text-muted">No models installed</p>
-        ) : (
-          <ul role="listbox" aria-label="Installed models">
-            {installed.map(model => {
-              const isSelected = model.name === selected
-              const isActive = model.name === activeModel
-              return (
-                <li key={model.name}>
-                  <button
-                    role="option"
-                    aria-selected={isSelected}
-                    title={model.name}
-                    className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
-                      isSelected
-                        ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-500'
-                        : 'text-text-secondary hover:bg-bg-surface-3'
-                    }`}
-                    onClick={() => setSelected(model.name)}
-                  >
-                    {isActive && (
-                      <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
-                    )}
-                    <span className="truncate flex-1" title={model.name}>{model.name}</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-        {!ollamaOnline && (
-          <div className="px-4 py-2 text-xs text-text-muted flex items-center gap-1.5">
-            <WifiOff size={12} aria-hidden="true" />
-            Ollama offline
-          </div>
-        )}
-      </div>
+    <div data-testid="screen-models" className="flex flex-col h-full">
+      <Tabs.Root defaultValue="installed" className="flex flex-col h-full">
+        {/* Tab bar */}
+        <Tabs.List
+          className="flex shrink-0 border-b border-border-default bg-bg-surface-1 px-4 gap-1"
+          aria-label="Models navigation"
+        >
+          <Tabs.Trigger
+            value="installed"
+            className="px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px"
+          >
+            Installed ({installed.length})
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="download"
+            className="px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px"
+          >
+            Download from HuggingFace
+          </Tabs.Trigger>
+        </Tabs.List>
 
-      {/* Right panel */}
-      <div className="flex-1 bg-bg-base overflow-auto">
-        {selectedModel ? <ModelDetail model={selectedModel} /> : <EmptySelection />}
-      </div>
+        {/* Installed tab */}
+        <Tabs.Content value="installed" className="flex flex-1 overflow-hidden">
+          {/* Left panel */}
+          <div className="w-[200px] shrink-0 bg-bg-surface-1 border-r border-border-default overflow-y-auto flex flex-col">
+            <p className="px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide">
+              Installed
+            </p>
+            {installed.length === 0 ? (
+              <p className="px-4 py-2 text-xs text-text-muted">No models installed</p>
+            ) : (
+              <ul role="listbox" aria-label="Installed models">
+                {installed.map(model => {
+                  const isSelected = model.name === selected
+                  const isActive = model.name === activeModel
+                  return (
+                    <li key={model.name}>
+                      <button
+                        role="option"
+                        aria-selected={isSelected}
+                        title={model.name}
+                        className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
+                          isSelected
+                            ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-500'
+                            : 'text-text-secondary hover:bg-bg-surface-3'
+                        }`}
+                        onClick={() => setSelected(model.name)}
+                      >
+                        {isActive && (
+                          <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
+                        )}
+                        <span className="truncate flex-1" title={model.name}>{model.name}</span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+            {!ollamaOnline && (
+              <div className="px-4 py-2 text-xs text-text-muted flex items-center gap-1.5">
+                <WifiOff size={12} aria-hidden="true" />
+                Ollama offline
+              </div>
+            )}
+          </div>
+
+          {/* Right panel */}
+          <div className="flex-1 bg-bg-base overflow-auto">
+            {selectedModel ? <ModelDetail model={selectedModel} /> : <EmptySelection />}
+          </div>
+        </Tabs.Content>
+
+        {/* Download from HuggingFace tab */}
+        <Tabs.Content value="download" className="flex-1 overflow-auto bg-bg-base">
+          <HuggingFacePanel />
+        </Tabs.Content>
+      </Tabs.Root>
     </div>
   )
 }
