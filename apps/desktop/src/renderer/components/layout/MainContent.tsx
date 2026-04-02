@@ -5,6 +5,7 @@ import { Chat } from '../../screens/Chat'
 import { Training } from '../../screens/Training'
 import { Federation } from '../../screens/Federation'
 import { Settings } from '../../screens/Settings'
+import { Knowledge } from '../../screens/Knowledge'
 
 const screens = {
   dashboard: Dashboard,
@@ -12,6 +13,7 @@ const screens = {
   chat: Chat,
   training: Training,
   federation: Federation,
+  knowledge: Knowledge,
   settings: Settings,
 }
 

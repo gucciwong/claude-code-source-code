@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type NavSection = 'dashboard' | 'models' | 'chat' | 'training' | 'federation' | 'settings'
+export type NavSection = 'dashboard' | 'models' | 'chat' | 'training' | 'federation' | 'knowledge' | 'settings'
 
 interface NavigationState {
   active: NavSection

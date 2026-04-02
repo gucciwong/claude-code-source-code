@@ -1,6 +1,7 @@
 import { Lock, Zap, Network, Mic } from 'lucide-react'
 import { useSystemStore } from '../../store/systemStore'
 import { useVoiceStore } from '../../store/voiceStore'
+import { useKnowledgeLibraryStore } from '../../store/knowledgeLibraryStore'
 
 export function StatusBar() {
   const {
@@ -13,6 +14,7 @@ export function StatusBar() {
     federationPeers,
   } = useSystemStore()
   const { serviceReady, isRecording } = useVoiceStore()
+  const { totalItems } = useKnowledgeLibraryStore()
 
   return (
     <footer
@@ -71,6 +73,14 @@ export function StatusBar() {
             <Network size={10} aria-hidden={true} />
             {federationPeers} peers
           </span>
+        </>
+      )}
+
+      {/* Conditional: PKL snippet count */}
+      {totalItems > 0 && (
+        <>
+          <span aria-hidden="true" className="text-border-default">|</span>
+          <span className="flex-shrink-0">{totalItems} snippets</span>
         </>
       )}
 
