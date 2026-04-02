@@ -189,8 +189,11 @@ Addressable Market Analysis (2026)
 | P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 ✅ |
 | P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 ✅ |
 | P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 ✅ |
-| P2 | Federated Learning | Collaborative training without data sharing | Very High | v0.7 🔜 |
-| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.7 🔜 |
+| P2 | Semantic Code Search | TF-IDF code search, IndexManager, SearchEngine | High | v0.7 ✅ |
+| P2 | Plugin Extension System | PluginRegistry, HookDispatcher, 5 lifecycle hooks | High | v0.7 ✅ |
+| P2 | Automated PR Review Agent | GitDiffParser, RuleEngine, CommentGenerator | High | v0.7 ✅ |
+| P2 | Local Model Fine-tuning UI | FinetuneJobManager, LossCurve, LoRA config | Medium | v0.7 ✅ |
+| P2 | Federated Learning Core | FedAvgAggregator, DifferentialPrivacy (DP-SGD) | Very High | v0.7 ✅ |
 | P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium | v1.0 |
 | P2 | Live Execution Trace Injection | Feed real runtime traces into model context | High | v0.5 ✅ |
 | P2 | Temporal Decision Graph | Queryable causal history of why codebase evolved | High | v0.5 ✅ |
@@ -1374,14 +1377,16 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 │    WeChat Work/WhatsApp/LINE, CommandProcessor, port 8010              │
 │  • 618 TypeScript + 176 Python tests passing                           │
 │                                                                          │
+│  v0.7.0 — Advanced Developer Tools  [✅ COMPLETED April 2026]          │
+│  • Semantic Code Search (TF-IDF, port 8011)                           │
+│  • Plugin Extension System (HookDispatcher, port 8012)                │
+│  • Automated PR Review Agent (RuleEngine, port 8013)                  │
+│  • Local Model Fine-tuning UI (LoRA config, port 8001 extension)      │
+│  • Federated Learning Core (FedAvg + DP-SGD, port 8014)              │
+│  • Tests: 735 TypeScript, ~281 Python                                 │
+│                                                                          │
 │  🔜 IN PROGRESS / PLANNED                                               │
 │  ─────────────────────────────────────────────────────────────────────  │
-│  v0.7.0 — Federated Learning  [Q1 2027, Mar 31]                       │
-│  • Federated averaging protocol (FedAvg)                               │
-│  • Differential privacy (DP-SGD)                                       │
-│  • First industry consortium launch (fintech/healthcare)               │
-│  • Self-improvement loop (8-hour upgrade cycle)                        │
-│  • Plugin marketplace foundation                                       │
 │                                                                          │
 │  v1.0 — Platform  [Q2 2027]                                            │
 │  • Plugin ecosystem open                                               │
