@@ -47,7 +47,7 @@ class CompletionEvent(Base):
     top_p = Column(Float)
     
     # Custom metadata (as JSON)
-    metadata = Column(JSON)
+    event_metadata = Column(JSON)
     
     # Timestamps & version
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -64,7 +64,7 @@ class CompletionEvent(Base):
             "tokens_generated": self.tokens_generated,
             "temperature": self.temperature,
             "top_p": self.top_p,
-            "metadata": self.metadata,
+            "event_metadata": self.event_metadata,
             "created_at": self.created_at.isoformat(),
         }
 
