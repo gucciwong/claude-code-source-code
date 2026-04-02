@@ -82,6 +82,7 @@ function ModelDetail({ model }: { model: OllamaModel }) {
       {/* Action Buttons */}
       <div className="flex gap-2 flex-wrap">
         <button
+          type="button"
           className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
           onClick={() => useSystemStore.setState({ activeModel: model.name })}
           aria-label={`Set ${model.name} as active`}
@@ -90,14 +91,18 @@ function ModelDetail({ model }: { model: OllamaModel }) {
           Set as Active
         </button>
         <button
-          className="border border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-surface-3 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          type="button"
+          disabled
+          className="border border-border-default text-text-secondary text-sm font-medium px-4 py-2 rounded-md cursor-not-allowed opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
           aria-label={`Fine-tune ${model.name}`}
         >
           <Zap size={14} aria-hidden="true" />
           Fine-tune
         </button>
         <button
-          className="border border-border-default text-red-400 hover:text-red-300 hover:border-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+          type="button"
+          disabled
+          className="border border-border-default text-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-not-allowed opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
           aria-label={`Delete ${model.name}`}
         >
           <Trash2 size={14} aria-hidden="true" />
@@ -153,7 +158,9 @@ export function Models() {
                   return (
                     <li key={model.name}>
                       <button
+                        type="button"
                         aria-pressed={isSelected}
+                        aria-label={isActive ? `${model.name} (active)` : model.name}
                         title={model.name}
                         className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
                           isSelected

@@ -130,8 +130,12 @@ export function HuggingFacePanel() {
   const handleDownload = useCallback(
     async (modelId: string) => {
       setDownloadStatuses(prev => new Map(prev).set(modelId, 'downloading'))
-      const result = await downloadModel(modelId)
-      if (!result) {
+      try {
+        const result = await downloadModel(modelId)
+        if (!result) {
+          setDownloadStatuses(prev => new Map(prev).set(modelId, 'error'))
+        }
+      } catch {
         setDownloadStatuses(prev => new Map(prev).set(modelId, 'error'))
       }
     },
@@ -222,16 +226,17 @@ export function HuggingFacePanel() {
         {displayedModels.length === 0 ? (
           <p className="text-sm text-text-muted">No models found for &ldquo;{debouncedQuery}&rdquo;</p>
         ) : (
-          <div className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-3 list-none p-0 m-0">
             {displayedModels.map(model => (
-              <ModelCard
-                key={model.id}
-                {...model}
-                downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
-                onDownload={handleDownload}
-              />
+              <li key={model.id}>
+                <ModelCard
+                  {...model}
+                  downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
+                  onDownload={handleDownload}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
     </div>

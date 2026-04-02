@@ -45,6 +45,7 @@ export function ModelCard({
 
         {downloadStatus === 'idle' && (
           <button
+            type="button"
             className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             onClick={() => onDownload(id)}
             aria-label={`Download ${name}`}
@@ -56,6 +57,7 @@ export function ModelCard({
 
         {downloadStatus === 'downloading' && (
           <button
+            type="button"
             className="border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 cursor-not-allowed opacity-70"
             disabled
             aria-label={`Downloading ${name}`}
@@ -65,12 +67,11 @@ export function ModelCard({
           </button>
         )}
 
+        <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {downloadStatus === 'done' ? `${name} downloaded` : ''}
+        </div>
         {downloadStatus === 'done' && (
-          <div
-            role="status"
-            aria-label={`${name} downloaded`}
-            className="border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2"
-          >
+          <div className="border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2">
             <CheckCircle2 size={14} className="text-green-400" aria-hidden="true" />
             Downloaded
           </div>
@@ -78,6 +79,7 @@ export function ModelCard({
 
         {downloadStatus === 'error' && (
           <button
+            type="button"
             className="border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             onClick={() => onDownload(id)}
             aria-label={`Retry downloading ${name}`}
