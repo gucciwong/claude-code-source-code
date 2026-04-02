@@ -226,7 +226,7 @@ export function HuggingFacePanel() {
         {displayedModels.length === 0 ? (
           <p className="text-sm text-text-muted">No models found for &ldquo;{debouncedQuery}&rdquo;</p>
         ) : (
-          <ul className="flex flex-col gap-3 list-none p-0 m-0">
+          <ul role="list" className="flex flex-col gap-3 list-none p-0 m-0">
             {displayedModels.map(model => (
               <li key={model.id}>
                 <ModelCard
