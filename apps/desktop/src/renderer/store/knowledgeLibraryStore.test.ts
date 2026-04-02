@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import {
-  useKnowledgeLibraryStore,
-  type SearchResult,
-  type Snippet,
-} from './knowledgeLibraryStore'
+import { useKnowledgeLibraryStore } from './knowledgeLibraryStore'
+import { type SearchResult, type Snippet } from '../../shared/knowledge'
 
 function makeSnippet(overrides: Partial<Snippet> = {}): Snippet {
   return {
@@ -82,6 +79,13 @@ describe('useKnowledgeLibraryStore', () => {
     expect(result.find((s) => s.id === 'remove-me')).toBeUndefined()
     expect(result.find((s) => s.id === 'keep-1')).toBeDefined()
     expect(result.find((s) => s.id === 'keep-2')).toBeDefined()
+
+    // No-op: removing a non-existent ID leaves the list unchanged
+    useKnowledgeLibraryStore.getState().setSnippets([
+      { id: 'a', text: 'keep', language: 'ts', domain: 'test', qualityScore: 0.8, usageCount: 0, createdAt: 1, updatedAt: 1, tags: [], rejected: false },
+    ])
+    useKnowledgeLibraryStore.getState().removeSnippet('nonexistent-id')
+    expect(useKnowledgeLibraryStore.getState().snippets).toHaveLength(1)
   })
 
   // Test 5

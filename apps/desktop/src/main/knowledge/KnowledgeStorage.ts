@@ -1,41 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
+import { Snippet, Decision, PKLConfig, VectorSearchResult } from '../../shared/knowledge'
 
-export interface Snippet {
-  id: string
-  text: string
-  language: string
-  domain: string
-  qualityScore: number
-  usageCount: number
-  createdAt: number
-  updatedAt: number
-  tags: string[]
-  rejected: boolean
-}
-
-export interface Decision {
-  id: string
-  summary: string
-  rationale: string
-  alternatives: string[]
-  outcome: string
-  timestamp: number
-  projectPath: string
-}
-
-export interface PKLConfig {
-  injectionEnabled: boolean
-  maxTokens: number
-  qualityThreshold: number
-  version: string
-}
-
-export interface VectorSearchResult {
-  id: string
-  similarity: number
-}
+export type { Snippet, Decision, PKLConfig, VectorSearchResult }
 
 // KnowledgeStorage is injected with a db interface so it can be tested without Electron
 export interface Database {
@@ -158,10 +126,7 @@ export class KnowledgeStorage {
     )
   }
 
-  getSnippet(id: string): Snippet | null {
-    const stmt = this.db.prepare(`SELECT * FROM snippets WHERE id = ?`)
-    const row = stmt.get(id) as Record<string, unknown> | null | undefined
-    if (!row) return null
+  private rowToSnippet(row: Record<string, unknown>): Snippet {
     return {
       id: row.id as string,
       text: row.text as string,
@@ -171,26 +136,22 @@ export class KnowledgeStorage {
       usageCount: row.usage_count as number,
       createdAt: row.created_at as number,
       updatedAt: row.updated_at as number,
-      tags: JSON.parse((row.tags as string | undefined) ?? '[]') as string[],
+      tags: JSON.parse(row.tags as string ?? '[]'),
       rejected: Boolean(row.rejected),
     }
+  }
+
+  getSnippet(id: string): Snippet | null {
+    const stmt = this.db.prepare(`SELECT * FROM snippets WHERE id = ?`)
+    const row = stmt.get(id) as Record<string, unknown> | null | undefined
+    if (!row) return null
+    return this.rowToSnippet(row)
   }
 
   getAllSnippets(): Snippet[] {
     const stmt = this.db.prepare(`SELECT * FROM snippets WHERE rejected = 0`)
     const rows = stmt.all() as Array<Record<string, unknown>>
-    return rows.map((row) => ({
-      id: row.id as string,
-      text: row.text as string,
-      language: row.language as string,
-      domain: row.domain as string,
-      qualityScore: row.quality as number,
-      usageCount: row.usage_count as number,
-      createdAt: row.created_at as number,
-      updatedAt: row.updated_at as number,
-      tags: JSON.parse((row.tags as string | undefined) ?? '[]') as string[],
-      rejected: false,
-    }))
+    return rows.map((row) => this.rowToSnippet(row))
   }
 
   deleteSnippet(id: string): void {
@@ -270,7 +231,12 @@ export class KnowledgeStorage {
 
   saveMemoryMarkdown(content: string): void {
     const filePath = path.join(this.knowledgeDir, 'memory.md')
-    fs.writeFileSync(filePath, content, 'utf8')
+    try {
+      fs.writeFileSync(filePath, content, 'utf8')
+    } catch (err) {
+      console.error('[KnowledgeStorage] Failed to write memory.md:', err)
+      throw err
+    }
   }
 
   getConfig(): PKLConfig {
@@ -285,7 +251,12 @@ export class KnowledgeStorage {
 
   saveConfig(config: PKLConfig): void {
     const filePath = path.join(this.knowledgeDir, 'config.json')
-    fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
+    } catch (err) {
+      console.error('[KnowledgeStorage] Failed to write config.json:', err)
+      throw err
+    }
   }
 
   getSnippetCount(): number {

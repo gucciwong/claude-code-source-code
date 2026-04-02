@@ -1,42 +1,7 @@
 import { create } from 'zustand'
+import { Snippet, Decision, DomainStat, SearchResult } from '../../shared/knowledge'
 
-export interface Snippet {
-  id: string
-  text: string
-  language: string
-  domain: string
-  qualityScore: number
-  usageCount: number
-  createdAt: number
-  updatedAt: number
-  tags: string[]
-  rejected: boolean
-}
-
-export interface Decision {
-  id: string
-  summary: string
-  rationale: string
-  alternatives: string[]
-  outcome: string
-  timestamp: number
-  projectPath: string
-}
-
-export interface DomainStat {
-  domain: string
-  language: string
-  count: number
-}
-
-export interface SearchResult {
-  id: string
-  text: string
-  similarity: number
-  language: string
-  domain: string
-  createdAt: number
-}
+export type { Snippet, Decision, DomainStat, SearchResult }
 
 interface KnowledgeLibraryState {
   snippets: Snippet[]

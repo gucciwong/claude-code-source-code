@@ -2,7 +2,8 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { KnowledgeStorage, type PKLConfig, type Snippet } from './KnowledgeStorage'
+import { KnowledgeStorage } from './KnowledgeStorage'
+import { type PKLConfig, type Snippet } from '../../shared/knowledge'
 
 function createMockDb() {
   return {
@@ -172,6 +173,11 @@ describe('KnowledgeStorage', () => {
     expect(results[1].similarity).toBeLessThan(1)
     // id2 should NOT appear (it's 3rd place, topK=2)
     expect(results.find((r) => r.id === 'id2')).toBeUndefined()
+
+    // Zero-vector guard: all-zeros query returns 0 similarity for all (denom = 0)
+    const zeroQuery = new Float32Array([0, 0, 0])
+    const zeroResults = storage.searchByVector(zeroQuery, 3)
+    expect(zeroResults.every((r) => r.similarity === 0)).toBe(true)
   })
 
   // Test 11
