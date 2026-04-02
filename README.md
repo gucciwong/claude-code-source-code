@@ -1,6 +1,53 @@
-# Claude Code v2.1.88 — Source Code Analysis
+# claude-code-source-code
 
-> **Disclaimer**: All source code in this repository is the intellectual property of **Anthropic and Claude**. This repository is provided strictly for technical research, study, and educational exchange among enthusiasts. **Commercial use is strictly prohibited.** No individual, organization, or entity may use this content for commercial purposes, profit-making activities, illegal activities, or any other unauthorized scenarios. If any content infringes upon your legal rights, intellectual property, or other interests, please contact us and we will verify and remove it immediately.
+This repository contains two distinct projects:
+
+## 🚀 Sovereign Coder Desktop Application
+
+**Location**: `apps/desktop/`
+
+A production-ready Electron + React desktop AI coding assistant with local model support, training infrastructure, and voice I/O capabilities.
+
+### Key Features
+- **Local-first architecture** — All processing runs locally, no cloud transmission
+- **Unified UI** — Dashboard, Chat, Models, Training, Voice, Settings screens
+- **Training infrastructure** — Collect, manage, and create custom datasets
+- **Voice I/O** — Speech-to-text (Whisper) and text-to-speech synthesis
+- **Status monitoring** — Real-time GPU, VRAM, temperature, and throughput metrics
+- **Model management** — Browse, download, and switch between Ollama models
+
+### Quick Start
+
+```bash
+# Install dependencies
+cd apps/desktop
+npm install
+
+# Start development server (MCP enabled)
+npm run dev
+
+# Run tests
+npm test
+
+# Build production bundle
+npm run build
+```
+
+**📚 Full Setup Guide**: See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed installation, configuration, and deployment instructions.
+
+**📋 Implementation Plan**: See [docs/plans/2026-04-02-desktop-app-implementation-plan.md](docs/plans/2026-04-02-desktop-app-implementation-plan.md) for architecture and component reference.
+
+### System Status
+- ✅ **Tests**: 314 passing (0 failed, 10 skipped)
+- ✅ **Build**: Production bundle ready (546 kB minified)
+- ✅ **Components**: 50+ UI components with design system integration
+- ✅ **Services**: Training, Voice, and Ollama backends integrated
+
+---
+
+## 📖 Claude Code v2.1.88 — Source Code Analysis
+
+> **Disclaimer**: All source code in `src/` is the intellectual property of **Anthropic and Claude**. This repository is provided strictly for technical research, study, and educational exchange among enthusiasts. **Commercial use is strictly prohibited.** No individual, organization, or entity may use this content for commercial purposes, profit-making activities, illegal activities, or any other unauthorized scenarios. If any content infringes upon your legal rights, intellectual property, or other interests, please contact us and we will verify and remove it immediately.
 
 > Extracted from npm package `@anthropic-ai/claude-code` version **2.1.88**.
 > The published package ships a single bundled `cli.js` (~12MB). The `src/` directory in this repo contains the **unbundled TypeScript source** extracted from the npm tarball.
