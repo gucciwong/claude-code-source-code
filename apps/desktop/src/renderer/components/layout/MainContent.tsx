@@ -17,6 +17,7 @@ import { SemanticSearch } from '../../screens/SemanticSearch'
 import { Plugins } from '../../screens/Plugins'
 import { PRReview } from '../../screens/PRReview'
 import { Finetune } from '../../screens/Finetune'
+import { FederationCore } from '../../screens/FederationCore'
 
 const screens = {
   dashboard: Dashboard,
@@ -36,6 +37,7 @@ const screens = {
   plugins: Plugins,
   prreview: PRReview,
   finetune: Finetune,
+  federationcore: FederationCore,
   settings: Settings,
 }
 

@@ -26,6 +26,7 @@ const navItems: NavItem[] = [
   { id: 'plugins', label: 'Plugins', icon: Puzzle },
   { id: 'prreview', label: 'PR Review', icon: GitPullRequest },
   { id: 'finetune', label: 'Fine-tune', icon: FlaskConical },
+  { id: 'federationcore', label: 'Fed Core', icon: Network },
 ]
 
 const bottomItems: NavItem[] = [
