@@ -33,14 +33,14 @@ test('shows empty state when no model selected', () => {
 test('selecting a model shows model detail', async () => {
   const user = userEvent.setup()
   render(<Models />)
-  await user.click(screen.getByRole('option', { name: /llama3.1:8b/ }))
+  await user.click(screen.getByRole('button', { name: /llama3.1:8b/ }))
   expect(screen.getByRole('heading', { name: 'llama3.1:8b' })).toBeInTheDocument()
 })
 
 test('model detail shows size formatted as GB', async () => {
   const user = userEvent.setup()
   render(<Models />)
-  await user.click(screen.getByRole('option', { name: /llama3.1:8b/ }))
+  await user.click(screen.getByRole('button', { name: /llama3.1:8b/ }))
   expect(screen.getByText('4.5 GB')).toBeInTheDocument()
 })
 

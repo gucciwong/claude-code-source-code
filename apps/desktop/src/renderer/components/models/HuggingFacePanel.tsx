@@ -107,23 +107,24 @@ export function HuggingFacePanel() {
     }
   }, [searchQuery])
 
-  // Poll listModels every 3 seconds while panel is mounted
+  // Poll listModels every 3 seconds while panel is mounted (and immediately on mount)
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const poll = async () => {
       const result = await listModels()
       if (!result) return
       setDownloadStatuses(prev => {
         const next = new Map(prev)
         result.cached_models.forEach((m: ModelInfo) => {
-          if (prev.get(m.id) === 'downloading' && m.cached) {
+          if (m.cached && prev.get(m.id) !== 'done') {
             next.set(m.id, 'done')
           }
         })
         return next
       })
-    }, 3000)
-
-    return () => clearInterval(interval)
+    }
+    void poll()
+    const id = setInterval(poll, 3000)
+    return () => clearInterval(id)
   }, [listModels])
 
   const handleDownload = useCallback(

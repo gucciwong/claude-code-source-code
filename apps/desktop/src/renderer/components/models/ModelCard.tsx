@@ -66,13 +66,14 @@ export function ModelCard({
         )}
 
         {downloadStatus === 'done' && (
-          <button
-            className="border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 cursor-default"
+          <div
+            role="status"
             aria-label={`${name} downloaded`}
+            className="border border-border-default text-text-secondary rounded-md px-3 py-2 text-sm flex items-center gap-2"
           >
             <CheckCircle2 size={14} className="text-green-400" aria-hidden="true" />
             Downloaded
-          </button>
+          </div>
         )}
 
         {downloadStatus === 'error' && (

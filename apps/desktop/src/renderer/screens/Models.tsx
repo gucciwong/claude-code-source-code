@@ -45,7 +45,7 @@ function ModelDetail({ model }: { model: OllamaModel }) {
           </div>
           {isActive && (
             <div className="flex-shrink-0">
-              <CheckCircle2 size={24} className="text-green-500" aria-label="Active model" />
+              <CheckCircle2 size={24} className="text-green-500" role="img" aria-label="Active model" />
             </div>
           )}
         </div>
@@ -146,15 +146,14 @@ export function Models() {
             {installed.length === 0 ? (
               <p className="px-4 py-2 text-xs text-text-muted">No models installed</p>
             ) : (
-              <ul role="listbox" aria-label="Installed models">
+              <ul role="list" aria-label="Installed models">
                 {installed.map(model => {
                   const isSelected = model.name === selected
                   const isActive = model.name === activeModel
                   return (
                     <li key={model.name}>
                       <button
-                        role="option"
-                        aria-selected={isSelected}
+                        aria-pressed={isSelected}
                         title={model.name}
                         className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
                           isSelected
