@@ -1,6 +1,7 @@
 """
 Sovereign Code - Model Manager Service
 Handles Huggingface model downloads, management, and inference
+Supports mirror for China access (hf-mirror.com)
 """
 
 from fastapi import FastAPI, HTTPException
@@ -9,6 +10,19 @@ import os
 import json
 import asyncio
 from typing import Optional, List, Dict, Any
+
+# Import config
+try:
+    from config import HF_TOKEN, HF_MIRROR, HF_API_ENDPOINT, HF_ENDPOINT, MODEL_CACHE_PATH, DEVICE, MAX_CACHE_GB
+except ImportError:
+    # Default values if config not available
+    HF_TOKEN = os.getenv("HF_TOKEN", "")
+    HF_MIRROR = os.getenv("HF_MIRROR", "huggingface").lower()
+    HF_API_ENDPOINT = "https://hf-mirror.com/api" if HF_MIRROR == "mirror" else "https://huggingface.co/api"
+    HF_ENDPOINT = "https://hf-mirror.com" if HF_MIRROR == "mirror" else "https://huggingface.co"
+    MODEL_CACHE_PATH = os.getenv("MODEL_CACHE_PATH", "./models")
+    DEVICE = os.getenv("DEVICE", "cpu")
+    MAX_CACHE_GB = int(os.getenv("MAX_CACHE_GB", "50"))
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -39,11 +53,58 @@ async def health():
         "version": "0.2.0",
         "device": DEVICE,
         "cache_path": MODEL_CACHE_PATH,
-        "cache_limit_gb": MAX_CACHE_GB
+        "cache_limit_gb": MAX_CACHE_GB,
+        "mirror": HF_MIRROR,
+        "huggingface_endpoint": HF_ENDPOINT,
+        "api_endpoint": HF_API_ENDPOINT
     }
 
 
-@app.get("/api/v1/models")
+@app.get("/api/v1/mirror")
+async def get_mirror_info():
+    """Get current mirror configuration"""
+    return {
+        "current_mirror": HF_MIRROR,
+        "is_china_mirror": HF_MIRROR == "mirror",
+        "huggingface_endpoint": HF_ENDPOINT,
+        "api_endpoint": HF_API_ENDPOINT,
+        "available_mirrors": [
+            {
+                "name": "huggingface",
+                "display": "Official Huggingface",
+                "endpoint": "https://huggingface.co",
+                "api_endpoint": "https://huggingface.co/api"
+            },
+            {
+                "name": "mirror",
+                "display": "Huggingface Mirror (China)",
+                "endpoint": "https://hf-mirror.com",
+                "api_endpoint": "https://hf-mirror.com/api"
+            }
+        ]
+    }
+
+
+@app.post("/api/v1/mirror/switch")
+async def switch_mirror(mirror_name: str = "huggingface"):
+    """
+    Switch between mirrors (requires environment variable restart)
+    Note: In production, this would require stopping and restarting the service
+    """
+    valid_mirrors = ["huggingface", "mirror"]
+    
+    if mirror_name not in valid_mirrors:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid mirror. Choose from: {', '.join(valid_mirrors)}"
+        )
+    
+    return {
+        "message": f"To switch to {mirror_name} mirror, set environment variable: HF_MIRROR={mirror_name}",
+        "instruction": f"set HF_MIRROR={mirror_name}" if os.name == 'nt' else f"export HF_MIRROR={mirror_name}",
+        "note": "Then restart the Model Manager service",
+        "recommended_for": "mirror" if mirror_name == "mirror" else "global"
+    }
 async def list_models():
     """List all available and cached models"""
     cached_models = []

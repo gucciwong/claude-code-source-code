@@ -12,7 +12,23 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 # === Huggingface Configuration ===
 HF_TOKEN = os.getenv("HF_TOKEN", "")
-HF_API_ENDPOINT = "https://huggingface.co/api"
+
+# Support for Huggingface mirrors (for China access)
+# Options: "huggingface", "mirror" (hf-mirror.com)
+HF_MIRROR = os.getenv("HF_MIRROR", "huggingface").lower()
+
+if HF_MIRROR == "mirror":
+    # Chinese mirror - https://hf-mirror.com
+    HF_API_ENDPOINT = "https://hf-mirror.com/api"
+    HF_ENDPOINT = "https://hf-mirror.com"
+    # Mirror uses same Huggingface models
+else:
+    # Official Huggingface
+    HF_API_ENDPOINT = "https://huggingface.co/api"
+    HF_ENDPOINT = "https://huggingface.co"
+
+# Also support HUGGINGFACE_HUB_ENDPOINT env var (used by transformers library)
+os.environ["HUGGINGFACE_HUB_ENDPOINT"] = os.getenv("HUGGINGFACE_HUB_ENDPOINT", HF_ENDPOINT)
 
 # === Model Cache Configuration ===
 MODEL_CACHE_PATH = os.getenv("MODEL_CACHE_PATH", "./models")

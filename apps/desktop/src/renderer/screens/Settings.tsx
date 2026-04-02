@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSystemStore } from '../store/systemStore'
 import { useNavigationStore } from '../store/navigationStore'
+import { MirrorSelector } from '../components/common/MirrorSelector'
 
 export function Settings() {
   const [activeTab, setActiveTab] = useState<'general' | 'inference' | 'privacy'>('general')
@@ -37,6 +38,12 @@ export function Settings() {
         {/* General Tab */}
         {activeTab === 'general' && (
           <div className="space-y-6">
+            {/* Model Source Section */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-text-primary">Model Source</h3>
+              <MirrorSelector />
+            </div>
+
             {/* Display Section */}
             <div className="space-y-3">
               <h3 className="font-semibold text-text-primary">Display</h3>
