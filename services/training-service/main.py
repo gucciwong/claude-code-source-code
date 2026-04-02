@@ -3,7 +3,7 @@ Sovereign Coder Training Service - FastAPI backend
 Handles training data collection, orchestration, and evaluation
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from contextlib import asynccontextmanager
 
@@ -27,17 +27,44 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 class CompletionEventRequest(BaseModel):
-    """Request to log a completion event"""
-    event_type: str  # completion_accepted, completion_rejected, completion_edited
+    """Request to log a completion or inference event — §3.1 envelope + §3.2 domain fields"""
+    # §3.1 Common envelope (optional; populated by desktop client)
+    event_name: Optional[str] = None
+    event_version: str = "1.0"
+    correlation_id: Optional[str] = None
+    session_id: Optional[str] = None
+    installation_id_hash: Optional[str] = None
+    project_id_hash: Optional[str] = None
+    client_version: Optional[str] = None
+    platform: Optional[str] = None
+    runtime_backend: Optional[str] = None
+
+    # Existing core fields
+    event_type: str  # completion_accepted | completion_suggested | inference_request_* | …
     prompt: str
     completion: str
-    language: str
+    language: str = "text"
     file_path: Optional[str] = None
     model_id: Optional[str] = None
     tokens_generated: Optional[int] = None
     temperature: Optional[float] = None
     top_p: Optional[float] = None
     metadata: Optional[Dict[str, Any]] = None
+
+    # §3.2 Completion-specific KPI fields
+    completion_type: Optional[str] = None
+    suggestion_length_tokens: Optional[int] = None
+    accepted_boolean: Optional[bool] = None
+    edit_distance_after_accept: Optional[int] = None
+
+    # §3.2 Inference-specific KPI fields
+    first_token_latency_ms: Optional[float] = None
+    tokens_per_second: Optional[float] = None
+    backend_name: Optional[str] = None
+    model_quantization: Optional[str] = None
+    prompt_tokens: Optional[int] = None
+    completion_tokens: Optional[int] = None
+    error_message: Optional[str] = None
 
 
 class TaskTrajectoryRequest(BaseModel):
@@ -134,17 +161,17 @@ async def health_check():
 
 @app.post("/api/v1/training/event", status_code=201)
 async def log_completion_event(request: CompletionEventRequest):
-    """Log a code completion event for training"""
+    """Log a completion or inference lifecycle event for training"""
     
     db = next(get_db())
     store = TrainingDataStore(db)
     
     try:
-        # Validate event type
+        # Validate event type against known values
         if request.event_type not in [e.value for e in EventType]:
             raise ValueError(f"Invalid event_type: {request.event_type}")
         
-        # Add to store
+        # Add to store with full KPI envelope
         event_id = store.add_completion_event(
             event_type=request.event_type,
             prompt=request.prompt,
@@ -156,13 +183,36 @@ async def log_completion_event(request: CompletionEventRequest):
             temperature=request.temperature,
             top_p=request.top_p,
             metadata=request.metadata,
+            # §3.1 envelope
+            event_name=request.event_name,
+            event_version=request.event_version,
+            correlation_id=request.correlation_id,
+            session_id=request.session_id,
+            installation_id_hash=request.installation_id_hash,
+            project_id_hash=request.project_id_hash,
+            client_version=request.client_version,
+            platform=request.platform,
+            runtime_backend=request.runtime_backend,
+            # §3.2 completion
+            completion_type=request.completion_type,
+            suggestion_length_tokens=request.suggestion_length_tokens,
+            accepted_boolean=request.accepted_boolean,
+            edit_distance_after_accept=request.edit_distance_after_accept,
+            # §3.2 inference
+            first_token_latency_ms=request.first_token_latency_ms,
+            tokens_per_second=request.tokens_per_second,
+            backend_name=request.backend_name,
+            model_quantization=request.model_quantization,
+            prompt_tokens=request.prompt_tokens,
+            completion_tokens=request.completion_tokens,
+            error_message=request.error_message,
         )
         
         logger.info(f"✓ Logged event {event_id} ({request.event_type})")
         
         return {
             "event_id": event_id,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
         }
     
     except ValueError as e:
@@ -199,7 +249,7 @@ async def log_task_trajectory(request: TaskTrajectoryRequest):
         
         return {
             "task_id": task_id,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
         }
     
     except ValueError as e:

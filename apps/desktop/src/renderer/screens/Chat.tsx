@@ -9,6 +9,7 @@ import { DiffViewer } from '../components/chat/DiffViewer'
 import { VoicePanel } from '../components/common/VoicePanel'
 import { useVoiceStore } from '../store/voiceStore'
 import { useTrainingService } from '../hooks/useTrainingService'
+import { buildEnvelope } from '../services/telemetry'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -38,7 +39,7 @@ export function Chat() {
   const activeModel = useSystemStore(s => s.activeModel)
   const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
   const { isProcessing } = useVoiceStore()
-  const { logCompletion: logTrainingCompletion, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
+  const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastUserPromptRef = useRef<string>('')
 
@@ -56,7 +57,7 @@ export function Chat() {
       content: text,
     }
     addMessage(userMsg)
-    lastUserPromptRef.current = text // Save prompt for training logging
+    lastUserPromptRef.current = text
     setInput('')
 
     const assistantMsg: ChatMessage = {
@@ -71,25 +72,83 @@ export function Chat() {
     const model = activeModel || 'llama3.1:8b'
     const apiMessages = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }))
 
+    // §3.2 Inference instrumentation — shared correlation_id ties all 4 lifecycle events
+    const correlationId = crypto.randomUUID()
+    const inferenceStart = performance.now()
+    let firstTokenTime: number | null = null
+    let chunkCount = 0
+    let totalChars = 0
+
+    // ── inference_request_started ──────────────────────────────────
+    void logInference({
+      ...buildEnvelope('inference_request_started', model, 'ollama', 'local', correlationId),
+    })
+
     try {
       for await (const chunk of streamChat(model, apiMessages)) {
+        // ── inference_first_token_emitted (once) ──────────────────
+        if (chunkCount === 0) {
+          firstTokenTime = performance.now()
+          const firstTokenLatencyMs = firstTokenTime - inferenceStart
+          void logInference({
+            ...buildEnvelope('inference_first_token_emitted', model, 'ollama', 'local', correlationId),
+            first_token_latency_ms: Math.round(firstTokenLatencyMs),
+          })
+
+          // §3.2 completion_suggested: response has started rendering
+          const lastMessage = useChatStore.getState().messages.at(-1)
+          if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
+            void logTrainingCompletion({
+              ...buildEnvelope('completion_suggested', model, 'ollama', 'local', correlationId),
+              prompt: lastUserPromptRef.current,
+              completion: chunk,
+              event_type: 'completion_suggested',
+              language: 'text',
+              completion_type: 'chat',
+              accepted_boolean: undefined, // not yet known
+            })
+          }
+        }
+        chunkCount++
+        totalChars += chunk.length
         appendToLast(chunk)
       }
-      
-      // After streaming completes, log the completion for training
+
+      // ── inference_request_completed ───────────────────────────────
+      const totalMs = performance.now() - inferenceStart
+      const estimatedTokens = Math.round(totalChars / 4) // ~4 chars/token
+      const tokensPerSecond = totalMs > 0 ? (estimatedTokens / totalMs) * 1000 : 0
+      void logInference({
+        ...buildEnvelope('inference_request_completed', model, 'ollama', 'local', correlationId),
+        completion_tokens: estimatedTokens,
+        tokens_per_second: Math.round(tokensPerSecond * 10) / 10,
+        first_token_latency_ms: firstTokenTime != null ? Math.round(firstTokenTime - inferenceStart) : undefined,
+      })
+
+      // §3.2 completion_accepted: streaming finished, user received the full response
       const lastMessage = useChatStore.getState().messages.at(-1)
       if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
         try {
           await logTrainingCompletion({
+            ...buildEnvelope('completion_accepted', model, 'ollama', 'local', correlationId),
             prompt: lastUserPromptRef.current,
             completion: lastMessage.content,
             event_type: 'completion_accepted',
             language: 'text',
+            completion_type: 'chat',
+            suggestion_length_tokens: estimatedTokens,
+            accepted_boolean: true,
           })
         } catch (err) {
           console.error('Failed to log training completion:', err)
         }
       }
+    } catch (err) {
+      // ── inference_request_failed ──────────────────────────────────
+      void logInference({
+        ...buildEnvelope('inference_request_failed', model, 'ollama', 'local', correlationId),
+        error_message: err instanceof Error ? err.message : String(err),
+      })
     } finally {
       setLastStreaming(false)
       setIsStreaming(false)

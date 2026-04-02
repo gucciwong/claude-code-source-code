@@ -4,7 +4,7 @@ Training data store - abstraction over SQLite with validation & sanitization
 
 import uuid
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
 from .models import CompletionEvent, TaskTrajectory, TrainingRun, EventType
@@ -59,13 +59,38 @@ class TrainingDataStore:
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        # §3.1 KPI envelope
+        event_name: Optional[str] = None,
+        event_version: Optional[str] = None,
+        correlation_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        installation_id_hash: Optional[str] = None,
+        project_id_hash: Optional[str] = None,
+        client_version: Optional[str] = None,
+        platform: Optional[str] = None,
+        runtime_backend: Optional[str] = None,
+        # §3.2 Completion-specific
+        completion_type: Optional[str] = None,
+        suggestion_length_tokens: Optional[int] = None,
+        accepted_boolean: Optional[bool] = None,
+        edit_distance_after_accept: Optional[int] = None,
+        # §3.2 Inference-specific
+        first_token_latency_ms: Optional[float] = None,
+        tokens_per_second: Optional[float] = None,
+        backend_name: Optional[str] = None,
+        model_quantization: Optional[str] = None,
+        prompt_tokens: Optional[int] = None,
+        completion_tokens: Optional[int] = None,
+        error_message: Optional[str] = None,
     ) -> str:
-        """Add a completion event to the store"""
+        """Add a completion or inference event to the store"""
         
-        # Validate
-        valid, error = self._validate_code(prompt + completion, language)
-        if not valid:
-            raise ValueError(f"Invalid code: {error}")
+        # Validate (skip for pure inference events that have no meaningful code)
+        is_inference = event_type.startswith("inference_")
+        if not is_inference:
+            valid, error = self._validate_code(prompt + completion, language)
+            if not valid:
+                raise ValueError(f"Invalid code: {error}")
         
         # Sanitize
         prompt_clean = self._sanitize_code(prompt)
@@ -84,7 +109,30 @@ class TrainingDataStore:
             tokens_generated=tokens_generated,
             temperature=temperature,
             top_p=top_p,
-            metadata=metadata or {},
+            event_metadata=metadata or {},
+            # KPI envelope
+            event_name=event_name or event_type,
+            event_version=event_version or "1.0",
+            correlation_id=correlation_id,
+            session_id=session_id,
+            installation_id_hash=installation_id_hash,
+            project_id_hash=project_id_hash,
+            client_version=client_version,
+            platform=platform,
+            runtime_backend=runtime_backend,
+            # Completion-specific
+            completion_type=completion_type,
+            suggestion_length_tokens=suggestion_length_tokens,
+            accepted_boolean=accepted_boolean,
+            edit_distance_after_accept=edit_distance_after_accept,
+            # Inference-specific
+            first_token_latency_ms=first_token_latency_ms,
+            tokens_per_second=tokens_per_second,
+            backend_name=backend_name,
+            model_quantization=model_quantization,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            error_message=error_message,
         )
         
         self.db.add(event)
@@ -212,7 +260,7 @@ class TrainingDataStore:
         ).count()
         
         # Recent activity (last 24h)
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         yesterday = now - timedelta(days=1)
         recent = self.db.query(CompletionEvent).filter(
             CompletionEvent.created_at >= yesterday
@@ -284,7 +332,7 @@ class TrainingDataStore:
             run.error_message = error_message
         
         if status == "completed":
-            run.completed_at = datetime.utcnow()
+            run.completed_at = datetime.now(timezone.utc)
         
         self.db.commit()
     
@@ -300,7 +348,7 @@ class TrainingDataStore:
     def clear_old_events(self, days_old: int = 90):
         """Delete old training events (management task)"""
         
-        cutoff = datetime.utcnow() - timedelta(days=days_old)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days_old)
         deleted = self.db.query(CompletionEvent).filter(
             CompletionEvent.created_at < cutoff
         ).delete()

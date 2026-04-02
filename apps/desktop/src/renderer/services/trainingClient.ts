@@ -3,15 +3,35 @@
  * Communicates with: services/training-service (FastAPI)
  */
 
-interface CompletionEventPayload {
+import type { TelemetryEnvelope } from './telemetry'
+
+/** §3.2 Completion event payload — envelope + completion-specific KPI fields */
+export interface CompletionEventPayload extends Partial<TelemetryEnvelope> {
+  // Required by backend
   prompt: string
   completion: string
-  event_type: 'completion_accepted' | 'completion_rejected' | 'completion_edited'
+  event_type: 'completion_suggested' | 'completion_accepted' | 'completion_rejected' | 'completion_edited' | 'completion_edited_after_accept'
   language?: string
   model_id?: string
   temperature?: number
   top_p?: number
-  [key: string]: unknown
+  // §3.2 Completion-specific KPI fields
+  completion_type?: 'chat' | 'inline' | 'agent'
+  suggestion_length_tokens?: number
+  accepted_boolean?: boolean
+  edit_distance_after_accept?: number
+}
+
+/** §3.2 Inference event payload — envelope + inference-specific KPI fields */
+export interface InferenceEventPayload extends TelemetryEnvelope {
+  // event_name is one of the 4 inference event names
+  prompt_tokens?: number
+  completion_tokens?: number
+  first_token_latency_ms?: number
+  tokens_per_second?: number
+  backend_name?: string
+  model_quantization?: string
+  error_message?: string
 }
 
 interface TrainingStats {
@@ -40,7 +60,7 @@ export class TrainingServiceClient {
   }
 
   /**
-   * Log a completion event (code accepted, rejected, or edited)
+   * Log a completion event with full KPI envelope (§3.2 completion events)
    */
   async logCompletionEvent(payload: CompletionEventPayload): Promise<{ event_id: string; created_at: string }> {
     try {
@@ -59,6 +79,25 @@ export class TrainingServiceClient {
     } catch (error) {
       console.error('[Training] Error logging completion event:', error)
       return { event_id: 'error', created_at: new Date().toISOString() }
+    }
+  }
+
+  /**
+   * Log an inference event with full KPI envelope (§3.2 inference events)
+   * Fires-and-forgets — never throws, never blocks the UI.
+   */
+  async logInferenceEvent(payload: InferenceEventPayload): Promise<void> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/training/event`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, event_type: payload.event_name }),
+      })
+      if (!response.ok) {
+        console.warn(`[Telemetry] inference event ${payload.event_name} → ${response.status}`)
+      }
+    } catch {
+      // Non-critical — telemetry must never affect UX
     }
   }
 

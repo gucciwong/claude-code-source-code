@@ -4,15 +4,8 @@
  */
 
 import { useCallback, useEffect, useState } from 'react'
-import { TrainingServiceClient, getTrainingClient } from '../services/trainingClient'
-
-interface CompletionEventPayload {
-  prompt: string
-  completion: string
-  event_type: 'completion_accepted' | 'completion_rejected' | 'completion_edited'
-  language?: string
-  model_id?: string
-}
+import { getTrainingClient } from '../services/trainingClient'
+import type { CompletionEventPayload, InferenceEventPayload } from '../services/trainingClient'
 
 interface TrainingStatus {
   model_id: string
@@ -25,6 +18,7 @@ interface TrainingStatus {
 interface UseTrainingServiceReturn {
   // Methods
   logCompletion: (payload: CompletionEventPayload) => Promise<{ event_id: string; created_at: string }>
+  logInference: (payload: InferenceEventPayload) => Promise<void>
   getStatus: () => Promise<TrainingStatus | null>
   getStats: () => Promise<unknown>
 
@@ -60,7 +54,7 @@ export function useTrainingService(): UseTrainingServiceReturn {
     return () => clearInterval(interval)
   }, [client])
 
-  // Log a completion event
+  // Log a completion event (chat / inline / agent)
   const logCompletion = useCallback(
     async (payload: CompletionEventPayload) => {
       if (!isServiceAvailable) {
@@ -84,6 +78,15 @@ export function useTrainingService(): UseTrainingServiceReturn {
     [client, isServiceAvailable]
   )
 
+  // Log an inference lifecycle event (non-blocking fire-and-forget)
+  const logInference = useCallback(
+    async (payload: InferenceEventPayload) => {
+      if (!isServiceAvailable) return
+      await client.logInferenceEvent(payload)
+    },
+    [client, isServiceAvailable]
+  )
+
   // Get training status
   const getStatus = useCallback(async () => {
     if (!isServiceAvailable) return null
@@ -103,6 +106,7 @@ export function useTrainingService(): UseTrainingServiceReturn {
   return {
     // Methods
     logCompletion,
+    logInference,
     getStatus,
     getStats,
 
@@ -113,3 +117,4 @@ export function useTrainingService(): UseTrainingServiceReturn {
     eventCount,
   }
 }
+

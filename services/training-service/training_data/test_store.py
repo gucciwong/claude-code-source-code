@@ -15,8 +15,7 @@ from training_data.store import TrainingDataStore
 
 @pytest.fixture
 def test_db():
-    """Create in-memory test database"""
-    # Create temp file
+    """Create a test database in a temporary file"""
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         db_path = f.name
     
@@ -24,12 +23,17 @@ def test_db():
     engine = create_engine(f"sqlite:///{db_path}", connect_args={"check_same_thread": False})
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
+    session = Session()
     
-    yield Session()
+    yield session
     
-    # Cleanup
-    os.unlink(db_path)
+    # Windows-safe cleanup: close session and dispose engine BEFORE deleting the file
+    session.close()
     engine.dispose()
+    try:
+        os.unlink(db_path)
+    except PermissionError:
+        pass  # Windows may briefly hold the lock; the OS will clean it up
 
 
 def test_add_completion_event(test_db):
