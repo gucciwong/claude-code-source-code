@@ -107,11 +107,8 @@ export function HuggingFacePanel() {
     }
   }, [searchQuery])
 
-  // Poll for active downloads every 3 seconds
+  // Poll listModels every 3 seconds while panel is mounted
   useEffect(() => {
-    const hasActiveDownloads = Array.from(downloadStatuses.values()).some(s => s === 'downloading')
-    if (!hasActiveDownloads) return
-
     const interval = setInterval(async () => {
       const result = await listModels()
       if (!result) return
@@ -127,7 +124,7 @@ export function HuggingFacePanel() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [downloadStatuses, listModels])
+  }, [listModels])
 
   const handleDownload = useCallback(
     async (modelId: string) => {
