@@ -2,6 +2,7 @@
   "name": "sovereign-coder-desktop",
   "version": "0.1.0",
   "description": "Sovereign Coder Desktop App",
+  "author": "Sovereign Coder Team",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -10,7 +11,9 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "build:win": "npm run build && electron-builder --win --publish never",
+    "build:win:exe": "npm run build && electron-builder --win nsis --publish never"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -44,5 +47,34 @@
     "typescript": "^5.5.2",
     "vite": "^5.3.1",
     "vitest": "^1.6.0"
+  },
+  "build": {
+    "appId": "com.sovereign-coder.app",
+    "productName": "Sovereign Coder",
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "Sovereign-Coder-${version}-portable.exe"
+    }
   }
 }
