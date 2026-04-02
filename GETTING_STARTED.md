@@ -1,6 +1,6 @@
-# Getting Started with Sovereign Coder v1.0.0
+# Getting Started with Sovereign Code v0.2.0
 
-Welcome to **Sovereign Coder**! This guide will have you up and running in **5 minutes**.
+Welcome to **Sovereign Code**! This guide will have you up and running in **5 minutes**.
 
 ## ⚡ 5-Minute Quick Start
 

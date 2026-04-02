@@ -1,8 +1,8 @@
 {
-  "name": "sovereign-coder-desktop",
-  "version": "0.1.0",
-  "description": "Sovereign Coder Desktop App",
-  "author": "Sovereign Coder Team",
+  "name": "sovereign-code-desktop",
+  "version": "0.2.0",
+  "description": "Sovereign Code - Independent AI Model Management & Training",
+  "author": "Sovereign Code Team",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",

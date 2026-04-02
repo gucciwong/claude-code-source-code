@@ -1,6 +1,6 @@
 {
-  "appId": "com.sovereigncodcer.app",
-  "productName": "Sovereign Coder",
+  "appId": "com.sovereigncode.app",
+  "productName": "Sovereign Code",
   "directories": {
     "output": "dist",
     "buildResources": "resources"

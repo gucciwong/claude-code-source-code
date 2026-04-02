@@ -2,11 +2,11 @@
 
 This repository contains two distinct projects:
 
-## 🚀 Sovereign Coder Desktop Application
+## 🚀 Sovereign Code — Independent AI Model Management
 
 **Location**: `apps/desktop/`
 
-A production-ready Electron + React desktop AI coding assistant with local model support, training infrastructure, and voice I/O capabilities.
+A production-ready Electron + React desktop application for independent AI model management, training, and inference with Huggingface integration.
 
 ### Key Features
 - **Local-first architecture** — All processing runs locally, no cloud transmission
