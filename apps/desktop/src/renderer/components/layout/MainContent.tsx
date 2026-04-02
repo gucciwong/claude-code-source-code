@@ -10,6 +10,7 @@ import { Enterprise } from '../../screens/Enterprise'
 import { DecisionGraph } from '../../screens/DecisionGraph'
 import { Orchestration } from '../../screens/Orchestration'
 import { OrgIntelligence } from '../../screens/OrgIntelligence'
+import { PersonaCouncil } from '../../screens/PersonaCouncil'
 
 const screens = {
   dashboard: Dashboard,
@@ -22,6 +23,7 @@ const screens = {
   decisiongraph: DecisionGraph,
   orchestration: Orchestration,
   orgintelligence: OrgIntelligence,
+  personacouncil: PersonaCouncil,
   settings: Settings,
 }
 
