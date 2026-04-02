@@ -1,9 +1,10 @@
-# Sovereign Coder - Product Requirements Document
+# Sovereign Code - Product Requirements Document
 
-**Version:** 1.0  
-**Date:** 2026-03-31  
-**Status:** Draft  
+**Version:** 2.0  
+**Date:** 2026-04-02  
+**Status:** Active Development  
 **Author:** Sovereign AI Labs  
+**Previous Version:** 1.0 (2026-03-31)
 
 ---
 
@@ -17,60 +18,90 @@
 6. [Technical Specifications](#6-technical-specifications)
 7. [Self-Improvement System](#7-self-improvement-system)
 8. [Federated Learning Framework](#8-federated-learning-framework)
-9. [Product Roadmap](#9-product-roadmap)
-10. [Success Metrics](#10-success-metrics)
-11. [Risk Analysis](#11-risk-analysis)
-12. [Appendix](#12-appendix)
+9. [Personal Knowledge Library System](#9-personal-knowledge-library-system)
+10. [Enterprise Data Integration](#10-enterprise-data-integration)
+11. [Product Roadmap](#11-product-roadmap)
+12. [Success Metrics](#12-success-metrics)
+13. [Risk Analysis](#13-risk-analysis)
+14. [Appendix](#14-appendix)
 
 ---
 
 ## 1. Executive Summary
 
-### 1.1 What is Sovereign Coder?
+### 1.1 What is Sovereign Code?
 
-**Sovereign Coder** is a revolutionary AI-powered coding tool that runs 100% locally on consumer-grade hardware. Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Coder ensures:
+**Sovereign Code** (formerly Sovereign Coder) is an enterprise AI coding platform that runs 100% locally. It has evolved from a personal coding tool into an organization-wide knowledge management system where every staff member — not just developers — can:
 
-- **Zero data leakage** - Code never leaves your machine
-- **Full model ownership** - Train, customize, and own your AI model
-- **Privacy-first architecture** - Suitable for regulated industries (finance, healthcare, defense)
-- **Self-improving capability** - The tool trains itself on your codebase over time
-- **Federated collaboration** - Teams share knowledge without sharing code
+1. **Build tools quickly** — Use AI assistance to rapidly create scripts, automations, and internal tools to solve daily problems
+2. **Build a personal knowledge library** — AI learns from how you work and builds a searchable memory of your domain expertise; the more you use it, the smarter it gets about *your* patterns
+3. **Integrate enterprise data** — With IT approval, connect ERP, CRM, OMS, HRM, and BI systems so AI understands live business context when helping you build and automate
+
+Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Code ensures:
+
+- **Zero data leakage** — Code and business data never leave your machine or private infrastructure
+- **Full model ownership** — Train, customize, and own your AI model as a company asset
+- **Privacy-first architecture** — Suitable for regulated industries (finance, healthcare, defense)
+- **Self-improving capability** — The tool trains itself on your codebase and usage over time
+- **Enterprise-grade knowledge** — Personal libraries feed organizational intelligence
+- **Accessible globally** — China mirror support (hf-mirror.com) for users behind access restrictions
 
 ### 1.2 The Problem
 
-| Pain Point | Current Solutions | Sovereign Coder Solution |
+| Pain Point | Current Solutions | Sovereign Code Solution |
 |------------|-------------------|-------------------------|
 | Data privacy concerns | Cloud AI tools with data policies | 100% local, no data transmission |
 | Generic models | One-size-fits-all AI | Industry-specific fine-tuned models |
 | No IP ownership | Third-party owns your data insights | Your model, your IP, your asset |
-| Collaboration barriers | Share code to share knowledge | Federated learning - share insights, not code |
+| Isolated knowledge | Each developer starts from zero | Personal libraries feed the model |
+| Collaboration barriers | Share code to share knowledge | Federated learning — share insights, not code |
 | Capability ceiling | Limited by provider's model | Continuously improving via self-training |
+| No business context | AI doesn't know your ERP/CRM data | Enterprise data integration (IT-approved) |
+| Access from China | Slow/blocked Huggingface downloads | Built-in hf-mirror.com support |
 
 ### 1.3 Key Differentiators
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                                                                          │
-│   SOVEREIGN CODER vs COMPETITORS                                        │
+│   SOVEREIGN CODE vs COMPETITORS                                         │
 │                                                                          │
-│   ┌───────────────┬──────────────┬──────────────┬──────────────────┐   │
-│   │    Feature    │ GitHub       │   Cursor     │ Sovereign Coder  │   │
-│   │               │   Copilot    │   /Windsurf  │                  │   │
-│   ├───────────────┼──────────────┼──────────────┼──────────────────┤   │
-│   │ Local Running │      ✗       │      △      │        ✓        │   │
-│   │ Data Privacy  │      ✗       │      △      │        ✓        │   │
-│   │ Model Privacy │      ✗       │      ✗      │        ✓        │   │
-│   │ Customizable  │      ✗       │      ✗      │        ✓        │   │
-│   │ Trainable     │      ✗       │      ✗      │        ✓        │   │
-│   │ Federated     │      ✗       │      ✗      │        ✓        │   │
-│   │ Self-improving│      ✗       │      ✗      │        ✓        │   │
-│   │ Offline Capable│     ✗       │      △      │        ✓        │   │
-│   └───────────────┴──────────────┴──────────────┴──────────────────┘   │
+│   ┌──────────────────┬──────────────┬──────────────┬──────────────────┐ │
+│   │    Feature       │ GitHub       │   Cursor     │ Sovereign Code   │ │
+│   │                  │   Copilot    │   /Windsurf  │                  │ │
+│   ├──────────────────┼──────────────┼──────────────┼──────────────────┤ │
+│   │ Local Running    │      ✗       │      △       │        ✓        │ │
+│   │ Data Privacy     │      ✗       │      △       │        ✓        │ │
+│   │ Model Ownership  │      ✗       │      ✗       │        ✓        │ │
+│   │ Customizable     │      ✗       │      ✗       │        ✓        │ │
+│   │ Self-trainable   │      ✗       │      ✗       │        ✓        │ │
+│   │ Personal Library │      ✗       │      ✗       │        ✓        │ │
+│   │ Enterprise Data  │      ✗       │      ✗       │        ✓        │ │
+│   │ Federated Learn  │      ✗       │      ✗       │        ✓        │ │
+│   │ Offline Capable  │      ✗       │      △       │        ✓        │ │
+│   │ China Support    │      △       │      ✗       │        ✓        │ │
+│   └──────────────────┴──────────────┴──────────────┴──────────────────┘ │
 │                                                                          │
-│   Legend: ✓ Full Support   △ Partial/Cloud-dependent   ✗ Not Supported │
+│   Legend: ✓ Full Support   △ Partial/Cloud-dependent   ✗ Not Supported  │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+### 1.4 Current Status (v0.3.x — April 2026)
+
+The desktop application is actively in development with the following milestones completed:
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Electron desktop app | ✅ Built | React 18 + Tailwind v4, 314 tests passing |
+| Local model inference | ✅ Built | Huggingface integration, GGUF support |
+| Model manager service | ✅ Built | FastAPI on port 8002 |
+| Training service | ✅ Built | FastAPI on port 8001, QLoRA pipeline |
+| Voice I/O (VibeVoice) | ✅ Built | Whisper ASR + Google TTS |
+| China mirror support | ✅ Built | hf-mirror.com toggle in Settings |
+| Windows EXE packaging | ✅ Built | electron-builder, 70MB installer |
+| Personal Knowledge Library | 🔜 v0.4.0 | Q2 2026 |
+| Enterprise Data Integration | 🔜 v0.5.0 | Q3 2026 |
 
 ---
 
@@ -78,21 +109,23 @@
 
 ### 2.1 Vision Statement
 
-> **"Every developer deserves a coding companion that respects their privacy, grows with their expertise, and ultimately becomes an asset they own."**
+> **"Every person in an organization deserves an AI assistant that respects their privacy, grows with their domain expertise, and ultimately integrates with the systems they work in every day — without ever sending their data to a cloud."**
 
 ### 2.2 Mission Statement
 
-- Democratize advanced AI coding tools for developers and enterprises worldwide
+- Empower every staff member — not just developers — to build tools and automations with AI assistance
+- Create personal knowledge libraries that capture each person's domain expertise and grow over time
+- Enable secure, IT-governed integration with enterprise systems (ERP, CRM, OMS, HRM, BI)
 - Eliminate the tradeoff between AI capability and data privacy
-- Create a new paradigm where tools self-improve through usage
-- Build an ecosystem where knowledge is shared without compromising intellectual property
+- Build an ecosystem where organizational knowledge compounds without exposing proprietary data
 
 ### 2.3 Core Values
 
-1. **Privacy by Design** - Zero data transmission, zero telemetry, zero compromise
-2. **Ownership Economy** - Your code, your model, your intellectual property
-3. **Continuous Evolution** - Every interaction makes the tool smarter
-4. **Collaborative Intelligence** - Learn from the collective without exposing secrets
+1. **Privacy by Design** — Zero data transmission, zero telemetry, zero compromise
+2. **Ownership Economy** — Your code, your model, your intellectual property, your knowledge
+3. **Continuous Evolution** — Every interaction makes the tool smarter and more personalized
+4. **Collaborative Intelligence** — Learn from the collective without exposing secrets
+5. **Universal Access** — Works in all regions including China (mirror support); no cloud dependency
 
 ---
 
@@ -141,21 +174,25 @@ Addressable Market Analysis (2026)
 
 ### 4.1 Feature Priority Matrix
 
-| Priority | Feature | Description | Complexity |
-|----------|---------|-------------|------------|
-| P0 | Local LLM Inference | Run 10B-70B models on consumer GPU | High |
-| P0 | Code Completion | Inline suggestions and multi-line completions | Medium |
-| P0 | Context Awareness | Project-level understanding via RAG | High |
-| P1 | Agent Mode | Autonomous task execution | Very High |
-| P1 | Local Training | QLoRA fine-tuning on user data | Very High |
-| P1 | Model Management | Switch, update, quantize models | Medium |
-| P2 | Federated Learning | Collaborative training without data sharing | Very High |
-| P2 | Self-Improvement Loop | Automated model enhancement | High |
-| P2 | Enterprise Integration | SSO, audit logs, compliance features | High |
-| P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium |
-| P2 | Live Execution Trace Injection | Feed real runtime traces into model context during completions | High |
-| P2 | Temporal Decision Graph | Queryable causal history of why the codebase evolved as it did | High |
-| P3 | Adversarial Persona Council | Parallel specialized LoRA adapters that surface model disagreements | Very High |
+| Priority | Feature | Description | Complexity | Version |
+|----------|---------|-------------|------------|---------|
+| P0 | Local LLM Inference | Run 10B-70B models on consumer GPU | High | v0.1 ✅ |
+| P0 | Code Completion | Inline suggestions and multi-line completions | Medium | v0.1 ✅ |
+| P0 | Context Awareness | Project-level understanding via RAG | High | v0.2 ✅ |
+| P0 | Model Management | Download, switch, quantize models via HuggingFace | Medium | v0.2 ✅ |
+| P0 | China Mirror Support | hf-mirror.com toggle for China users | Low | v0.3 ✅ |
+| P1 | Agent Mode | Autonomous task execution | Very High | v0.3 ✅ |
+| P1 | Local Training | QLoRA fine-tuning on user data | Very High | v0.3 ✅ |
+| P1 | Voice I/O (VibeVoice) | Hands-free coding via Whisper ASR + TTS | High | v0.3 ✅ |
+| P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 🔜 |
+| P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 🔜 |
+| P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 🔜 |
+| P2 | Federated Learning | Collaborative training without data sharing | Very High | v0.7 🔜 |
+| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.5 🔜 |
+| P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium | v1.0 |
+| P2 | Live Execution Trace Injection | Feed real runtime traces into model context | High | v0.5 |
+| P2 | Temporal Decision Graph | Queryable causal history of why codebase evolved | High | v0.5 |
+| P3 | Adversarial Persona Council | Parallel specialized LoRA adapters for quality tradeoffs | Very High | v0.7 |
 
 ### 4.2 Detailed Feature Specifications
 
@@ -1093,138 +1130,326 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 ---
 
-## 9. Product Roadmap
+## 9. Personal Knowledge Library System
 
-### 9.1 Development Phases
+### 9.1 Overview
+
+Every user of Sovereign Code automatically builds a **Personal Knowledge Library (PKL)** — a local, private repository of their domain expertise, past decisions, and proven code patterns. The PKL feeds into every AI request, making suggestions progressively more personalized and accurate.
+
+> *"The more you use Sovereign Code, the smarter it gets about you."*
+
+### 9.2 Architecture
+
+```
+Personal Knowledge Layer (~/.sovereign-code/knowledge/)
+├── memory.md             ← Personal knowledge base (user-editable)
+├── domains.json          ← Domain expertise mapping (auto-detected)
+├── snippets/             ← Code snippet library (auto-populated)
+│   ├── patterns/
+│   ├── utilities/
+│   └── templates/
+├── decisions.md          ← Why decisions were made
+├── learnings.json        ← What worked / what didn't
+└── metadata.json         ← Library metadata
+
+↓ (injected into every model request)
+
+Sovereign Code Inference Engine
+├── RAG: Retrieve relevant snippets from library
+├── Context Window: Include relevant memories
+├── Few-shot: Show examples from user's history
+└── Personalized: Tailored suggestions based on patterns
+```
+
+### 9.3 Auto-Population Pipeline
+
+The system learns passively from user activity with zero manual effort:
+
+| User Activity | What is Extracted | What is Stored |
+|---------------|-------------------|----------------|
+| Accept AI completion | Problem type, solution pattern | "When [context], this pattern works" |
+| Debug for 30+ minutes | Bug type, diagnosis, fix | "Tricky area: [symptoms] → [solution]" |
+| Complete a task | Methodology, frameworks used | Domain expertise data point |
+| Write a decision comment | Architectural rationale | Decision log entry |
+| Reject AI suggestion | Mismatch type | Negative sample (avoid this) |
+
+### 9.4 Storage Specifications
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  PERSONAL KNOWLEDGE LIBRARY SPECS                                 │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Location:  ~/.sovereign-code/knowledge/                         │
+│  Format:    Markdown + JSON (human-readable, git-friendly)       │
+│  Privacy:   100% local, zero upload, zero sync                   │
+│  Size:      Typical user: 5,000-50,000 words after 3 months      │
+│                                                                   │
+│  Retrieval:                                                       │
+│  • Semantic search: e5-small-v2 embeddings stored in SQLite      │
+│  • Full-text search: inverted index for keyword lookup           │
+│  • Hybrid ranking: semantic + keyword + recency score            │
+│  • Latency target: < 50ms per query                              │
+│                                                                   │
+│  Context Injection:                                               │
+│  • Budget: max 8K tokens of PKL context per request             │
+│  • Priority: most relevant snippets ranked by semantic score     │
+│  • Freshness: recently used entries boosted                      │
+│  • Negative filtering: exclude patterns user previously rejected │
+│                                                                   │
+│  Portability:                                                     │
+│  • Export: zip archive of ~/.sovereign-code/knowledge/           │
+│  • Import: drag-drop or import dialog                            │
+│  • Merge: combine libraries from multiple machines               │
+│  • Selective share: export topic-specific subset for teams       │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 9.5 UI: Knowledge Screen
+
+The dedicated Knowledge screen (accessible from the sidebar) provides:
+
+- **Memory.md editor** — Rich markdown editor for manual knowledge entry
+- **Snippet browser** — Searchable library with language/tag filters
+- **Decision log** — Timeline of architectural decisions with context  
+- **Domain map** — Visual representation of detected expertise areas
+- **Activity feed** — Recent auto-captures with review/delete options
+- **Stats** — Library size, search query history, context injection frequency
+
+### 9.6 Impact Projections
+
+| Timeframe | Individual Benefit | Organization Benefit |
+|-----------|-------------------|--------------------|
+| Week 1-4 | AI suggestions feel "familiar" | — |
+| Month 1-3 | 50% faster on known problem types | New hires ramp 2x faster with team library |
+| Month 3-12 | 80% acceptance rate on personal patterns | 25% productivity gain org-wide |
+| Year 1+ | Full domain-expert AI assistant | Organizational knowledge compounds forever |
+
+---
+
+## 10. Enterprise Data Integration
+
+### 10.1 Overview
+
+With explicit IT approval, Sovereign Code can connect to enterprise systems and provide AI assistance that understands live business context. The model can reference actual ERP records, CRM data, or BI metrics when helping users build tools and automations.
+
+**Key principle:** Data flows inward (from systems into context), never outward (to cloud). All connections are read-only, IT-governed, and fully audited.
+
+### 10.2 Supported Systems (v0.5.0)
+
+| System Category | Connectors | Access Type |
+|----------------|------------|-------------|
+| **ERP** | SAP S/4HANA, Oracle ERP, Microsoft Dynamics | Read-only schema + anonymized samples |
+| **CRM** | Salesforce, HubSpot, Zoho | Read-only, PII-masked |
+| **OMS** | SAP Commerce, Magento, custom REST | Order data summary only |
+| **HRM** | SAP SuccessFactors, Workday, BambooHR | Org chart + anonymized roles |
+| **BI** | PowerBI, Tableau, Metabase, Postgres | Aggregated metrics, no row-level PII |
+| **Custom** | Any REST API / PostgreSQL / MySQL / MongoDB | IT-configurable rules |
+
+### 10.3 Security Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                  ENTERPRISE DATA SECURITY MODEL                          │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────┐    IT Admin Console                                   │
+│  │ ERP / CRM /  │    ┌──────────────────────────────────────────────┐   │
+│  │ OMS / HRM /  │ →  │  Connection Approval Workflow                │   │
+│  │ BI Systems   │    │  • Define allowed tables/fields              │   │
+│  └──────────────┘    │  • Set PII masking rules (SSN, salary etc.)  │   │
+│                      │  • Configure rate limits & quotas            │   │
+│                      │  • Activate/deactivate per user role         │   │
+│                      └──────────────────┬───────────────────────────┘   │
+│                                         ↓                               │
+│                      ┌──────────────────────────────────────────────┐   │
+│                      │  Data Access Layer (On-premise)              │   │
+│                      │  • Read-only connector                       │   │
+│                      │  • PII detection & masking (Presidio)        │   │
+│                      │  • Data sampling (max N rows per query)      │   │
+│                      │  • No caching of sensitive values            │   │
+│                      └──────────────────┬───────────────────────────┘   │
+│                                         ↓                               │
+│                      ┌──────────────────────────────────────────────┐   │
+│                      │  Context Injection                           │   │
+│                      │  • Anonymized schema: "orders table has      │   │
+│                      │    200K rows, columns: id, status, amount"  │   │
+│                      │  • Sample data only (5 rows max)             │   │
+│                      │  • Business metrics: "Q1 revenue: $4.2M"    │   │
+│                      │  • Data stays in RAM, never written to disk  │   │
+│                      └──────────────────┬───────────────────────────┘   │
+│                                         ↓                               │
+│                      ┌──────────────────────────────────────────────┐   │
+│                      │  Audit Log (Immutable)                       │   │
+│                      │  • User, timestamp, query, system accessed   │   │
+│                      │  • Exportable for compliance (SOC2, HIPAA)  │   │
+│                      └──────────────────────────────────────────────┘   │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### 10.4 Compliance Standards
+
+| Standard | Coverage | Implementation |
+|----------|----------|----------------|
+| SOC 2 Type II | Data handling, access control | Audit logs, RBAC, encryption |
+| HIPAA | Healthcare data | PHI masking, access control |
+| GDPR | EU personal data | Right to erasure, consent tracking |
+| CCPA | California personal data | Data inventory, opt-out |
+| PCI-DSS | Payment card data | Cardholder data masking |
+
+### 10.5 IT Admin Console
+
+An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provides:
+
+- **Connection registry** — View, add, approve, or revoke data connections
+- **Field masking rules** — Configure which fields are masked per connector
+- **User permissions** — Which users/roles can access which systems
+- **Live audit log** — Real-time query monitoring with user attribution
+- **Usage analytics** — How AI is using enterprise data (query types, frequency)
+- **Emergency off switch** — Disable all enterprise data access instantly
+
+---
+
+## 11. Product Roadmap
+
+### 11.1 Release History & Forward Plan
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                          PRODUCT ROADMAP                                 │
+│                     SOVEREIGN CODE RELEASE TIMELINE                      │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
-│  PHASE 1: FOUNDATION (Month 1-3)                                        │
-│  ════════════════════════════════════════════════                       │
+│  ✅ COMPLETED                                                            │
+│  ─────────────────────────────────────────────────────────────────────  │
+│  v0.1 — Desktop Foundation                                              │
+│  • Electron app with React 18 + Tailwind v4                            │
+│  • 8 screens: Dashboard, Models, Chat, Training, Federation,           │
+│    Settings, System Health, Voice                                       │
+│  • 8 Zustand stores, WCAG AA accessibility                             │
+│  • 314 unit tests, Windows EXE packaging                               │
 │                                                                          │
-│  Month 1: Core Infrastructure                                          │
-│  ├── Local inference engine integration (Ollama)                        │
-│  ├── Basic code completion (inline suggestions)                         │
-│  ├── VSCode plugin MVP                                                   │
-│  └── CLI tool with basic commands                                       │
+│  v0.2 — Model Management                                                 │
+│  • HuggingFace model download/management (independent)                 │
+│  • FastAPI model-manager service (port 8002)                           │
+│  • QLoRA training pipeline (FastAPI training service, port 8001)       │
+│  • Renamed "Sovereign Code", v0.2 branding                             │
 │                                                                          │
-│  Month 2: IDE Integration                                                │
-│  ├── VSCode plugin completion                                          │
-│  ├── JetBrains plugin development                                       │
-│  ├── Project context awareness (RAG)                                    │
-│  └── Multi-file editing support                                         │
+│  v0.3 — Accessibility & Voice                                           │
+│  • China mirror support (hf-mirror.com, one-click toggle)             │
+│  • VibeVoice integration (Whisper ASR + Google TTS)                   │
+│  • Voice panel, waveform visualization, transcription history          │
+│  • MirrorSelector component in Settings                                │
 │                                                                          │
-│  Month 3: Model Management                                              │
-│  ├── Model registry and switching                                       │
-│  ├── GGUF format optimization                                           │
-│  ├── Streaming response implementation                                  │
-│  └── Basic evaluation pipeline                                          │
+│  🔜 IN PROGRESS / PLANNED                                               │
+│  ─────────────────────────────────────────────────────────────────────  │
+│  v0.4.0 — Personal Knowledge Library  [Q2 2026, June 30]              │
+│  • ~/.sovereign-code/knowledge/ local storage system                   │
+│  • Auto-learning from accepted completions, task completions           │
+│  • Semantic search (e5-small-v2 embeddings + SQLite)                   │
+│  • Knowledge UI screen in desktop app                                  │
+│  • Context injection into model prompts                                │
+│  • Memory.md editor, snippet browser, decision log                     │
 │                                                                          │
-│  MILESTONE: v0.1 - "First Code"                                        │
-│  • Basic completion working on consumer GPU                             │
-│  • Available for early testing                                          │
+│  v0.5.0 — Enterprise Data Integration  [Q3 2026, Sept 30]             │
+│  • 4 enterprise connectors (SAP, Salesforce, PostgreSQL, REST)        │
+│  • PII detection & masking (Presidio)                                  │
+│  • IT admin console (web UI, local)                                    │
+│  • Role-based access control                                           │
+│  • Immutable audit logging, compliance reports (SOC2, HIPAA)          │
+│  • Live Execution Trace Injection (JS/TS, Python)                      │
+│  • Temporal Decision Graph (git-based causal history)                  │
 │                                                                          │
-├─────────────────────────────────────────────────────────────────────────┤
+│  v0.6.0 — Organization Intelligence  [Q4 2026, Dec 31]                │
+│  • Team knowledge sharing (anonymous snippet library)                  │
+│  • Cross-team pattern discovery                                        │
+│  • Org-wide bottleneck & skill gap analysis                            │
+│  • Productivity metrics dashboard                                      │
+│  • ROI tracking & reporting                                            │
+│  • Adversarial Persona Council (Security/Perf/Maintainability/Correct)│
 │                                                                          │
-│  PHASE 2: TRAINING (Month 4-9)                                         │
-│  ════════════════════════════════════════════════                       │
+│  v0.7.0 — Federated Learning  [Q1 2027, Mar 31]                       │
+│  • Federated averaging protocol (FedAvg)                               │
+│  • Differential privacy (DP-SGD)                                       │
+│  • First industry consortium launch (fintech/healthcare)               │
+│  • Self-improvement loop (8-hour upgrade cycle)                        │
+│  • Plugin marketplace foundation                                       │
 │                                                                          │
-│  Month 4-5: Training Infrastructure                                      │
-│  ├── QLoRA training pipeline (Unsloth integration)                     │
-│  ├── Data collection system                                              │
-│  ├── Training orchestration and scheduling                             │
-│  └── Model versioning and registry                                      │
-│                                                                          │
-│  Month 6-7: Self-Improvement                                             │
-│  ├── 10-minute training loop implementation                             │
-│  ├── Automated evaluation harness                                       │
-│  ├── Model merge and export pipeline                                    │
-│  └── First fine-tuned model release                                     │
-│                                                                          │
-│  Month 8-9: Advanced Training                                           │
-│  ├── RLHF/DPO training integration                                      │
-│  ├── Domain-specific fine-tuning (Python, JS, etc.)                    │
-│  ├── Enterprise codebase customization                                  │
-│  └── Performance benchmarking suite                                     │
-│                                                                          │
-│  MILESTONE: v0.5 - "Self-Improving"                                    │
-│  • Model trains on user data                                            │
-│  • Demonstrable improvement over baseline                                │
-│                                                                          │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  PHASE 3: FEDERATION (Month 10-15)                                     │
-│  ════════════════════════════════════════════════                       │
-│                                                                          │
-│  Month 10-11: Federated Core                                            │
-│  ├── Federated averaging protocol                                       │
-│  ├── Secure aggregation implementation                                   │
-│  ├── Differential privacy integration                                   │
-│  └── Federation management console                                       │
-│                                                                          │
-│  Month 12-13: Enterprise Features                                        │
-│  ├── SSO integration (SAML, OIDC)                                       │
-│  ├── Audit logging and compliance                                       │
-│  ├── Role-based access control                                          │
-│  └── Enterprise deployment automation                                   │
-│                                                                          │
-│  Month 14-15: First Consortia                                           │
-│  ├── Launch first industry federation (fintech/healthcare)             │
-│  ├── Cross-organization model evaluation                                │
-│  ├── Reputation and contribution tracking                              │
-│  └── Federation governance framework                                    │
-│                                                                          │
-│  MILESTONE: v1.0 - "Federated"                                          │
-│  • Production-ready federated learning                                  │
-│  • First consortiums operational                                        │
-│                                                                          │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  PHASE 4: ECOSYSTEM (Month 16+)                                        │
-│  ════════════════════════════════════════════════                       │
-│                                                                          │
-│  ├── Plugin marketplace launch                                          │
-│  ├── Third-party model support                                         │
-│  ├── API marketplace (companies selling fine-tuned models)              │
-│  ├── Mobile companion app                                               │
-│  ├── Cloud + On-prem hybrid deployment option                          │
-│  └── Advanced agent capabilities                                        │
-│                                                                          │
-│  MILESTONE: v2.0 - "Platform"                                          │
-│  • Full ecosystem operational                                           │
-│  • Self-sustaining improvement loop                                     │
+│  v1.0 — Platform  [Q2 2027]                                            │
+│  • Plugin ecosystem open                                               │
+│  • First consortiums operational                                       │
+│  • Mobile companion app                                                │
+│  • Full API for third-party integrations                               │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 9.2 Key Milestones
+### 11.2 v0.4.0 Sprint Plan (Active — April 2026)
+
+```
+WEEK 1-2: Storage Foundation
+  ├── knowledge/ directory structure + config.json schema
+  ├── markdown-it parser for memory.md read/write
+  ├── SQLite embeddings database schema
+  └── knowledgeLibraryStore.ts (Zustand)
+
+WEEK 3-4: Auto-Learning Pipeline
+  ├── Completion event hook → pattern extraction
+  ├── Task completion event → methodology extraction
+  ├── Snippet deduplication + quality scoring
+  └── Background indexing worker
+
+WEEK 5-6: Semantic Search
+  ├── e5-small-v2 embedding generation (Python service)
+  ├── Cosine similarity search over SQLite vectors
+  ├── Hybrid ranking (semantic + keyword + recency)
+  └── Search API: GET /api/v1/knowledge/search
+
+WEEK 7-8: Context Injection
+  ├── Prompt builder: inject PKL context before model call
+  ├── Token budget manager (8K max PKL context)
+  ├── Relevance filtering (threshold: 0.7 similarity)
+  └── Negative example filtering (rejected patterns)
+
+WEEK 9-10: UI + Beta Testing
+  ├── Knowledge screen: Memory.md editor
+  ├── Snippet browser with filters
+  ├── Decision log timeline view
+  ├── Domain expertise visualization
+  └── Internal beta (10-15 users), bug fixes, GA
+
+v0.4.0 GA → June 30, 2026
+```
+
+### 11.3 Key Milestones
 
 | Milestone | Target Date | Success Criteria |
 |-----------|-------------|------------------|
-| First Code (v0.1) | Month 3 | Basic completion working |
-| Self-Improving (v0.5) | Month 9 | Demonstrable model improvement |
-| Federated (v1.0) | Month 15 | First consortium operational |
-| Platform (v2.0) | Month 24 | Ecosystem established |
+| v0.4.0 GA | June 30, 2026 | PKL active for 50%+ users |
+| v0.5.0 GA | Sept 30, 2026 | 20+ enterprise deployments |
+| v0.6.0 GA | Dec 31, 2026 | 500+ team members sharing patterns |
+| v0.7.0 GA | Mar 31, 2027 | First consortium operational |
+| v1.0 GA | June 30, 2027 | Plugin ecosystem live |
 
 ---
 
-## 10. Success Metrics
+## 12. Success Metrics
 
-### 10.1 Product Metrics
+### 12.1 Product Metrics
 
 | Metric | Baseline | 6-Month Target | 12-Month Target |
 |--------|----------|----------------|-----------------|
-| DAU (Daily Active Users) | - | 1,000 | 50,000 |
-| MAU (Monthly Active Users) | - | 5,000 | 100,000 |
-| Code Acceptance Rate | 30% | 45% | 60% |
+| DAU (Daily Active Users) | — | 1,000 | 50,000 |
+| MAU (Monthly Active Users) | — | 5,000 | 100,000 |
+| Code Acceptance Rate | 30% | 45% | 65% |
 | HumanEval Pass@1 | 40% | 65% | 80% |
 | SWE-bench Resolution | 10% | 35% | 50% |
 | Model Fine-tune Time | 48h | 8h | 2h |
+| PKL Library Size (avg active user) | — | 5K words | 20K words |
+| Enterprise Data Connections | — | — | 50+ |
 
-### 10.2 Technical Metrics
+### 12.2 Technical Metrics
 
 | Metric | Target |
 |--------|--------|
@@ -1232,40 +1457,56 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 | Token Throughput | > 30 tokens/sec |
 | Memory Usage | < 80% VRAM |
 | Offline Capability | 100% (no network required) |
+| PKL Semantic Search Latency | < 50ms |
 | Training Cost | < $0.50 per fine-tune cycle |
 | Model Quality Drift | < 5% degradation per month |
+| Audit Log Integrity | 100% (immutable, tamper-proof) |
 
-### 10.3 Business Metrics
+### 12.3 Business Metrics
 
 | Metric | Year 1 Target | Year 2 Target | Year 3 Target |
 |--------|---------------|---------------|---------------|
 | ARR (Annual Recurring Revenue) | $500K | $5M | $50M |
 | Enterprise Customers | 10 | 100 | 500 |
-| Federated Networks | 1 | 10 | 50 |
+| Users with Active PKL | 1,000 | 20,000 | 100,000 |
+| Enterprise Data Connections | 5 | 100 | 1,000 |
+| Federated Networks | 0 | 5 | 50 |
 | NPS (Net Promoter Score) | 40 | 55 | 70 |
+| Annual ROI per 500-person org | — | $2M | $5.7M |
 
 ---
 
-## 11. Risk Analysis
+## 13. Risk Analysis
 
-### 11.1 Technical Risks
+### 13.1 Technical Risks
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| Claude Code source unavailable | Medium | High | Build core from scratch; use Cursor alternatives |
 | Local model capability gap | High | Medium | Continuous prompt engineering; model selection |
 | Training instability | Medium | High | Robust evaluation pipeline; rollback mechanisms |
 | Hardware limitations | Low | High | Progressive model sizing; cloud fallback option |
+| PKL quality degradation | Medium | Medium | Quality scoring, deduplication, user review |
+| Enterprise connector breakage | Medium | High | Versioned APIs, contract testing, fallback mode |
 
-### 11.2 Market Risks
+### 13.2 Market Risks
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| Slow enterprise adoption | High | Medium | SaaS-first approach; strong ROI messaging |
-| Competitor replication | High | Medium | Fast iteration; data flywheel moat |
+| Slow enterprise adoption | High | Medium | ROI calculator; pilot program; strong documentation |
+| Competitor replication | High | Medium | Personal library flywheel; data moat |
 | Regulatory changes | Low | High | Compliance-ready architecture; regional variants |
+| China access disruption | Medium | Low | Multiple mirror options; offline-first default |
 
-### 11.3 Operational Risks
+### 13.3 Security Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Unauthorized enterprise data access | Low | Critical | RBAC, audit logging, IT approval workflow |
+| PII leakage via AI output | Medium | High | Presidio masking before context injection |
+| Local model exfiltration | Low | High | Sandboxed inference, no network in inference mode |
+| Supply chain attack (HF models) | Low | High | Model hash verification, trusted source list |
+
+### 13.4 Operational Risks
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
@@ -1274,9 +1515,9 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 ---
 
-## 12. Appendix
+## 14. Appendix
 
-### 12.1 Glossary
+### 14.1 Glossary
 
 | Term | Definition |
 |------|------------|
@@ -1289,7 +1530,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 | **LoRA** | Low-Rank Adaptation - Efficient fine-tuning technique |
 | **DPO** | Direct Preference Optimization - RLHF alternative using preference pairs |
 
-### 12.2 Reference Architecture
+### 14.2 Reference Architecture
 
 ```
 Related Open Source Projects:
@@ -1302,7 +1543,7 @@ Related Open Source Projects:
 └── NVIDIA FLARE - Federated learning framework
 ```
 
-### 12.3 Hardware Recommendations
+### 14.3 Hardware Recommendations
 
 | Use Case | GPU | VRAM | Price Range |
 |----------|-----|------|-------------|
@@ -1312,15 +1553,15 @@ Related Open Source Projects:
 | Team/Enterprise | A100 | 40GB | $10,000+ |
 | Budget | RTX 4060 | 8GB | $250-350 |
 
-### 12.4 Contact
+### 14.4 Contact
 
 For questions or collaboration inquiries:
-- **Project**: Sovereign Coder
-- **Documentation**: This PRD
-- **Development**: Codex-based implementation
+- **Project**: Sovereign Code
+- **Documentation**: This PRD (v2.0)
+- **Development**: See `docs/plans/` for sprint implementation plans
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: 2026-03-31  
-**Status**: Ready for Development  
+**Document Version**: 2.0  
+**Last Updated**: 2026-04-02  
+**Status**: Active Development  
