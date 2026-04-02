@@ -1,4 +1,4 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
 
@@ -27,6 +27,7 @@ const navItems: NavItem[] = [
   { id: 'prreview', label: 'PR Review', icon: GitPullRequest },
   { id: 'finetune', label: 'Fine-tune', icon: FlaskConical },
   { id: 'federationcore', label: 'Fed Core', icon: Network },
+  { id: 'codecompletion', label: 'Completions', icon: Code },
 ]
 
 const bottomItems: NavItem[] = [

@@ -18,6 +18,7 @@ import { Plugins } from '../../screens/Plugins'
 import { PRReview } from '../../screens/PRReview'
 import { Finetune } from '../../screens/Finetune'
 import { FederationCore } from '../../screens/FederationCore'
+import { CodeCompletion } from '../../screens/CodeCompletion'
 
 const screens = {
   dashboard: Dashboard,
@@ -38,6 +39,7 @@ const screens = {
   prreview: PRReview,
   finetune: Finetune,
   federationcore: FederationCore,
+  codecompletion: CodeCompletion,
   settings: Settings,
 }
 
