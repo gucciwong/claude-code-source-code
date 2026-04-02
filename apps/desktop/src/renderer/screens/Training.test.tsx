@@ -1,8 +1,27 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Training } from './Training'
+import * as trainingHook from '../hooks/useTrainingService'
+import { vi } from 'vitest'
+
+// Mock the training service
+vi.mock('../hooks/useTrainingService', () => ({
+  useTrainingService: vi.fn(),
+}))
 
 describe('Training Screen', () => {
+  beforeEach(() => {
+    // Mock training service as available
+    vi.mocked(trainingHook.useTrainingService).mockReturnValue({
+      trainingStatus: {
+        is_training: false,
+        uptime_seconds: 3600,
+      },
+      eventCount: 500,
+      isServiceAvailable: true,
+    } as any)
+  })
+
   test('renders training console header', () => {
     render(<Training />)
     expect(screen.getByText('Training Console')).toBeInTheDocument()

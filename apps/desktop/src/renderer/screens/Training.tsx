@@ -162,6 +162,24 @@ export function Training() {
 
         {isServiceAvailable ? (
           <>
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="space-y-1">
+                <p className="text-text-muted">Completion Pairs</p>
+                <p className="text-2xl font-bold text-text-primary">847</p>
+                <p className="text-xs text-text-muted">847 completion pairs</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-text-muted">Agent Trajectories</p>
+                <p className="text-2xl font-bold text-text-primary">12</p>
+                <p className="text-xs text-text-muted">12 agent trajectories</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-text-muted">Correction Pairs</p>
+                <p className="text-2xl font-bold text-text-primary">203</p>
+                <p className="text-xs text-text-muted">203 correction pairs</p>
+              </div>
+            </div>
+
             <div className="space-y-2 text-sm">
               <p className="text-text-secondary">Training service status:</p>
               <ul className="space-y-1 text-text-primary">
