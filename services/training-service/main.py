@@ -15,6 +15,7 @@ import os
 
 from training_data.models import init_db, get_session_maker, EventType
 from training_data.store import TrainingDataStore
+from finetune.router import router as finetune_router
 
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
@@ -103,6 +104,9 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+# Mount finetune sub-router
+app.include_router(finetune_router)
 
 
 # ============================================================================

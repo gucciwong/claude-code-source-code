@@ -16,6 +16,7 @@ import { Messaging } from '../../screens/Messaging'
 import { SemanticSearch } from '../../screens/SemanticSearch'
 import { Plugins } from '../../screens/Plugins'
 import { PRReview } from '../../screens/PRReview'
+import { Finetune } from '../../screens/Finetune'
 
 const screens = {
   dashboard: Dashboard,
@@ -34,6 +35,7 @@ const screens = {
   semanticsearch: SemanticSearch,
   plugins: Plugins,
   prreview: PRReview,
+  finetune: Finetune,
   settings: Settings,
 }
 
