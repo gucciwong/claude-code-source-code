@@ -29,36 +29,51 @@ function ModelDetail({ model }: { model: OllamaModel }) {
   const isActive = model.name === activeModel
 
   return (
-    <div className="p-6 max-w-xl">
-      <div className="mb-6">
-        <div className="flex items-start gap-3 mb-2">
-          <h2 className="text-xl font-semibold text-text-primary">{model.name}</h2>
+    <div className="p-6 space-y-6 max-w-2xl">
+      {/* Header */}
+      <div>
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <h2 
+              className="text-2xl font-semibold text-text-primary break-words"
+              title={model.name}
+            >
+              {model.name}
+            </h2>
+          </div>
           {isActive && (
-            <CheckCircle2 size={20} className="text-green-500 mt-0.5" aria-label="Active model" />
+            <div className="flex-shrink-0">
+              <CheckCircle2 size={24} className="text-green-500" aria-label="Active model" />
+            </div>
           )}
         </div>
-        <p className="text-xs text-text-muted">
-          {formatSize(model.size)} · Modified {formatDate(model.modified_at)}
+        <p className="text-sm text-text-muted">
+          {formatSize(model.size)} • Modified {formatDate(model.modified_at)}
         </p>
       </div>
 
-      {/* Info Grid */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
-          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Digest</p>
-          <p className="text-sm text-text-primary font-mono truncate">{model.digest.slice(0, 12)}...</p>
+      {/* Info Grid - 4 columns */}
+      <div className="grid grid-cols-4 gap-2">
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Digest</p>
+          <p className="text-xs text-text-primary font-mono break-all flex-1" title={model.digest}>
+            {model.digest.slice(0, 16)}...
+          </p>
         </div>
-        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
-          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Size</p>
-          <p className="text-sm text-text-primary font-mono">{formatSize(model.size)}</p>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Size</p>
+          <p className="text-xs text-text-primary font-mono">{formatSize(model.size)}</p>
         </div>
-        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
-          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Status</p>
-          <p className="text-sm text-text-primary font-mono">{isActive ? 'Active' : 'Installed'}</p>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Status</p>
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-yellow-500'}`} aria-hidden="true" />
+            <p className="text-xs text-text-primary font-mono">{isActive ? 'Active' : 'Installed'}</p>
+          </div>
         </div>
-        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-2">
-          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">Modified</p>
-          <p className="text-sm text-text-primary font-mono">{formatDate(model.modified_at)}</p>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Modified</p>
+          <p className="text-xs text-text-primary font-mono">{formatDate(model.modified_at)}</p>
         </div>
       </div>
 
@@ -116,6 +131,7 @@ export function Models() {
                   <button
                     role="option"
                     aria-selected={isSelected}
+                    title={model.name}
                     className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
                       isSelected
                         ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-500'
@@ -126,7 +142,7 @@ export function Models() {
                     {isActive && (
                       <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
                     )}
-                    <span className="truncate">{model.name}</span>
+                    <span className="truncate flex-1" title={model.name}>{model.name}</span>
                   </button>
                 </li>
               )
