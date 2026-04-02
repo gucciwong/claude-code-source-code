@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { PatternExtractor } from './PatternExtractor'
 import { QualityScorer } from './QualityScorer'
 import { DeduplicationEngine } from './DeduplicationEngine'
+import { IndexWorker } from './IndexWorker'
 import { Snippet } from '../../shared/knowledge'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -48,10 +49,8 @@ describe('PatternExtractor', () => {
   it('extract finds single code block', () => {
     const completion = '```typescript\nconst x = 1\n```'
     const patterns = extractor.extract(completion, 'write a var')
-    // single code block found (may be filtered by quality score)
-    // code block is extracted — whether it passes quality depends on score
-    // just verify it attempted extraction: 0 or 1 pattern
-    expect(patterns.length).toBeGreaterThanOrEqual(0)
+    // 'const x = 1' is a trivial one-liner — quality score < 0.6 → filtered out
+    expect(patterns.length).toBe(0)
   })
 
   it('extract finds multiple code blocks', () => {
@@ -72,9 +71,8 @@ describe('PatternExtractor', () => {
   it('extract detects language from fence', () => {
     const completion = '```python\ndef foo():\n    pass\n\ndef bar():\n    return 1\n\ndef baz():\n    return 2\n\nclass A:\n    x = 1\n```'
     const patterns = extractor.extract(completion, 'prompt')
-    if (patterns.length > 0) {
-      expect(patterns[0].language).toBe('python')
-    }
+    expect(patterns.length).toBeGreaterThan(0)
+    expect(patterns[0].language).toBe('python')
   })
 
   it('extract falls back to plaintext for unfenced code block header', () => {
@@ -85,9 +83,8 @@ describe('PatternExtractor', () => {
       '```',
     ].join('\n')
     const patterns = extractor.extract(completion, 'prompt')
-    if (patterns.length > 0) {
-      expect(patterns[0].language).toBe('plaintext')
-    }
+    expect(patterns.length).toBeGreaterThan(0)
+    expect(patterns[0].language).toBe('plaintext')
   })
 
   it('extract returns methodology pattern for long completion without code blocks', () => {
@@ -101,9 +98,7 @@ describe('PatternExtractor', () => {
     ].join('\n').repeat(3)  // make sure it's > 100 chars
     const patterns = extractor.extract(longText, 'explain repository pattern')
     expect(patterns.length).toBeGreaterThanOrEqual(1)
-    if (patterns.length > 0) {
-      expect(patterns[0].type).toBe('methodology')
-    }
+    expect(patterns[0].type).toBe('methodology')
   })
 
   it('extract limits to MAX_EXTRACTIONS_PER_COMPLETION (5)', () => {
@@ -239,5 +234,38 @@ describe('DeduplicationEngine', () => {
     expect(engine.isDuplicate(text)).toBe(true)
     engine.reset()
     expect(engine.isDuplicate(text)).toBe(false)
+  })
+})
+
+// ─── IndexWorker tests ───────────────────────────────────────────────────────
+
+describe('IndexWorker', () => {
+  it('enqueue() increases queueLength when already processing', () => {
+    const worker = new IndexWorker()
+    const snippet = makeSnippet(TYPESCRIPT_FUNCTION)
+    // First enqueue triggers processNext synchronously: item shifts to task, processing=true
+    worker.enqueue([snippet])
+    // Second enqueue sees processing=true, so item stays in queue
+    worker.enqueue([snippet])
+    expect(worker.queueLength).toBe(1)
+  })
+
+  it('enqueue() with empty array does not crash', () => {
+    const worker = new IndexWorker()
+    expect(() => worker.enqueue([])).not.toThrow()
+  })
+
+  it('isProcessing starts as false', () => {
+    const worker = new IndexWorker()
+    expect(worker.isProcessing).toBe(false)
+  })
+
+  it('onReady callback is invoked after processing', async () => {
+    const worker = new IndexWorker()
+    const received: Snippet[][] = []
+    worker.onReady(snippets => received.push(snippets))
+    worker.enqueue([makeSnippet(TYPESCRIPT_FUNCTION)])
+    await new Promise(resolve => setTimeout(resolve, 100))
+    expect(received).toHaveLength(1)
   })
 })
