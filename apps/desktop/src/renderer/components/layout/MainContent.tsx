@@ -14,6 +14,7 @@ import { PersonaCouncil } from '../../screens/PersonaCouncil'
 import { Analytics } from '../../screens/Analytics'
 import { Messaging } from '../../screens/Messaging'
 import { SemanticSearch } from '../../screens/SemanticSearch'
+import { Plugins } from '../../screens/Plugins'
 
 const screens = {
   dashboard: Dashboard,
@@ -30,6 +31,7 @@ const screens = {
   analytics: Analytics,
   messaging: Messaging,
   semanticsearch: SemanticSearch,
+  plugins: Plugins,
   settings: Settings,
 }
 
