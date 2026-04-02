@@ -1,121 +1,115 @@
 import React, { useEffect, useState } from 'react'
-import { Globe, AlertCircle } from 'lucide-react'
-import { useModelManager, type MirrorConfig } from '../../hooks/useModelManager'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Loader2 } from 'lucide-react'
+import { useModelManager } from '../../hooks/useModelManager'
+
+const MIRROR_OPTIONS = [
+  {
+    id: 'huggingface',
+    name: 'HuggingFace (Official)',
+    description: 'huggingface.co — default, requires VPN in China',
+  },
+  {
+    id: 'hf-mirror',
+    name: 'HF-Mirror (China)',
+    description: 'hf-mirror.com — fast access from mainland China',
+  },
+  {
+    id: 'modelscope',
+    name: 'ModelScope',
+    description: 'modelscope.cn — Alibaba open-source model hub',
+  },
+]
+
+type Status = 'idle' | 'switching' | 'success' | 'error'
 
 export function MirrorSelector() {
-  const { getMirrorInfo, getSwitchMirrorInstructions, loading, error } = useModelManager()
-  const [mirrorConfig, setMirrorConfig] = useState<MirrorConfig | null>(null)
-  const [switchInstructions, setSwitchInstructions] = useState<string | null>(null)
+  const { getMirrorInfo, getSwitchMirrorInstructions } = useModelManager()
+  const [selected, setSelected] = useState<string>('huggingface')
+  const [status, setStatus] = useState<Status>('idle')
 
   useEffect(() => {
-    const loadMirrorInfo = async () => {
-      const config = await getMirrorInfo()
-      if (config) {
-        setMirrorConfig(config)
+    getMirrorInfo().then(config => {
+      if (config?.current_mirror) {
+        setSelected(config.current_mirror)
       }
-    }
-    loadMirrorInfo()
+    })
   }, [getMirrorInfo])
 
-  const handleMirrorSwitch = async (mirrorName: string) => {
-    const instructions = await getSwitchMirrorInstructions(mirrorName)
-    if (instructions) {
-      setSwitchInstructions(instructions.instruction)
-      // Show copy-to-clipboard toast or notification
+  const handleChange = async (value: string) => {
+    if (value === selected) return
+    setStatus('switching')
+    const result = await getSwitchMirrorInstructions(value)
+    if (result !== null) {
+      setSelected(value)
+      setStatus('success')
+    } else {
+      setStatus('error')
     }
-  }
-
-  if (!mirrorConfig) {
-    return (
-      <div className="p-4 bg-bg-surface-2 border border-border-default rounded-lg">
-        <div className="flex items-center gap-2 text-text-secondary">
-          <Globe size={16} aria-hidden="true" />
-          Loading mirror configuration...
-        </div>
-      </div>
-    )
   }
 
   return (
-    <div className="space-y-4">
-      {/* Current Mirror Badge */}
-      <div className="p-4 bg-bg-surface-2 border border-border-default rounded-lg">
-        <div className="flex items-center gap-2 mb-3">
-          <Globe size={18} aria-hidden="true" />
-          <h3 className="text-sm font-medium text-text-primary">Huggingface Mirror</h3>
-        </div>
-        <div className="flex items-center gap-2 mb-3">
-          <div
-            className={`w-3 h-3 rounded-full ${
-              mirrorConfig.is_china_mirror ? 'bg-yellow-500' : 'bg-green-500'
-            }`}
-            aria-hidden="true"
-          />
-          <span className="text-sm text-text-secondary">
-            {mirrorConfig.current_mirror === 'mirror'
-              ? '🇨🇳 China Mirror (hf-mirror.com)'
-              : '🌐 Official (huggingface.co)'}
-          </span>
-        </div>
-      </div>
-
-      {/* Mirror Options */}
-      <div className="space-y-2">
-        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
-          Choose Mirror
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {mirrorConfig.available_mirrors.map(mirror => (
-            <button
-              key={mirror.name}
-              onClick={() => handleMirrorSwitch(mirror.name)}
-              disabled={loading}
-              className={`p-3 rounded-md text-sm font-medium transition-all cursor-pointer ${
-                mirrorConfig.current_mirror === mirror.name
-                  ? 'bg-accent-500 text-text-primary'
-                  : 'bg-bg-surface-2 border border-border-default text-text-secondary hover:bg-bg-surface-3'
-              } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              aria-pressed={mirrorConfig.current_mirror === mirror.name}
-            >
-              {mirror.display}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Switch Instructions */}
-      {switchInstructions && (
-        <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-md">
-          <div className="flex gap-2 mb-2">
-            <AlertCircle size={16} className="text-blue-400 flex-shrink-0" aria-hidden="true" />
-            <div className="text-xs text-blue-300">
-              <p className="font-medium mb-1">To switch mirrors, run:</p>
-              <code className="block bg-bg-base/50 p-2 rounded font-mono text-xs text-text-code">
-                {switchInstructions}
-              </code>
-              <p className="mt-2 text-blue-200">Then restart the Model Manager service.</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {error && (
-        <div className="p-3 bg-red-500/10 border border-red-400/30 rounded-md">
-          <p className="text-xs text-red-300">Error: {error}</p>
-        </div>
-      )}
-
-      {/* Mirror Endpoint Info */}
-      <div className="text-xs text-text-muted space-y-1">
-        <p>
-          <span className="text-text-secondary">Current endpoint: </span>
-          <code className="bg-bg-surface-3 px-1 py-0.5 rounded">{mirrorConfig.huggingface_endpoint}</code>
+    <div className="bg-bg-surface-2 border border-border-default rounded-lg p-4">
+      <div className="mb-4">
+        <h3 className="text-text-primary text-sm font-medium">HuggingFace Mirror</h3>
+        <p className="text-text-secondary text-xs mt-1">
+          Select the download mirror for HuggingFace models
         </p>
-        {mirrorConfig.is_china_mirror && (
-          <p className="text-yellow-400">💡 Mirror is recommended for faster access in China</p>
-        )}
       </div>
+
+      <RadioGroup.Root
+        value={selected}
+        onValueChange={handleChange}
+        className="flex flex-col gap-2"
+        aria-label="HuggingFace mirror selection"
+      >
+        {MIRROR_OPTIONS.map(option => (
+          <RadioGroup.Item
+            key={option.id}
+            value={option.id}
+            aria-label={option.name}
+            className={[
+              'flex items-center gap-3 p-3 rounded-md border cursor-pointer text-left w-full',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
+              'transition-colors',
+              selected === option.id
+                ? 'border-accent-500 bg-accent-500/10'
+                : 'border-border-default hover:border-border-strong',
+            ].join(' ')}
+          >
+            <div
+              className={[
+                'w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0',
+                selected === option.id ? 'border-accent-500' : 'border-border-default',
+              ].join(' ')}
+              aria-hidden="true"
+            >
+              {selected === option.id && (
+                <div className="w-2 h-2 rounded-full bg-accent-500" />
+              )}
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-text-primary text-sm font-medium">{option.name}</span>
+              <span className="text-text-secondary text-xs">{option.description}</span>
+            </div>
+          </RadioGroup.Item>
+        ))}
+      </RadioGroup.Root>
+
+      {status === 'switching' && (
+        <div className="mt-3 flex items-center gap-2 text-text-secondary text-sm">
+          <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+          Switching mirror...
+        </div>
+      )}
+      {status === 'success' && (
+        <p className="mt-3 text-green-400 text-sm">Mirror updated. Restart may be required.</p>
+      )}
+      {status === 'error' && (
+        <p className="mt-3 text-red-400 text-sm">
+          Failed to switch mirror. Is the model manager running?
+        </p>
+      )}
     </div>
   )
 }
