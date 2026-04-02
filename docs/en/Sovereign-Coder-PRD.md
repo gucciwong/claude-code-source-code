@@ -101,9 +101,9 @@ The desktop application is actively in development with the following milestones
 | China mirror support | ✅ Built | hf-mirror.com toggle in Settings |
 | Windows EXE packaging | ✅ Built | electron-builder, 70MB installer |
 | Personal Knowledge Library | ✅ Built | PKL system, knowledge-service, 408 tests |
-| Enterprise Data Integration | 🔜 v0.5.0 | Q3 2026 |
-| Live Execution Trace Injection | 🔜 v0.5.0 | Q3 2026 |
-| Temporal Decision Graph | 🔜 v0.5.0 | Q3 2026 |
+| Enterprise Data Integration | ✅ Built | FastAPI port 8004, 4 connectors, PII masking, audit log, 501 tests |
+| Live Execution Trace Injection | ✅ Built | Python/JS sandbox runners, TraceSerializer, FastAPI port 8005 |
+| Temporal Decision Graph | ✅ Built | GitHistoryParser, GraphQueryEngine, DecisionTimeline UI |
 
 ---
 
@@ -187,12 +187,12 @@ Addressable Market Analysis (2026)
 | P1 | Local Training | QLoRA fine-tuning on user data | Very High | v0.3 ✅ |
 | P1 | Voice I/O (VibeVoice) | Hands-free coding via Whisper ASR + TTS | High | v0.3 ✅ |
 | P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 ✅ |
-| P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 🔜 |
+| P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 ✅ |
 | P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 🔜 |
 | P2 | Federated Learning | Collaborative training without data sharing | Very High | v0.7 🔜 |
-| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.5 🔜 |
+| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.6 🔜 |
 | P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium | v1.0 |
-| P2 | Live Execution Trace Injection | Feed real runtime traces into model context | High | v0.5 |
+| P2 | Live Execution Trace Injection | Feed real runtime traces into model context | High | v0.5 ✅ |
 | P2 | Temporal Decision Graph | Queryable causal history of why codebase evolved | High | v0.5 |
 | P3 | Adversarial Persona Council | Parallel specialized LoRA adapters for quality tradeoffs | Very High | v0.7 |
 
@@ -1353,16 +1353,23 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 │  • Memory.md editor, snippet browser, decision log, domain expertise  │
 │  • 408 unit tests passing                                              │
 │                                                                          │
+│  v0.5.0 — Enterprise Data Integration  [✅ COMPLETED April 2026]        │
+│  • 4 enterprise connectors (SAP, Salesforce, PostgreSQL, REST API)    │
+│  • PII masking (6 entity types: email, phone, SSN, CC, IP, name)      │
+│  • IT admin console UI (3-tab screen: connectors/audit/PII rules)     │
+│  • Immutable audit log (SHA-256 hash chaining, SQLite, CSV export)    │
+│  • Live Execution Trace Injection (Python sys.settrace + JS/Node)     │
+│  • Temporal Decision Graph (git-history parser + NL query engine)     │
+│  • 501 TypeScript + 95 Python tests passing                            │
+│                                                                          │
 │  🔜 IN PROGRESS / PLANNED                                               │
 │  ─────────────────────────────────────────────────────────────────────  │
-│  v0.5.0 — Enterprise Data Integration  [Q3 2026, Sept 30]             │
-│  • 4 enterprise connectors (SAP, Salesforce, PostgreSQL, REST)        │
-│  • PII detection & masking (Presidio)                                  │
-│  • IT admin console (web UI, local)                                    │
-│  • Role-based access control                                           │
-│  • Immutable audit logging, compliance reports (SOC2, HIPAA)          │
-│  • Live Execution Trace Injection (JS/TS, Python)                      │
-│  • Temporal Decision Graph (git-based causal history)                  │
+│  v0.6.0 — Organization Intelligence  [Q4 2026, Dec 31]                │
+│  • Multi-Agent Orchestration (task decomp, dependency graph)           │
+│  • Team knowledge sharing (anonymous snippet library)                  │
+│  • Cross-team pattern discovery & org-wide skill gap analysis          │
+│  • Adversarial Persona Council (Security/Perf/Maintainability/Correct) │
+│  • Advanced analytics dashboard (usage metrics, quality trends, ROI)   │
 │                                                                          │
 │  v0.6.0 — Organization Intelligence  [Q4 2026, Dec 31]                │
 │  • Team knowledge sharing (anonymous snippet library)                  │
