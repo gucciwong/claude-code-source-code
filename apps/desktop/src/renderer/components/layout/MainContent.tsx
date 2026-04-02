@@ -15,6 +15,7 @@ import { Analytics } from '../../screens/Analytics'
 import { Messaging } from '../../screens/Messaging'
 import { SemanticSearch } from '../../screens/SemanticSearch'
 import { Plugins } from '../../screens/Plugins'
+import { PRReview } from '../../screens/PRReview'
 
 const screens = {
   dashboard: Dashboard,
@@ -32,6 +33,7 @@ const screens = {
   messaging: Messaging,
   semanticsearch: SemanticSearch,
   plugins: Plugins,
+  prreview: PRReview,
   settings: Settings,
 }
 
