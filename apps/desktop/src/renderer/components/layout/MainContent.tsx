@@ -19,6 +19,7 @@ import { PRReview } from '../../screens/PRReview'
 import { Finetune } from '../../screens/Finetune'
 import { FederationCore } from '../../screens/FederationCore'
 import { CodeCompletion } from '../../screens/CodeCompletion'
+import { ConversationMemory } from '../../screens/ConversationMemory'
 
 const screens = {
   dashboard: Dashboard,
@@ -40,6 +41,7 @@ const screens = {
   finetune: Finetune,
   federationcore: FederationCore,
   codecompletion: CodeCompletion,
+  memory: ConversationMemory,
   settings: Settings,
 }
 
