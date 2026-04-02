@@ -1,18 +1,24 @@
 from __future__ import annotations
 
+import hashlib
 import time
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 
+from enterprise_data.audit_logger import AuditLogger
 from enterprise_data.context_assembler import DataContextAssembler
+from enterprise_data.pii_masker import PiiMasker
 from enterprise_data.registry import ConnectorRegistry
 
 app = FastAPI(title="Enterprise Data Service", version="0.1.0")
 
 _registry = ConnectorRegistry()
 _assembler = DataContextAssembler(_registry)
+_pii_masker = PiiMasker()
+_audit_logger = AuditLogger()
 
 
 # ---------------------------------------------------------------------------
@@ -75,9 +81,20 @@ def query_connector(connector_id: str, body: QueryRequest) -> dict:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     duration_ms = int((time.monotonic() - start) * 1000)
 
+    masked_rows, total_pii = _pii_masker.mask_rows(rows)
+
+    query_hash = hashlib.sha256(str(body.params).encode()).hexdigest()
+    _audit_logger.log(
+        user_id="system",
+        connector_id=connector_id,
+        query_hash=query_hash,
+        rows_returned=len(masked_rows),
+        pii_entities_masked=total_pii,
+    )
+
     return {
-        "rows": rows,
-        "masked_count": 0,
+        "rows": masked_rows,
+        "masked_count": total_pii,
         "duration_ms": duration_ms,
     }
 
@@ -100,6 +117,26 @@ def get_schema(connector_id: str) -> dict:
 def build_context(body: ContextRequest) -> dict:
     xml_block = _assembler.build_context(body.prompt, body.connector_ids)
     return {"enterprise_context": xml_block}
+
+
+# ---------------------------------------------------------------------------
+# Audit log endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/audit-log")
+def get_audit_log() -> list[dict]:
+    return _audit_logger.get_all()
+
+
+@app.get("/audit-log/verify")
+def verify_audit_log() -> dict:
+    return {"valid": _audit_logger.verify_chain()}
+
+
+@app.get("/audit-log/export", response_class=PlainTextResponse)
+def export_audit_log() -> str:
+    return _audit_logger.export_csv()
 
 
 @app.get("/health")
