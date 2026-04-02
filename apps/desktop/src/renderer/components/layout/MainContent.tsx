@@ -7,6 +7,7 @@ import { Federation } from '../../screens/Federation'
 import { Settings } from '../../screens/Settings'
 import { Knowledge } from '../../screens/Knowledge'
 import { Enterprise } from '../../screens/Enterprise'
+import { DecisionGraph } from '../../screens/DecisionGraph'
 
 const screens = {
   dashboard: Dashboard,
@@ -16,6 +17,7 @@ const screens = {
   federation: Federation,
   knowledge: Knowledge,
   enterprise: Enterprise,
+  decisiongraph: DecisionGraph,
   settings: Settings,
 }
 
