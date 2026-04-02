@@ -11,6 +11,7 @@ import { DecisionGraph } from '../../screens/DecisionGraph'
 import { Orchestration } from '../../screens/Orchestration'
 import { OrgIntelligence } from '../../screens/OrgIntelligence'
 import { PersonaCouncil } from '../../screens/PersonaCouncil'
+import { Analytics } from '../../screens/Analytics'
 
 const screens = {
   dashboard: Dashboard,
@@ -24,6 +25,7 @@ const screens = {
   orchestration: Orchestration,
   orgintelligence: OrgIntelligence,
   personacouncil: PersonaCouncil,
+  analytics: Analytics,
   settings: Settings,
 }
 
