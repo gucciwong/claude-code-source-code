@@ -1,0 +1,95 @@
+{
+  "name": "sovereign-coder-training",
+  "displayName": "Sovereign Coder Training Logger",
+  "description": "Logs inline code completions to local training service for model fine-tuning",
+  "version": "0.1.0",
+  "publisher": "sovereign-coder",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "training",
+    "fine-tuning",
+    "ml",
+    "code-completion",
+    "local"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sovereignCoder.training.logCompletion",
+        "title": "Log Completion to Training Service",
+        "category": "Sovereign Coder"
+      },
+      {
+        "command": "sovereignCoder.training.openDashboard",
+        "title": "Open Training Dashboard",
+        "category": "Sovereign Coder"
+      },
+      {
+        "command": "sovereignCoder.training.toggleLogging",
+        "title": "Toggle Training Logging",
+        "category": "Sovereign Coder"
+      }
+    ],
+    "configuration": {
+      "title": "Sovereign Coder Training",
+      "properties": {
+        "sovereignCoder.training.serviceUrl": {
+          "type": "string",
+          "default": "http://localhost:8001",
+          "description": "Training service URL"
+        },
+        "sovereignCoder.training.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable training data collection"
+        },
+        "sovereignCoder.training.logAcceptedOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Only log completions that are accepted (tab/enter)"
+        },
+        "sovereignCoder.training.showStatusIndicator": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show training status indicator in status bar"
+        }
+      }
+    },
+    "statusBar": [
+      {
+        "id": "sovereignCoder.training.status",
+        "alignment": "right",
+        "priority": 100
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "vitest",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.5"
+  }
+}
