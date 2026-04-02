@@ -12,6 +12,7 @@ import { Orchestration } from '../../screens/Orchestration'
 import { OrgIntelligence } from '../../screens/OrgIntelligence'
 import { PersonaCouncil } from '../../screens/PersonaCouncil'
 import { Analytics } from '../../screens/Analytics'
+import { Messaging } from '../../screens/Messaging'
 
 const screens = {
   dashboard: Dashboard,
@@ -26,6 +27,7 @@ const screens = {
   orgintelligence: OrgIntelligence,
   personacouncil: PersonaCouncil,
   analytics: Analytics,
+  messaging: Messaging,
   settings: Settings,
 }
 
