@@ -8,6 +8,7 @@ import { ToolTrace } from '../components/chat/ToolTrace'
 import { DiffViewer } from '../components/chat/DiffViewer'
 import { VoicePanel } from '../components/common/VoicePanel'
 import { useVoiceStore } from '../store/voiceStore'
+import { useTrainingService } from '../hooks/useTrainingService'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -37,7 +38,9 @@ export function Chat() {
   const activeModel = useSystemStore(s => s.activeModel)
   const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
   const { isProcessing } = useVoiceStore()
+  const { logCompletion: logTrainingCompletion, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
   const bottomRef = useRef<HTMLDivElement>(null)
+  const lastUserPromptRef = useRef<string>('')
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: 'smooth' })
@@ -53,6 +56,7 @@ export function Chat() {
       content: text,
     }
     addMessage(userMsg)
+    lastUserPromptRef.current = text // Save prompt for training logging
     setInput('')
 
     const assistantMsg: ChatMessage = {
@@ -70,6 +74,21 @@ export function Chat() {
     try {
       for await (const chunk of streamChat(model, apiMessages)) {
         appendToLast(chunk)
+      }
+      
+      // After streaming completes, log the completion for training
+      const lastMessage = useChatStore.getState().messages.at(-1)
+      if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
+        try {
+          await logTrainingCompletion({
+            prompt: lastUserPromptRef.current,
+            completion: lastMessage.content,
+            event_type: 'completion_accepted',
+            language: 'text',
+          })
+        } catch (err) {
+          console.error('Failed to log training completion:', err)
+        }
       }
     } finally {
       setLastStreaming(false)

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Pause, Play, Square, Zap, TrendingUp, Archive } from 'lucide-react'
+import { useTrainingService } from '../hooks/useTrainingService'
 
 interface TrainingRun {
   id: string
@@ -16,6 +17,7 @@ export function Training() {
   const [isRunning, setIsRunning] = useState(false)
   const [schedule, setSchedule] = useState<'manual' | 'auto' | 'scheduled'>('auto')
   const [progress, setProgress] = useState(48)
+  const { trainingStatus, eventCount, isServiceAvailable } = useTrainingService()
 
   const trainingRuns: TrainingRun[] = [
     {
@@ -158,25 +160,35 @@ export function Training() {
           Data Collection
         </h2>
 
-        <div className="space-y-2 text-sm">
-          <p className="text-text-secondary">Collected this session:</p>
-          <ul className="space-y-1 text-text-primary">
-            <li>• 847 completion pairs (tab-accepted suggestions)</li>
-            <li>• 12 agent trajectories (completed tasks)</li>
-            <li>• 203 correction pairs (user edits to model output)</li>
-          </ul>
-        </div>
+        {isServiceAvailable ? (
+          <>
+            <div className="space-y-2 text-sm">
+              <p className="text-text-secondary">Training service status:</p>
+              <ul className="space-y-1 text-text-primary">
+                <li>• Total events collected: <span className="font-semibold">{eventCount}</span></li>
+                <li>• Service: <span className="font-semibold text-green-400">✓ Running</span></li>
+                <li>• Training status: <span className="font-semibold">{trainingStatus?.is_training ? 'Active' : 'Idle'}</span></li>
+              </ul>
+            </div>
 
-        <div className="pt-2 border-t border-border-subtle space-y-1">
-          <div className="flex justify-between text-sm">
-            <span className="text-text-muted">Total training samples:</span>
-            <span className="text-text-primary font-semibold">14,820</span>
+            <div className="pt-2 border-t border-border-subtle space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="text-text-muted">Total training events:</span>
+                <span className="text-text-primary font-semibold">{eventCount}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-text-muted">Service uptime:</span>
+                <span className="text-text-primary font-semibold">{trainingStatus?.uptime_seconds ? Math.floor(trainingStatus.uptime_seconds / 3600) + 'h' : '-'}</span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="space-y-2 text-sm">
+            <p className="text-red-400">⚠ Training service unavailable</p>
+            <p className="text-text-secondary">Make sure the training service is running at <code className="text-xs bg-bg-surface-3 px-2 py-1 rounded">http://localhost:8001</code></p>
+            <p className="text-text-muted text-xs mt-2">See TRAINING_INTEGRATION.md for setup instructions.</p>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-text-muted">Est. training time:</span>
-            <span className="text-text-primary font-semibold">4.2h</span>
-          </div>
-        </div>
+        )}
 
         <div className="flex flex-wrap gap-2 pt-2">
           <button className="px-3 py-1.5 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
