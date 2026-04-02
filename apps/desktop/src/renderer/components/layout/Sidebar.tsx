@@ -1,4 +1,4 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
 
@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
   { id: 'personacouncil', label: 'Code Council', icon: Shield },
   { id: 'analytics', label: 'Analytics', icon: BarChart2 },
   { id: 'messaging', label: 'IM Bridge', icon: Smartphone },
+  { id: 'semanticsearch', label: 'Code Search', icon: Search },
 ]
 
 const bottomItems: NavItem[] = [

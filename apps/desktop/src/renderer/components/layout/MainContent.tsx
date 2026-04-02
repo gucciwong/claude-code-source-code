@@ -13,6 +13,7 @@ import { OrgIntelligence } from '../../screens/OrgIntelligence'
 import { PersonaCouncil } from '../../screens/PersonaCouncil'
 import { Analytics } from '../../screens/Analytics'
 import { Messaging } from '../../screens/Messaging'
+import { SemanticSearch } from '../../screens/SemanticSearch'
 
 const screens = {
   dashboard: Dashboard,
@@ -28,6 +29,7 @@ const screens = {
   personacouncil: PersonaCouncil,
   analytics: Analytics,
   messaging: Messaging,
+  semanticsearch: SemanticSearch,
   settings: Settings,
 }
 
