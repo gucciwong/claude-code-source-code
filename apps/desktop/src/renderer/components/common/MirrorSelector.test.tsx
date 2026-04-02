@@ -13,7 +13,7 @@ describe('MirrorSelector', () => {
       getSwitchMirrorInstructions: mockGetSwitchMirrorInstructions,
       loading: false,
       error: null,
-    } as any)
+    } as ReturnType<typeof useModelManagerModule.useModelManager>)
     mockGetMirrorInfo.mockResolvedValue({ current_mirror: 'huggingface' })
     mockGetSwitchMirrorInstructions.mockResolvedValue({ success: true })
   })

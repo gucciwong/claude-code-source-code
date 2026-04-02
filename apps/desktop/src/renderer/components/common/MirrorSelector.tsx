@@ -29,11 +29,13 @@ export function MirrorSelector() {
   const [status, setStatus] = useState<Status>('idle')
 
   useEffect(() => {
-    getMirrorInfo().then(config => {
-      if (config?.current_mirror) {
-        setSelected(config.current_mirror)
-      }
-    })
+    getMirrorInfo()
+      .then(config => {
+        if (config?.current_mirror) setSelected(config.current_mirror)
+      })
+      .catch(() => {
+        // Keep hardcoded default ('huggingface') — no UI change needed
+      })
   }, [getMirrorInfo])
 
   const handleChange = async (value: string) => {
@@ -60,6 +62,7 @@ export function MirrorSelector() {
       <RadioGroup.Root
         value={selected}
         onValueChange={handleChange}
+        disabled={status === 'switching'}
         className="flex flex-col gap-2"
         aria-label="HuggingFace mirror selection"
       >
@@ -67,6 +70,7 @@ export function MirrorSelector() {
           <RadioGroup.Item
             key={option.id}
             value={option.id}
+            type="button"
             aria-label={option.name}
             className={[
               'flex items-center gap-3 p-3 rounded-md border cursor-pointer text-left w-full',
@@ -96,20 +100,20 @@ export function MirrorSelector() {
         ))}
       </RadioGroup.Root>
 
-      {status === 'switching' && (
-        <div className="mt-3 flex items-center gap-2 text-text-secondary text-sm">
-          <Loader2 size={14} className="animate-spin" aria-hidden="true" />
-          Switching mirror...
-        </div>
-      )}
-      {status === 'success' && (
-        <p className="mt-3 text-green-400 text-sm">Mirror updated. Restart may be required.</p>
-      )}
-      {status === 'error' && (
-        <p className="mt-3 text-red-400 text-sm">
-          Failed to switch mirror. Is the model manager running?
-        </p>
-      )}
+      <div aria-live="polite" aria-atomic="true" className="mt-3 min-h-[1.25rem]">
+        {status === 'switching' && (
+          <span className="flex items-center gap-2 text-text-secondary text-sm">
+            <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+            Switching mirror...
+          </span>
+        )}
+        {status === 'success' && (
+          <p className="text-green-400 text-sm">Mirror updated. Restart may be required.</p>
+        )}
+        {status === 'error' && (
+          <p className="text-red-400 text-sm">Failed to switch mirror. Is the model manager running?</p>
+        )}
+      </div>
     </div>
   )
 }
