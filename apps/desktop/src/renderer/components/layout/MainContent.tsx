@@ -9,6 +9,7 @@ import { Knowledge } from '../../screens/Knowledge'
 import { Enterprise } from '../../screens/Enterprise'
 import { DecisionGraph } from '../../screens/DecisionGraph'
 import { Orchestration } from '../../screens/Orchestration'
+import { OrgIntelligence } from '../../screens/OrgIntelligence'
 
 const screens = {
   dashboard: Dashboard,
@@ -20,6 +21,7 @@ const screens = {
   enterprise: Enterprise,
   decisiongraph: DecisionGraph,
   orchestration: Orchestration,
+  orgintelligence: OrgIntelligence,
   settings: Settings,
 }
 
