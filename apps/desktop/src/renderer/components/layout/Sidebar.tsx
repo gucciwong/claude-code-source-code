@@ -1,4 +1,4 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
 
@@ -15,6 +15,7 @@ const navItems: NavItem[] = [
   { id: 'training', label: 'Training', icon: Zap },
   { id: 'federation', label: 'Federation', icon: Network },
   { id: 'knowledge', label: 'Knowledge', icon: BookOpen },
+  { id: 'enterprise', label: 'Enterprise', icon: Database },
 ]
 
 const bottomItems: NavItem[] = [

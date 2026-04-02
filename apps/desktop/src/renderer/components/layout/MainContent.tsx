@@ -6,6 +6,7 @@ import { Training } from '../../screens/Training'
 import { Federation } from '../../screens/Federation'
 import { Settings } from '../../screens/Settings'
 import { Knowledge } from '../../screens/Knowledge'
+import { Enterprise } from '../../screens/Enterprise'
 
 const screens = {
   dashboard: Dashboard,
@@ -14,6 +15,7 @@ const screens = {
   training: Training,
   federation: Federation,
   knowledge: Knowledge,
+  enterprise: Enterprise,
   settings: Settings,
 }
 
