@@ -188,13 +188,15 @@ Addressable Market Analysis (2026)
 | P1 | Voice I/O (VibeVoice) | Hands-free coding via Whisper ASR + TTS | High | v0.3 ✅ |
 | P1 | Personal Knowledge Library | Auto-capture domain expertise; personal memory | High | v0.4 ✅ |
 | P1 | Enterprise Data Integration | Connect ERP/CRM/OMS/HRM/BI with IT approval | Very High | v0.5 ✅ |
-| P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 🔜 |
+| P2 | Organization Intelligence | Team patterns, analytics, skill gap detection | High | v0.6 ✅ |
 | P2 | Federated Learning | Collaborative training without data sharing | Very High | v0.7 🔜 |
-| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.6 🔜 |
+| P2 | Self-Improvement Loop | Automated model enhancement | High | v0.7 🔜 |
 | P3 | Plugin Ecosystem | Third-party extensions marketplace | Medium | v1.0 |
 | P2 | Live Execution Trace Injection | Feed real runtime traces into model context | High | v0.5 ✅ |
-| P2 | Temporal Decision Graph | Queryable causal history of why codebase evolved | High | v0.5 |
-| P3 | Adversarial Persona Council | Parallel specialized LoRA adapters for quality tradeoffs | Very High | v0.7 |
+| P2 | Temporal Decision Graph | Queryable causal history of why codebase evolved | High | v0.5 ✅ |
+| P3 | Adversarial Persona Council | Parallel specialized LoRA adapters for quality tradeoffs | Very High | v0.6 ✅ |
+| P2 | IM Remote Control Bridge | Monitor/control via Telegram/Slack/Discord/8 platforms | High | v0.6 ✅ |
+| P2 | Advanced Analytics Dashboard | Productivity metrics, quality trends, training ROI | High | v0.6 ✅ |
 
 ### 4.2 Detailed Feature Specifications
 
@@ -1362,23 +1364,18 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 │  • Temporal Decision Graph (git-history parser + NL query engine)     │
 │  • 501 TypeScript + 95 Python tests passing                            │
 │                                                                          │
+│  v0.6.0 — Organization Intelligence  [✅ COMPLETED April 2026]         │
+│  • Multi-Agent Orchestration Engine (task decomp, DAG, port 8006)     │
+│  • Team Knowledge Sharing — AnonymizationEngine, PatternAggregator    │
+│  • Cross-team pattern discovery & org-wide skill gap analysis (8007)  │
+│  • Adversarial Persona Council — 4 reviewers, CouncilOrchestrator     │
+│  • Advanced Analytics Dashboard (usage, quality trends, ROI) (8009)   │
+│  • IM Remote Control Bridge — Telegram/Slack/Discord/Feishu/DingTalk/ │
+│    WeChat Work/WhatsApp/LINE, CommandProcessor, port 8010              │
+│  • 618 TypeScript + 176 Python tests passing                           │
+│                                                                          │
 │  🔜 IN PROGRESS / PLANNED                                               │
 │  ─────────────────────────────────────────────────────────────────────  │
-│  v0.6.0 — Organization Intelligence  [Q4 2026, Dec 31]                │
-│  • Multi-Agent Orchestration (task decomp, dependency graph)           │
-│  • Team knowledge sharing (anonymous snippet library)                  │
-│  • Cross-team pattern discovery & org-wide skill gap analysis          │
-│  • Adversarial Persona Council (Security/Perf/Maintainability/Correct) │
-│  • Advanced analytics dashboard (usage metrics, quality trends, ROI)   │
-│                                                                          │
-│  v0.6.0 — Organization Intelligence  [Q4 2026, Dec 31]                │
-│  • Team knowledge sharing (anonymous snippet library)                  │
-│  • Cross-team pattern discovery                                        │
-│  • Org-wide bottleneck & skill gap analysis                            │
-│  • Productivity metrics dashboard                                      │
-│  • ROI tracking & reporting                                            │
-│  • Adversarial Persona Council (Security/Perf/Maintainability/Correct)│
-│                                                                          │
 │  v0.7.0 — Federated Learning  [Q1 2027, Mar 31]                       │
 │  • Federated averaging protocol (FedAvg)                               │
 │  • Differential privacy (DP-SGD)                                       │
