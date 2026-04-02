@@ -1,0 +1,12 @@
+[
+  { "firstTokenLatencyMs": 682, "tokensPerSecond": 28 },
+  { "firstTokenLatencyMs": 710, "tokensPerSecond": 26 },
+  { "firstTokenLatencyMs": 645, "tokensPerSecond": 31 },
+  { "firstTokenLatencyMs": 729, "tokensPerSecond": 27 },
+  { "firstTokenLatencyMs": 698, "tokensPerSecond": 29 },
+  { "firstTokenLatencyMs": 751, "tokensPerSecond": 25 },
+  { "firstTokenLatencyMs": 663, "tokensPerSecond": 30 },
+  { "firstTokenLatencyMs": 718, "tokensPerSecond": 28 },
+  { "firstTokenLatencyMs": 692, "tokensPerSecond": 27 },
+  { "firstTokenLatencyMs": 707, "tokensPerSecond": 28 }
+]

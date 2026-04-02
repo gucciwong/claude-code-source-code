@@ -1,0 +1,18 @@
+﻿{
+  "timestamp": "2026-04-02T17:10:42.591Z",
+  "profile": {
+    "requestedTier": "6GB",
+    "normalizedTier": "6GB"
+  },
+  "metrics": {
+    "sampleCount": 10,
+    "firstTokenLatencyMsAvg": 700,
+    "tokensPerSecondAvg": 28
+  },
+  "targets": {
+    "latencyLimitMs": 1000,
+    "throughputMinimumTps": 30,
+    "latencyPass": true,
+    "throughputPass": false
+  }
+}
