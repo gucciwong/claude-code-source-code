@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pause, Play, Square, Zap, TrendingUp, Archive } from 'lucide-react'
 import { useTrainingService } from '../hooks/useTrainingService'
+import { useSystemStore } from '../store/systemStore'
 
 interface TrainingRun {
   id: string
@@ -13,44 +14,37 @@ interface TrainingRun {
   timestamp: string
 }
 
-export function Training() {
-  const [isRunning, setIsRunning] = useState(false)
-  const [schedule, setSchedule] = useState<'manual' | 'auto' | 'scheduled'>('auto')
-  const [progress, setProgress] = useState(48)
-  const { trainingStatus, eventCount, isServiceAvailable } = useTrainingService()
+interface TrainingStats {
+  total_events: number
+  completion_accepted: number
+  completion_rejected: number
+  completion_edited: number
+  task_completed_total: number
+  task_success_rate: number
+  recent_events_24h: number
+}
 
-  const trainingRuns: TrainingRun[] = [
-    {
-      id: '1',
-      version: 'v1.4',
-      sample_count: 847,
-      validation_loss: 0.341,
-      improvement: 3.2,
-      training_time: '4h 12m',
-      status: 'completed',
-      timestamp: 'Apr 1, 02:14',
-    },
-    {
-      id: '2',
-      version: 'v1.3',
-      sample_count: 720,
-      validation_loss: 0.368,
-      improvement: 1.8,
-      training_time: '3h 58m',
-      status: 'completed',
-      timestamp: 'Mar 31, 22:00',
-    },
-    {
-      id: '3',
-      version: 'v1.2',
-      sample_count: 650,
-      validation_loss: 0.375,
-      improvement: 0.4,
-      training_time: '3h 45m',
-      status: 'rejected',
-      timestamp: 'Mar 31, 14:00',
-    },
-  ]
+export function Training() {
+  const [schedule, setSchedule] = useState<'manual' | 'auto' | 'scheduled'>('auto')
+  const [stats, setStats] = useState<TrainingStats | null>(null)
+  const { trainingStatus, isTraining, eventCount, isServiceAvailable, getStats } = useTrainingService()
+  const { vramUsed, vramTotal, gpuTemp } = useSystemStore()
+
+  const isRunning = isTraining
+  const progress = trainingStatus && trainingStatus.is_training
+    ? Math.round((trainingStatus.quick_train_count / Math.max(trainingStatus.quick_train_count + trainingStatus.next_full_train_in, 1)) * 100)
+    : 0
+
+  useEffect(() => {
+    if (isServiceAvailable) {
+      getStats().then((s) => {
+        if (s) setStats(s as TrainingStats)
+      })
+    }
+  }, [isServiceAvailable, getStats])
+
+  // Training runs history — no list API available yet; populated when service exposes it
+  const trainingRuns: TrainingRun[] = []
 
   return (
     <div data-testid="screen-training" className="p-6 space-y-6">
@@ -72,7 +66,7 @@ export function Training() {
           <div className="text-sm text-text-secondary">
             {isRunning ? (
               <>
-                Iteration 23/48 · Elapsed: 02:18:34 · ETA: 04:01h
+                Cycle: {trainingStatus?.active_cycle ?? '—'} · Quick trains: {trainingStatus?.quick_train_count ?? '—'} · Full in: {trainingStatus?.next_full_train_in ?? '—'}
               </>
             ) : (
               'No training active'
@@ -104,32 +98,35 @@ export function Training() {
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div className="space-y-1">
                 <span className="text-text-muted">Train Loss</span>
-                <p className="text-text-primary font-semibold">0.312 <span className="text-green-400">↓</span></p>
+                <p className="text-text-primary font-semibold">—</p>
               </div>
               <div className="space-y-1">
                 <span className="text-text-muted">Val Loss</span>
-                <p className="text-text-primary font-semibold">0.341 <span className="text-green-400">↓</span></p>
+                <p className="text-text-primary font-semibold">—</p>
               </div>
               <div className="space-y-1">
                 <span className="text-text-muted">Learning Rate</span>
-                <p className="text-text-primary font-mono">1.2e-4</p>
+                <p className="text-text-primary font-mono">—</p>
               </div>
             </div>
 
             <div className="pt-2 border-t border-border-subtle">
-              <p className="text-xs text-text-muted mb-2">GPU: RTX 4090 · VRAM: 22.1/24 GB · Temp: 78°C · TDP: 310W</p>
+              <p className="text-xs text-text-muted mb-2">
+                {[
+                  vramUsed != null && vramTotal != null ? `VRAM: ${vramUsed.toFixed(1)}/${vramTotal} GB` : null,
+                  gpuTemp != null ? `Temp: ${gpuTemp}°C` : null,
+                ].filter(Boolean).join(' · ') || 'GPU stats unavailable'}
+              </p>
             </div>
 
             <div className="flex gap-2 pt-2">
               <button
-                onClick={() => setIsRunning(false)}
                 className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer"
               >
                 <Pause size={14} aria-hidden="true" />
                 Pause
               </button>
               <button
-                onClick={() => setIsRunning(false)}
                 className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-red-400 hover:bg-red-500/10 cursor-pointer"
               >
                 <Square size={14} aria-hidden="true" />
@@ -144,7 +141,6 @@ export function Training() {
 
         {!isRunning && (
           <button
-            onClick={() => setIsRunning(true)}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-400 text-text-primary rounded font-medium cursor-pointer"
           >
             <Play size={16} aria-hidden="true" />
@@ -165,18 +161,24 @@ export function Training() {
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div className="space-y-1">
                 <p className="text-text-muted">Completion Pairs</p>
-                <p className="text-2xl font-bold text-text-primary">847</p>
-                <p className="text-xs text-text-muted">847 completion pairs</p>
+                <p className="text-2xl font-bold text-text-primary">{stats?.completion_accepted ?? '—'}</p>
+                <p className="text-xs text-text-muted">
+                  {stats?.completion_accepted != null ? `${stats.completion_accepted} completion pairs` : 'Loading...'}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-text-muted">Agent Trajectories</p>
-                <p className="text-2xl font-bold text-text-primary">12</p>
-                <p className="text-xs text-text-muted">12 agent trajectories</p>
+                <p className="text-2xl font-bold text-text-primary">{stats?.task_completed_total ?? '—'}</p>
+                <p className="text-xs text-text-muted">
+                  {stats?.task_completed_total != null ? `${stats.task_completed_total} agent trajectories` : 'Loading...'}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-text-muted">Correction Pairs</p>
-                <p className="text-2xl font-bold text-text-primary">203</p>
-                <p className="text-xs text-text-muted">203 correction pairs</p>
+                <p className="text-2xl font-bold text-text-primary">{stats?.completion_edited ?? '—'}</p>
+                <p className="text-xs text-text-muted">
+                  {stats?.completion_edited != null ? `${stats.completion_edited} correction pairs` : 'Loading...'}
+                </p>
               </div>
             </div>
 
@@ -254,7 +256,9 @@ export function Training() {
         </h2>
 
         <div className="space-y-3">
-          {trainingRuns.map((run) => (
+          {trainingRuns.length === 0 ? (
+            <p className="text-sm text-text-muted">No training history available from service.</p>
+          ) : trainingRuns.map((run) => (
             <div
               key={run.id}
               className="flex items-center justify-between p-3 border border-border-subtle rounded-lg hover:bg-bg-surface-3 transition-colors"
