@@ -1,3 +1,5 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # Sovereign Coder — Figma Key Frames & Component Spec
 
 **Version:** 1.0  
@@ -597,3 +599,5 @@ Before sharing with developers:
 - [ ] Accessibility annotations added (aria-current, role=status, aria-hidden icons)
 - [ ] Spacing values use 4px grid throughout
 - [ ] Export `tokens.json` (W3C DTCG format) and commit to `apps/desktop/src/renderer/styles/`
+
+

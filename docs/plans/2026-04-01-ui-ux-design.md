@@ -1,3 +1,5 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # Sovereign Coder — Desktop App UI/UX Design Document
 
 **Version:** 1.0  
@@ -835,3 +837,5 @@ Design tokens live in `src/styles/tokens.css` as CSS custom properties, consumed
 3. Convert skipped E2E voice tests into opt-in CI lane with explicit evidence artifacts
 4. Refresh acceptance checklist with completed vs remaining tags and owners
 5. Maintain this design doc as canonical UI contract for v1.0 polish
+
+

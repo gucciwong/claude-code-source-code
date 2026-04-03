@@ -1,6 +1,8 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # PRD v2 Kickoff Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For contributors:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Convert PRD v2 into an execution-ready delivery stream with owners, milestones, acceptance checks, and immediate Sprint 1 tasks.
 
@@ -251,3 +253,5 @@ git commit -m "chore: verify PRD v2 kickoff artifacts"
 2. Share tracker and epics docs for stakeholder review.
 3. Lock Sprint 1 owners and timeline.
 4. Start Task 3 after metrics owner confirmation.
+
+

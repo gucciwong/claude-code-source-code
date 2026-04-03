@@ -1,6 +1,8 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # VSCode Extension MVP Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For contributors:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Build a VS Code extension that provides inline ghost-text code completions powered by a locally running Ollama model.
 
@@ -1034,3 +1036,5 @@ git commit -m "feat(vscode-ext): complete MVP — inline completions + status ba
 - No debouncing — `Automatic` trigger fires on every keystroke. Add a 300ms debounce if performance is a concern.
 - No integration test (requires VS Code binary download). Add `@vscode/test-cli` in a follow-up.
 - `ConfigurationTarget.Global` on toggle — should be `Workspace` if per-project toggle is desired.
+
+

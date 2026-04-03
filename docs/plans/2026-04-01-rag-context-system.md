@@ -1,6 +1,8 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # RAG Context System Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For contributors:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Add project-context-aware completions to the VSCode extension by building a local embedding-based retrieval system that indexes workspace files and injects relevant code snippets into the completion prompt.
 
@@ -1470,3 +1472,5 @@ git commit -m "feat(vscode-ext/rag): complete RAG context system — indexer, st
 >   "rebuild": "electron-rebuild -v 28.x.x -m node_modules/better-sqlite3"
 > }
 > ```
+
+

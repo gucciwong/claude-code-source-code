@@ -1,3 +1,5 @@
+> Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
+
 # Sovereign Code v0.7.0 — Federated Learning Sprint Plan
 
 **Version:** v0.7.0  
@@ -190,3 +192,5 @@ type NavSection =
   | 'messaging' | 'semanticsearch' | 'plugins'
   | 'prreview' | 'finetune' | 'federationcore'
 ```
+
+
