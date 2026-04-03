@@ -18,7 +18,6 @@ import { SemanticSearch } from '../../screens/SemanticSearch'
 import { Plugins } from '../../screens/Plugins'
 import { PRReview } from '../../screens/PRReview'
 import { Finetune } from '../../screens/Finetune'
-import { FederationCore } from '../../screens/FederationCore'
 import { CodeCompletion } from '../../screens/CodeCompletion'
 import { ConversationMemory } from '../../screens/ConversationMemory'
 
@@ -40,7 +39,6 @@ const screens = {
   plugins: Plugins,
   prreview: PRReview,
   finetune: Finetune,
-  federationcore: FederationCore,
   codecompletion: CodeCompletion,
   memory: ConversationMemory,
   settings: Settings,
