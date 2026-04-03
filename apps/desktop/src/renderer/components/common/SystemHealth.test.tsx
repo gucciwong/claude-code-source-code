@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { render, screen, act } from '@testing-library/react'
 import { SystemHealth } from './SystemHealth'
 import { useSystemStore } from '../../store/systemStore'
 
@@ -120,7 +120,7 @@ describe('SystemHealth', () => {
     const { rerender } = render(<SystemHealth />)
     expect(screen.getByText('65°C')).toBeInTheDocument()
 
-    useSystemStore.setState({ gpuTemp: 75 })
+    act(() => { useSystemStore.setState({ gpuTemp: 75 }) })
     rerender(<SystemHealth />)
     expect(screen.getByText('75°C')).toBeInTheDocument()
   })

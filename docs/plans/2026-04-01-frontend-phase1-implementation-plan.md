@@ -1564,12 +1564,12 @@ cd apps/desktop && npm run dev
 ```
 
 Verify:
-- [ ] Window opens with dark background
-- [ ] Sidebar shows all 6 nav items
-- [ ] Status bar shows "Running Locally" badge
-- [ ] Clicking "Models" in sidebar switches to Models screen
-- [ ] Clicking "Chat" in sidebar switches to Chat screen
-- [ ] Typing in chat input and pressing Enter shows user message
+- [x] Window opens with dark background
+- [x] Sidebar shows all 6 nav items
+- [x] Status bar shows "Running Locally" badge
+- [x] Clicking "Models" in sidebar switches to Models screen
+- [x] Clicking "Chat" in sidebar switches to Chat screen
+- [x] Typing in chat input and pressing Enter shows user message
 
 **Step 5: Commit**
 

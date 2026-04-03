@@ -49,6 +49,7 @@ export function PlatformConfigDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-40" />
         <Dialog.Content
+          aria-describedby={undefined}
           className="fixed inset-0 flex items-center justify-center z-50 p-4"
           aria-labelledby="config-dialog-title"
         >

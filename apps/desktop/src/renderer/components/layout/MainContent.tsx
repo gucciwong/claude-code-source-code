@@ -3,6 +3,7 @@ import { ErrorBoundary } from '../common/ErrorBoundary'
 import { Dashboard } from '../../screens/Dashboard'
 import { Models } from '../../screens/Models'
 import { Chat } from '../../screens/Chat'
+import { Coding } from '../../screens/Coding'
 import { Training } from '../../screens/Training'
 import { Federation } from '../../screens/Federation'
 import { Settings } from '../../screens/Settings'
@@ -21,15 +22,18 @@ import { Finetune } from '../../screens/Finetune'
 import { CodeCompletion } from '../../screens/CodeCompletion'
 import { ConversationMemory } from '../../screens/ConversationMemory'
 import { Developer } from '../../screens/Developer'
+import { DataHub } from '../../screens/DataHub'
 
 const screens = {
   dashboard: Dashboard,
   models: Models,
   chat: Chat,
+  coding: Coding,
   training: Training,
   federation: Federation,
   knowledge: Knowledge,
   enterprise: Enterprise,
+  datahub: DataHub,
   decisiongraph: DecisionGraph,
   orchestration: Orchestration,
   orgintelligence: OrgIntelligence,
@@ -50,7 +54,7 @@ export function MainContent() {
   const active = useNavigationStore(s => s.active)
   const Screen = screens[active]
   return (
-    <main className="flex-1 bg-bg-base overflow-auto">
+    <main className="flex-1 min-w-0 bg-bg-base overflow-auto">
       <ErrorBoundary label={active}>
         <Screen />
       </ErrorBoundary>

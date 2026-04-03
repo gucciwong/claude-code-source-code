@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { CommandPalette } from './CommandPalette'
 import { useCommandPaletteStore } from '../store/commandPaletteStore'
 import { useModelsStore } from '../store/modelsStore'
@@ -15,10 +15,10 @@ test('CommandPalette renders nothing when closed', () => {
 
 test('CommandPalette opens when store state is true', () => {
   render(<CommandPalette />)
-  useCommandPaletteStore.setState({ open: true })
+  act(() => { useCommandPaletteStore.setState({ open: true }) })
   // Re-render
   const { rerender } = render(<CommandPalette />)
-  useCommandPaletteStore.setState({ open: true })
+  act(() => { useCommandPaletteStore.setState({ open: true }) })
   rerender(<CommandPalette />)
   expect(screen.getByRole('dialog')).toBeInTheDocument()
 })

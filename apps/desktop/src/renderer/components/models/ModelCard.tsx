@@ -1,4 +1,10 @@
-import { Download, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Download, Loader2, CheckCircle2, AlertCircle, Star, TrendingUp } from 'lucide-react'
+
+function formatNum(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k`
+  return String(n)
+}
 
 export interface ModelCardProps {
   id: string
@@ -9,6 +15,8 @@ export interface ModelCardProps {
   description: string
   downloadStatus: 'idle' | 'downloading' | 'done' | 'error'
   onDownload: (id: string) => void
+  stars?: number
+  downloads?: number
 }
 
 export function ModelCard({
@@ -20,6 +28,8 @@ export function ModelCard({
   description,
   downloadStatus,
   onDownload,
+  stars,
+  downloads,
 }: ModelCardProps) {
   return (
     <div className="bg-bg-surface-2 border border-border-default rounded-lg p-4 flex flex-col gap-3">
@@ -36,6 +46,24 @@ export function ModelCard({
 
       {/* Description */}
       <p className="text-sm text-text-secondary line-clamp-2">{description}</p>
+
+      {/* Stats row (optional) */}
+      {(stars !== undefined || downloads !== undefined) && (
+        <div className="flex items-center gap-4 text-xs text-text-muted">
+          {stars !== undefined && (
+            <span className="flex items-center gap-1">
+              <Star size={11} aria-hidden="true" />
+              {formatNum(stars)}
+            </span>
+          )}
+          {downloads !== undefined && (
+            <span className="flex items-center gap-1">
+              <TrendingUp size={11} aria-hidden="true" />
+              {formatNum(downloads)} / mo
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Footer row: format tag + action button */}
       <div className="flex items-center justify-between gap-2">

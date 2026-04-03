@@ -1,4 +1,4 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code, Brain, Terminal } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, DatabaseZap, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code, Code2, Brain, Terminal } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
 
@@ -12,11 +12,13 @@ const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'models', label: 'Models', icon: Cpu },
   { id: 'chat', label: 'Chat', icon: MessageSquare },
+  { id: 'coding', label: 'Coding', icon: Code2 },
   { id: 'developer', label: 'Developer', icon: Terminal },
   { id: 'training', label: 'Training', icon: Zap },
   { id: 'federation', label: 'Federation', icon: Network },
   { id: 'knowledge', label: 'Knowledge', icon: BookOpen },
   { id: 'enterprise', label: 'Enterprise', icon: Database },
+  { id: 'datahub', label: 'Data Hub', icon: DatabaseZap },
   { id: 'decisiongraph', label: 'Decision Graph', icon: GitBranch },
   { id: 'orchestration', label: 'Orchestration', icon: Workflow },
   { id: 'orgintelligence', label: 'Org Intel', icon: Users },
@@ -70,7 +72,7 @@ export function Sidebar() {
       </div>
 
       {/* Main navigation */}
-      <nav className="flex-1 py-2" aria-label="Primary navigation">
+      <nav className="flex-1 overflow-y-auto min-h-0 py-2" aria-label="Primary navigation">
         {navItems.map(navButton)}
       </nav>
 

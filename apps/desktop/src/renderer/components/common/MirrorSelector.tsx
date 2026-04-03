@@ -96,9 +96,9 @@ export function MirrorSelector() {
                 <div className="w-2 h-2 rounded-full bg-accent-500" />
               )}
             </div>
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col text-left min-w-0">
               <span className="text-text-primary text-sm font-medium">{option.name}</span>
-              <span className="text-text-secondary text-xs">{option.description}</span>
+              <span className="text-text-secondary text-xs break-words">{option.description}</span>
             </div>
           </RadioGroup.Item>
         ))}

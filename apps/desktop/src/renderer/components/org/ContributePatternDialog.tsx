@@ -32,7 +32,7 @@ export function ContributePatternDialog() {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg-surface-2 border border-border-default rounded-xl p-6 w-[540px] z-50 focus:outline-none">
+        <Dialog.Content aria-describedby={undefined} className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg-surface-2 border border-border-default rounded-xl p-6 w-[540px] z-50 focus:outline-none">
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-text-primary text-lg font-semibold">Contribute Pattern</Dialog.Title>
             <Dialog.Close asChild>

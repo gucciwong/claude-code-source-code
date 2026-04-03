@@ -32,7 +32,7 @@ test('shows Training screen when active is training', () => {
 test('shows Federation screen when active is federation', () => {
   useNavigationStore.setState({ active: 'federation' })
   render(<MainContent />)
-  expect(screen.getByTestId('screen-federation')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Federated Learning Core' })).toBeInTheDocument()
 })
 
 test('shows Settings screen when active is settings', () => {

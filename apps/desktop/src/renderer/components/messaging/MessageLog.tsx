@@ -10,9 +10,11 @@ interface MessageLogProps {
 export function MessageLog({ entries }: MessageLogProps) {
   if (entries.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-32 gap-2">
-        <MessageSquare size={24} aria-hidden="true" className="text-text-muted" />
-        <p className="text-text-muted text-sm">No messages yet</p>
+      <div className="space-y-2" role="log" aria-label="Message history">
+        <div className="flex flex-col items-center justify-center h-32 gap-2">
+          <MessageSquare size={24} aria-hidden="true" className="text-text-muted" />
+          <p className="text-text-muted text-sm">No messages yet</p>
+        </div>
       </div>
     )
   }

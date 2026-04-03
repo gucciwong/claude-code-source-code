@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { HuggingFacePanel } from './HuggingFacePanel'
 import { useModelManager } from '../../hooks/useModelManager'
 
@@ -19,18 +19,21 @@ beforeEach(() => {
   vi.mocked(useModelManager).mockReturnValue(mockUseModelManager)
 })
 
-test('renders "Download from HuggingFace" heading', () => {
+test('renders "Download from HuggingFace" heading', async () => {
   render(<HuggingFacePanel />)
+  await act(async () => {})
   expect(screen.getByText('Download from HuggingFace')).toBeInTheDocument()
 })
 
-test('renders "Staff Picks" section by default', () => {
+test('renders "Staff Picks" section by default', async () => {
   render(<HuggingFacePanel />)
+  await act(async () => {})
   expect(screen.getByText('Staff Picks')).toBeInTheDocument()
 })
 
-test('renders all 8 staff pick model names', () => {
+test('renders all 8 staff pick model names', async () => {
   render(<HuggingFacePanel />)
+  await act(async () => {})
   expect(screen.getByText('Llama 3.1 8B Instruct')).toBeInTheDocument()
   expect(screen.getByText('Mistral 7B Instruct v0.3')).toBeInTheDocument()
   expect(screen.getByText('Qwen 2.5 Coder 7B')).toBeInTheDocument()
@@ -41,14 +44,16 @@ test('renders all 8 staff pick model names', () => {
   expect(screen.getByText('Code Llama 13B Instruct')).toBeInTheDocument()
 })
 
-test('renders ModelCard for each staff pick (8 Download buttons)', () => {
+test('renders ModelCard for each staff pick (8 Download buttons)', async () => {
   render(<HuggingFacePanel />)
+  await act(async () => {})
   const downloadButtons = screen.getAllByText('Download')
   expect(downloadButtons).toHaveLength(8)
 })
 
-test('shows a search input', () => {
+test('shows a search input', async () => {
   render(<HuggingFacePanel />)
+  await act(async () => {})
   expect(
     screen.getByPlaceholderText(/Search HuggingFace models/)
   ).toBeInTheDocument()

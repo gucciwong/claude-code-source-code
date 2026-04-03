@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import { Training } from './Training'
 import * as trainingHook from '../hooks/useTrainingService'
 import { useSystemStore } from '../store/systemStore'
@@ -48,17 +48,19 @@ describe('Training Screen', () => {
     })
   })
 
-  test('renders training console header', () => {
+  test('renders training console header', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText('Training Console')).toBeInTheDocument()
   })
 
-  test('displays idle state when service reports not training', () => {
+  test('displays idle state when service reports not training', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText('IDLE')).toBeInTheDocument()
   })
 
-  test('shows RUNNING when service reports is_training true', () => {
+  test('shows RUNNING when service reports is_training true', async () => {
     vi.mocked(trainingHook.useTrainingService).mockReturnValue({
       trainingStatus: {
         model_id: 'test-model',
@@ -76,10 +78,11 @@ describe('Training Screen', () => {
       logInference: vi.fn(),
     } as any)
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText('RUNNING')).toBeInTheDocument()
   })
 
-  test('shows progress percentage from trainingStatus when training', () => {
+  test('shows progress percentage from trainingStatus when training', async () => {
     vi.mocked(trainingHook.useTrainingService).mockReturnValue({
       trainingStatus: {
         model_id: 'test-model',
@@ -97,11 +100,12 @@ describe('Training Screen', () => {
       logInference: vi.fn(),
     } as any)
     render(<Training />)
+    await act(async () => {})
     // quick_train_count=5, next_full_train_in=5 => 5/(5+5)*100 = 50%
     expect(screen.getByText('50%')).toBeInTheDocument()
   })
 
-  test('shows GPU temp from system store when training', () => {
+  test('shows GPU temp from system store when training', async () => {
     vi.mocked(trainingHook.useTrainingService).mockReturnValue({
       trainingStatus: {
         model_id: 'test-model',
@@ -119,10 +123,11 @@ describe('Training Screen', () => {
       logInference: vi.fn(),
     } as any)
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText(/72°C/)).toBeInTheDocument()
   })
 
-  test('shows VRAM from system store when training', () => {
+  test('shows VRAM from system store when training', async () => {
     vi.mocked(trainingHook.useTrainingService).mockReturnValue({
       trainingStatus: {
         model_id: 'test-model',
@@ -140,17 +145,18 @@ describe('Training Screen', () => {
       logInference: vi.fn(),
     } as any)
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText(/18\.2\/24 GB/)).toBeInTheDocument()
   })
 
   test('shows data collection completion pairs from service stats', async () => {
-    render(<Training />)
+    await act(async () => { render(<Training />) })
     await waitFor(() => {
       expect(screen.getByText('350')).toBeInTheDocument()
     })
   })
 
-  test('shows training service offline message when unavailable', () => {
+  test('shows training service offline message when unavailable', async () => {
     vi.mocked(trainingHook.useTrainingService).mockReturnValue({
       trainingStatus: null,
       isTraining: false,
@@ -162,35 +168,41 @@ describe('Training Screen', () => {
       logInference: vi.fn(),
     } as any)
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText(/Training service unavailable/)).toBeInTheDocument()
   })
 
-  test('shows version history section', () => {
+  test('shows version history section', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText('Version History')).toBeInTheDocument()
   })
 
   test('shows no history message when runs list is empty', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText(/No training history available/)).toBeInTheDocument()
   })
 
-  test('has schedule options', () => {
+  test('has schedule options', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByLabelText('Manual (start manually)')).toBeInTheDocument()
     expect(screen.getByLabelText('Auto (train when GPU idle > 10 min)')).toBeInTheDocument()
     expect(screen.getByLabelText('Scheduled — Set Time...')).toBeInTheDocument()
   })
 
-  test('has data collection action buttons', () => {
+  test('has data collection action buttons', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByText('Clear Dataset')).toBeInTheDocument()
     expect(screen.getByText('Preview Samples')).toBeInTheDocument()
     expect(screen.getByText('Export Dataset')).toBeInTheDocument()
   })
 
-  test('renders screen testid', () => {
+  test('renders screen testid', async () => {
     render(<Training />)
+    await act(async () => {})
     expect(screen.getByTestId('screen-training')).toBeInTheDocument()
   })
 })

@@ -1,13 +1,41 @@
 import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { useSystemStore } from '../store/systemStore'
 import { MirrorSelector } from '../components/common/MirrorSelector'
+
+function StyledSelect({
+  value,
+  onChange,
+  defaultValue,
+  children,
+  'aria-label': ariaLabel,
+}: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div className="relative">
+      <select
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+        aria-label={ariaLabel}
+        className="w-full px-3 py-2 pr-8 bg-bg-surface-2 border border-border-default rounded-md text-text-primary text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-500 transition-colors hover:border-border-strong"
+      >
+        {children}
+      </select>
+      <ChevronDown
+        size={14}
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+        aria-hidden="true"
+      />
+    </div>
+  )
+}
 
 export function Settings() {
   const [activeTab, setActiveTab] = useState<'general' | 'inference' | 'privacy'>('general')
   const { theme, setTheme } = useSystemStore()
 
   return (
-    <div data-testid="screen-settings" className="p-6 space-y-6">
+    <div data-testid="screen-settings" className="h-full overflow-y-auto p-6 space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
@@ -20,9 +48,9 @@ export function Settings() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-3 font-medium text-sm transition-colors ${
+            className={`px-4 py-3 font-medium text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
               activeTab === tab
-                ? 'text-accent-500 border-b-2 border-accent-500 -mb-1'
+                ? 'text-accent-500 border-b-2 border-accent-500 -mb-px'
                 : 'text-text-secondary hover:text-text-primary'
             }`}
             aria-current={activeTab === tab ? 'page' : undefined}
@@ -33,7 +61,7 @@ export function Settings() {
       </div>
 
       {/* Tab Content */}
-      <div className="max-w-2xl space-y-8">
+      <div className="w-full max-w-2xl space-y-8">
         {/* General Tab */}
         {activeTab === 'general' && (
           <div className="space-y-6">
@@ -48,25 +76,25 @@ export function Settings() {
               <h3 className="font-semibold text-text-primary">Display</h3>
 
               <div className="space-y-2">
-                <label className="block text-sm text-text-secondary">Theme</label>
-                <select
+                <label htmlFor="setting-theme" className="block text-sm text-text-secondary">Theme</label>
+                <StyledSelect
                   value={theme}
-                  onChange={(e) => setTheme(e.target.value as 'dark' | 'light')}
-                  className="w-full px-3 py-2 bg-bg-surface-2 border border-border-default rounded-md text-text-primary text-sm"
+                  onChange={(e) => setTheme((e.target as HTMLSelectElement).value as 'dark' | 'light')}
+                  aria-label="Theme"
                 >
                   <option value="dark">Dark</option>
                   <option value="light">Light</option>
-                </select>
+                </StyledSelect>
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm text-text-secondary">Font Size</label>
-                <select className="w-full px-3 py-2 bg-bg-surface-2 border border-border-default rounded-md text-text-primary text-sm">
+                <label htmlFor="setting-fontsize" className="block text-sm text-text-secondary">Font Size</label>
+                <StyledSelect defaultValue="14" aria-label="Font size">
                   <option value="12">12px (Small)</option>
-                  <option value="14" defaultValue="14">14px (Default)</option>
+                  <option value="14">14px (Default)</option>
                   <option value="16">16px (Large)</option>
                   <option value="18">18px (Extra Large)</option>
-                </select>
+                </StyledSelect>
               </div>
             </div>
 
@@ -135,11 +163,11 @@ export function Settings() {
 
               <div className="space-y-2">
                 <label className="block text-sm text-text-secondary">Backend</label>
-                <select className="w-full px-3 py-2 bg-bg-surface-2 border border-border-default rounded-md text-text-primary text-sm">
+                <StyledSelect defaultValue="ollama" aria-label="Backend">
                   <option value="ollama">Ollama</option>
                   <option value="llamacpp">llama.cpp</option>
                   <option value="vllm">vLLM</option>
-                </select>
+                </StyledSelect>
               </div>
 
               <div className="space-y-2">
@@ -234,11 +262,11 @@ export function Settings() {
 
               <div className="space-y-2">
                 <label className="block text-sm text-text-secondary">Chat History</label>
-                <select className="w-full px-3 py-2 bg-bg-surface-2 border border-border-default rounded-md text-text-primary text-sm">
+                <StyledSelect defaultValue="30" aria-label="Chat history retention">
                   <option value="30">Retain 30 days</option>
                   <option value="7">Retain 7 days</option>
                   <option value="unlimited">Retain indefinitely</option>
-                </select>
+                </StyledSelect>
               </div>
 
               <div className="flex gap-2">

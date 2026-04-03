@@ -13,7 +13,7 @@ export default function App() {
   useVoiceService()
   return (
     <AppShell>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="relative flex flex-1 overflow-hidden">
         <Sidebar />
         <ErrorBoundary label="Main content">
           <MainContent />

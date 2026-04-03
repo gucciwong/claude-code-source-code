@@ -34,7 +34,7 @@ export const VoicePanelDrawer: React.FC = () => {
   }
 
   return (
-    <div className="w-[280px] bg-bg-surface-1 border-r border-border-subtle flex flex-col h-full overflow-hidden">
+    <div className="absolute right-0 top-0 h-full w-[280px] bg-bg-surface-1 border-l border-border-subtle flex flex-col overflow-hidden z-40 shadow-xl">
       {renderView()}
     </div>
   )

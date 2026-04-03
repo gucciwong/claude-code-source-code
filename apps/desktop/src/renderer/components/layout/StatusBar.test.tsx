@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { StatusBar } from './StatusBar'
 import { useSystemStore } from '../../store/systemStore'
 
@@ -49,7 +49,7 @@ test('StatusBar shows Training status only when running', () => {
   const { rerender } = render(<StatusBar />)
   expect(screen.queryByText(/Training: Running/)).not.toBeInTheDocument()
 
-  useSystemStore.setState({ trainingStatus: 'running' })
+  act(() => { useSystemStore.setState({ trainingStatus: 'running' }) })
   rerender(<StatusBar />)
   expect(screen.getByText(/Training: Running/)).toBeInTheDocument()
 })

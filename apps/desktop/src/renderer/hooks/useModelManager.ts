@@ -20,6 +20,15 @@ export interface MirrorConfig {
   }>
 }
 
+export interface MirrorSwitchResult {
+  success: boolean
+  current_mirror: string
+  huggingface_endpoint: string
+  api_endpoint: string
+  message: string
+  note?: string
+}
+
 export interface HealthStatus {
   status: string
   version: string
@@ -37,6 +46,27 @@ export interface ModelInfo {
   cached: boolean
   size_bytes?: number
   local_path?: string
+}
+
+export interface SearchResult {
+  id: string
+  name: string
+  cached: boolean
+  downloaded: boolean
+  downloading: boolean
+  download_progress: number
+  size_gb: number
+  quantizations: string[]
+}
+
+export interface DownloadQueueEntry {
+  status: 'pending' | 'downloading' | 'done' | 'cancelled' | 'error'
+  progress: number
+  total_size_gb: number
+  downloaded_gb: number
+  model_name: string
+  started_at: number
+  error?: string
 }
 
 export function useModelManager() {
@@ -79,7 +109,7 @@ export function useModelManager() {
 
   // Get switch mirror instructions
   const getSwitchMirrorInstructions = useCallback(
-    async (mirrorName: string): Promise<{ message: string; instruction: string; note: string } | null> => {
+    async (mirrorName: string): Promise<MirrorSwitchResult | null> => {
       setLoading(true)
       setError(null)
       try {
@@ -154,6 +184,46 @@ export function useModelManager() {
     }
   }, [])
 
+  // Search HuggingFace models via backend
+  const searchModels = useCallback(async (query: string, limit = 20): Promise<SearchResult[] | null> => {
+    setLoading(true)
+    setError(null)
+    try {
+      const params = new URLSearchParams({ q: query, limit: String(limit) })
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/search?${params}`)
+      if (!response.ok) throw new Error(`Search failed: ${response.statusText}`)
+      return await response.json()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setError(message)
+      return null
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  // Get status of all active downloads
+  const getDownloadStatus = useCallback(async (): Promise<Record<string, DownloadQueueEntry> | null> => {
+    try {
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/status`)
+      if (!response.ok) return null
+      const data = await response.json()
+      return (data.queue ?? {}) as Record<string, DownloadQueueEntry>
+    } catch {
+      return null
+    }
+  }, [])
+
+  // Cancel an in-progress download
+  const cancelDownload = useCallback(async (modelId: string): Promise<boolean> => {
+    try {
+      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/cancel`, { method: 'POST' })
+      return true
+    } catch {
+      return false
+    }
+  }, [])
+
   return {
     loading,
     error,
@@ -163,5 +233,8 @@ export function useModelManager() {
     listModels,
     downloadModel,
     setActiveModel,
+    searchModels,
+    getDownloadStatus,
+    cancelDownload,
   }
 }

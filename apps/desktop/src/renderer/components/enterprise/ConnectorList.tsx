@@ -45,7 +45,7 @@ export function ConnectorList() {
     <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] bg-bg-surface-2 border border-border-default rounded-lg p-6 flex flex-col gap-4">
+        <Dialog.Content aria-describedby={undefined} className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] bg-bg-surface-2 border border-border-default rounded-lg p-6 flex flex-col gap-4">
           <div className="flex justify-between items-center">
             <Dialog.Title className="text-text-primary font-semibold">Add Connector</Dialog.Title>
             <Dialog.Close asChild>

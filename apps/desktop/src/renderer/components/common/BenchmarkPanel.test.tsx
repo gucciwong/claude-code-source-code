@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BenchmarkPanel } from './BenchmarkPanel'
 import { useSystemStore } from '../../store/systemStore'
@@ -7,6 +7,10 @@ import { useSystemStore } from '../../store/systemStore'
 describe('BenchmarkPanel', () => {
   beforeEach(() => {
     useSystemStore.setState({ activeModel: 'llama3.1:8b' })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('renders benchmark panel with title', () => {
@@ -76,18 +80,18 @@ describe('BenchmarkPanel', () => {
   })
 
   it('updates button state during benchmark run', async () => {
-    const user = userEvent.setup()
+    vi.useFakeTimers()
     render(<BenchmarkPanel />)
 
     const runButton = screen.getByRole('button', { name: /run benchmark/i })
     
-    // Initial state
+    // Initial state: button present and enabled
     expect(runButton).toBeInTheDocument()
     expect(runButton).not.toBeDisabled()
     
-    // After click, it should show "Running..." but we can't easily test async state changes in this way
-    // The important thing is the button exists and is clickable
-    await user.click(runButton)
+    // Use fireEvent (synchronous) to avoid userEvent + fake-timer deadlock
+    await act(async () => { fireEvent.click(runButton) })
+    await act(async () => { vi.advanceTimersByTime(2100) })
   })
 
   it('shows current model name in last run info', () => {

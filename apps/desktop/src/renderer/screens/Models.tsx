@@ -4,6 +4,7 @@ import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
 import { Server, WifiOff, CheckCircle2, Zap, Trash2 } from 'lucide-react'
 import { HuggingFacePanel } from '../components/models/HuggingFacePanel'
+import { OrgInsightsPanel } from '../components/models/OrgInsightsPanel'
 
 function formatSize(bytes: number): string {
   return (bytes / 1e9).toFixed(1) + ' GB'
@@ -189,6 +190,12 @@ export function Models() {
           >
             Download from HuggingFace
           </Tabs.Trigger>
+          <Tabs.Trigger
+            value="org"
+            className="px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px"
+          >
+            Org Insights
+          </Tabs.Trigger>
         </Tabs.List>
 
         {/* Installed tab */}
@@ -246,6 +253,11 @@ export function Models() {
         {/* Download from HuggingFace tab */}
         <Tabs.Content value="download" className="flex-1 overflow-auto bg-bg-base">
           <HuggingFacePanel />
+        </Tabs.Content>
+
+        {/* Org Insights tab */}
+        <Tabs.Content value="org" className="flex-1 overflow-auto bg-bg-base">
+          <OrgInsightsPanel />
         </Tabs.Content>
       </Tabs.Root>
     </div>

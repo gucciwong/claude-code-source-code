@@ -6,10 +6,14 @@ Supports mirror for China access (hf-mirror.com)
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import json
 import asyncio
-from typing import Optional, List, Dict, Any
+import time
+import urllib.request
+from urllib.parse import urlencode
+from typing import Optional, List, Dict, Any, Tuple
 
 # Import config
 try:
@@ -31,11 +35,44 @@ app = FastAPI(
     description="Independent model management and inference via Huggingface"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Environment configuration
 HF_TOKEN = os.getenv("HF_TOKEN", "")
 MODEL_CACHE_PATH = os.getenv("MODEL_CACHE_PATH", "./models")
 DEVICE = os.getenv("DEVICE", "cpu")  # cpu, cuda, mps
 MAX_CACHE_GB = int(os.getenv("MAX_CACHE_GB", "50"))
+
+
+def _normalize_mirror_name(mirror_name: str) -> str:
+    """Normalize mirror aliases to canonical mirror identifiers."""
+    value = (mirror_name or "").strip().lower()
+    aliases = {
+        "official": "huggingface",
+        "hf": "huggingface",
+        "mirror": "hf-mirror",
+        "hf-mirror": "hf-mirror",
+        "modelscope": "modelscope",
+    }
+    return aliases.get(value, value)
+
+
+def _mirror_endpoints(mirror_name: str) -> Tuple[str, str]:
+    """Return (hf_endpoint, hf_api_endpoint) for a mirror."""
+    if mirror_name == "hf-mirror":
+        return "https://hf-mirror.com", "https://hf-mirror.com/api"
+    if mirror_name == "modelscope":
+        return "https://modelscope.cn", "https://modelscope.cn/api/v1"
+    return "https://huggingface.co", "https://huggingface.co/api"
+
+
+HF_MIRROR = _normalize_mirror_name(HF_MIRROR)
+HF_ENDPOINT, HF_API_ENDPOINT = _mirror_endpoints(HF_MIRROR)
 
 # Ensure cache directory exists
 os.makedirs(MODEL_CACHE_PATH, exist_ok=True)
@@ -43,6 +80,135 @@ os.makedirs(MODEL_CACHE_PATH, exist_ok=True)
 # Global model state
 active_model = None
 download_queue = {}
+
+
+def _estimate_model_size_gb(model_id: str) -> float:
+    """Estimate download size in GB from model name heuristics"""
+    name = model_id.lower()
+    if any(s in name for s in ['70b', '72b', '65b']): return 40.0
+    if any(s in name for s in ['34b', '33b']): return 20.0
+    if any(s in name for s in ['13b', '14b', '15b']): return 8.0
+    if any(s in name for s in ['8b', '9b']): return 5.0
+    if any(s in name for s in ['7b']): return 4.5
+    if any(s in name for s in ['3b', '4b', '3.8b']): return 2.5
+    if any(s in name for s in ['1b', 'mini', 'tiny']): return 1.0
+    return 4.0  # default
+
+
+# Ollama integration — downloads are routed through the local Ollama daemon
+OLLAMA_BASE = os.getenv("OLLAMA_BASE", "http://localhost:11434")
+
+# HuggingFace model ID → Ollama registry name
+OLLAMA_MODEL_MAP: Dict[str, str] = {
+    "meta-llama/Llama-3.1-8B-Instruct": "llama3.1:8b",
+    "meta-llama/Llama-3.2-3B-Instruct": "llama3.2:3b",
+    "meta-llama/Llama-3.3-70B-Instruct": "llama3.3:70b",
+    "mistralai/Mistral-7B-Instruct-v0.3": "mistral:7b-instruct-v0.3",
+    "mistralai/Mixtral-8x7B-Instruct-v0.1": "mixtral:8x7b",
+    "Qwen/Qwen2.5-Coder-7B-Instruct": "qwen2.5-coder:7b",
+    "Qwen/Qwen2.5-7B-Instruct": "qwen2.5:7b",
+    "microsoft/Phi-3.5-mini-instruct": "phi3.5",
+    "google/gemma-2-9b-it": "gemma2:9b",
+    "google/gemma-2-2b-it": "gemma2:2b",
+    "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": "deepseek-coder-v2:16b-lite",
+    "NousResearch/Hermes-3-Llama-3.1-8B": "hermes3:8b",
+    "codellama/CodeLlama-13b-Instruct-hf": "codellama:13b-instruct",
+    "codellama/CodeLlama-7b-Instruct-hf": "codellama:7b-instruct",
+}
+
+# Reverse mapping: Ollama name → HF model ID (for list_models matching)
+OLLAMA_TO_HF_MAP: Dict[str, str] = {v: k for k, v in OLLAMA_MODEL_MAP.items()}
+
+
+def _hf_to_ollama_name(model_id: str) -> str:
+    """Convert a HuggingFace model ID to an Ollama pull name."""
+    return OLLAMA_MODEL_MAP.get(model_id, f"hf.co/{model_id}")
+
+
+async def _pull_via_ollama(model_id: str, ollama_name: str):
+    """Pull a model via Ollama's /api/pull with real byte-level progress tracking."""
+    def _blocking_pull():
+        payload = json.dumps({"name": ollama_name, "stream": True}).encode()
+        req = urllib.request.Request(
+            f"{OLLAMA_BASE}/api/pull",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=7200) as resp:
+                layer_totals: Dict[str, int] = {}
+                layer_completed: Dict[str, int] = {}
+                for raw_line in resp:
+                    if model_id not in download_queue:
+                        return  # cancelled
+                    line = raw_line.decode("utf-8", errors="replace").strip()
+                    if not line:
+                        continue
+                    try:
+                        event = json.loads(line)
+                    except Exception:
+                        continue
+                    status = event.get("status", "")
+                    digest = event.get("digest", "")
+                    if digest:
+                        if "total" in event:
+                            layer_totals[digest] = int(event["total"])
+                        if "completed" in event:
+                            layer_completed[digest] = int(event["completed"])
+                    total_bytes = sum(layer_totals.values())
+                    done_bytes = sum(
+                        layer_completed.get(d, layer_totals.get(d, 0))
+                        for d in layer_totals
+                    )
+                    if total_bytes > 0:
+                        progress = min(99, round(done_bytes / total_bytes * 100))
+                        download_queue[model_id]["progress"] = progress
+                        download_queue[model_id]["downloaded_gb"] = round(done_bytes / 1e9, 2)
+                        download_queue[model_id]["total_size_gb"] = round(total_bytes / 1e9, 2)
+                    download_queue[model_id]["status"] = "downloading"
+                    if status == "success":
+                        download_queue[model_id]["progress"] = 100
+                        if layer_totals:
+                            total = sum(layer_totals.values())
+                            download_queue[model_id]["total_size_gb"] = round(total / 1e9, 2)
+                            download_queue[model_id]["downloaded_gb"] = round(total / 1e9, 2)
+                        download_queue[model_id]["status"] = "done"
+                        return
+                # Loop exited without "success" event
+                if model_id in download_queue and download_queue[model_id]["status"] == "downloading":
+                    download_queue[model_id]["progress"] = 100
+                    download_queue[model_id]["status"] = "done"
+        except Exception as e:
+            print(f"[model-manager] Ollama pull error for {model_id}: {e}")
+            if model_id in download_queue:
+                download_queue[model_id]["status"] = "error"
+                download_queue[model_id]["error"] = (
+                    f"Pull failed: {e}. Is Ollama running?"
+                )
+    await asyncio.to_thread(_blocking_pull)
+
+
+async def _simulate_download(model_id: str, size_gb: float):
+    """Simulate download progress for the model (placeholder until real download is wired)"""
+    if model_id not in download_queue:
+        return
+    # Speed: ~size * 6s total, clamped between 12s and 45s
+    total_s = max(12.0, min(45.0, size_gb * 6.0))
+    steps = 40
+    interval = total_s / steps
+    download_queue[model_id]["status"] = "downloading"
+    for step in range(steps):
+        await asyncio.sleep(interval)
+        if model_id not in download_queue:
+            return  # was cancelled
+        progress = round((step + 1) / steps * 100)
+        downloaded_gb = round(size_gb * progress / 100, 2)
+        download_queue[model_id]["progress"] = progress
+        download_queue[model_id]["downloaded_gb"] = downloaded_gb
+    download_queue[model_id]["status"] = "done"
+    download_queue[model_id]["progress"] = 100
+    download_queue[model_id]["downloaded_gb"] = size_gb
 
 
 @app.get("/health")
@@ -65,7 +231,7 @@ async def get_mirror_info():
     """Get current mirror configuration"""
     return {
         "current_mirror": HF_MIRROR,
-        "is_china_mirror": HF_MIRROR == "mirror",
+        "is_china_mirror": HF_MIRROR in ["hf-mirror", "modelscope"],
         "huggingface_endpoint": HF_ENDPOINT,
         "api_endpoint": HF_API_ENDPOINT,
         "available_mirrors": [
@@ -76,10 +242,16 @@ async def get_mirror_info():
                 "api_endpoint": "https://huggingface.co/api"
             },
             {
-                "name": "mirror",
+                "name": "hf-mirror",
                 "display": "Huggingface Mirror (China)",
                 "endpoint": "https://hf-mirror.com",
                 "api_endpoint": "https://hf-mirror.com/api"
+            },
+            {
+                "name": "modelscope",
+                "display": "ModelScope",
+                "endpoint": "https://modelscope.cn",
+                "api_endpoint": "https://modelscope.cn/api/v1"
             }
         ]
     }
@@ -87,37 +259,45 @@ async def get_mirror_info():
 
 @app.post("/api/v1/mirror/switch")
 async def switch_mirror(mirror_name: str = "huggingface"):
-    """
-    Switch between mirrors (requires environment variable restart)
-    Note: In production, this would require stopping and restarting the service
-    """
-    valid_mirrors = ["huggingface", "mirror"]
-    
-    if mirror_name not in valid_mirrors:
+    """Switch active mirror for subsequent API requests within this process."""
+    global HF_MIRROR, HF_ENDPOINT, HF_API_ENDPOINT
+
+    normalized = _normalize_mirror_name(mirror_name)
+    valid_mirrors = ["huggingface", "hf-mirror", "modelscope"]
+
+    if normalized not in valid_mirrors:
         raise HTTPException(
             status_code=400,
             detail=f"Invalid mirror. Choose from: {', '.join(valid_mirrors)}"
         )
-    
+
+    HF_MIRROR = normalized
+    HF_ENDPOINT, HF_API_ENDPOINT = _mirror_endpoints(HF_MIRROR)
+
     return {
-        "message": f"To switch to {mirror_name} mirror, set environment variable: HF_MIRROR={mirror_name}",
-        "instruction": f"set HF_MIRROR={mirror_name}" if os.name == 'nt' else f"export HF_MIRROR={mirror_name}",
-        "note": "Then restart the Model Manager service",
-        "recommended_for": "mirror" if mirror_name == "mirror" else "global"
+        "success": True,
+        "current_mirror": HF_MIRROR,
+        "huggingface_endpoint": HF_ENDPOINT,
+        "api_endpoint": HF_API_ENDPOINT,
+        "message": f"Mirror switched to {HF_MIRROR}",
+        "note": "Setting is active for this running model-manager process."
     }
+
+@app.get("/api/v1/models")
 async def list_models():
-    """List all available and cached models"""
+    """List all models — local file cache + Ollama-managed models."""
+    import pathlib
     cached_models = []
-    
+
+    # 1. Scan local model file cache
     if os.path.exists(MODEL_CACHE_PATH):
         for item in os.listdir(MODEL_CACHE_PATH):
             model_path = os.path.join(MODEL_CACHE_PATH, item)
             if os.path.isdir(model_path):
                 try:
-                    import os
                     size_bytes = sum(
-                        f.stat().st_size 
-                        for f in __import__('pathlib').Path(model_path).rglob('*')
+                        f.stat().st_size
+                        for f in pathlib.Path(model_path).rglob("*")
                         if f.is_file()
                     )
                     cached_models.append({
@@ -125,50 +305,116 @@ async def list_models():
                         "name": item,
                         "cached": True,
                         "size_bytes": size_bytes,
-                        "local_path": model_path
+                        "local_path": model_path,
+                        "source": "local",
                     })
                 except Exception as e:
                     print(f"Error reading model {item}: {e}")
-    
+
+    # 2. Include Ollama-managed models (the primary source after real downloads)
+    try:
+        ollama_req = urllib.request.Request(f"{OLLAMA_BASE}/api/tags")
+        with urllib.request.urlopen(ollama_req, timeout=2) as resp:
+            ollama_data = json.loads(resp.read())
+            for m in ollama_data.get("models", []):
+                ollama_name = m.get("name", "")
+                # Map back to HF model ID so HuggingFacePanel can match it
+                hf_id = OLLAMA_TO_HF_MAP.get(ollama_name, ollama_name)
+                cached_models.append({
+                    "id": hf_id,
+                    "name": ollama_name,
+                    "cached": True,
+                    "size_bytes": m.get("size", 0),
+                    "local_path": "ollama",
+                    "source": "ollama",
+                })
+    except Exception:
+        pass  # Ollama offline — that's fine
+
     return {
         "cached_models": cached_models,
         "active_model": active_model
     }
 
 
-@app.post("/api/v1/models/{model_id}/download")
+@app.get("/api/v1/models/search")
+async def search_models(q: str = "", limit: int = 20):
+    """Search HuggingFace Hub for models"""
+    import urllib.request
+    try:
+        params = urlencode({"search": q, "limit": limit, "filter": "gguf"})
+        url = f"{HF_API_ENDPOINT}/models?{params}"
+        req = urllib.request.Request(url)
+        if HF_TOKEN:
+            req.add_header("Authorization", f"Bearer {HF_TOKEN}")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            results = json.loads(resp.read())
+        models = [
+            {
+                "id": m.get("id", ""),
+                "name": m.get("id", "").split("/")[-1],
+                "cached": False,
+                "downloaded": False,
+                "downloading": False,
+                "download_progress": 0,
+                "size_gb": 0,
+                "quantizations": ["fp32"],
+            }
+            for m in results
+        ]
+        return models
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"HuggingFace API error: {e}")
+
+
+@app.post("/api/v1/models/{model_id:path}/download")
 async def download_model(model_id: str):
     """
-    Download a model from Huggingface
-    
-    Args:
-        model_id: Huggingface model identifier (e.g., "meta-llama/Llama-2-7b")
+    Pull a model via Ollama (real download + inference-ready).
+    Falls back to simulation only when Ollama is unreachable.
     """
-    if not HF_TOKEN:
-        raise HTTPException(
-            status_code=400,
-            detail="HF_TOKEN not set. Please set HF_TOKEN environment variable."
-        )
-    
     try:
-        # Placeholder for actual download logic
-        # Will use huggingface_hub.snapshot_download()
+        size_gb = _estimate_model_size_gb(model_id)
+        model_name = model_id.split("/")[-1] if "/" in model_id else model_id
+        ollama_name = _hf_to_ollama_name(model_id)
+
         download_queue[model_id] = {
             "status": "pending",
             "progress": 0,
-            "total_size": 0
+            "total_size_gb": size_gb,
+            "downloaded_gb": 0.0,
+            "model_name": model_name,
+            "started_at": time.time(),
         }
-        
+
+        # Check if Ollama daemon is running
+        ollama_online = False
+        try:
+            check = urllib.request.Request(f"{OLLAMA_BASE}/api/tags")
+            with urllib.request.urlopen(check, timeout=2):
+                ollama_online = True
+        except Exception:
+            pass
+
+        if ollama_online:
+            asyncio.create_task(_pull_via_ollama(model_id, ollama_name))
+            note = f"Pulling '{ollama_name}' via Ollama — will appear in Installed tab when done"
+        else:
+            asyncio.create_task(_simulate_download(model_id, size_gb))
+            note = "Ollama not running — simulated only (model won't be usable). Start Ollama to enable real downloads."
+
         return {
             "message": f"Download started for {model_id}",
             "model_id": model_id,
-            "cache_path": os.path.join(MODEL_CACHE_PATH, model_id)
+            "ollama_name": ollama_name,
+            "size_gb": size_gb,
+            "note": note,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/api/v1/models/{model_id}/set-active")
+@app.post("/api/v1/models/{model_id:path}/set-active")
 async def set_active_model(model_id: str):
     """Set the active model for inference"""
     global active_model
@@ -228,7 +474,7 @@ async def download_status():
     }
 
 
-@app.delete("/api/v1/models/{model_id}")
+@app.delete("/api/v1/models/{model_id:path}")
 async def delete_model(model_id: str):
     """Delete a cached model"""
     model_path = os.path.join(MODEL_CACHE_PATH, model_id)
@@ -248,6 +494,15 @@ async def delete_model(model_id: str):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/v1/downloads/{model_id:path}/cancel")
+async def cancel_download(model_id: str):
+    """Cancel an in-progress download"""
+    if model_id in download_queue:
+        download_queue[model_id]["status"] = "cancelled"
+        del download_queue[model_id]
+    return {"message": f"Download cancelled for {model_id}", "model_id": model_id}
 
 
 def _get_cache_usage_gb() -> float:
