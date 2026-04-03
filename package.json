@@ -1,14 +1,18 @@
 {
-  "name": "@anthropic-ai/claude-code-source",
-  "version": "2.1.88",
-  "description": "Claude Code v2.1.88 — decompiled source for research",
-  "type": "module",
+  "name": "sovereign-coder-workspace",
+  "version": "1.0.0",
+  "description": "Sovereign Coder monorepo for desktop app, VS Code extension, and local services.",
   "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/desktop",
+    "apps/vscode-extension"
+  ],
   "scripts": {
-    "prepare-src": "node scripts/prepare-src.mjs",
-    "build": "npm run prepare-src && node scripts/build.mjs",
-    "check": "npm run prepare-src && tsc --noEmit",
-    "start": "node dist/cli.js",
+    "desktop:dev": "npm --prefix apps/desktop run dev",
+    "desktop:build": "npm --prefix apps/desktop run build",
+    "desktop:test": "npm --prefix apps/desktop run test",
+    "extension:test": "npm --prefix apps/vscode-extension run test",
     "sovereign:week1:check": "node scripts/sovereign-week1-runtime-check.mjs",
     "sovereign:week1:benchmark": "node scripts/sovereign-week1-benchmark.mjs",
     "sovereign:week1:evidence": "node scripts/sovereign-week1-evidence-bundle.mjs",
@@ -24,7 +28,6 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "esbuild": "^0.27.4",
     "typescript": "^6.0.2"
   }
 }

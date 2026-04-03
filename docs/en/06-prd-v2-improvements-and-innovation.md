@@ -1,4 +1,4 @@
-# Sovereign Coder - Product Requirements Document
+﻿# Sovereign Coder - Product Requirements Document
 
 **Version:** 1.0  
 **Date:** 2026-03-31  
@@ -236,7 +236,7 @@ Context-aware code completion supporting single-line, multi-line, and whole-func
 #### 4.2.3 Agent Mode (Autonomous Task Execution)
 
 **Description:**
-Claude Code-like agent capable of autonomously reading, writing, and modifying code across entire projects.
+Sovereign Coder agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
 
 **Requirements:**
 
@@ -1110,7 +1110,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| Claude Code source unavailable | Medium | High | Build core from scratch; use Cursor alternatives |
+| Sovereign Coder source unavailable | Medium | High | Build core from scratch; use Cursor alternatives |
 | Local model capability gap | High | Medium | Continuous prompt engineering; model selection |
 | Training instability | Medium | High | Robust evaluation pipeline; rollback mechanisms |
 | Hardware limitations | Low | High | Progressive model sizing; cloud fallback option |
@@ -1151,7 +1151,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 ```
 Related Open Source Projects:
-├── Claude Code (Anthropic) - Inspiration for agent capabilities
+├── Sovereign Coder (Anthropic) - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference
@@ -1182,3 +1182,4 @@ For questions or collaboration inquiries:
 **Document Version**: 1.0  
 **Last Updated**: 2026-03-31  
 **Status**: Ready for Development  
+

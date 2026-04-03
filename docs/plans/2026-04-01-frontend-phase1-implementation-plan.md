@@ -1,4 +1,4 @@
-# Sovereign Coder Desktop App — Phase 1 Frontend Implementation Plan
+﻿# Sovereign Coder Desktop App — Phase 1 Frontend Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -27,7 +27,7 @@
 **Step 1: Create the Electron + Vite project scaffold**
 
 ```bash
-cd d:/Users/Admin/Documents/GitHub/claude-code-source-code
+cd d:/Users/Admin/Documents/GitHub/sovereign-coder
 mkdir apps
 cd apps
 npm create @quick-start/electron@latest desktop -- --template react-ts
@@ -125,7 +125,7 @@ Expected: Electron window opens with Vite dev server. Background should be defau
 **Step 7: Commit**
 
 ```bash
-cd d:/Users/Admin/Documents/GitHub/claude-code-source-code
+cd d:/Users/Admin/Documents/GitHub/sovereign-coder
 git add apps/desktop/
 git commit -m "feat(desktop): scaffold Electron app with Vite, React, Tailwind v4, design tokens"
 ```
@@ -1683,3 +1683,4 @@ git commit -m "a11y(desktop): add aria-current to sidebar nav, role=status to st
 This file is a Phase 1 implementation artifact and should be treated as archived planning context.
 
 Features originally listed as deferred (for example agent mode, training console, federation console, trace/graph) are now implemented in later phases. Keep this document for historical traceability only.
+

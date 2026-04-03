@@ -1,4 +1,4 @@
-# Getting Started with Sovereign Code v0.2.0
+﻿# Getting Started with Sovereign Code v0.2.0
 
 Welcome to **Sovereign Code**! This guide will have you up and running in **5 minutes**.
 
@@ -24,8 +24,8 @@ git --version               # Should show a version
 
 ```bash
 # Clone this repository
-git clone https://github.com/YOUR_ORG/claude-code-source-code.git
-cd claude-code-source-code
+git clone https://github.com/YOUR_ORG/sovereign-coder.git
+cd sovereign-coder
 
 # Go to desktop app directory
 cd apps/desktop
@@ -307,3 +307,4 @@ A: Yes — they're optional. App works fine without the voice service.
 **Status**: Production Ready ✅
 
 Happy coding! 🚀
+

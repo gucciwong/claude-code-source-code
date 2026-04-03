@@ -1,4 +1,4 @@
-# Sovereign Coder v1.0.0 — Deployment & Distribution Guide
+﻿# Sovereign Coder v1.0.0 — Deployment & Distribution Guide
 
 **Status**: Production Ready ✅  
 **Build Version**: 1.0.0  
@@ -83,8 +83,8 @@ For **Linux packages**:
 
 ```powershell
 # Clone repository
-git clone https://github.com/YOUR_ORG/claude-code-source-code.git
-cd claude-code-source-code
+git clone https://github.com/YOUR_ORG/sovereign-coder.git
+cd sovereign-coder
 
 # Verify clean git state
 git status                  # Should be clean with no uncommitted changes
@@ -669,3 +669,4 @@ Increment patch version (1.0.X) for bugfixes, minor version (1.X.0) for features
 **Version**: 1.0.0  
 **Status**: Production Ready ✅  
 **Last Updated**: 2026-04-02
+

@@ -1,4 +1,4 @@
-# Sovereign Code Refactor - Implementation Status
+﻿# Sovereign Code Refactor - Implementation Status
 
 **Current Date**: April 2, 2026  
 **Current Version**: 0.2.0  
@@ -79,7 +79,7 @@ Tasks:
 
 ### Phase 5: Migration & Documentation
 - [ ] Update all docs to "Sovereign Code"
-- [ ] Create migration guide from Claude Code
+- [ ] Create migration guide from Sovereign Coder
 - [ ] Add Huggingface setup guide
 - [ ] Add API documentation
 - [ ] Create video tutorials
@@ -212,3 +212,4 @@ Sovereign Code/
 **Commit**: c0143df  
 **Branch**: main  
 **Last Updated**: 2026-04-02 14:45 UTC
+

@@ -1,4 +1,4 @@
-# Sovereign Coder v1.0.0 — Release Notes
+﻿# Sovereign Coder v1.0.0 — Release Notes
 
 **Release Date**: 2026-04-02  
 **Build Status**: ✅ Production Ready  
@@ -110,8 +110,8 @@ Sovereign Coder v1.0.0
 **Installation:**
 ```bash
 # Clone and enter repository
-git clone https://github.com/YOUR_ORG/claude-code-source-code.git
-cd claude-code-source-code
+git clone https://github.com/YOUR_ORG/sovereign-coder.git
+cd sovereign-coder
 
 # Install Node dependencies
 cd apps/desktop
@@ -419,7 +419,7 @@ See [CLAUDE.md](CLAUDE.md) Part 2 for contribution guidelines and coding standar
 This project contains two license scopes:
 
 1. **`src/` Directory** — Research/Reference Only
-   - Original Claude Code v2.1.88 source (Anthropic IP)
+   - Original Sovereign Coder v2.1.88 source (Anthropic IP)
    - For research and educational purposes only
    - Commercial use strictly prohibited
 
@@ -451,8 +451,8 @@ Built with:
 - 🧪 [Integration Testing](LIVE_INTEGRATION_TESTING_GUIDE.md)
 - 📖 [Architecture & Guidelines](CLAUDE.md)
 - 🏗️ [Implementation Plans](docs/plans/)
-- 🐛 [Issue Tracking](https://github.com/YOUR_ORG/claude-code-source-code/issues)
-- 💬 [Discussions](https://github.com/YOUR_ORG/claude-code-source-code/discussions)
+- 🐛 [Issue Tracking](https://github.com/YOUR_ORG/sovereign-coder/issues)
+- 💬 [Discussions](https://github.com/YOUR_ORG/sovereign-coder/discussions)
 
 ---
 
@@ -462,3 +462,4 @@ Built with:
 **Build Date: April 2, 2026**  
 
 🚀 Thank you for using Sovereign Coder!
+

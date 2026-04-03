@@ -1,4 +1,4 @@
-# Live Integration Testing Guide
+﻿# Live Integration Testing Guide
 
 ## Overview
 
@@ -55,7 +55,7 @@ Before starting integration testing, ensure:
 
 ### Project Structure
 ```
-claude-code-source-code/
+sovereign-coder/
 ├── apps/
 │   └── desktop/                 ← React + Electron app
 │       ├── src/
@@ -584,3 +584,4 @@ npm run dist:linux         # Linux AppImage
 **Last Updated**: 2026-04-02
 **Version**: 1.0.0
 **Status**: Production Ready
+

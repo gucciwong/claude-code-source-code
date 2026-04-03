@@ -1,4 +1,4 @@
-# Sovereign Code - Product Requirements Document
+﻿# Sovereign Code - Product Requirements Document
 
 **Version:** 2.0  
 **Date:** 2026-04-02  
@@ -285,7 +285,7 @@ Context-aware code completion supporting single-line, multi-line, and whole-func
 #### 4.2.3 Agent Mode (Autonomous Task Execution)
 
 **Description:**
-Claude Code-like agent capable of autonomously reading, writing, and modifying code across entire projects.
+Sovereign Coder agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
 
 **Requirements:**
 
@@ -1523,7 +1523,7 @@ Current planning focus should remain on v1.0 deliverables and hardening work.
 
 ```
 Related Open Source Projects:
-├── Claude Code (Anthropic) - Inspiration for agent capabilities
+├── Sovereign Coder (Anthropic) - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference
@@ -1554,3 +1554,4 @@ For questions or collaboration inquiries:
 **Document Version**: 2.0  
 **Last Updated**: 2026-04-02  
 **Status**: Active Development  
+

@@ -1,4 +1,4 @@
-% VibeVoice Phase 1B - Implementation Complete
+﻿% VibeVoice Phase 1B - Implementation Complete
 # VibeVoice Phase 1B Implementation Summary
 
 **Status:** ✅ COMPLETE  
@@ -336,7 +336,7 @@ Desktop:
 
 ## Quick Links
 
-- **Repository:** `d:\Users\Admin\Documents\GitHub\claude-code-source-code`
+- **Repository:** `d:\Users\Admin\Documents\GitHub\sovereign-coder`
 - **Worktree:** `.worktrees/feat/vibevoice-phase1b`
 - **Branch:** `feat/vibevoice-phase1b`
 - **Plan:** `docs/plans/2026-04-01-vibevoice-implementation-plan.md`
@@ -347,3 +347,4 @@ Desktop:
 **Implementation completed:** 2026-04-02  
 **Tested by:** Autonomous agent  
 **Ready for:** Code review → PR → Integration  
+

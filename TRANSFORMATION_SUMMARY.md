@@ -1,4 +1,4 @@
-# Sovereign Code v0.2.0 - Transformation Complete
+﻿# Sovereign Code v0.2.0 - Transformation Complete
 
 **Date**: April 2, 2026  
 **Time**: ~3 hours of work  
@@ -324,7 +324,7 @@ npm test
 ## 🎯 Vision
 
 **Sovereign Code** is becoming the open-source alternative to:
-- ❌ Claude Code → Ollama dependency issue
+- ❌ Sovereign Coder → Ollama dependency issue
 - ❌ LMStudio → UI-only tool
 - ❌ Replicate → Cloud-based, not local
 
@@ -356,3 +356,4 @@ All groundwork is done. The next phase is straightforward:
 **Version**: 0.2.0  
 **Last Updated**: 2026-04-02 14:50 UTC  
 **Commits**: 255af58 (HEAD)
+

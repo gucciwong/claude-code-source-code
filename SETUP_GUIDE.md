@@ -1,4 +1,4 @@
-# Sovereign Coder Desktop App - Setup & Deployment Guide
+﻿# Sovereign Coder Desktop App - Setup & Deployment Guide
 
 **Version:** 1.0.0  
 **Status:** Production Ready  
@@ -25,7 +25,7 @@
 ### Step 1: Clone Repository
 ```bash
 git clone <your-repo-url>
-cd claude-code-source-code
+cd sovereign-coder
 git checkout main
 ```
 
@@ -403,4 +403,5 @@ MIT License - See LICENSE file for details
 ---
 
 **Ready to start?** Run the services in the order shown in the "Running the Application" section above!
+
 

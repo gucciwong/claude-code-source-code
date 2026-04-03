@@ -1,4 +1,4 @@
-# Sovereign Coder v1.0.0 — PRODUCTION READY ✅
+﻿# Sovereign Coder v1.0.0 — PRODUCTION READY ✅
 
 **Status**: 🚀 **READY FOR RELEASE**  
 **Build Date**: 2026-04-02  
@@ -329,11 +329,11 @@ Documentation:
 ## 📞 Support Contact
 
 **For Technical Issues:**
-- GitHub Issues: https://github.com/YOUR_ORG/claude-code-source-code/issues
+- GitHub Issues: https://github.com/YOUR_ORG/sovereign-coder/issues
 - Documentation: See [SETUP_GUIDE.md](SETUP_GUIDE.md) troubleshooting
 
 **For Feature Requests:**
-- GitHub Discussions: https://github.com/YOUR_ORG/claude-code-source-code/discussions
+- GitHub Discussions: https://github.com/YOUR_ORG/sovereign-coder/discussions
 - Roadmap: See [RELEASE_NOTES_v1.0.0.md](RELEASE_NOTES_v1.0.0.md)
 
 ---
@@ -370,3 +370,4 @@ Sovereign Coder v1.0.0 has successfully completed:
 6. scripts/deploy.ps1 — Automation script
 
 **All documentation is production-ready and linked in README.md**
+
