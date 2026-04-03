@@ -419,7 +419,7 @@ See [CLAUDE.md](CLAUDE.md) Part 2 for contribution guidelines and coding standar
 This project contains two license scopes:
 
 1. **`src/` Directory** — Research/Reference Only
-   - Original Sovereign Coder v2.1.88 source (Anthropic IP)
+   - Historical source artifacts retained for internal research/reference only
    - For research and educational purposes only
    - Commercial use strictly prohibited
 

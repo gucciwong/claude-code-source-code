@@ -28,7 +28,7 @@ test('renders all three tab triggers', () => {
   render(<Developer />)
   expect(screen.getByRole('tab', { name: 'Ollama' })).toBeInTheDocument()
   expect(screen.getByRole('tab', { name: 'OpenAI-compatible' })).toBeInTheDocument()
-  expect(screen.getByRole('tab', { name: 'Anthropic-compatible' })).toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: 'Messages API-compatible' })).toBeInTheDocument()
 })
 
 test('Ollama tab is active by default and shows copy buttons for each snippet', () => {

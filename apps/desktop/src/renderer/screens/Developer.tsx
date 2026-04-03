@@ -149,10 +149,10 @@ console.log(response.choices[0].message.content);`
               OpenAI-compatible
             </Tabs.Trigger>
             <Tabs.Trigger
-              value="anthropic"
+              value="messages-api"
               className="px-4 py-1.5 text-sm rounded-md transition-colors cursor-pointer text-text-secondary hover:text-text-primary data-[state=active]:bg-accent-500 data-[state=active]:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             >
-              Anthropic-compatible
+              Messages API-compatible
             </Tabs.Trigger>
           </Tabs.List>
 
@@ -203,12 +203,12 @@ console.log(response.choices[0].message.content);`
             />
           </Tabs.Content>
 
-          {/* Anthropic-compatible Tab */}
-          <Tabs.Content value="anthropic" className="space-y-5">
+          {/* Messages API-compatible Tab */}
+          <Tabs.Content value="messages-api" className="space-y-5">
             <div className="p-5 bg-bg-surface-2 border border-border-default rounded-lg space-y-2">
-              <p className="text-sm font-semibold text-text-primary">Anthropic-compatible endpoint</p>
+              <p className="text-sm font-semibold text-text-primary">Messages API-compatible endpoint</p>
               <p className="text-sm text-text-secondary">
-                Anthropic-compatible endpoint is available via a translation proxy. Configure in Settings → Inference.
+                Messages API-compatible endpoint is available via a translation proxy. Configure in Settings → Inference.
               </p>
             </div>
           </Tabs.Content>

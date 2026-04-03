@@ -138,7 +138,7 @@ These features exist in LM Studio but are missing or weaker in Sovereign Coder:
 | Model README | Full README display in model detail | Not present | ❌ Missing |
 | Staff picks / curation | Curated model list on HF browser home | Not present | ❌ Missing |
 | In-app mirror toggle | N/A (LM Studio uses official HF) | CLI instructions only, no real switch | ⚠️ Partially missing |
-| Developer/API docs section | Local server endpoint docs, Anthropic-compat | Not present | ❌ Missing |
+| Developer/API docs section | Local server endpoint docs, Messages API compat | Not present | ❌ Missing |
 | Model file management | Reveal in Finder, copy path | Not present | ❌ Missing |
 
 ---
@@ -273,13 +273,13 @@ Rewrite `MirrorSelector.tsx`:
 
 #### Task 6: Add Developer / Local API Docs Section
 
-**Why:** LM Studio's third screenshot shows a Developer section with live server endpoint documentation, client code examples (curl/Python), and Anthropic-compatible endpoint reference. This helps developers integrate with the local inference server.
+**Why:** LM Studio's third screenshot shows a Developer section with live server endpoint documentation, client code examples (curl/Python), and Messages API-compatible endpoint reference. This helps developers integrate with the local inference server.
 
 **Implementation:**
 
 Add a new "API" tab or section to the Dashboard or a new `Developer` screen showing:
 - Current model endpoint: `http://localhost:11434/v1`
-- Anthropic-compatible endpoint if enabled
+- Messages API-compatible endpoint if enabled
 - Ready-to-copy curl examples
 - Python/Node SDK snippets
 

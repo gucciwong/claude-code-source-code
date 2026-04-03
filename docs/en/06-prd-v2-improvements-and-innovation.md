@@ -187,7 +187,7 @@ A unified inference layer that supports multiple backend engines (Ollama, vLLM, 
 │                                                                   │
 │  API Compliance:                                                 │
 │  • OpenAI Chat Completions API compatible                       │
-│  • Anthropic Messages API compatible                             │
+│  • Messages API compatible                                      │
 │  • Local inference fallback on network failure                  │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
@@ -1151,7 +1151,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 ```
 Related Open Source Projects:
-├── Sovereign Coder (Anthropic) - Inspiration for agent capabilities
+├── Sovereign Coder - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference

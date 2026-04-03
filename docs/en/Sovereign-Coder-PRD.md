@@ -236,7 +236,7 @@ A unified inference layer that supports multiple backend engines (Ollama, vLLM, 
 │                                                                   │
 │  API Compliance:                                                 │
 │  • OpenAI Chat Completions API compatible                       │
-│  • Anthropic Messages API compatible                             │
+│  • Messages API compatible                                      │
 │  • Local inference fallback on network failure                  │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
@@ -1523,7 +1523,7 @@ Current planning focus should remain on v1.0 deliverables and hardening work.
 
 ```
 Related Open Source Projects:
-├── Sovereign Coder (Anthropic) - Inspiration for agent capabilities
+├── Sovereign Coder - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference
