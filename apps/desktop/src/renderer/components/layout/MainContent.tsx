@@ -20,6 +20,7 @@ import { PRReview } from '../../screens/PRReview'
 import { Finetune } from '../../screens/Finetune'
 import { CodeCompletion } from '../../screens/CodeCompletion'
 import { ConversationMemory } from '../../screens/ConversationMemory'
+import { Developer } from '../../screens/Developer'
 
 const screens = {
   dashboard: Dashboard,
@@ -40,6 +41,7 @@ const screens = {
   prreview: PRReview,
   finetune: Finetune,
   codecompletion: CodeCompletion,
+  developer: Developer,
   memory: ConversationMemory,
   settings: Settings,
 }
