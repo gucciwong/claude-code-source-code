@@ -143,10 +143,12 @@ export function Models() {
 
   useEffect(() => {
     if (!selected) return
+    const controller = new AbortController()
     fetch('http://localhost:11434/api/show', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: selected }),
+      signal: controller.signal,
     })
       .then(r => r.json())
       .then(data => {
@@ -159,9 +161,12 @@ export function Models() {
           })
         }
       })
-      .catch(() => {
-        // Network error or Ollama not running — leave details undefined
+      .catch(err => {
+        if ((err as Error).name !== 'AbortError') {
+          // Network error or Ollama not running — leave details undefined
+        }
       })
+    return () => controller.abort()
   }, [selected, setModelDetails])
 
   return (
