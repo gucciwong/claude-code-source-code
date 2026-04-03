@@ -16,6 +16,7 @@ class AudioBuffer:
         sample_rate: int = 16000,
         chunk_duration_ms: int = 320,
         buffer_duration_ms: int = 4000,
+        max_chunks: Optional[int] = None,
     ):
         """
         Initialize audio buffer.
@@ -24,6 +25,7 @@ class AudioBuffer:
             sample_rate: Audio sample rate (default 16kHz)
             chunk_duration_ms: Duration of each chunk (default 320ms)
             buffer_duration_ms: Total buffer duration (default 4s)
+            max_chunks: Optional fixed max chunk count override
         """
         self.sample_rate = sample_rate
         self.chunk_duration_ms = chunk_duration_ms
@@ -32,6 +34,8 @@ class AudioBuffer:
         # Calculate frames per chunk and max chunks
         self.frames_per_chunk = int(sample_rate * chunk_duration_ms / 1000)
         self.max_chunks = int(buffer_duration_ms / chunk_duration_ms)
+        if max_chunks is not None:
+            self.max_chunks = max_chunks
 
         # Use deque for efficient circular buffer
         self.buffer: deque = deque(maxlen=self.max_chunks)
@@ -100,6 +104,11 @@ class AudioBuffer:
     def get_buffer_fill_ratio(self) -> float:
         """Get buffer fill ratio (0.0 to 1.0)."""
         return len(self.buffer) / self.max_chunks if self.max_chunks > 0 else 0.0
+
+    @property
+    def buffer_fill_ratio(self) -> float:
+        """Compatibility alias for get_buffer_fill_ratio()."""
+        return self.get_buffer_fill_ratio()
 
     def get_buffer_duration_ms(self) -> float:
         """Get current buffered duration in milliseconds."""

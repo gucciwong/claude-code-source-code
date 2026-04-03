@@ -41,7 +41,7 @@ from prometheus_client import generate_latest
 
 # FastAPI app
 app = FastAPI(
-    title="VibeVoice Service",
+    title="Sovereign Voice Service",
     description="Voice I/O service for VSCode + Desktop",
     version="0.1.0"
 )
@@ -202,7 +202,7 @@ async def health_check():
     device_info = DeviceConfig.get_device_info()
     
     response = {
-        "status": "ok",
+        "status": "healthy",
         "version": "0.2.0",
         "models": {
             "asr_loaded": bool(asr_model and asr_model.is_loaded),
@@ -215,6 +215,12 @@ async def health_check():
         response["models"]["asr_info"] = asr_model.get_device_info()
     
     return response
+
+
+# Backward-compatible aliases expected by some clients/tests.
+@app.post("/api/voice/transcribe", response_model=TranscribeResponse)
+async def transcribe_api_alias(file: UploadFile = File(...), language: Optional[str] = None):
+    return await transcribe(file=file, language=language)
 
 
 @app.post("/transcribe", response_model=TranscribeResponse)
@@ -303,6 +309,11 @@ async def speak(text: str = Form(...), language: str = Form("en")):
     except Exception as e:
         logger.error(f"TTS error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/voice/speak", response_model=SpeakResponse)
+async def speak_api_alias(text: str = Form(...), language: str = Form("en")):
+    return await speak(text=text, language=language)
 
 
 @app.get("/models/asr")

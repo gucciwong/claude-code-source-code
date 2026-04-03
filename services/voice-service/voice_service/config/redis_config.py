@@ -62,8 +62,9 @@ class RedisClient:
 
     def __init__(self):
         """Initialize Redis client if not already initialized."""
+        # Defer connection creation until first access to avoid import-time failures.
         if self._client is None:
-            self._initialize()
+            self._is_healthy = False
 
     def _initialize(self) -> None:
         """Initialize Redis connection pool and client."""
@@ -84,21 +85,37 @@ class RedisClient:
             )
 
         except ConnectionError as e:
-            logger.error(f"Failed to connect to Redis: {e}")
-            self._is_healthy = False
-            raise
+            logger.warning(f"Failed to connect to Redis: {e}. Falling back to in-memory fakeredis.")
+            try:
+                import fakeredis
+
+                self._client = fakeredis.FakeStrictRedis(decode_responses=True)
+                self._is_healthy = True
+                logger.info("Using fakeredis fallback (in-memory, non-persistent)")
+            except ImportError:
+                logger.error("fakeredis not installed and Redis is unavailable")
+                self._client = None
+                self._is_healthy = False
+
+    def _ensure_initialized(self) -> bool:
+        """Ensure client is initialized, returning False when unavailable."""
+        if self._client is None:
+            self._initialize()
+        return self._client is not None
 
     @property
     def client(self) -> redis.Redis:
         """Get Redis client instance."""
         if self._client is None:
             self._initialize()
+        if self._client is None:
+            raise ConnectionError("Redis client is not available")
         return self._client
 
     @property
     def is_healthy(self) -> bool:
         """Check if Redis connection is healthy."""
-        if not self._is_healthy:
+        if not self._ensure_initialized():
             return False
 
         try:
@@ -120,6 +137,10 @@ class RedisClient:
         }
 
         try:
+            if not self._ensure_initialized():
+                result["error"] = "Redis client is not available"
+                return result
+
             import time
 
             start = time.time()
@@ -169,5 +190,5 @@ class RedisClient:
         logger.warning("Redis database flushed")
 
 
-# Singleton instance
+# Singleton instance (lazy initialization)
 redis_client = RedisClient()

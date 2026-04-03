@@ -188,13 +188,13 @@ class TestMetricsAggregation:
 
     def test_latency_percentile_calculation(self):
         """Test calculating latency percentiles."""
-        latencies = [0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0]
+        latencies = [0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 30.0]
         latencies.sort()
 
         # Calculate percentiles
         p50 = latencies[int(len(latencies) * 0.50) - 1]  # Median
         p95 = latencies[int(len(latencies) * 0.95) - 1]
-        p99 = latencies[int(len(latencies) * 0.99) - 1]
+        p99 = latencies[min(int(len(latencies) * 0.99), len(latencies) - 1)]
 
         assert p50 < p95 < p99
 

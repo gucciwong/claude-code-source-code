@@ -94,7 +94,7 @@ class VADDetector:
     def _is_speech_energy(self, audio_chunk: np.ndarray) -> bool:
         """Simple energy-based speech detection (fallback)."""
         energy = np.mean(audio_chunk ** 2)
-        return energy > self._energy_threshold
+        return bool(energy > self._energy_threshold)
 
     def _calculate_energy_threshold(self) -> float:
         """Calculate energy threshold for simple VAD."""

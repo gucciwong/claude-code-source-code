@@ -1,20 +1,25 @@
 fastapi==0.104.1
 uvicorn==0.24.0
+httpx>=0.27.0,<0.28.0
 python-multipart==0.0.6
 websockets==12.0  # WebSocket support for streaming
-# Note: For CUDA support, install: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-torch==2.1.0
-transformers==4.36.0
-torchaudio==2.1.0
-numpy==1.24.0
+# Note: For CUDA support, install the matching torch/torchaudio pair from https://download.pytorch.org/whl/cu118
+# Use a modern range to support current Python versions in local/dev environments.
+torch>=2.9.0,<3.0.0
+transformers>=4.57.0,<5.0.0
+torchaudio>=2.9.0,<3.0.0
+numpy>=2.1.0,<3.0.0
 librosa==0.10.0
 pytest==7.4.3
 pytest-asyncio==0.21.1
-psutil==5.9.0  # For GPU/CPU monitoring
-webrtcvad==2.0.10  # Voice Activity Detection for streaming
+psutil>=7.0.0,<8.0.0  # For GPU/CPU monitoring
+# Optional: WebRTC VAD backend. If unavailable, code falls back to energy-based VAD.
+# Install manually where compiler/toolchain is available.
+# webrtcvad-wheels>=2.0.14
 python-dotenv==1.0.0  # Environment variable management
-onnxruntime==1.17.0  # ONNX Runtime for optimized inference
+onnxruntime>=1.24.1,<2.0.0  # ONNX Runtime for optimized inference
 redis==5.0.1  # Redis client for distributed session store and caching
+fakeredis==2.31.0  # In-memory Redis fallback for tests/local development
 prometheus-client==0.19.0  # Prometheus metrics export
 # Optional: onnxruntime[quantization]==1.17.0 for INT8/INT4 quantization support
 # Optional: onnxruntime-gpu==1.17.0 for NVIDIA GPU acceleration
