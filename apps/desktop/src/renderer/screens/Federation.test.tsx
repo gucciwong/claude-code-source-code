@@ -1,64 +1,69 @@
+import React from 'react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Federation } from './Federation'
+import { useFederationCoreStore } from '../store/federationCoreStore'
+import * as useFederationCoreHook from '../hooks/useFederationCore'
+
+vi.mock('../hooks/useFederationCore', () => ({
+  useFederationCore: vi.fn(),
+}))
+
+const mockHook = {
+  fetchPeers: vi.fn().mockResolvedValue([]),
+  registerPeer: vi.fn().mockResolvedValue(true),
+  unregisterPeer: vi.fn().mockResolvedValue(true),
+  startRound: vi.fn().mockResolvedValue(null),
+  fetchHistory: vi.fn().mockResolvedValue([]),
+}
 
 describe('Federation Screen', () => {
-  test('renders federation console header', () => {
-    render(<Federation />)
-    expect(screen.getByText('Federation Console')).toBeInTheDocument()
-    expect(screen.getByText(/Join federations, contribute gradients/)).toBeInTheDocument()
+  beforeEach(() => {
+    vi.mocked(useFederationCoreHook.useFederationCore).mockReturnValue(mockHook)
+    useFederationCoreStore.setState({
+      peers: [],
+      currentRound: null,
+      roundHistory: [],
+      isLoading: false,
+      error: null,
+    })
   })
 
-  test('displays join federation button', () => {
+  it('renders "Federated Learning Core" heading', () => {
     render(<Federation />)
-    expect(screen.getByText('Join Federation')).toBeInTheDocument()
+    expect(screen.getByText('Federated Learning Core')).toBeInTheDocument()
   })
 
-  test('shows my federations section', () => {
+  it('renders description mentioning Federated Averaging or Differential Privacy', () => {
     render(<Federation />)
-    expect(screen.getByText('My Federations')).toBeInTheDocument()
+    expect(screen.getByText(/Federated Averaging|Differential Privacy/i)).toBeInTheDocument()
   })
 
-  test('displays federation entries', () => {
+  it('renders Peers tab', () => {
     render(<Federation />)
-    expect(screen.getByText('Finance AI Consortium')).toBeInTheDocument()
-    expect(screen.getByText('Open Source Coder Commons')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /peers/i })).toBeInTheDocument()
   })
 
-  test('shows connected federation status', () => {
+  it('renders Current Round tab', () => {
     render(<Federation />)
-    expect(screen.getByText(/Connected · 8 peers/)).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /current round/i })).toBeInTheDocument()
   })
 
-  test('shows offline federation status', () => {
+  it('renders History tab', () => {
     render(<Federation />)
-    expect(screen.getByText('Offline — Resume')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /history/i })).toBeInTheDocument()
   })
 
-  test('displays privacy status section', () => {
+  it('renders peer ID input', () => {
     render(<Federation />)
-    expect(screen.getByText('Privacy Status')).toBeInTheDocument()
-    expect(screen.getByText(/Differential Privacy: ON/)).toBeInTheDocument()
+    expect(screen.getByLabelText('New peer ID')).toBeInTheDocument()
   })
 
-  test('shows network graph section', () => {
+  it('renders Start Federated Round button', async () => {
+    const user = userEvent.setup()
     render(<Federation />)
-    expect(screen.getByText('Network Graph')).toBeInTheDocument()
-  })
-
-  test('displays contribution history', () => {
-    render(<Federation />)
-    expect(screen.getByText('Contribution History')).toBeInTheDocument()
-    expect(screen.getByText(/Round 127/)).toBeInTheDocument()
-  })
-
-  test('shows reputation score', () => {
-    render(<Federation />)
-    expect(screen.getByText(/847 points/)).toBeInTheDocument()
-    expect(screen.getByText('Top 15% contributor')).toBeInTheDocument()
-  })
-
-  test('has test id', () => {
-    render(<Federation />)
-    expect(screen.getByTestId('screen-federation')).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: /current round/i }))
+    expect(screen.getByRole('button', { name: /Start Federated Round/i })).toBeInTheDocument()
   })
 })
