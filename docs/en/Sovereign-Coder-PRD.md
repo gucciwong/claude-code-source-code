@@ -1463,6 +1463,35 @@ Current planning focus should remain on v1.0 deliverables and hardening work.
 | NPS (Net Promoter Score) | 40 | 55 | 70 |
 | Annual ROI per 500-person org | — | $2M | $5.7M |
 
+### 12.4 Pricing And Billing Canonical Policy (Year 1)
+
+The monetization strategy for the first 12 months prioritizes adoption over short-term ARPU.
+
+Canonical pricing model:
+
+| Plan | Eligibility | Price | Policy Notes |
+|------|-------------|------:|--------------|
+| Individual Free | Personal users | $0 | Free forever |
+| Organization Starter Free | Organizations with 1-5 active users | $0 | Shared workspace baseline |
+| Organization Growth Free | Organizations with 6+ active users | $0 | Usage-limited free (Option C): API/automation caps, no SSO/SCIM/compliance exports |
+| Pro | 6-50 users | $5/user/month | Entry paid tier |
+| Business | 51-200 users | $7/user/month | Expanded analytics/admin capabilities |
+| Enterprise | 201+ users | $9/user/month or custom annual | Identity, compliance, procurement controls |
+
+Billing and conversion policy (canonical):
+
+1. Billing metric is active seats.
+2. Proration is daily for seat add/remove events.
+3. Annual billing discount is 10%.
+4. In-product quota warnings are shown at 70%, 85%, and 100% of free-growth limits.
+5. First hard-cap event per org may receive a one-time 14-day temporary quota boost.
+6. Anti-abuse defaults include one free-growth org per verified domain with review-based exceptions.
+
+Detailed references:
+
+1. Customer-facing pricing copy: `docs/en/PRICING_PAGE_COPY.md`
+2. Internal billing policy specification: `docs/en/BILLING_POLICY_SPEC.md`
+
 ---
 
 ## 13. Risk Analysis
