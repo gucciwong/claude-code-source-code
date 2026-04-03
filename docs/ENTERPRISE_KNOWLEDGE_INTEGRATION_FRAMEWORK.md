@@ -32,7 +32,7 @@ Every team member builds a personal knowledge library that acts as:
 
 ```
 Personal Knowledge Layer
-├── Memory.md / Claude.md (local knowledge base)
+├── Memory.md / TeamRules.md (local knowledge base)
 ├── Code Snippets Library (searchable collection)
 ├── Decision Log (why decisions were made)
 ├── Domain Models (conceptual understanding)
