@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { vi } from 'vitest'
 import { Models } from './Models'
 import { useModelsStore } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
@@ -10,8 +11,15 @@ const mockModels = [
 ]
 
 beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+    json: () => Promise.resolve({}),
+  }))
   useModelsStore.setState({ installed: mockModels, selected: null })
   useSystemStore.setState({ ollamaOnline: true, activeModel: '' })
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
 })
 
 test('renders installed models list', () => {
@@ -44,11 +52,10 @@ test('model detail shows size formatted as GB', async () => {
   expect(screen.getByText('4.5 GB')).toBeInTheDocument()
 })
 
-test('model detail shows info grid with Digest, Size, Status, Modified', async () => {
-  const user = userEvent.setup()
+test('model detail shows info grid with Parameters, Size, Status, Modified', async () => {
   useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
   render(<Models />)
-  expect(screen.getByText('Digest')).toBeInTheDocument()
+  expect(screen.getByText('Parameters')).toBeInTheDocument()
   expect(screen.getByText('Size')).toBeInTheDocument()
   expect(screen.getByText('Status')).toBeInTheDocument()
   expect(screen.getByText('Modified')).toBeInTheDocument()
@@ -116,6 +123,34 @@ test('renders tab bar with Installed and Download from HuggingFace tabs', () => 
   render(<Models />)
   expect(screen.getByRole('tab', { name: /Installed/ })).toBeInTheDocument()
   expect(screen.getByRole('tab', { name: /Download from HuggingFace/ })).toBeInTheDocument()
+})
+
+test('Parameters card shows value when details.parameter_size is present', () => {
+  const modelWithDetails = [
+    { ...mockModels[0], details: { parameter_size: '7.2B', quantization_level: 'Q4_K_M', family: 'llama', format: 'gguf' } },
+    ...mockModels.slice(1),
+  ]
+  useModelsStore.setState({ installed: modelWithDetails, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getByText('7.2B')).toBeInTheDocument()
+})
+
+test('Parameters card shows \u2014 when details are absent', () => {
+  useModelsStore.setState({ installed: mockModels, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getByText('Parameters')).toBeInTheDocument()
+  // The em-dash fallback should be rendered
+  expect(screen.getAllByText('\u2014').length).toBeGreaterThanOrEqual(1)
+})
+
+test('quantization_level badge renders when present', () => {
+  const modelWithDetails = [
+    { ...mockModels[0], details: { parameter_size: '7.2B', quantization_level: 'Q4_K_M', family: 'llama', format: 'gguf' } },
+    ...mockModels.slice(1),
+  ]
+  useModelsStore.setState({ installed: modelWithDetails, selected: 'llama3.1:8b' })
+  render(<Models />)
+  expect(screen.getByText('Q4_K_M')).toBeInTheDocument()
 })
 
 test('Installed tab shows installed model count', () => {

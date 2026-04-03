@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
@@ -37,10 +38,15 @@ function ModelDetail({ model }: { model: OllamaModel }) {
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex-1 min-w-0">
             <h2 
-              className="text-2xl font-semibold text-text-primary break-words"
+              className="text-2xl font-semibold text-text-primary break-words flex items-center gap-2 flex-wrap"
               title={model.name}
             >
               {model.name}
+              {model.details?.quantization_level && (
+                <span className="bg-bg-surface-3 text-text-muted text-xs px-2 py-0.5 rounded font-normal">
+                  {model.details.quantization_level}
+                </span>
+              )}
             </h2>
           </div>
           {isActive && (
@@ -57,9 +63,9 @@ function ModelDetail({ model }: { model: OllamaModel }) {
       {/* Info Grid - 4 columns */}
       <div className="grid grid-cols-4 gap-2">
         <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
-          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Digest</p>
-          <p className="text-xs text-text-primary font-mono break-all flex-1" title={model.digest}>
-            {model.digest.slice(0, 16)}...
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Parameters</p>
+          <p className="text-xs text-text-primary font-mono">
+            {model.details?.parameter_size ?? '\u2014'}
           </p>
         </div>
         <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
@@ -76,6 +82,22 @@ function ModelDetail({ model }: { model: OllamaModel }) {
         <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 min-h-[80px] flex flex-col">
           <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Modified</p>
           <p className="text-xs text-text-primary font-mono">{formatDate(model.modified_at)}</p>
+        </div>
+      </div>
+
+      {/* Architecture + Format cards */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Architecture</p>
+          <p className="text-xs text-text-primary font-mono">
+            {model.details?.family ?? '\u2014'}
+          </p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Format</p>
+          <p className="text-xs text-text-primary font-mono">
+            {model.details?.format ?? '\u2014'}
+          </p>
         </div>
       </div>
 
@@ -114,10 +136,33 @@ function ModelDetail({ model }: { model: OllamaModel }) {
 }
 
 export function Models() {
-  const { installed, selected, setSelected } = useModelsStore()
+  const { installed, selected, setSelected, setModelDetails } = useModelsStore()
   const activeModel = useSystemStore(s => s.activeModel)
   const ollamaOnline = useSystemStore(s => s.ollamaOnline)
   const selectedModel = installed.find(m => m.name === selected) ?? null
+
+  useEffect(() => {
+    if (!selected) return
+    fetch('http://localhost:11434/api/show', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: selected }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data?.details) {
+          setModelDetails(selected, {
+            parameter_size: data.details.parameter_size,
+            quantization_level: data.details.quantization_level,
+            family: data.details.family,
+            format: data.details.format,
+          })
+        }
+      })
+      .catch(() => {
+        // Network error or Ollama not running — leave details undefined
+      })
+  }, [selected, setModelDetails])
 
   return (
     <div data-testid="screen-models" className="flex flex-col h-full">
