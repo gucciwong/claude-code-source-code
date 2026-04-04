@@ -34,16 +34,11 @@ export const ollamaClient = {
     model: string,
     messages: { role: string; content: string }[]
   ): AsyncGenerator<string> {
-    let res: Response
-    try {
-      res = await fetch(`${BASE}/v1/chat/completions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model, messages, stream: true }),
-      })
-    } catch {
-      return
-    }
+    const res = await fetch(`${BASE}/v1/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, stream: true }),
+    })
     if (!res.body) return
     const reader = res.body.getReader()
     const decoder = new TextDecoder()
@@ -65,8 +60,8 @@ export const ollamaClient = {
           }
         }
       }
-    } catch {
-      // stream interrupted — stop iteration cleanly
+    } catch (e) {
+      throw e
     } finally {
       reader.releaseLock()
     }

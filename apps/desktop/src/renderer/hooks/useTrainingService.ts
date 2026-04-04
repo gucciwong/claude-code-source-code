@@ -62,18 +62,13 @@ export function useTrainingService(): UseTrainingServiceReturn {
         return { event_id: 'skipped', created_at: new Date().toISOString() }
       }
 
-      try {
-        const result = await client.logCompletionEvent(payload)
-        // Update event count
-        const stats = await client.getStats()
-        if (stats) {
-          setEventCount(stats.total_events)
-        }
-        return result
-      } catch (error) {
-        console.error('[Training] Error logging completion:', error)
-        return { event_id: 'error', created_at: new Date().toISOString() }
+      const result = await client.logCompletionEvent(payload)
+      // Update event count
+      const stats = await client.getStats()
+      if (stats) {
+        setEventCount(stats.total_events)
       }
+      return result
     },
     [client, isServiceAvailable]
   )

@@ -37,6 +37,7 @@ export const useVoiceService = () => {
         return true
       } else {
         setServiceReady(false)
+        setTranscriptionError(null)
         return false
       }
     } catch (error) {

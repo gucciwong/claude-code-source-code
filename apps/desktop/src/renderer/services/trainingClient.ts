@@ -63,23 +63,17 @@ export class TrainingServiceClient {
    * Log a completion event with full KPI envelope (§3.2 completion events)
    */
   async logCompletionEvent(payload: CompletionEventPayload): Promise<{ event_id: string; created_at: string }> {
-    try {
-      const response = await fetch(`${this.baseUrl}/api/v1/training/event`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+    const response = await fetch(`${this.baseUrl}/api/v1/training/event`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
 
-      if (!response.ok) {
-        console.error(`[Training] Failed to log event: ${response.status}`)
-        return { event_id: 'error', created_at: new Date().toISOString() }
-      }
-
-      return await response.json()
-    } catch (error) {
-      console.error('[Training] Error logging completion event:', error)
-      return { event_id: 'error', created_at: new Date().toISOString() }
+    if (!response.ok) {
+      throw new Error(`[Training] Failed to log event: ${response.status}`)
     }
+
+    return await response.json()
   }
 
   /**
