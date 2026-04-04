@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
 import { useModelManagerStore } from '../store/modelManagerStore'
-import { Server, WifiOff, CheckCircle2, Zap, Trash2 } from 'lucide-react'
+import { Server, WifiOff, CheckCircle2, Zap, Trash2, Loader2 } from 'lucide-react'
 import { HuggingFacePanel } from '../components/models/HuggingFacePanel'
 import { OrgInsightsPanel } from '../components/models/OrgInsightsPanel'
 
@@ -32,6 +32,10 @@ function EmptySelection() {
 function ModelDetail({ model }: { model: OllamaModel }) {
   const activeModel = useSystemStore(s => s.activeModel)
   const isActive = model.name === activeModel
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  useEffect(() => { setConfirmDelete(false) }, [model.name])
 
   return (
     <div className="p-6 space-y-6 max-w-2xl">
@@ -123,15 +127,47 @@ function ModelDetail({ model }: { model: OllamaModel }) {
           <Zap size={14} aria-hidden="true" />
           Fine-tune
         </button>
-        <button
-          type="button"
-          disabled
-          className="border border-border-default text-red-400 text-sm font-medium px-4 py-2 rounded-md cursor-not-allowed opacity-50 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
-          aria-label={`Delete ${model.name}`}
-        >
-          <Trash2 size={14} aria-hidden="true" />
-          Delete
-        </button>
+        {!confirmDelete ? (
+          <button
+            type="button"
+            className="border border-border-default text-red-400 hover:bg-red-500/10 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+            onClick={() => setConfirmDelete(true)}
+            aria-label={`Delete ${model.name}`}
+          >
+            <Trash2 size={14} aria-hidden="true" />
+            Delete
+          </button>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+              onClick={async () => {
+                setDeleting(true)
+                try {
+                  await useModelsStore.getState().deleteModel(model.name)
+                } catch (e) {
+                  useModelManagerStore.setState({ last_error: `Delete failed: ${e instanceof Error ? e.message : 'Unknown error'}` })
+                } finally {
+                  setDeleting(false)
+                  setConfirmDelete(false)
+                }
+              }}
+              aria-label={`Confirm delete ${model.name}`}
+            >
+              {deleting ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Trash2 size={14} aria-hidden="true" />}
+              {deleting ? 'Deleting…' : 'Confirm Delete'}
+            </button>
+            <button
+              type="button"
+              className="border border-border-default text-text-secondary hover:text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+              onClick={() => setConfirmDelete(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

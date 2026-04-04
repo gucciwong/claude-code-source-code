@@ -21,6 +21,7 @@ interface ModelsState {
   setSelected: (name: string) => void
   setInstalled: (models: OllamaModel[]) => void
   setModelDetails: (name: string, details: OllamaModelDetails) => void
+  deleteModel: (name: string) => Promise<void>
 }
 
 export const useModelsStore = create<ModelsState>((set) => ({
@@ -32,4 +33,17 @@ export const useModelsStore = create<ModelsState>((set) => ({
     set(state => ({
       installed: state.installed.map(m => m.name === name ? { ...m, details } : m),
     })),
+  deleteModel: async (name) => {
+    const res = await fetch('http://localhost:11434/api/delete', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+      signal: AbortSignal.timeout(10_000),
+    })
+    if (!res.ok) throw new Error(`Delete failed: HTTP ${res.status}`)
+    set(state => ({
+      installed: state.installed.filter(m => m.name !== name),
+      selected: state.selected === name ? (state.installed.filter(m => m.name !== name)[0]?.name ?? null) : state.selected,
+    }))
+  },
 }))
