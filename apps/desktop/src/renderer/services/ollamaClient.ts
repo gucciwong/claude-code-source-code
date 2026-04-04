@@ -10,7 +10,7 @@ const BASE = 'http://localhost:11434'
 export const ollamaClient = {
   async getModels(): Promise<OllamaModel[]> {
     try {
-      const res = await fetch(`${BASE}/api/tags`)
+      const res = await fetch(`${BASE}/api/tags`, { signal: AbortSignal.timeout(5_000) })
       if (!res.ok) return []
       const data = await res.json() as { models?: OllamaModel[] }
       return data.models ?? []

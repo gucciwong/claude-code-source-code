@@ -29,7 +29,7 @@ export const useVoiceService = () => {
   // Check service health
   const checkServiceHealth = useCallback(async () => {
     try {
-      const response = await fetch(`${VOICE_SERVICE_URL}/health`)
+      const response = await fetch(`${VOICE_SERVICE_URL}/health`, { signal: AbortSignal.timeout(5_000) })
       if (response.ok) {
         const data = (await response.json()) as HealthResponse
         setServiceReady(data.asr_loaded && data.tts_loaded)
@@ -70,6 +70,7 @@ export const useVoiceService = () => {
         const response = await fetch(`${VOICE_SERVICE_URL}/transcribe`, {
           method: 'POST',
           body: formData,
+          signal: AbortSignal.timeout(30_000),
         })
 
         if (response.ok) {
@@ -98,6 +99,7 @@ export const useVoiceService = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text, language }),
+          signal: AbortSignal.timeout(30_000),
         })
 
         if (response.ok) {
@@ -121,7 +123,7 @@ export const useVoiceService = () => {
   // Get detailed service status
   const getServiceDetails = useCallback(async () => {
     try {
-      const response = await fetch(`${VOICE_SERVICE_URL}/health/detailed`)
+      const response = await fetch(`${VOICE_SERVICE_URL}/health/detailed`, { signal: AbortSignal.timeout(5_000) })
       if (response.ok) {
         return await response.json()
       }

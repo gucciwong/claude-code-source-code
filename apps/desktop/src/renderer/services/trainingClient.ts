@@ -67,6 +67,7 @@ export class TrainingServiceClient {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10_000),
     })
 
     if (!response.ok) {
@@ -86,6 +87,7 @@ export class TrainingServiceClient {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...payload, event_type: payload.event_name }),
+        signal: AbortSignal.timeout(10_000),
       })
       if (!response.ok) {
         console.warn(`[Telemetry] inference event ${payload.event_name} → ${response.status}`)
@@ -100,7 +102,7 @@ export class TrainingServiceClient {
    */
   async getStats(): Promise<TrainingStats | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/training/stats`)
+      const response = await fetch(`${this.baseUrl}/api/v1/training/stats`, { signal: AbortSignal.timeout(10_000) })
 
       if (!response.ok) {
         console.error(`[Training] Failed to get stats: ${response.status}`)
@@ -119,7 +121,7 @@ export class TrainingServiceClient {
    */
   async getStatus(): Promise<TrainingStatus | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/training/status`)
+      const response = await fetch(`${this.baseUrl}/api/v1/training/status`, { signal: AbortSignal.timeout(10_000) })
 
       if (!response.ok) {
         console.error(`[Training] Failed to get status: ${response.status}`)
@@ -138,7 +140,7 @@ export class TrainingServiceClient {
    */
   async getVersion(modelId: string): Promise<{ version_id: string; status: string; quality_score: number } | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/training/version/${modelId}`)
+      const response = await fetch(`${this.baseUrl}/api/v1/training/version/${modelId}`, { signal: AbortSignal.timeout(10_000) })
 
       if (!response.ok) {
         console.error(`[Training] Failed to get version: ${response.status}`)
@@ -157,7 +159,7 @@ export class TrainingServiceClient {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`)
+      const response = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(5_000) })
       return response.ok
     } catch {
       return false

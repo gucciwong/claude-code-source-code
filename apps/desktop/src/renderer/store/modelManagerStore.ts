@@ -58,7 +58,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
 
   list_available: async () => {
     try {
-      const response = await fetch('http://localhost:8002/api/v1/models')
+      const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       
       const data = await response.json()
@@ -78,7 +78,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
 
   list_cached: async () => {
     try {
-      const response = await fetch('http://localhost:8002/api/v1/models')
+      const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       
       const data = await response.json()
@@ -105,7 +105,8 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantization: quantization || 'fp32' })
+          body: JSON.stringify({ quantization: quantization || 'fp32' }),
+          signal: AbortSignal.timeout(10_000),
         }
       )
       
@@ -121,7 +122,8 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
       const pollInterval = setInterval(async () => {
         try {
           const statusResponse = await fetch(
-            'http://localhost:8002/api/v1/downloads/status'
+            'http://localhost:8002/api/v1/downloads/status',
+            { signal: AbortSignal.timeout(10_000) },
           )
           const status = await statusResponse.json()
           failCount = 0 // reset on success
@@ -172,7 +174,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
     try {
       const response = await fetch(
         `http://localhost:8002/api/v1/models/${model_id}/set-active`,
-        { method: 'POST' }
+        { method: 'POST', signal: AbortSignal.timeout(10_000) }
       )
       
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -190,7 +192,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
     try {
       const response = await fetch(
         `http://localhost:8002/api/v1/models/${model_id}`,
-        { method: 'DELETE' }
+        { method: 'DELETE', signal: AbortSignal.timeout(10_000) }
       )
       
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -208,7 +210,8 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
     try {
       const params = new URLSearchParams({ q: query })
       const response = await fetch(
-        `http://localhost:8002/api/v1/models/search?${params}`
+        `http://localhost:8002/api/v1/models/search?${params}`,
+        { signal: AbortSignal.timeout(10_000) },
       )
       
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -223,7 +226,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
     try {
       await fetch(
         `http://localhost:8002/api/v1/downloads/${model_id}/cancel`,
-        { method: 'POST' }
+        { method: 'POST', signal: AbortSignal.timeout(10_000) }
       )
       
       const existingInterval = pollIntervals.get(model_id)
