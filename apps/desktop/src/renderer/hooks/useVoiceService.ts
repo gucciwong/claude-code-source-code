@@ -34,7 +34,7 @@ export const useVoiceService = () => {
       const response = await fetch(`${VOICE_SERVICE_URL}/health`, { signal: AbortSignal.timeout(5_000) })
       if (response.ok) {
         const data = parseResponse(HealthResponseSchema, await response.json())
-        setServiceReady(data.models?.asr_loaded && data.models?.tts_loaded || false)
+        setServiceReady(data.asr_loaded && data.tts_loaded)
         setTranscriptionError(null)
         return true
       } else {

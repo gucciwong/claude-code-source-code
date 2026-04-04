@@ -72,9 +72,9 @@ describe('useAnalytics', () => {
     const { result } = renderHook(() => useAnalytics())
     await act(() => result.current.fetchReport())
     expect(fetchMock).toHaveBeenCalledTimes(3)
-    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/productivity')
-    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/quality-trends')
-    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/training-roi')
+    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/productivity', expect.anything())
+    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/quality-trends', expect.anything())
+    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8009/metrics/training-roi', expect.anything())
   })
 
   it('fetchReport returns assembled report on success', async () => {

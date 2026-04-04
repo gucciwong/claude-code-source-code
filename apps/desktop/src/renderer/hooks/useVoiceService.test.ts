@@ -36,7 +36,7 @@ describe('useVoiceService', () => {
       renderHook(() => useVoiceService())
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/health')
+        expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/health', expect.anything())
       })
     })
 
@@ -122,6 +122,16 @@ describe('useVoiceService', () => {
     })
 
     it('should handle transcription errors', async () => {
+      // First mock: health check on mount
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          status: 'ok',
+          asr_loaded: true,
+          tts_loaded: true,
+        }),
+      })
+      // Second mock: transcription failure
       mockFetch.mockResolvedValueOnce({
         ok: false,
         text: async () => 'Bad request',
@@ -144,6 +154,16 @@ describe('useVoiceService', () => {
         transcriptionError: 'Previous error',
       })
 
+      // First mock: health check on mount
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          status: 'ok',
+          asr_loaded: true,
+          tts_loaded: true,
+        }),
+      })
+      // Second mock: successful transcription
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
@@ -197,6 +217,16 @@ describe('useVoiceService', () => {
     })
 
     it('should handle synthesis errors', async () => {
+      // First mock: health check on mount
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          status: 'ok',
+          asr_loaded: true,
+          tts_loaded: true,
+        }),
+      })
+      // Second mock: synthesis failure
       mockFetch.mockResolvedValueOnce({
         ok: false,
         text: async () => 'Synthesis failed',

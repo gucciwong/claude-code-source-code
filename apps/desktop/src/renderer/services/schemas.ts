@@ -59,20 +59,15 @@ export const TrainingVersionSchema = z.object({
 
 export const HealthResponseSchema = z.object({
   status: z.string(),
-  version: z.string().optional(),
-  models: z
-    .object({
-      asr_loaded: z.boolean(),
-      tts_loaded: z.boolean(),
-    })
-    .optional(),
+  asr_loaded: z.boolean(),
+  tts_loaded: z.boolean(),
 })
 
 export const TranscribeResponseSchema = z.object({
   text: z.string(),
   language: z.string(),
   confidence: z.number(),
-  error: z.string().nullable().optional(),
+  duration: z.number(),
 })
 
 export const SynthesizeResponseSchema = z.object({
@@ -84,7 +79,8 @@ export const SynthesizeResponseSchema = z.object({
 
 export const CompletionItemSchema = z.object({
   text: z.string(),
-  score: z.number().optional(),
+  confidence: z.number(),
+  source: z.enum(['ngram', 'prefix', 'template']),
 })
 
 export const CompletionsResponseSchema = z.object({
@@ -94,30 +90,35 @@ export const CompletionsResponseSchema = z.object({
 // ── Analytics ──
 
 export const ProductivityMetricsSchema = z.object({
-  completions_accepted: z.number(),
-  completions_shown: z.number(),
+  total_sessions: z.number(),
+  total_tokens: z.number(),
+  avg_tokens_per_session: z.number(),
+  total_code_reviews: z.number(),
+  total_training_runs: z.number(),
   acceptance_rate: z.number(),
-  time_saved_minutes: z.number().optional(),
 })
 
 export const QualityTrendSchema = z.object({
-  date: z.string(),
-  score: z.number(),
+  date_label: z.string(),
+  avg_quality_score: z.number(),
+  pattern_count: z.number(),
 })
 
 export const TrainingROISchema = z.object({
-  hours_invested: z.number(),
-  quality_improvement: z.number(),
-  roi_factor: z.number().optional(),
+  total_training_runs: z.number(),
+  avg_improvement_pct: z.number(),
+  time_saved_hours: z.number(),
+  estimated_roi_multiplier: z.number(),
 })
 
 // ── Conversation Memory ──
 
 export const MemorySchema = z.object({
   id: z.string(),
-  content: z.string(),
-  type: z.string().optional(),
-  created_at: z.string().optional(),
+  text: z.string(),
+  tags: z.array(z.string()),
+  relevance_score: z.number(),
+  timestamp: z.string(),
 })
 
 export const MemoriesResponseSchema = z.object({
@@ -125,10 +126,15 @@ export const MemoriesResponseSchema = z.object({
 })
 
 export const MemorySearchResponseSchema = z.object({
-  results: z.array(MemorySchema),
+  results: z.array(z.object({
+    memory: MemorySchema,
+    score: z.number(),
+  })),
 })
 
 export const ContextSummarySchema = z.object({
-  summary: z.string(),
-  memory_count: z.number().optional(),
+  query: z.string(),
+  relevant_memories: z.array(MemorySchema),
+  compressed_context: z.string(),
+  token_estimate: z.number(),
 })
