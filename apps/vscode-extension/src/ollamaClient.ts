@@ -1,3 +1,5 @@
+import { validateOllamaUrl } from './validateUrl'
+
 export async function getCompletion(
   baseUrl: string,
   model: string,
@@ -5,6 +7,7 @@ export async function getCompletion(
   maxTokens: number,
   signal?: AbortSignal,
 ): Promise<string> {
+  baseUrl = validateOllamaUrl(baseUrl)
   try {
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: 'POST',
@@ -30,6 +33,7 @@ export async function getCompletion(
 }
 
 export async function checkOllamaOnline(baseUrl: string): Promise<boolean> {
+  baseUrl = validateOllamaUrl(baseUrl)
   try {
     const response = await fetch(`${baseUrl}/api/tags`, {
       signal: AbortSignal.timeout(2000),

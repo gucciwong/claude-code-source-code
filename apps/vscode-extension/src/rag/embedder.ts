@@ -1,3 +1,5 @@
+import { validateOllamaUrl } from '../validateUrl'
+
 /**
  * Calls Ollama's /api/embeddings endpoint to get a vector embedding for the given text.
  * Returns null if the request fails for any reason (network error, model not found, etc.)
@@ -8,6 +10,7 @@ export async function getEmbedding(
   text: string,
   signal?: AbortSignal,
 ): Promise<number[] | null> {
+  baseUrl = validateOllamaUrl(baseUrl)
   try {
     const response = await fetch(`${baseUrl}/api/embeddings`, {
       method: 'POST',
