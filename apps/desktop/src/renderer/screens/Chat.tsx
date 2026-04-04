@@ -43,6 +43,7 @@ export function Chat() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastUserPromptRef = useRef<string>('')
   const abortControllerRef = useRef<AbortController | null>(null)
+  const isStreamingRef = useRef(false)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: 'smooth' })
@@ -50,10 +51,11 @@ export function Chat() {
 
   async function handleSend() {
     const text = input.trim()
-    if (!text || isStreaming) return
+    if (!text || isStreamingRef.current) return
+    isStreamingRef.current = true
 
     const userMsg: ChatMessage = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       role: 'user',
       content: text,
     }
@@ -62,7 +64,7 @@ export function Chat() {
     setInput('')
 
     const assistantMsg: ChatMessage = {
-      id: (Date.now() + 1).toString(),
+      id: crypto.randomUUID(),
       role: 'assistant',
       content: '',
       streaming: true,
@@ -148,12 +150,16 @@ export function Chat() {
         }
       }
     } catch (err) {
-      // ── inference_request_failed ──────────────────────────────────
-      void logInference({
-        ...buildEnvelope('inference_request_failed', model, 'ollama', 'local', correlationId),
-        error_message: err instanceof Error ? err.message : String(err),
-      })
+      // User-initiated abort is not a failure — skip telemetry
+      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+        // ── inference_request_failed ──────────────────────────────────
+        void logInference({
+          ...buildEnvelope('inference_request_failed', model, 'ollama', 'local', correlationId),
+          error_message: err instanceof Error ? err.message : String(err),
+        })
+      }
     } finally {
+      isStreamingRef.current = false
       abortControllerRef.current = null
       setLastStreaming(false)
       setIsStreaming(false)
