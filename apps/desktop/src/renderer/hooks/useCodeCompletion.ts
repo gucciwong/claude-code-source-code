@@ -15,6 +15,7 @@ export function useCodeCompletion() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(req),
+        signal: AbortSignal.timeout(10_000),
       })
       if (!res.ok) return []
       const data: { completions: Completion[] } = await res.json()
@@ -34,6 +35,7 @@ export function useCodeCompletion() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fb),
+        signal: AbortSignal.timeout(10_000),
       })
       return res.ok
     } catch {

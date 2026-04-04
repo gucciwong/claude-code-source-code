@@ -13,6 +13,7 @@ export function useAnalytics() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(event),
+        signal: AbortSignal.timeout(10_000),
       })
       return res.ok
     } catch {
@@ -25,9 +26,9 @@ export function useAnalytics() {
     setError(null)
     try {
       const [prodRes, qualRes, roiRes] = await Promise.all([
-        fetch(`${BASE_URL}/metrics/productivity`),
-        fetch(`${BASE_URL}/metrics/quality-trends`),
-        fetch(`${BASE_URL}/metrics/training-roi`),
+        fetch(`${BASE_URL}/metrics/productivity`, { signal: AbortSignal.timeout(10_000) }),
+        fetch(`${BASE_URL}/metrics/quality-trends`, { signal: AbortSignal.timeout(10_000) }),
+        fetch(`${BASE_URL}/metrics/training-roi`, { signal: AbortSignal.timeout(10_000) }),
       ])
       if (!prodRes.ok || !qualRes.ok || !roiRes.ok) throw new Error('Failed to fetch metrics')
       const [productivity, quality_trends, training_roi] = await Promise.all([
@@ -54,7 +55,7 @@ export function useAnalytics() {
 
   const exportReport = useCallback(async (format: 'json' | 'csv' = 'json'): Promise<string | null> => {
     try {
-      const res = await fetch(`${BASE_URL}/reports/export?format=${format}`)
+      const res = await fetch(`${BASE_URL}/reports/export?format=${format}`, { signal: AbortSignal.timeout(10_000) })
       if (!res.ok) return null
       return await res.text()
     } catch {
