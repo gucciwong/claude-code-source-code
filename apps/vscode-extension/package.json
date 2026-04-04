@@ -19,8 +19,30 @@
       {
         "command": "sovereign-code.toggleCompletions",
         "title": "Sovereign Code: Toggle Inline Completions"
+      },
+      {
+        "command": "sovereign-code.selectModel",
+        "title": "Sovereign Code: Select Model"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sovereign-code",
+          "title": "Sovereign Code",
+          "icon": "$(hubot)"
+        }
+      ]
+    },
+    "views": {
+      "sovereign-code": [
+        {
+          "type": "webview",
+          "id": "sovereign-code.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
     "configuration": {
       "title": "Sovereign Code",
       "properties": {

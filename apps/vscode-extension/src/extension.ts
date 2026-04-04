@@ -3,7 +3,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { SovereignCompletionProvider } from './completionProvider'
 import { createStatusBar } from './statusBar'
-import { checkOllamaOnline } from './ollamaClient'
+import { checkOllamaOnline, listModels } from './ollamaClient'
+import { ChatViewProvider } from './chatViewProvider'
 import { ChunkStore } from './rag/store'
 import { Retriever } from './rag/retriever'
 import { Indexer } from './rag/indexer'
@@ -60,6 +61,34 @@ export function activate(context: vscode.ExtensionContext): void {
     },
   )
   context.subscriptions.push(commandDisposable)
+
+  // Chat sidebar panel
+  const chatProvider = new ChatViewProvider(context.extensionUri)
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(ChatViewProvider.viewType, chatProvider)
+  )
+
+  // Model selection command
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sovereign-code.selectModel', async () => {
+      const config = vscode.workspace.getConfiguration('sovereign-code')
+      const baseUrl = config.get<string>('ollamaUrl', 'http://localhost:11434')
+      const models = await listModels(baseUrl)
+      if (models.length === 0) {
+        vscode.window.showWarningMessage('No models found. Is Ollama running?')
+        return
+      }
+      const current = config.get<string>('model', 'qwen2.5-coder:7b')
+      const picked = await vscode.window.showQuickPick(models, {
+        placeHolder: `Current: ${current}`,
+        title: 'Select Ollama Model',
+      })
+      if (picked) {
+        await config.update('model', picked, vscode.ConfigurationTarget.Global)
+        vscode.window.showInformationMessage(`Model set to ${picked}`)
+      }
+    })
+  )
 
   // Push status bar disposal to subscriptions
   context.subscriptions.push({ dispose: () => statusBar.dispose() })
