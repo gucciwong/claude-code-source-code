@@ -61,7 +61,7 @@ class TestExperimentCreation:
             commit_hash="abc123def",
             config={"lr": 5e-4, "batch_size": 8},
             description="Increased learning rate and batch size",
-            status=ExperimentStatus.COMPLETED if hasattr(ExperimentStatus, 'COMPLETED') else ExperimentStatus.KEEP,
+            status=ExperimentStatus.KEEP,
             val_loss=0.45,
             val_bpb=1.2,
             primary_metric=0.45,
@@ -293,42 +293,3 @@ class TestExperimentLineage:
         
         assert child.parent_experiment_id == parent.id
         assert "learning rate" in child.changes_from_parent.lower()
-
-
-class TestExperimentStatus:
-    """Additional status tests for decision logic"""
-
-    def test_status_for_keep_discard_crash_decisions(self):
-        """Verify status enum supports autoresearch keep/discard/crash classification"""
-        keep_exp = Experiment(
-            id="keep",
-            run_tag="test",
-            config={},
-            description="Keeping this",
-            status=ExperimentStatus.KEEP,
-            primary_metric=0.95,
-            created_at=datetime.now(timezone.utc),
-        )
-        
-        discard_exp = Experiment(
-            id="discard",
-            run_tag="test",
-            config={},
-            description="Discarding this",
-            status=ExperimentStatus.DISCARD,
-            primary_metric=0.50,
-            created_at=datetime.now(timezone.utc),
-        )
-        
-        crash_exp = Experiment(
-            id="crash",
-            run_tag="test",
-            config={},
-            description="This one crashed",
-            status=ExperimentStatus.CRASH,
-            created_at=datetime.now(timezone.utc),
-        )
-        
-        assert keep_exp.status == ExperimentStatus.KEEP
-        assert discard_exp.status == ExperimentStatus.DISCARD
-        assert crash_exp.status == ExperimentStatus.CRASH

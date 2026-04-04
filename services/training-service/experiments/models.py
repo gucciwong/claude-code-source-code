@@ -41,7 +41,7 @@ class Experiment(BaseModel):
     commit_hash: Optional[str] = None          # Checkpoint version identifier
     
     # Configuration & Intent
-    config: dict                               # Full training config snapshot (hyperparameters)
+    config: Dict[str, Any]                     # Full training config snapshot (hyperparameters)
     description: str                           # What this experiment tried (human-readable rationale)
     
     # Status & Outcome
