@@ -1,4 +1,4 @@
-# Sovereign Coder Week 2 Execution Board
+# Sovereign Code Week 2 Execution Board
 
 > Scope Window: Foundation Month 1, Week 2
 > Alignment: F4.1 completion, F2.1 hardening, F1.3 benchmark validation, F3.1 kickoff

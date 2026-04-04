@@ -1,4 +1,4 @@
-﻿# Sovereign Coder - Product Requirements Document
+# Sovereign Code - Product Requirements Document
 
 **Version:** 1.0  
 **Date:** 2026-03-31  
@@ -26,9 +26,9 @@
 
 ## 1. Executive Summary
 
-### 1.1 What is Sovereign Coder?
+### 1.1 What is Sovereign Code?
 
-**Sovereign Coder** is a revolutionary AI-powered coding tool that runs 100% locally on consumer-grade hardware. Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Coder ensures:
+**Sovereign Code** is a revolutionary AI-powered coding tool that runs 100% locally on consumer-grade hardware. Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Code ensures:
 
 - **Zero data leakage** - Code never leaves your machine
 - **Full model ownership** - Train, customize, and own your AI model
@@ -38,7 +38,7 @@
 
 ### 1.2 The Problem
 
-| Pain Point | Current Solutions | Sovereign Coder Solution |
+| Pain Point | Current Solutions | Sovereign Code Solution |
 |------------|-------------------|-------------------------|
 | Data privacy concerns | Cloud AI tools with data policies | 100% local, no data transmission |
 | Generic models | One-size-fits-all AI | Industry-specific fine-tuned models |
@@ -51,10 +51,10 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                                                                          │
-│   SOVEREIGN CODER vs COMPETITORS                                        │
+│   SOVEREIGN CODE vs COMPETITORS                                        │
 │                                                                          │
 │   ┌───────────────┬──────────────┬──────────────┬──────────────────┐   │
-│   │    Feature    │ GitHub       │   Cursor     │ Sovereign Coder  │   │
+│   │    Feature    │ GitHub       │   Cursor     │ Sovereign Code  │   │
 │   │               │   Copilot    │   /Windsurf  │                  │   │
 │   ├───────────────┼──────────────┼──────────────┼──────────────────┤   │
 │   │ Local Running │      ✗       │      △      │        ✓        │   │
@@ -129,7 +129,7 @@ Addressable Market Analysis (2026)
 │   Privacy-Focused Segment          │     $3.2B (SAM)      │
 │   (Local + Enterprise Privacy)    │                      │
 │                                    │                      │
-│   Sovereign Coder Target           │     $800M (SOM)      │
+│   Sovereign Code Target           │     $800M (SOM)      │
 │   (Year 3 projection)             │                      │
 │                                                            │
 └────────────────────────────────────────────────────────────┘
@@ -236,7 +236,7 @@ Context-aware code completion supporting single-line, multi-line, and whole-func
 #### 4.2.3 Agent Mode (Autonomous Task Execution)
 
 **Description:**
-Sovereign Coder agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
+Sovereign Code agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
 
 **Requirements:**
 
@@ -464,7 +464,7 @@ Collaborative model training where teams share knowledge without sharing code.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        SOVEREIGN CODER - SYSTEM ARCHITECTURE             │
+│                        SOVEREIGN CODE - SYSTEM ARCHITECTURE             │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
@@ -674,7 +674,7 @@ Authorization: Bearer <local-api-key>
 {
   "model": "qwen2.5-coder-32b",
   "messages": [
-    {"role": "system", "content": "You are Sovereign Coder..."},
+    {"role": "system", "content": "You are Sovereign Code..."},
     {"role": "user", "content": "Write a function to..."}
   ],
   "max_tokens": 2048,
@@ -743,7 +743,7 @@ GET /api/federation/model/:round
 
 ### 7.1 Overview
 
-The self-improvement system enables Sovereign Coder to continuously enhance its own capabilities through usage, creating a virtuous cycle where the tool becomes better over time.
+The self-improvement system enables Sovereign Code to continuously enhance its own capabilities through usage, creating a virtuous cycle where the tool becomes better over time.
 
 ### 7.2 Data Collection Pipeline
 
@@ -1110,7 +1110,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| Sovereign Coder source unavailable | Medium | High | Build core from scratch; use Cursor alternatives |
+| Sovereign Code source unavailable | Medium | High | Build core from scratch; use Cursor alternatives |
 | Local model capability gap | High | Medium | Continuous prompt engineering; model selection |
 | Training instability | Medium | High | Robust evaluation pipeline; rollback mechanisms |
 | Hardware limitations | Low | High | Progressive model sizing; cloud fallback option |
@@ -1151,7 +1151,7 @@ Federated learning enables multiple organizations to collaboratively train AI mo
 
 ```
 Related Open Source Projects:
-├── Sovereign Coder - Inspiration for agent capabilities
+├── Sovereign Code - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference
@@ -1173,7 +1173,7 @@ Related Open Source Projects:
 ### 12.4 Contact
 
 For questions or collaboration inquiries:
-- **Project**: Sovereign Coder
+- **Project**: Sovereign Code
 - **Documentation**: This PRD
 - **Development**: Codex-based implementation
 

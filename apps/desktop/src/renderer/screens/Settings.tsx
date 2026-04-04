@@ -39,7 +39,7 @@ export function Settings() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
-        <p className="text-sm text-text-muted mt-1">Configure Sovereign Coder preferences</p>
+        <p className="text-sm text-text-muted mt-1">Configure Sovereign Code preferences</p>
       </div>
 
       {/* Tabs */}
@@ -281,7 +281,7 @@ export function Settings() {
 
             <div className="space-y-3">
               <h3 className="font-semibold text-text-primary">Opt-in Telemetry</h3>
-              <p className="text-xs text-text-muted mb-3">Help improve Sovereign Coder by sharing anonymous data</p>
+              <p className="text-xs text-text-muted mb-3">Help improve Sovereign Code by sharing anonymous data</p>
 
               <div className="space-y-2">
                 <label className="flex items-center gap-2 cursor-pointer">

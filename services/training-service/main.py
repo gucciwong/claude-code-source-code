@@ -1,5 +1,5 @@
 """
-Sovereign Coder Training Service - FastAPI backend
+Sovereign Code Training Service - FastAPI backend
 Handles training data collection, orchestration, and evaluation
 """
 
@@ -127,7 +127,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Sovereign Coder Training Service",
+    title="Sovereign Code Training Service",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -462,7 +462,7 @@ async def get_version_history(model_id: str, limit: int = 5):
 async def root():
     """API root"""
     return {
-        "service": "Sovereign Coder Training Service",
+        "service": "Sovereign Code Training Service",
         "version": "0.1.0",
         "docs": "/docs",
         "health": "/health",

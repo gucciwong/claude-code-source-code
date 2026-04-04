@@ -1,4 +1,4 @@
-# Sovereign Coder Week 4 Closure Board
+# Sovereign Code Week 4 Closure Board
 
 > Scope Window: Foundation Month 1, Week 4
 > Alignment: v0.1 release gate, defect burn-down, readiness sign-off, Sprint 2 handoff

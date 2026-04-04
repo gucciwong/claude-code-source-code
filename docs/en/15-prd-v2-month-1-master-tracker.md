@@ -1,4 +1,4 @@
-# Sovereign Coder Month 1 Master Tracker
+# Sovereign Code Month 1 Master Tracker
 
 > Scope: Foundation Phase Month 1 (Weeks 1-4)
 > Status: Active

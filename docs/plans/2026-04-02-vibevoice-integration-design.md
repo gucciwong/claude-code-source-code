@@ -1,17 +1,17 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
 # VibeVoice Integration Design
-**Sovereign Coder Voice-as-Interface Layer**
+**Sovereign Code Voice-as-Interface Layer**
 
 **Date:** 2026-04-02  
 **Status:** Design Review  
-**Author:** Sovereign Coder Brainstorm  
+**Author:** Sovereign Code Brainstorm  
 
 ---
 
 ## 1. Executive Summary
 
-Integrate Microsoft's **VibeVoice** (open-source voice AI) into Sovereign Coder to enable:
+Integrate Microsoft's **VibeVoice** (open-source voice AI) into Sovereign Code to enable:
 - **Voice commands** → Natural language to code (speech → ASR → prompt → code generation)
 - **Voice output** → Read code suggestions, errors, chat responses aloud (TTS)
 - **Hands-free coding** → Accessibility + improved developer flow state
@@ -26,13 +26,13 @@ Integrate Microsoft's **VibeVoice** (open-source voice AI) into Sovereign Coder 
 ## 2. Problem Statement
 
 ### Current State
-- Sovereign Coder has excellent **text-based** interface (inline completions, chat)
+- Sovereign Code has excellent **text-based** interface (inline completions, chat)
 - No voice interaction layer → excludes accessibility users, requires typing
 - Competitors (GitHub Copilot, Cursor) have basic voice but **cloud-based** → privacy leak
 
 ### Solution
 - **VibeVoice** = Microsoft's open-source voice models (ASR + TTS)
-- **Offline-first** = All processing on device (aligns with Sovereign Coder DNA)
+- **Offline-first** = All processing on device (aligns with Sovereign Code DNA)
 - **Two-way dialogue** = Speak intent, hear responses (natural coding rhythm)
 
 ### Target Users
@@ -87,7 +87,7 @@ Integrate Microsoft's **VibeVoice** (open-source voice AI) into Sovereign Coder 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
-│                    SOVEREIGN CODER + VIBEVOICE                      │
+│                    SOVEREIGN CODE + VIBEVOICE                      │
 │                                                                     │
 │  ┌──────────────────────────────────────────────────────────────┐  │
 │  │                    USER INTERFACE LAYER                      │  │
@@ -308,7 +308,7 @@ services/voice-service/
 
 ### Workflow 2: Desktop Voice Chat (Hands-Free Coding)
 ```
-1. Open Sovereign Coder desktop app → Models screen → Chat tab
+1. Open Sovereign Code desktop app → Models screen → Chat tab
 2. Click "🎤 Start Recording"
 3. Speak prompt: "Create a React component for user login"
 4. System shows live transcription
@@ -514,7 +514,7 @@ Voice Disabled (Fall back to text)
 - **vLLM** — Optional ASR speedup (KV-cache optimization)
 
 ### C. License Considerations
-- VibeVoice: MIT license ✅ (compatible with Sovereign Coder)
+- VibeVoice: MIT license ✅ (compatible with Sovereign Code)
 - Transformers: Apache 2.0 ✅
 - Ollama: Proprietary (models are open) ✅
 - **Conclusion:** No licensing conflicts

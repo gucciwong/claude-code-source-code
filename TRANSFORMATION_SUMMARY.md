@@ -1,4 +1,4 @@
-﻿# Sovereign Code v0.2.0 - Transformation Complete
+# Sovereign Code v0.2.0 - Transformation Complete
 
 **Date**: April 2, 2026  
 **Time**: ~3 hours of work  
@@ -8,7 +8,7 @@
 
 ## 🎯 What You Asked For
 
-1. ✅ **Rename "Sovereign Coder" → "Sovereign Code"**
+1. ✅ **Rename "Sovereign Code" → "Sovereign Code"**
    - Updated across entire project
    - Version bumped to 0.2.0
    - Reflects mission as independent model management system
@@ -324,7 +324,7 @@ npm test
 ## 🎯 Vision
 
 **Sovereign Code** is becoming the open-source alternative to:
-- ❌ Sovereign Coder → Ollama dependency issue
+- ❌ Sovereign Code → Ollama dependency issue
 - ❌ LMStudio → UI-only tool
 - ❌ Replicate → Cloud-based, not local
 

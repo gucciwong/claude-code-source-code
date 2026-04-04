@@ -1,7 +1,7 @@
 {
-  "name": "sovereign-coder-workspace",
+  "name": "sovereign-code-workspace",
   "version": "1.0.0",
-  "description": "Sovereign Coder monorepo for desktop app, VS Code extension, and local services.",
+  "description": "Sovereign Code monorepo for desktop app, VS Code extension, and local services.",
   "private": true,
   "type": "module",
   "workspaces": [

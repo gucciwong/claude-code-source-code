@@ -82,7 +82,7 @@ User sends message in Chat
 
 ### 🔧 VSCode Extension: Inline Completion Logging (New)
 
-**Location:** `extensions/sovereign-coder-training/`
+**Location:** `extensions/sovereign-code-training/`
 
 **What it does:**
 - Auto-detects code completions in VSCode editor
@@ -93,7 +93,7 @@ User sends message in Chat
 
 **Installation (development):**
 ```bash
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install && npm run build
 code --extensionDevelopmentPath=.
 ```
@@ -121,7 +121,7 @@ Developer types code in VSCode
 - ✅ Configurable (enable/disable, service URL)
 - ✅ Resilient (handles service disconnections gracefully)
 
-**Testing:** See `extensions/sovereign-coder-training/TESTING.md` (500+ lines, 8-part test suite)
+**Testing:** See `extensions/sovereign-code-training/TESTING.md` (500+ lines, 8-part test suite)
 
 ---
 
@@ -162,14 +162,14 @@ Developer types code in VSCode
 - `apps/desktop/INTEGRATION_VERIFICATION.md` (300+ lines)
 
 **VSCode Extension:**
-- `extensions/sovereign-coder-training/package.json`
-- `extensions/sovereign-coder-training/tsconfig.json`
-- `extensions/sovereign-coder-training/src/extension.ts` (420 lines)
-- `extensions/sovereign-coder-training/src/services/trainingClient.ts` (120 lines)
-- `extensions/sovereign-coder-training/README.md` (300+ lines)
-- `extensions/sovereign-coder-training/DEVELOPMENT.md` (300+ lines)
-- `extensions/sovereign-coder-training/TESTING.md` (500+ lines)
-- `extensions/sovereign-coder-training/Makefile`
+- `extensions/sovereign-code-training/package.json`
+- `extensions/sovereign-code-training/tsconfig.json`
+- `extensions/sovereign-code-training/src/extension.ts` (420 lines)
+- `extensions/sovereign-code-training/src/services/trainingClient.ts` (120 lines)
+- `extensions/sovereign-code-training/README.md` (300+ lines)
+- `extensions/sovereign-code-training/DEVELOPMENT.md` (300+ lines)
+- `extensions/sovereign-code-training/TESTING.md` (500+ lines)
+- `extensions/sovereign-code-training/Makefile`
 
 **Documentation:**
 - `DESKTOP_INTEGRATION_COMPLETE.md` (comprehensive summary)
@@ -204,7 +204,7 @@ npm run dev
 
 ### Terminal 3: Start VSCode Extension (Optional Testing)
 ```bash
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install
 npm run build
 code --extensionDevelopmentPath=.
@@ -233,7 +233,7 @@ curl http://localhost:8001/api/v1/training/stats
 **Quick test:** Send chat message → Training tab shows count incremented
 
 ### VSCode Extension Testing
-**See:** `extensions/sovereign-coder-training/TESTING.md` (500+ lines)
+**See:** `extensions/sovereign-code-training/TESTING.md` (500+ lines)
 - 8-part comprehensive test suite
 - Part 1-2: Setup + configuration
 - Part 3-4: Logging verification + stress testing
@@ -285,7 +285,7 @@ curl http://localhost:8001/api/v1/training/stats
 
 ```
 2e42037 (HEAD) docs: vscode extension testing & complete integration overview
-216ae76         feat(vscode-extension): sovereign coder training logger
+216ae76         feat(vscode-extension): sovereign code training logger
 118b08f         docs: desktop training service integration completion summary
 76dcb6f         docs(desktop): add integration verification guide
 31f88d6         feat(desktop): integrate training service into Chat & Training screens
@@ -365,9 +365,9 @@ Before shipping to users:
 - Summary: `DESKTOP_INTEGRATION_COMPLETE.md`
 
 **For VSCode Extension Issues:**
-- Docs: `extensions/sovereign-coder-training/README.md` (user guide)
-- Dev: `extensions/sovereign-coder-training/DEVELOPMENT.md` (developer guide)
-- Testing: `extensions/sovereign-coder-training/TESTING.md` (full test suite)
+- Docs: `extensions/sovereign-code-training/README.md` (user guide)
+- Dev: `extensions/sovereign-code-training/DEVELOPMENT.md` (developer guide)
+- Testing: `extensions/sovereign-code-training/TESTING.md` (full test suite)
 
 **For Training Service Issues:**
 - Docs: `services/training-service/DEPLOYMENT_GUIDE.md` (deployment)

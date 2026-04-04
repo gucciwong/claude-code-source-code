@@ -14,7 +14,7 @@ export class SovereignCompletionProvider implements vscode.InlineCompletionItemP
     context: vscode.InlineCompletionContext,
     token: vscode.CancellationToken,
   ): Promise<vscode.InlineCompletionItem[] | vscode.InlineCompletionList> {
-    const config = vscode.workspace.getConfiguration('sovereign-coder')
+    const config = vscode.workspace.getConfiguration('sovereign-code')
     const enabled = config.get<boolean>('enabled', true)
     const triggerOnTyping = config.get<boolean>('triggerOnTyping', true)
 

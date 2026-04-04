@@ -1,4 +1,4 @@
-# Sovereign Coder Training Logger — VSCode Extension
+# Sovereign Code Training Logger — VSCode Extension
 
 Automatically logs code completions from your editor to local training service for model fine-tuning.
 
@@ -17,7 +17,7 @@ Automatically logs code completions from your editor to local training service f
 ```bash
 # Clone repo
 git clone <repo-url>
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 
 # Install dependencies
 npm install
@@ -31,7 +31,7 @@ npm run build
 
 ### From VSCode Marketplace (When Published)
 
-Search for "Sovereign Coder Training" in VSCode Extensions
+Search for "Sovereign Code Training" in VSCode Extensions
 
 ## Setup
 
@@ -53,7 +53,7 @@ curl http://localhost:8001/health
 
 - Open VSCode
 - Go to Extensions: `Cmd+Shift+X` / `Ctrl+Shift+X`
-- Search: "Sovereign Coder Training"
+- Search: "Sovereign Code Training"
 - Click Install
 
 ### 3. Configure Service URL (Optional)
@@ -61,7 +61,7 @@ curl http://localhost:8001/health
 If service not on `localhost:8001`, update settings:
 
 1. Open VSCode Settings: `Cmd+,` / `Ctrl+,`
-2. Search: "sovereign coder"
+2. Search: "sovereign code"
 3. Update `sovereignCoder.training.serviceUrl`
 4. Reload VSCode window
 
@@ -99,7 +99,7 @@ Click to open training dashboard stats.
 
 ## Configuration
 
-Open VSCode Settings (`Cmd+,` / `Ctrl+,`), search "sovereign coder":
+Open VSCode Settings (`Cmd+,` / `Ctrl+,`), search "sovereign code":
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|

@@ -68,7 +68,7 @@ export function Sidebar() {
     >
       {/* Logo area */}
       <div className="px-4 py-4 border-b border-border-subtle">
-        <span className="text-text-primary font-semibold text-sm">Sovereign Coder</span>
+        <span className="text-text-primary font-semibold text-sm">Sovereign Code</span>
       </div>
 
       {/* Main navigation */}

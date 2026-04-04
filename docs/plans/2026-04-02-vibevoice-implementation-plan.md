@@ -4,7 +4,7 @@
 
 > **For contributors:** Use the executing-plans skill to implement this plan task-by-task.
 
-**Goal:** Add voice input/output capabilities to Sovereign Coder (VSCode extension + Desktop app) using VibeVoice models, enabling developers to speak code intent and hear responses.
+**Goal:** Add voice input/output capabilities to Sovereign Code (VSCode extension + Desktop app) using VibeVoice models, enabling developers to speak code intent and hear responses.
 
 **Architecture:** Python FastAPI backend runs VibeVoice ASR (speech-to-text) and Realtime TTS (text-to-speech) models locally. VSCode extension and Desktop app call backend via HTTP, capture browser audio, and playback responses.
 
@@ -54,7 +54,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sovereign-voice-service"
 version = "0.1.0"
-description = "Voice AI service for Sovereign Coder using VibeVoice"
+description = "Voice AI service for Sovereign Code using VibeVoice"
 requires-python = ">=3.10"
 dependencies = []
 
@@ -1086,7 +1086,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register voice toggle command (Ctrl+Shift+V)
   const voiceCommand = vscode.commands.registerCommand(
-    'sovereign-coder.toggleVoice',
+    'sovereign-code.toggleVoice',
     () => voiceController.toggleRecording(context)
   );
 
@@ -1104,7 +1104,7 @@ Modify `apps/vscode-extension/package.json`:
 {
   "keybindings": [
     {
-      "command": "sovereign-coder.toggleVoice",
+      "command": "sovereign-code.toggleVoice",
       "key": "ctrl+shift+v",
       "mac": "cmd+shift+v",
       "when": "editorFocus"

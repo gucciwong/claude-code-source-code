@@ -1,7 +1,7 @@
 # VSCode Extension Structure
 
 ```
-extensions/sovereign-coder-training/
+extensions/sovereign-code-training/
 ├── src/
 │   ├── extension.ts           # Main extension file + inline completion hook
 │   └── services/
@@ -18,7 +18,7 @@ extensions/sovereign-coder-training/
 
 ```bash
 # 1. Install dependencies
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install
 
 # 2. Open VSCode development host
@@ -67,7 +67,7 @@ npm run watch
 
 2. Start VSCode extension development host:
    ```bash
-   cd extensions/sovereign-coder-training
+   cd extensions/sovereign-code-training
    npm run build
    code --extensionDevelopmentPath=.
    ```
@@ -234,7 +234,7 @@ curl http://localhost:8001/api/v1/training/stats
 npm run build
 npx vsce package
 
-# Creates: sovereign-coder-training-0.1.0.vsix
+# Creates: sovereign-code-training-0.1.0.vsix
 # Install locally: Extensions → Install from VSIX
 ```
 

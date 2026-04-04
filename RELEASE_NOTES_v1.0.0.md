@@ -1,4 +1,4 @@
-﻿# Sovereign Coder v1.0.0 — Release Notes
+# Sovereign Code v1.0.0 — Release Notes
 
 **Release Date**: 2026-04-02  
 **Build Status**: ✅ Production Ready  
@@ -54,7 +54,7 @@
 ## Architecture
 
 ```
-Sovereign Coder v1.0.0
+Sovereign Code v1.0.0
 │
 ├─── apps/desktop/ (Electron + React)
 │    ├─── src/main/
@@ -92,7 +92,7 @@ Sovereign Coder v1.0.0
 │
 ├─── SETUP_GUIDE.md (Installation & setup instructions)
 ├─── LIVE_INTEGRATION_TESTING_GUIDE.md (E2E testing)
-├─── README.md (Updated with Sovereign Coder info)
+├─── README.md (Updated with Sovereign Code info)
 └─── CLAUDE.md (Project guidelines & design tokens)
 ```
 
@@ -110,8 +110,8 @@ Sovereign Coder v1.0.0
 **Installation:**
 ```bash
 # Clone and enter repository
-git clone https://github.com/YOUR_ORG/sovereign-coder.git
-cd sovereign-coder
+git clone https://github.com/YOUR_ORG/sovereign-code.git
+cd sovereign-code
 
 # Install Node dependencies
 cd apps/desktop
@@ -236,7 +236,7 @@ VITE_TRAINING_FEATURES_ENABLED=true
 
 ### Design Tokens
 
-Sovereign Coder uses Tailwind CSS v4 with custom design tokens. To modify colors:
+Sovereign Code uses Tailwind CSS v4 with custom design tokens. To modify colors:
 
 **File:** `apps/desktop/src/renderer/styles/tokens.css`
 
@@ -424,7 +424,7 @@ This project contains two license scopes:
    - Commercial use strictly prohibited
 
 2. **`apps/desktop/` and `services/` Directories** — Open Development
-   - Sovereign Coder desktop application
+   - Sovereign Code desktop application
    - Licensed under [YOUR_LICENSE_HERE]
    - See LICENSE file for details
 
@@ -451,8 +451,8 @@ Built with:
 - 🧪 [Integration Testing](LIVE_INTEGRATION_TESTING_GUIDE.md)
 - 📖 [Architecture & Guidelines](CLAUDE.md)
 - 🏗️ [Implementation Plans](docs/plans/)
-- 🐛 [Issue Tracking](https://github.com/YOUR_ORG/sovereign-coder/issues)
-- 💬 [Discussions](https://github.com/YOUR_ORG/sovereign-coder/discussions)
+- 🐛 [Issue Tracking](https://github.com/YOUR_ORG/sovereign-code/issues)
+- 💬 [Discussions](https://github.com/YOUR_ORG/sovereign-code/discussions)
 
 ---
 
@@ -461,5 +461,5 @@ Built with:
 **Last Updated: 2026-04-02**  
 **Build Date: April 2, 2026**  
 
-🚀 Thank you for using Sovereign Coder!
+🚀 Thank you for using Sovereign Code!
 

@@ -1,4 +1,4 @@
-# Sovereign Coder Sprint 1 Deliverables
+# Sovereign Code Sprint 1 Deliverables
 
 > Sprint Window: Weeks 1-4 (Foundation Month 1)
 > Phase Alignment: Foundation Month 1
@@ -7,7 +7,7 @@
 
 ## 1. Sprint Objective
 
-Deliver the first executable slice of the Sovereign Coder Foundation phase: local inference baseline, completion MVP, and developer-facing entry points.
+Deliver the first executable slice of the Sovereign Code Foundation phase: local inference baseline, completion MVP, and developer-facing entry points.
 
 ## 2. Sprint Deliverables
 

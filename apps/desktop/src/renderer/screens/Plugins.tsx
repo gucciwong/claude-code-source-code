@@ -32,7 +32,7 @@ export function Plugins() {
             <RefreshCw size={14} aria-hidden="true" />
           </button>
         </div>
-        <p className="text-text-secondary text-sm">Extend Sovereign Coder with custom plugins</p>
+        <p className="text-text-secondary text-sm">Extend Sovereign Code with custom plugins</p>
       </div>
 
       <Tabs.Root defaultValue="installed" className="flex flex-col flex-1 min-h-0">

@@ -13,7 +13,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build:win": "npm run build && electron-builder --win --publish never",
-    "build:win:exe": "npm run build && electron-builder --win nsis --publish never"
+    "build:win:exe": "npm run build && electron-builder --win nsis --publish never",
+    "build:mac": "npm run build && electron-builder --mac --publish never",
+    "build:linux": "npm run build && electron-builder --linux --publish never"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -54,8 +56,8 @@
     "vitest": "^1.6.0"
   },
   "build": {
-    "appId": "com.sovereign-coder.app",
-    "productName": "Sovereign Coder",
+    "appId": "com.sovereign-code.app",
+    "productName": "Sovereign Code",
     "directories": {
       "output": "dist",
       "buildResources": "resources"
@@ -83,7 +85,7 @@
       "createStartMenuShortcut": true
     },
     "portable": {
-      "artifactName": "Sovereign-Coder-${version}-portable.exe"
+      "artifactName": "Sovereign-Code-${version}-portable.exe"
     }
   }
 }

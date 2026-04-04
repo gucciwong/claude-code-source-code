@@ -1,4 +1,4 @@
-﻿% VibeVoice Phase 1B - Implementation Complete
+% VibeVoice Phase 1B - Implementation Complete
 # VibeVoice Phase 1B Implementation Summary
 
 **Status:** ✅ COMPLETE  
@@ -9,7 +9,7 @@
 
 ## Overview
 
-VibeVoice Phase 1B delivers a complete voice I/O system for Sovereign Coder desktop + VSCode extension. The implementation includes a production-ready Python backend (FastAPI) with ASR/TTS models and an accessible React desktop UI.
+VibeVoice Phase 1B delivers a complete voice I/O system for Sovereign Code desktop + VSCode extension. The implementation includes a production-ready Python backend (FastAPI) with ASR/TTS models and an accessible React desktop UI.
 
 ---
 
@@ -205,7 +205,7 @@ import { VoicePanel } from '@/components/voice'
 
 ## Design System Compliance
 
-All UI components follow **Sovereign Coder design system**:
+All UI components follow **Sovereign Code design system**:
 
 | Element | Tailwind Class |
 |---|---|
@@ -336,7 +336,7 @@ Desktop:
 
 ## Quick Links
 
-- **Repository:** `d:\Users\Admin\Documents\GitHub\sovereign-coder`
+- **Repository:** `d:\Users\Admin\Documents\GitHub\sovereign-code`
 - **Worktree:** `.worktrees/feat/vibevoice-phase1b`
 - **Branch:** `feat/vibevoice-phase1b`
 - **Plan:** `docs/plans/2026-04-01-vibevoice-implementation-plan.md`

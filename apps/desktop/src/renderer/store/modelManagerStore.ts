@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+const pollIntervals = new Map<string, ReturnType<typeof setInterval>>()
+
 export type Quantization = 'fp32' | 'int8' | 'int4'
 
 export interface ModelInfo {
@@ -34,6 +36,7 @@ export interface ModelManagerStore {
   delete_model: (model_id: string) => Promise<void>
   search_models: (query: string) => Promise<ModelInfo[]>
   cancel_download: (model_id: string) => Promise<void>
+  cleanup_polls: () => void
   get_popular_models: () => ModelInfo[]
   
   // Status tracking
@@ -94,6 +97,8 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
   },
 
   download_model: async (model_id: string, quantization?: Quantization) => {
+    if (get().downloads_in_progress[model_id] !== undefined) return // already downloading
+
     try {
       const response = await fetch(
         `http://localhost:8002/api/v1/models/${model_id}/download`,
@@ -112,12 +117,14 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
       }))
 
       // Poll download progress
+      let failCount = 0
       const pollInterval = setInterval(async () => {
         try {
           const statusResponse = await fetch(
             'http://localhost:8002/api/v1/downloads/status'
           )
           const status = await statusResponse.json()
+          failCount = 0 // reset on success
           
           if (status.queue?.[model_id]) {
             set(state => ({
@@ -129,9 +136,10 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
           } else {
             // Download complete
             clearInterval(pollInterval)
+            pollIntervals.delete(model_id)
             await get().list_cached()
             set(state => {
-              const { [model_id]: _, ...rest } =state.downloads_in_progress
+              const { [model_id]: _, ...rest } = state.downloads_in_progress
               return {
                 downloads_in_progress: rest,
                 download_queue: state.download_queue.filter(m => m !== model_id)
@@ -139,9 +147,22 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
             })
           }
         } catch (err) {
-          console.error('Failed to poll download status:', err)
+          failCount++
+          if (failCount >= 5) {
+            clearInterval(pollInterval)
+            pollIntervals.delete(model_id)
+            set(state => {
+              const { [model_id]: _, ...rest } = state.downloads_in_progress
+              return {
+                downloads_in_progress: rest,
+                download_queue: state.download_queue.filter(m => m !== model_id),
+                last_error: `Download status polling failed after 5 retries`
+              }
+            })
+          }
         }
       }, 1000)
+      pollIntervals.set(model_id, pollInterval)
     } catch (err) {
       set({ last_error: `Download failed: ${err}` })
     }
@@ -205,6 +226,12 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
         { method: 'POST' }
       )
       
+      const existingInterval = pollIntervals.get(model_id)
+      if (existingInterval) {
+        clearInterval(existingInterval)
+        pollIntervals.delete(model_id)
+      }
+
       set(state => {
         const { [model_id]: _, ...rest } = state.downloads_in_progress
         return {
@@ -215,6 +242,13 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
     } catch (err) {
       set({ last_error: `Cancel failed: ${err}` })
     }
+  },
+
+  cleanup_polls: () => {
+    for (const [, interval] of pollIntervals) {
+      clearInterval(interval)
+    }
+    pollIntervals.clear()
   },
 
   get_popular_models: () => [

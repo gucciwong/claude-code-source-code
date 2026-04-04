@@ -1,6 +1,6 @@
 {
-  "name": "sovereign-coder",
-  "displayName": "Sovereign Coder",
+  "name": "sovereign-code",
+  "displayName": "Sovereign Code",
   "description": "Local AI code completions powered by Ollama",
   "version": "0.1.0",
   "publisher": "sovereign-ai-labs",
@@ -17,54 +17,54 @@
   "contributes": {
     "commands": [
       {
-        "command": "sovereign-coder.toggleCompletions",
-        "title": "Sovereign Coder: Toggle Inline Completions"
+        "command": "sovereign-code.toggleCompletions",
+        "title": "Sovereign Code: Toggle Inline Completions"
       }
     ],
     "configuration": {
-      "title": "Sovereign Coder",
+      "title": "Sovereign Code",
       "properties": {
-        "sovereign-coder.enabled": {
+        "sovereign-code.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable inline code completions"
         },
-        "sovereign-coder.ollamaUrl": {
+        "sovereign-code.ollamaUrl": {
           "type": "string",
           "default": "http://localhost:11434",
           "description": "Ollama server base URL"
         },
-        "sovereign-coder.model": {
+        "sovereign-code.model": {
           "type": "string",
           "default": "qwen2.5-coder:7b",
           "description": "Ollama model to use for completions"
         },
-        "sovereign-coder.maxTokens": {
+        "sovereign-code.maxTokens": {
           "type": "number",
           "default": 128,
           "description": "Maximum tokens to generate per completion"
         },
-        "sovereign-coder.triggerOnTyping": {
+        "sovereign-code.triggerOnTyping": {
           "type": "boolean",
           "default": true,
           "description": "Trigger completions automatically while typing"
         },
-        "sovereign-coder.ragEnabled": {
+        "sovereign-code.ragEnabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable RAG project context in completions (requires nomic-embed-text in Ollama)"
         },
-        "sovereign-coder.embeddingModel": {
+        "sovereign-code.embeddingModel": {
           "type": "string",
           "default": "nomic-embed-text",
           "description": "Ollama model to use for generating embeddings"
         },
-        "sovereign-coder.ragTopK": {
+        "sovereign-code.ragTopK": {
           "type": "number",
           "default": 3,
           "description": "Number of context chunks to retrieve per completion"
         },
-        "sovereign-coder.ragMaxContextChars": {
+        "sovereign-code.ragMaxContextChars": {
           "type": "number",
           "default": 2000,
           "description": "Maximum characters of retrieved context to prepend to the prompt"

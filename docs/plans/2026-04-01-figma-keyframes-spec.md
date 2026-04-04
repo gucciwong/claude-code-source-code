@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder — Figma Key Frames & Component Spec
+# Sovereign Code — Figma Key Frames & Component Spec
 
 **Version:** 1.0  
 **Date:** 2026-04-01  
@@ -15,7 +15,7 @@ Import `tokens.json` (sibling file) into Figma via **Tokens Studio** or the **Va
 ## 0. Figma File Setup
 
 ```
-File name:  Sovereign Coder — Design System
+File name:  Sovereign Code — Design System
 Pages:
   1. 🎨 Tokens & Styles    (colour styles, text styles, effect styles)
   2. 🧩 Components         (all reusable components)
@@ -479,7 +479,7 @@ Canvas size: 1280 × 800
 Layers (top to bottom):
   TitleBar [1280 × 32] bg/surface-1, border-bottom border/subtle
     Left:  traffic lights placeholder (macOS) OR window controls (Win)
-    Centre: "Sovereign Coder — Qwen2.5-32B ▾" text/base text/secondary
+    Centre: "Sovereign Code — Qwen2.5-32B ▾" text/base text/secondary
     Right: [–][□][✕] controls
 
   Sidebar [220 × 740] bg/surface-1, border-right border/subtle

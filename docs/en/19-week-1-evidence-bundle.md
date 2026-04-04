@@ -1,4 +1,4 @@
-# Sovereign Coder — Week 1 Evidence Bundle
+# Sovereign Code — Week 1 Evidence Bundle
 
 > Date: 2026-04-03 (Friday)
 > Week: Foundation Month 1, Week 1
@@ -111,7 +111,7 @@ node scripts/sovereign-week1-runtime-check.mjs --vram 8GB
 
 Expected output:
 ```
-Sovereign Coder — Runtime Check
+Sovereign Code — Runtime Check
 Host: 127.0.0.1:11434
 Status: reachable
 ...

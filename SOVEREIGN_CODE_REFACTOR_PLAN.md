@@ -3,7 +3,7 @@
 
 ---
 
-## Phase 1: Rename Project (Sovereign Coder → Sovereign Code)
+## Phase 1: Rename Project (Sovereign Code → Sovereign Code)
 
 ### 1.1 Project Configuration Files
 - [ ] `package.json` - name, description

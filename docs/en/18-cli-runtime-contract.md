@@ -1,4 +1,4 @@
-# Sovereign Coder — CLI and Runtime Contract
+# Sovereign Code — CLI and Runtime Contract
 
 > Version: 1.0.0
 > Date: 2026-04-03
@@ -6,7 +6,7 @@
 > Spec reference: docs/en/09-prd-v2-kpi-instrumentation-spec.md §3, §4
 
 This document is the authoritative reference for all CLI scripts, REST API endpoints, and
-event payload schemas shipped in Sovereign Coder v0.8.x (Week 1). All downstream tooling
+event payload schemas shipped in Sovereign Code v0.8.x (Week 1). All downstream tooling
 (CI, the VS Code extension, the desktop app) must conform to the contracts defined here.
 
 ---
@@ -39,7 +39,7 @@ node scripts/sovereign-week1-runtime-check.mjs [options]
 
 ```
 $ node scripts/sovereign-week1-runtime-check.mjs --vram 8GB
-Sovereign Coder — Runtime Check
+Sovereign Code — Runtime Check
 Host: 127.0.0.1:11434
 Status: reachable
 Models: 2

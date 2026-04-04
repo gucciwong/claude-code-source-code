@@ -1,4 +1,4 @@
-﻿# Sovereign Coder v1.0.0 — Deployment & Distribution Guide
+# Sovereign Code v1.0.0 — Deployment & Distribution Guide
 
 **Status**: Production Ready ✅  
 **Build Version**: 1.0.0  
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This guide covers deploying Sovereign Coder from source code to end-user packages for Windows, macOS, and Linux.
+This guide covers deploying Sovereign Code from source code to end-user packages for Windows, macOS, and Linux.
 
 ### Deployment Flow
 
@@ -22,15 +22,15 @@ Source Code (GitHub)
     │
     ├─ Windows Package
     │   └─ npm run dist:win
-    │       → sovereign-coder-1.0.0.exe (installer)
+    │       → sovereign-code-1.0.0.exe (installer)
     │
     ├─ macOS Package
     │   └─ npm run dist:mac
-    │       → Sovereign-Coder-1.0.0.dmg (installer)
+    │       → Sovereign-Code-1.0.0.dmg (installer)
     │
     ├─ Linux Package
     │   └─ npm run dist:linux
-    │       → sovereign-coder-1.0.0.AppImage (executable)
+    │       → sovereign-code-1.0.0.AppImage (executable)
     │
     └─ Release
         ├─ GitHub Release
@@ -83,8 +83,8 @@ For **Linux packages**:
 
 ```powershell
 # Clone repository
-git clone https://github.com/YOUR_ORG/sovereign-coder.git
-cd sovereign-coder
+git clone https://github.com/YOUR_ORG/sovereign-code.git
+cd sovereign-code
 
 # Verify clean git state
 git status                  # Should be clean with no uncommitted changes
@@ -179,7 +179,7 @@ Test-Path "out/renderer/assets"         # Should be True
 npm run dist:win
 
 # Output location:
-# dist/Sovereign Coder Setup 1.0.0.exe  (~300-400 MB depending on assets)
+# dist/Sovereign Code Setup 1.0.0.exe  (~300-400 MB depending on assets)
 
 # To test installer:
 # - Run the .exe file
@@ -207,8 +207,8 @@ npm run dist:win
 npm run dist:mac
 
 # Output location:
-# dist/Sovereign Coder-1.0.0-arm64.dmg  (Apple Silicon)
-# dist/Sovereign Coder-1.0.0-x64.dmg    (Intel)
+# dist/Sovereign Code-1.0.0-arm64.dmg  (Apple Silicon)
+# dist/Sovereign Code-1.0.0-x64.dmg    (Intel)
 
 # To test DMG:
 # - Double-click to mount
@@ -238,11 +238,11 @@ npm run dist:mac
 npm run dist:linux
 
 # Output location:
-# dist/sovereign-coder-1.0.0.AppImage  (~500-600 MB)
+# dist/sovereign-code-1.0.0.AppImage  (~500-600 MB)
 
 # To test AppImage:
-chmod +x sovereign-coder-1.0.0.AppImage
-./sovereign-coder-1.0.0.AppImage
+chmod +x sovereign-code-1.0.0.AppImage
+./sovereign-code-1.0.0.AppImage
 
 # Or install fuse if needed:
 # Ubuntu/Debian: sudo apt-get install libfuse2
@@ -269,7 +269,7 @@ chmod +x sovereign-coder-1.0.0.AppImage
 
 ```bash
 # Tag the release
-git tag -a v1.0.0 -m "Sovereign Coder v1.0.0 Release"
+git tag -a v1.0.0 -m "Sovereign Code v1.0.0 Release"
 git push origin v1.0.0
 
 # Verify tag created
@@ -286,7 +286,7 @@ gh release create v1.0.0 --generate-notes
 
 # Or with custom release notes
 gh release create v1.0.0 \
-  --title "Sovereign Coder v1.0.0" \
+  --title "Sovereign Code v1.0.0" \
   --notes "See RELEASE_NOTES_v1.0.0.md for full details"
 ```
 
@@ -294,7 +294,7 @@ Or manually via GitHub web interface:
 1. Go to Releases page
 2. Click "Draft a new release"
 3. Tag version: `v1.0.0`
-4. Title: "Sovereign Coder v1.0.0"
+4. Title: "Sovereign Code v1.0.0"
 5. Description: Copy from `RELEASE_NOTES_v1.0.0.md`
 6. Upload assets (see Step 3)
 
@@ -305,11 +305,11 @@ Attach built packages to the GitHub release:
 ```bash
 # After creating release, upload assets
 gh release upload v1.0.0 \
-  dist/'Sovereign Coder Setup 1.0.0.exe' \
-  dist/'Sovereign Coder-1.0.0-arm64.dmg' \
-  dist/'Sovereign Coder-1.0.0-x64.dmg' \
-  dist/sovereign-coder-1.0.0.AppImage \
-  dist/sovereign-coder-1.0.0.rpm
+  dist/'Sovereign Code Setup 1.0.0.exe' \
+  dist/'Sovereign Code-1.0.0-arm64.dmg' \
+  dist/'Sovereign Code-1.0.0-x64.dmg' \
+  dist/sovereign-code-1.0.0.AppImage \
+  dist/sovereign-code-1.0.0.rpm
 
 # Or upload manually on GitHub website:
 # - Drag files to release assets section
@@ -365,16 +365,16 @@ curl -L "https://github.com/YOUR_ORG/.../Sovereign%20Coder-1.0.0-arm64.dmg" -o a
 
 # Mount and test
 hdiutil mount app.dmg
-cp -r /Volumes/"Sovereign Coder"/Sovereign\ Coder.app ~/Applications/
+cp -r /Volumes/"Sovereign Code"/Sovereign\ Coder.app ~/Applications/
 
 # Launch and verify
-open ~/Applications/"Sovereign Coder.app"
+open ~/Applications/"Sovereign Code.app"
 ```
 
 **Linux:**
 ```bash
 # Download AppImage
-curl -L "https://github.com/YOUR_ORG/.../sovereign-coder-1.0.0.AppImage" -o app.AppImage
+curl -L "https://github.com/YOUR_ORG/.../sovereign-code-1.0.0.AppImage" -o app.AppImage
 chmod +x app.AppImage
 
 # Run and verify
@@ -393,7 +393,7 @@ Create `scripts/deploy.ps1` for one-command deployment:
 
 ```powershell
 #!/usr/bin/env pwsh
-# Sovereign Coder Deployment Script
+# Sovereign Code Deployment Script
 # Usage: .\scripts\deploy.ps1 -Version "1.0.0" -Platform "windows"
 
 param(
@@ -405,7 +405,7 @@ param(
     [string]$Platform = "all"
 )
 
-Write-Host "Deploying Sovereign Coder v$Version" -ForegroundColor Green
+Write-Host "Deploying Sovereign Code v$Version" -ForegroundColor Green
 
 # Step 1: Verify environment
 Write-Host "Step 1: Verifying environment..." -ForegroundColor Blue
@@ -541,7 +541,7 @@ Distribution Packages:
 Create `.github/workflows/deploy.yml`:
 
 ```yaml
-name: Deploy Sovereign Coder
+name: Deploy Sovereign Code
 
 on:
   release:
@@ -619,7 +619,7 @@ npm run dist:mac -- --publish=never
 
 **Linux AppImage not executable**
 ```bash
-chmod +x sovereign-coder-*.AppImage
+chmod +x sovereign-code-*.AppImage
 ```
 
 ---

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Week 1 benchmark helper for Sovereign Coder.
+ * Week 1 benchmark helper for Sovereign Code.
  *
  * Input samples represent local runs from completion/inference traces.
  * Each sample must include:

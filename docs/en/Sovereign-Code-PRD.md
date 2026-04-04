@@ -1,4 +1,4 @@
-﻿# Sovereign Code - Product Requirements Document
+# Sovereign Code - Product Requirements Document
 
 **Version:** 2.0  
 **Date:** 2026-04-02  
@@ -31,7 +31,7 @@
 
 ### 1.1 What is Sovereign Code?
 
-**Sovereign Code** (formerly Sovereign Coder) is an enterprise AI coding platform that runs 100% locally. It has evolved from a personal coding tool into an organization-wide knowledge management system where every staff member — not just developers — can:
+**Sovereign Code** (formerly Sovereign Code) is an enterprise AI coding platform that runs 100% locally. It has evolved from a personal coding tool into an organization-wide knowledge management system where every staff member — not just developers — can:
 
 1. **Build tools quickly** — Use AI assistance to rapidly create scripts, automations, and internal tools to solve daily problems
 2. **Build a personal knowledge library** — AI learns from how you work and builds a searchable memory of your domain expertise; the more you use it, the smarter it gets about *your* patterns
@@ -166,7 +166,7 @@ Addressable Market Analysis (2026)
 │   Privacy-Focused Segment          │     $3.2B (SAM)      │
 │   (Local + Enterprise Privacy)    │                      │
 │                                    │                      │
-│   Sovereign Coder Target           │     $800M (SOM)      │
+│   Sovereign Code Target           │     $800M (SOM)      │
 │   (Year 3 projection)             │                      │
 │                                                            │
 └────────────────────────────────────────────────────────────┘
@@ -285,7 +285,7 @@ Context-aware code completion supporting single-line, multi-line, and whole-func
 #### 4.2.3 Agent Mode (Autonomous Task Execution)
 
 **Description:**
-Sovereign Coder agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
+Sovereign Code agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
 
 **Requirements:**
 
@@ -652,7 +652,7 @@ Instead of a single model answer, four specialized LoRA adapters run in parallel
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        SOVEREIGN CODER - SYSTEM ARCHITECTURE             │
+│                        SOVEREIGN CODE - SYSTEM ARCHITECTURE             │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
@@ -862,7 +862,7 @@ Authorization: Bearer <local-api-key>
 {
   "model": "qwen2.5-coder-32b",
   "messages": [
-    {"role": "system", "content": "You are Sovereign Coder..."},
+    {"role": "system", "content": "You are Sovereign Code..."},
     {"role": "user", "content": "Write a function to..."}
   ],
   "max_tokens": 2048,
@@ -931,7 +931,7 @@ GET /api/federation/model/:round
 
 ### 7.1 Overview
 
-The self-improvement system enables Sovereign Coder to continuously enhance its own capabilities through usage, creating a virtuous cycle where the tool becomes better over time.
+The self-improvement system enables Sovereign Code to continuously enhance its own capabilities through usage, creating a virtuous cycle where the tool becomes better over time.
 
 ### 7.2 Data Collection Pipeline
 
@@ -1552,7 +1552,7 @@ Detailed references:
 
 ```
 Related Open Source Projects:
-├── Sovereign Coder - Inspiration for agent capabilities
+├── Sovereign Code - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference

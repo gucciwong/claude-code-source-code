@@ -10,6 +10,7 @@ interface SystemState {
   trainingStatus: 'idle' | 'running' | 'complete'
   federationPeers: number
   ollamaOnline: boolean
+  ollamaConnectionError: string | null
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
 }
@@ -24,6 +25,7 @@ export const useSystemStore = create<SystemState>((set) => ({
   trainingStatus: 'idle',
   federationPeers: 0,
   ollamaOnline: false,
+  ollamaConnectionError: null,
   theme: 'dark',
   setTheme: (theme) => set({ theme }),
 }))

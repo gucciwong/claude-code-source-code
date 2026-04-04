@@ -1,7 +1,7 @@
 """VibeVoice Service - Voice I/O for VSCode + Desktop."""
 
 __version__ = "0.1.0"
-__author__ = "Sovereign Coder"
+__author__ = "Sovereign Code"
 
 from voice_service.models.whisper import WhisperASR
 from voice_service.models.tts import GTTSAPI

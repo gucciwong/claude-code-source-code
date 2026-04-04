@@ -20,7 +20,7 @@
 | Provider method | `provideInlineCompletionItems(doc, pos, ctx, token): ProviderResult<InlineCompletionList \| InlineCompletionItem[]>` |
 | Single completion | `new vscode.InlineCompletionItem(insertText: string, range?: Range)` |
 | Cancellation | `token.isCancellationRequested` — check before AND after any `await` |
-| Config read | `vscode.workspace.getConfiguration('sovereign-coder').get<T>(key, default)` |
+| Config read | `vscode.workspace.getConfiguration('sovereign-code').get<T>(key, default)` |
 | Status bar | `vscode.window.createStatusBarItem(id, alignment, priority)` → `.show()` |
 | Lifecycle | `context.subscriptions.push(disposable)` |
 | Trigger kinds | `vscode.InlineCompletionTriggerKind.Invoke = 0`, `Automatic = 1` |
@@ -69,8 +69,8 @@ apps/vscode-extension/
 
 ```json
 {
-  "name": "sovereign-coder",
-  "displayName": "Sovereign Coder",
+  "name": "sovereign-code",
+  "displayName": "Sovereign Code",
   "description": "Local AI code completions powered by Ollama",
   "version": "0.1.0",
   "publisher": "sovereign-ai-labs",
@@ -83,34 +83,34 @@ apps/vscode-extension/
   "contributes": {
     "commands": [
       {
-        "command": "sovereign-coder.toggleCompletions",
-        "title": "Sovereign Coder: Toggle Inline Completions"
+        "command": "sovereign-code.toggleCompletions",
+        "title": "Sovereign Code: Toggle Inline Completions"
       }
     ],
     "configuration": {
-      "title": "Sovereign Coder",
+      "title": "Sovereign Code",
       "properties": {
-        "sovereign-coder.enabled": {
+        "sovereign-code.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable inline code completions"
         },
-        "sovereign-coder.ollamaUrl": {
+        "sovereign-code.ollamaUrl": {
           "type": "string",
           "default": "http://localhost:11434",
           "description": "Ollama server base URL"
         },
-        "sovereign-coder.model": {
+        "sovereign-code.model": {
           "type": "string",
           "default": "qwen2.5-coder:7b",
           "description": "Ollama model to use for completions"
         },
-        "sovereign-coder.maxTokens": {
+        "sovereign-code.maxTokens": {
           "type": "number",
           "default": 128,
           "description": "Maximum tokens to generate per completion"
         },
-        "sovereign-coder.triggerOnTyping": {
+        "sovereign-code.triggerOnTyping": {
           "type": "boolean",
           "default": true,
           "description": "Trigger completions automatically while typing"
@@ -636,7 +636,7 @@ export class SovereignCompletionProvider implements vscode.InlineCompletionItemP
     context: vscode.InlineCompletionContext,
     token: vscode.CancellationToken,
   ): Promise<vscode.InlineCompletionItem[] | vscode.InlineCompletionList> {
-    const config = vscode.workspace.getConfiguration('sovereign-coder')
+    const config = vscode.workspace.getConfiguration('sovereign-code')
     const enabled = config.get<boolean>('enabled', true)
     const triggerOnTyping = config.get<boolean>('triggerOnTyping', true)
 
@@ -711,7 +711,7 @@ beforeEach(() => {
 test('creates a status bar item on construction', () => {
   createStatusBar()
   expect(vscode.window.createStatusBarItem).toHaveBeenCalledWith(
-    'sovereign-coder',
+    'sovereign-code',
     vscode.StatusBarAlignment.Right,
     100,
   )
@@ -755,25 +755,25 @@ export interface SovereignStatusBar {
 
 export function createStatusBar(): SovereignStatusBar {
   const item = vscode.window.createStatusBarItem(
-    'sovereign-coder',
+    'sovereign-code',
     vscode.StatusBarAlignment.Right,
     100,
   )
-  item.command = 'sovereign-coder.toggleCompletions'
+  item.command = 'sovereign-code.toggleCompletions'
   item.show()
 
   return {
     setOnline(model: string) {
       item.text = `$(sparkle) ${model}`
-      item.tooltip = `Sovereign Coder: Active — ${model}`
+      item.tooltip = `Sovereign Code: Active — ${model}`
     },
     setOffline() {
       item.text = '$(warning) Sovereign Offline'
-      item.tooltip = 'Sovereign Coder: Ollama not reachable'
+      item.tooltip = 'Sovereign Code: Ollama not reachable'
     },
     setLoading() {
       item.text = '$(loading~spin) Sovereign'
-      item.tooltip = 'Sovereign Coder: Connecting…'
+      item.tooltip = 'Sovereign Code: Connecting…'
     },
     dispose() {
       item.dispose()
@@ -855,7 +855,7 @@ test('activate registers toggleCompletions command', () => {
   const ctx = makeContext()
   activate(ctx)
   expect(vscode.commands.registerCommand).toHaveBeenCalledWith(
-    'sovereign-coder.toggleCompletions',
+    'sovereign-code.toggleCompletions',
     expect.any(Function),
   )
 })
@@ -904,9 +904,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register toggle command
   const commandDisposable = vscode.commands.registerCommand(
-    'sovereign-coder.toggleCompletions',
+    'sovereign-code.toggleCompletions',
     () => {
-      const config = vscode.workspace.getConfiguration('sovereign-coder')
+      const config = vscode.workspace.getConfiguration('sovereign-code')
       const current = config.get<boolean>('enabled', true)
       config.update('enabled', !current, vscode.ConfigurationTarget.Global)
     },
@@ -918,7 +918,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Initial online check + periodic polling
   async function checkOnline(): Promise<void> {
-    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const cfg = vscode.workspace.getConfiguration('sovereign-code')
     const url = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
     const model = cfg.get<string>('model', 'qwen2.5-coder:7b')
     const online = await checkOllamaOnline(url)

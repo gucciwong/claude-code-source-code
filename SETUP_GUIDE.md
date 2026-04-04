@@ -1,4 +1,4 @@
-﻿# Sovereign Coder Desktop App - Setup & Deployment Guide
+# Sovereign Code Desktop App - Setup & Deployment Guide
 
 **Version:** 1.0.0  
 **Status:** Production Ready  
@@ -25,7 +25,7 @@
 ### Step 1: Clone Repository
 ```bash
 git clone <your-repo-url>
-cd sovereign-coder
+cd sovereign-code
 git checkout main
 ```
 
@@ -104,21 +104,21 @@ npm run dev
 ```bash
 cd apps/desktop
 npm run dist:win
-# Creates: dist/Sovereign Coder Setup 1.0.0.exe
+# Creates: dist/Sovereign Code Setup 1.0.0.exe
 ```
 
 **macOS App:**
 ```bash
 cd apps/desktop
 npm run dist:mac
-# Creates: dist/Sovereign Coder-1.0.0.dmg
+# Creates: dist/Sovereign Code-1.0.0.dmg
 ```
 
 **Linux AppImage:**
 ```bash
 cd apps/desktop
 npm run dist:linux
-# Creates: dist/Sovereign Coder-1.0.0.AppImage
+# Creates: dist/Sovereign Code-1.0.0.AppImage
 ```
 
 ---

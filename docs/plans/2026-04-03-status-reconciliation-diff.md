@@ -13,7 +13,7 @@ Align documentation to current implementation reality and remove timeline/status
 
 ## 1) PRD: fix contradictory status labels and stale sprint section
 
-Source file: docs/en/Sovereign-Coder-PRD.md
+Source file: docs/en/Sovereign-Code-PRD.md
 
 ### A. Replace section title and intro for current status
 

@@ -66,7 +66,7 @@ CREATE INDEX IF NOT EXISTS idx_decisions_timestamp ON decisions(timestamp DESC);
 const DEFAULT_MEMORY_MARKDOWN = `# Personal Knowledge Library
 
 ## Summary
-_This file is auto-managed by Sovereign Coder._
+_This file is auto-managed by Sovereign Code._
 
 ## Snippets
 <!-- Snippets will be listed here -->

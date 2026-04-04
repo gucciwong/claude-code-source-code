@@ -9,7 +9,7 @@ beforeEach(() => {
 test('creates a status bar item on construction', () => {
   createStatusBar()
   expect(vscode.window.createStatusBarItem).toHaveBeenCalledWith(
-    'sovereign-coder',
+    'sovereign-code',
     vscode.StatusBarAlignment.Right,
     100,
   )

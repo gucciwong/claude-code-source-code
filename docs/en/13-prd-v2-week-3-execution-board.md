@@ -1,4 +1,4 @@
-# Sovereign Coder Week 3 Execution Board
+# Sovereign Code Week 3 Execution Board
 
 > Scope Window: Foundation Month 1, Week 3
 > Alignment: F3.1 implementation, F3.2 retrieval prototype, v0.1 gate preparation

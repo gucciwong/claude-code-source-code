@@ -6,7 +6,7 @@ describe('Settings Screen', () => {
   test('renders settings header', () => {
     render(<Settings />)
     expect(screen.getByText('Settings')).toBeInTheDocument()
-    expect(screen.getByText('Configure Sovereign Coder preferences')).toBeInTheDocument()
+    expect(screen.getByText('Configure Sovereign Code preferences')).toBeInTheDocument()
   })
 
   test('displays three tabs: general, inference, privacy', () => {

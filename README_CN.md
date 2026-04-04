@@ -1,6 +1,6 @@
-﻿# Sovereign Coder
+# Sovereign Code
 
-Sovereign Coder 是一个本地优先的 AI 工程平台，聚焦独立模型运行、编码协作与企业集成能力。
+Sovereign Code 是一个本地优先的 AI 工程平台，聚焦独立模型运行、编码协作与企业集成能力。
 
 ## 当前项目
 

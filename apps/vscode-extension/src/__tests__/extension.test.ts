@@ -44,7 +44,7 @@ test('activate registers toggleCompletions command', () => {
   const ctx = makeContext()
   activate(ctx)
   expect(vscode.commands.registerCommand).toHaveBeenCalledWith(
-    'sovereign-coder.toggleCompletions',
+    'sovereign-code.toggleCompletions',
     expect.any(Function),
   )
 })

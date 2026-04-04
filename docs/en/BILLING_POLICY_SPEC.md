@@ -1,4 +1,4 @@
-# Sovereign Coder Billing Policy Specification
+# Sovereign Code Billing Policy Specification
 
 Status: Draft v1.0  
 Date: 2026-04-04  
@@ -6,7 +6,7 @@ Strategy objective: Max adoption in first 12 months
 
 ## 1. Scope
 
-This specification defines pricing, billing, quota enforcement, and anti-abuse policy for Sovereign Coder subscriptions.
+This specification defines pricing, billing, quota enforcement, and anti-abuse policy for Sovereign Code subscriptions.
 
 ## 2. Pricing Model
 

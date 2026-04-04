@@ -1,9 +1,9 @@
 {
-  "name": "sovereign-coder-training",
-  "displayName": "Sovereign Coder Training Logger",
+  "name": "sovereign-code-training",
+  "displayName": "Sovereign Code Training Logger",
   "description": "Logs inline code completions to local training service for model fine-tuning",
   "version": "0.1.0",
-  "publisher": "sovereign-coder",
+  "publisher": "sovereign-code",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -27,21 +27,21 @@
       {
         "command": "sovereignCoder.training.logCompletion",
         "title": "Log Completion to Training Service",
-        "category": "Sovereign Coder"
+        "category": "Sovereign Code"
       },
       {
         "command": "sovereignCoder.training.openDashboard",
         "title": "Open Training Dashboard",
-        "category": "Sovereign Coder"
+        "category": "Sovereign Code"
       },
       {
         "command": "sovereignCoder.training.toggleLogging",
         "title": "Toggle Training Logging",
-        "category": "Sovereign Coder"
+        "category": "Sovereign Code"
       }
     ],
     "configuration": {
-      "title": "Sovereign Coder Training",
+      "title": "Sovereign Code Training",
       "properties": {
         "sovereignCoder.training.serviceUrl": {
           "type": "string",

@@ -1,6 +1,6 @@
-﻿# Sovereign Coder
+# Sovereign Code
 
-Sovereign Coder is a local-first AI engineering platform focused on independent model operations, coding workflows, and enterprise integrations.
+Sovereign Code is a local-first AI engineering platform focused on independent model operations, coding workflows, and enterprise integrations.
 
 ## Active Projects
 

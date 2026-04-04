@@ -82,25 +82,25 @@ Expected: `package.json` `dependencies` now contains `"better-sqlite3": "^x.x.x"
 
 **Step 2: Add 4 config properties to `package.json` `contributes.configuration.properties`**
 
-Add after the existing `sovereign-coder.triggerOnTyping` block:
+Add after the existing `sovereign-code.triggerOnTyping` block:
 
 ```json
-        "sovereign-coder.ragEnabled": {
+        "sovereign-code.ragEnabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable RAG project context in completions (requires nomic-embed-text in Ollama)"
         },
-        "sovereign-coder.embeddingModel": {
+        "sovereign-code.embeddingModel": {
           "type": "string",
           "default": "nomic-embed-text",
           "description": "Ollama model to use for generating embeddings"
         },
-        "sovereign-coder.ragTopK": {
+        "sovereign-code.ragTopK": {
           "type": "number",
           "default": 3,
           "description": "Number of context chunks to retrieve per completion"
         },
-        "sovereign-coder.ragMaxContextChars": {
+        "sovereign-code.ragMaxContextChars": {
           "type": "number",
           "default": 2000,
           "description": "Maximum characters of retrieved context to prepend to the prompt"
@@ -998,7 +998,7 @@ import { getEmbedding } from './embedder'
 import { ChunkStore } from './store'
 
 const INCLUDE_GLOB = '**/*.{ts,tsx,js,jsx,py,go,rs,java,cpp,c,h,cs,rb,php,swift,kt,vue,svelte}'
-const EXCLUDE_GLOB = '{**/node_modules/**,**/out/**,**/.git/**,**/dist/**,**/.sovereign-coder/**,**/*.min.js,**/*.d.ts}'
+const EXCLUDE_GLOB = '{**/node_modules/**,**/out/**,**/.git/**,**/dist/**,**/.sovereign-code/**,**/*.min.js,**/*.d.ts}'
 
 export class Indexer {
   private watcher?: vscode.FileSystemWatcher
@@ -1216,7 +1216,7 @@ export class SovereignCompletionProvider implements vscode.InlineCompletionItemP
     context: vscode.InlineCompletionContext,
     token: vscode.CancellationToken,
   ): Promise<vscode.InlineCompletionItem[] | vscode.InlineCompletionList> {
-    const config = vscode.workspace.getConfiguration('sovereign-coder')
+    const config = vscode.workspace.getConfiguration('sovereign-code')
     const enabled = config.get<boolean>('enabled', true)
     const triggerOnTyping = config.get<boolean>('triggerOnTyping', true)
 
@@ -1306,10 +1306,10 @@ export function activate(context: vscode.ExtensionContext): void {
   const workspaceFolders = vscode.workspace.workspaceFolders
   if (workspaceFolders && workspaceFolders.length > 0) {
     const workspaceRoot = workspaceFolders[0].uri.fsPath
-    const dbDir = path.join(workspaceRoot, '.sovereign-coder')
+    const dbDir = path.join(workspaceRoot, '.sovereign-code')
     fs.mkdirSync(dbDir, { recursive: true })
 
-    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const cfg = vscode.workspace.getConfiguration('sovereign-code')
     const ollamaUrl = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
     const embeddingModel = cfg.get<string>('embeddingModel', 'nomic-embed-text')
 
@@ -1331,9 +1331,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register toggle command
   const commandDisposable = vscode.commands.registerCommand(
-    'sovereign-coder.toggleCompletions',
+    'sovereign-code.toggleCompletions',
     () => {
-      const config = vscode.workspace.getConfiguration('sovereign-coder')
+      const config = vscode.workspace.getConfiguration('sovereign-code')
       const current = config.get<boolean>('enabled', true)
       void config.update('enabled', !current, vscode.ConfigurationTarget.Global)
     },
@@ -1345,7 +1345,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Online check + periodic polling
   async function checkOnline(): Promise<void> {
-    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const cfg = vscode.workspace.getConfiguration('sovereign-code')
     const url = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
     const model = cfg.get<string>('model', 'qwen2.5-coder:7b')
     const online = await checkOllamaOnline(url)
@@ -1423,12 +1423,12 @@ Common fixes needed:
 - `import type` for `Retriever` in `completionProvider.ts` (already done above — ensure it doesn't cause circular reference)
 - `fs` import in `extension.ts` needs `@types/node` (already in devDependencies)
 
-### Step 3: Add `.sovereign-coder/` to `.vscodeignore`
+### Step 3: Add `.sovereign-code/` to `.vscodeignore`
 
 The index database must not be bundled into a VSIX. Check `apps/vscode-extension/.vscodeignore` and add:
 
 ```
-.sovereign-coder/
+.sovereign-code/
 src/__tests__/
 src/__mocks__/
 ```

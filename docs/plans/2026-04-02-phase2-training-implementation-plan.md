@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder Phase 2 - Training Infrastructure Implementation Plan
+# Sovereign Code Phase 2 - Training Infrastructure Implementation Plan
 
 **Status:** Active Implementation  
 **Estimated Timeline:** 4-6 weeks  
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Phase 2 transforms Sovereign Coder from a static completion engine into a **self-improving system**. Users' code patterns train into the model automatically, and a continuously-updated fine-tuned version replaces the base model over time.
+Phase 2 transforms Sovereign Code from a static completion engine into a **self-improving system**. Users' code patterns train into the model automatically, and a continuously-updated fine-tuned version replaces the base model over time.
 
 ### Phase 1B → Phase 2 Transition
 

@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder Desktop App - Phase 1 Implementation Plan
+# Sovereign Code Desktop App - Phase 1 Implementation Plan
 
 **Date:** April 2, 2026  
 **Status:** Ready for Implementation  
@@ -12,7 +12,7 @@
 
 ## Executive Summary
 
-Build a professional Electron 30 + React 18 desktop application for Sovereign Coder with:
+Build a professional Electron 30 + React 18 desktop application for Sovereign Code with:
 - **Local-first architecture** (all inference on user's machine)
 - **Status transparency** (GPU, VRAM, tok/s always visible)
 - **Training integration** (background fine-tuning)
@@ -220,7 +220,7 @@ export const TitleBar: React.FC = () => {
       <div className="flex items-center gap-2">
         <Lock size={14} aria-hidden="true" className="text-accent-500" />
         <span className="text-xs font-medium text-text-primary">
-          Sovereign Coder
+          Sovereign Code
         </span>
       </div>
       
@@ -838,7 +838,7 @@ File: `apps/desktop/electron-builder.config.js`
 ```javascript
 module.exports = {
   appId: "com.sovereigncoder.app",
-  productName: "Sovereign Coder",
+  productName: "Sovereign Code",
   directories: {
     buildResources: "assets",
     output: "dist"

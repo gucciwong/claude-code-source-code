@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
+import { useModelManagerStore } from '../store/modelManagerStore'
 import { Server, WifiOff, CheckCircle2, Zap, Trash2 } from 'lucide-react'
 import { HuggingFacePanel } from '../components/models/HuggingFacePanel'
 import { OrgInsightsPanel } from '../components/models/OrgInsightsPanel'
@@ -170,8 +171,23 @@ export function Models() {
     return () => controller.abort()
   }, [selected, setModelDetails])
 
+  const lastError = useModelManagerStore(s => s.last_error)
+
   return (
     <div data-testid="screen-models" className="flex flex-col h-full">
+      {lastError && (
+        <div role="alert" className="mx-4 mt-2 px-3 py-2 bg-red-500/10 border border-red-500/30 rounded text-sm text-red-400 flex items-center justify-between">
+          <span>{lastError}</span>
+          <button
+            type="button"
+            className="text-red-400 hover:text-red-300 ml-2 text-xs"
+            onClick={() => useModelManagerStore.setState({ last_error: null })}
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <Tabs.Root defaultValue="installed" className="flex flex-col h-full">
         {/* Tab bar */}
         <Tabs.List

@@ -3,9 +3,9 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sovereign-coder-training"
+name = "sovereign-code-training"
 version = "0.1.0"
-description = "Training data collection and fine-tuning orchestration for Sovereign Coder"
+description = "Training data collection and fine-tuning orchestration for Sovereign Code"
 readme = "README.md"
 authors = [{name = "Sovereign AI Labs"}]
 requires-python = ">=3.10"

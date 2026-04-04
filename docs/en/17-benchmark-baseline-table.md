@@ -1,4 +1,4 @@
-# Sovereign Coder — Week 1 Benchmark Baseline Table
+# Sovereign Code — Week 1 Benchmark Baseline Table
 
 > Version: 1.0.0
 > Captured: 2026-04-03

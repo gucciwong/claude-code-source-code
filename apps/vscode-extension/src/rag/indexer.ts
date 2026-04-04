@@ -5,7 +5,7 @@ import { getEmbedding } from './embedder'
 import { ChunkStore } from './store'
 
 const INCLUDE_GLOB = '**/*.{ts,tsx,js,jsx,py,go,rs,java,cpp,c,h,cs,rb,php,swift,kt,vue,svelte}'
-const EXCLUDE_GLOB = '{**/node_modules/**,**/out/**,**/.git/**,**/dist/**,**/.sovereign-coder/**,**/*.min.js,**/*.d.ts}'
+const EXCLUDE_GLOB = '{**/node_modules/**,**/out/**,**/.git/**,**/dist/**,**/.sovereign-code/**,**/*.min.js,**/*.d.ts}'
 
 export class Indexer {
   private watcher?: vscode.FileSystemWatcher

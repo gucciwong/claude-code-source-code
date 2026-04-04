@@ -77,7 +77,7 @@ function toggleNode(nodes: FileNode[], id: string): FileNode[] {
 
 // -- Demo scaffolding defaults are declared before store creation to avoid TDZ access --
 
-const WELCOME_CODE = `// Welcome to Sovereign Coder
+const WELCOME_CODE = `// Welcome to Sovereign Code
 // Your local-first AI coding assistant
 //
 // • AI Copilot panel (right) answers questions about your code
@@ -171,7 +171,7 @@ export const useCodingStore = create<CodingStore>((set) => ({
   isPanelOpen: true,
   activePanelTab: 'terminal',
   terminalLines: [
-    '$ Sovereign Coder Terminal',
+    '$ Sovereign Code Terminal',
     '$ Ready.',
   ],
 

@@ -1,13 +1,13 @@
-# Sovereign Coder Execution Tracker
+# Sovereign Code Execution Tracker
 
 > Status: Active
-> PRD Baseline: Sovereign Coder PRD v1.0 (2026-03-31)
+> PRD Baseline: Sovereign Code PRD v1.0 (2026-03-31)
 > Owner Group: Product, Platform Engineering, Applied AI
 > Last updated: 2026-04-01
 
 ## 1. Purpose
 
-Track delivery against the Sovereign Coder roadmap and ensure every phase milestone has clear ownership, measurable exit criteria, and risk controls.
+Track delivery against the Sovereign Code roadmap and ensure every phase milestone has clear ownership, measurable exit criteria, and risk controls.
 
 ## 2. Phase Streams
 
@@ -60,7 +60,7 @@ Track delivery against the Sovereign Coder roadmap and ensure every phase milest
 
 | Date | Decision | Owner | Rationale | Follow-up |
 |---|---|---|---|---|
-| 2026-03-31 | Use Sovereign Coder PRD as canonical baseline | Product | Remove ambiguity across execution docs | Rewrite tracker, epics, KPIs, sprint docs |
+| 2026-03-31 | Use Sovereign Code PRD as canonical baseline | Product | Remove ambiguity across execution docs | Rewrite tracker, epics, KPIs, sprint docs |
 
 ## 8. Exit Criteria for Current Planning Cycle
 

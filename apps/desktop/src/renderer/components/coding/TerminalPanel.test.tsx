@@ -6,7 +6,7 @@ import { useCodingStore } from '../../store/codingStore'
 beforeEach(() => {
   useCodingStore.setState({
     activePanelTab: 'terminal',
-    terminalLines: ['$ Sovereign Coder Terminal', '$ Ready.'],
+    terminalLines: ['$ Sovereign Code Terminal', '$ Ready.'],
     isPanelOpen: true,
   })
 })
@@ -26,7 +26,7 @@ test('terminal tab is selected by default', () => {
 
 test('renders terminal line content', () => {
   render(<TerminalPanel />)
-  expect(screen.getByText('$ Sovereign Coder Terminal')).toBeInTheDocument()
+  expect(screen.getByText('$ Sovereign Code Terminal')).toBeInTheDocument()
   expect(screen.getByText('$ Ready.')).toBeInTheDocument()
 })
 

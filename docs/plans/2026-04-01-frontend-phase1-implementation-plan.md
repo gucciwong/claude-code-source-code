@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder Desktop App — Phase 1 Frontend Implementation Plan
+# Sovereign Code Desktop App — Phase 1 Frontend Implementation Plan
 
 > **For contributors:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -29,7 +29,7 @@
 **Step 1: Create the Electron + Vite project scaffold**
 
 ```bash
-cd d:/Users/Admin/Documents/GitHub/sovereign-coder
+cd d:/Users/Admin/Documents/GitHub/sovereign-code
 mkdir apps
 cd apps
 npm create @quick-start/electron@latest desktop -- --template react-ts
@@ -127,7 +127,7 @@ Expected: Electron window opens with Vite dev server. Background should be defau
 **Step 7: Commit**
 
 ```bash
-cd d:/Users/Admin/Documents/GitHub/sovereign-coder
+cd d:/Users/Admin/Documents/GitHub/sovereign-code
 git add apps/desktop/
 git commit -m "feat(desktop): scaffold Electron app with Vite, React, Tailwind v4, design tokens"
 ```
@@ -538,7 +538,7 @@ export function Sidebar() {
     <aside className="w-[220px] flex flex-col bg-[var(--color-bg-surface-1)] border-r border-[var(--color-border-subtle)] flex-shrink-0">
       {/* Logo */}
       <div className="px-4 py-4 border-b border-[var(--color-border-subtle)]">
-        <span className="text-[var(--color-text-primary)] font-semibold text-sm">Sovereign Coder</span>
+        <span className="text-[var(--color-text-primary)] font-semibold text-sm">Sovereign Code</span>
       </div>
 
       {/* Main nav */}

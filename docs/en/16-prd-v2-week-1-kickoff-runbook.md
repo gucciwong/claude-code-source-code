@@ -1,4 +1,4 @@
-# Sovereign Coder Week 1 Kickoff Runbook
+# Sovereign Code Week 1 Kickoff Runbook
 
 > Window: Foundation Month 1, Week 1
 > Status: Active

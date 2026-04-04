@@ -8162,7 +8162,7 @@ function Sidebar() {
       className: "w-[220px] flex flex-col bg-bg-surface-1 border-r border-border-subtle flex-shrink-0",
       "aria-label": "Main navigation",
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-4 border-b border-border-subtle", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary font-semibold text-sm", children: "Sovereign Coder" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-4 border-b border-border-subtle", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary font-semibold text-sm", children: "Sovereign Code" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex-1 py-2", "aria-label": "Primary navigation", children: navItems.map(navButton) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-2 border-t border-border-subtle space-y-2", children: [
           bottomItems.map(navButton),
@@ -14052,7 +14052,7 @@ function Settings() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-testid": "screen-settings", className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-text-primary", children: "Settings" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-muted mt-1", children: "Configure Sovereign Coder preferences" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-text-muted mt-1", children: "Configure Sovereign Code preferences" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 border-b border-border-default", children: ["general", "inference", "privacy"].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
@@ -14252,7 +14252,7 @@ function Settings() {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-text-primary", children: "Opt-in Telemetry" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-text-muted mb-3", children: "Help improve Sovereign Coder by sharing anonymous data" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-text-muted mb-3", children: "Help improve Sovereign Code by sharing anonymous data" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 cursor-pointer", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded" }),
@@ -16778,7 +16778,7 @@ function Plugins() {
           }
         )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Extend Sovereign Coder with custom plugins" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-text-secondary text-sm", children: "Extend Sovereign Code with custom plugins" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(Root2$1, { defaultValue: "installed", className: "flex flex-col flex-1 min-h-0", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(List, { className: "flex gap-1 px-6 pt-4 border-b border-border-subtle", children: ["installed", "hooks", "guide"].map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(

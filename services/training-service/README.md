@@ -1,4 +1,4 @@
-# Sovereign Coder Training Service
+# Sovereign Code Training Service
 
 Phase 2 backend for model fine-tuning and self-improvement pipeline.
 

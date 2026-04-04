@@ -1,6 +1,6 @@
 # Phase 2 Training Infrastructure - Complete System Overview
 
-> **Sovereign Coder Self-Improvement System** — Phase 2 is complete and production-ready.
+> **Sovereign Code Self-Improvement System** — Phase 2 is complete and production-ready.
 
 ---
 
@@ -372,7 +372,7 @@ For questions or issues:
 
 ## 📄 License
 
-Part of Sovereign Coder project.
+Part of Sovereign Code project.
 
 ---
 

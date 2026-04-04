@@ -1,4 +1,4 @@
-// React Voice Input component for Sovereign Coder desktop.
+// React Voice Input component for Sovereign Code desktop.
 
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { Mic, Square, Upload, AlertCircle, Loader } from 'lucide-react'

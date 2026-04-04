@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder — Desktop App UI/UX Design Document
+# Sovereign Code — Desktop App UI/UX Design Document
 
 **Version:** 1.0  
 **Date:** 2026-04-01  
@@ -155,7 +155,7 @@ Use **Lucide React** icon set throughout. Key icons mapped to features:
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │ TITLEBAR (macOS traffic lights / Windows controls)                      │ 32px
-│ [●][●][●]         Sovereign Coder — Qwen2.5-Coder-32B ▾       [–][□][✕] │
+│ [●][●][●]         Sovereign Code — Qwen2.5-Coder-32B ▾       [–][□][✕] │
 ├──────┬──────────────────────────────────────────────┬────────────────────┤
 │      │                                              │                    │
 │  S   │                                              │                    │
@@ -362,7 +362,7 @@ Global overlay accessible from anywhere. Triggered by `⌘K` (macOS) / `Ctrl+K` 
 │                                              │  CONTEXT PANEL           │
 │  ┌──────────────────────────────────────┐    │  ─────────────           │
 │  │  system                              │    │  Project: my-app/        │
-│  │  You are Sovereign Coder, a local... │    │                          │
+│  │  You are Sovereign Code, a local... │    │                          │
 │  └──────────────────────────────────────┘    │  Indexed files: 1,247   │
 │                                              │  Last indexed: 2m ago    │
 │  ┌── User ──────────────────────────────┐    │                          │
@@ -575,7 +575,7 @@ GPU layers:       [All ▾]  (35/35 layers on GPU)
 │  ✓ All inference is local                                       │
 │  ✓ No telemetry collected                                       │
 │  ✓ No API keys sent externally                                  │
-│  ✓ All data stored in ~/.sovereign-coder/ (encrypted)          │
+│  ✓ All data stored in ~/.sovereign-code/ (encrypted)          │
 └─────────────────────────────────────────────────────────────────┘
 
 Data Storage
@@ -595,10 +595,10 @@ Opt-in Telemetry
 ### 5.1 First-Time Setup (< 5 minutes target)
 
 ```
-1. Install Sovereign Coder
+1. Install Sovereign Code
    ↓
 2. Launch → Welcome screen
-   "Welcome to Sovereign Coder — your private AI coding companion."
+   "Welcome to Sovereign Code — your private AI coding companion."
    • Hardware check: GPU detected (RTX 4090 ✓), 64 GB RAM ✓
    • Ollama check: [Install Ollama ▾] or [Ollama detected ✓]
    ↓
@@ -623,7 +623,7 @@ Code as normal → ghost text completions appear
 ↓
 Press Tab to accept → completion logged as training data
 ↓
-Complex task needed → open Sovereign Coder sidebar in VSCode
+Complex task needed → open Sovereign Code sidebar in VSCode
 (or launch desktop app)
 ↓
 Chat: "Refactor this function to use async/await"
@@ -682,7 +682,7 @@ The VSCode plugin uses the same design language but simplified.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  SOVEREIGN CODER        ● Connected  v1.4           │
+│  SOVEREIGN CODE        ● Connected  v1.4           │
 │  ─────────────────────────────────────────────────  │
 │                                                     │
 │  Model: Qwen2.5-32B  Q4_K_M  45 tok/s  [Switch ▾]  │
@@ -755,7 +755,7 @@ The panel renders the parsed JSON output from `report.mjs` directly. The "Run No
 │          No model loaded                          │
 │                                                   │
 │          Download your first model to start       │
-│          using Sovereign Coder.                   │
+│          using Sovereign Code.                   │
 │                                                   │
 │          [Browse Models →]                        │
 │                                                   │

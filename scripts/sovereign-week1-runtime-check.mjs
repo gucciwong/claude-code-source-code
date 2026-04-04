@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Week 1 implementation starter for Sovereign Coder Foundation.
+ * Week 1 implementation starter for Sovereign Code Foundation.
  *
  * What it does:
  * 1) Checks local Ollama runtime reachability and model listing.

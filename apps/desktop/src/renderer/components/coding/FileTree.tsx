@@ -33,7 +33,7 @@ const DEMO_CONTENTS: Record<string, string> = {
 export function App() {
   return (
     <div className="app">
-      <h1>Hello, Sovereign Coder!</h1>
+      <h1>Hello, Sovereign Code!</h1>
     </div>
   )
 }
@@ -110,7 +110,7 @@ export { Button } from './components/Button'
 `,
   'README.md': `# My Project
 
-A project built with Sovereign Coder.
+A project built with Sovereign Code.
 
 ## Getting Started
 

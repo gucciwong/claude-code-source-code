@@ -1,6 +1,6 @@
 # VSCode Extension Integration — Testing & Verification
 
-Complete guide for end-to-end testing of the Sovereign Coder Training VSCode extension.
+Complete guide for end-to-end testing of the Sovereign Code Training VSCode extension.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ curl http://localhost:8001/health
 **Terminal 2: Build extension**
 
 ```bash
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install
 npm run build
 ```
@@ -53,18 +53,18 @@ npm run build
 **Terminal 2 (after build completes): Launch VSCode extension host**
 
 ```bash
-# Still in extensions/sovereign-coder-training/
+# Still in extensions/sovereign-code-training/
 code --extensionDevelopmentPath=. --verbose
 ```
 
 **What happens:**
 1. New VSCode window opens (the "extension host")
 2. VSCode loads the extension
-3. Extension activates (check Output → "Sovereign Coder Training")
+3. Extension activates (check Output → "Sovereign Code Training")
 
 **Check extension loaded:**
 - Open VSCode Settings (`Cmd+,` / `Ctrl+,`)
-- Search: "sovereign coder"
+- Search: "sovereign code"
 - Should see 4 settings + extension listed in status bar (bottom right)
 
 ## Part 2: Verify Extension Functionality
@@ -89,7 +89,7 @@ If showing OFFLINE:
 **In extension host settings:**
 
 1. Open Settings: `Cmd+,` / `Ctrl+,`
-2. Search: "sovereign coder training"
+2. Search: "sovereign code training"
 3. Check each setting:
 
 | Setting | Expected Value | Notes |

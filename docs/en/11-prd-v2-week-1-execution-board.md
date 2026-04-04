@@ -1,4 +1,4 @@
-# Sovereign Coder Week 1 Execution Board
+# Sovereign Code Week 1 Execution Board
 
 > Scope Window: Foundation Month 1, Week 1
 > Alignment: F1.1, F1.2, F2.1, F4.2, F4.1 (prep)

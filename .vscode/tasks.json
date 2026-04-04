@@ -10,6 +10,12 @@
 				"test:sovereign"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "run-model-manager-service",
+			"type": "shell",
+			"command": "$healthUrl='http://127.0.0.1:8002/health'; try { Invoke-RestMethod -Uri $healthUrl -TimeoutSec 2 | Out-Null; Write-Host 'Model Manager already running on 127.0.0.1:8002'; exit 0 } catch {}; Set-Location services/model-manager; if (Test-Path '../../.venv/Scripts/python.exe') { ../../.venv/Scripts/python.exe -m uvicorn main:app --host 127.0.0.1 --port 8002 } else { c:/python314/python.exe -m uvicorn main:app --host 127.0.0.1 --port 8002 }",
+			"isBackground": true
 		}
 	]
 }

@@ -1,6 +1,6 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# READY FOR DEPLOYMENT - Sovereign Coder v1.0 Integration Plan
+# READY FOR DEPLOYMENT - Sovereign Code v1.0 Integration Plan
 
 **Status:** ✅ ALL COMPONENTS PRODUCTION-READY  
 **Date:** April 2, 2026  
@@ -81,15 +81,15 @@ cd apps/desktop
 
 # Windows Installer
 npm run dist:win
-# Output: dist/Sovereign Coder Setup 1.0.0.exe
+# Output: dist/Sovereign Code Setup 1.0.0.exe
 
 # macOS App
 npm run dist:mac  
-# Output: dist/Sovereign Coder-1.0.0.dmg
+# Output: dist/Sovereign Code-1.0.0.dmg
 
 # Linux AppImage
 npm run dist:linux
-# Output: dist/Sovereign Coder-1.0.0.AppImage
+# Output: dist/Sovereign Code-1.0.0.AppImage
 ```
 
 ---
@@ -123,7 +123,7 @@ npm run dist:linux
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│         Sovereign Coder Desktop App v1.0             │
+│         Sovereign Code Desktop App v1.0             │
 │    (Electron 30 + React 18 + Tailwind CSS v4)       │
 └────────────────┬──────────────────────────────────┬─┘
                  │                                  │
@@ -162,7 +162,7 @@ npm run dist:linux
 ## Release Notes Preview
 
 ### Version 1.0.0 - April 2026
-**Sovereign Coder - Local AI Assistant for Developers**
+**Sovereign Code - Local AI Assistant for Developers**
 
 **Features:**
 - ✅ Local-first architecture (no cloud transmission)

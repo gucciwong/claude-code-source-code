@@ -1,10 +1,10 @@
-﻿# CLAUDE.md — Sovereign Coder Repository Rules
+# CLAUDE.md — Sovereign Code Repository Rules
 
 Coding-agent rules for this repository.
 
 ## Repository Scope
 
-This repository is a Sovereign Coder monorepo.
+This repository is a Sovereign Code monorepo.
 
 - Desktop product code lives in `apps/desktop/`
 - VS Code extension code lives in `apps/vscode-extension/`

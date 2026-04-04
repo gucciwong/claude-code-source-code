@@ -7,7 +7,7 @@
 
 ## Phase 2 Summary
 
-**Sovereign Coder's self-improvement training infrastructure is now complete.**
+**Sovereign Code's self-improvement training infrastructure is now complete.**
 
 This document provides:
 - ✅ Complete Phase 2 deployment guide
@@ -709,7 +709,7 @@ du -sh ~/.cache/huggingface/
 
 ---
 
-**Sovereign Coder can now improve itself through user interactions.**
+**Sovereign Code can now improve itself through user interactions.**
 
 Deploy with confidence. Monitor closely. Iterate based on metrics.
 

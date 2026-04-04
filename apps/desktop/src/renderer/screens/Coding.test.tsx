@@ -12,9 +12,9 @@ beforeEach(() => {
   })
 })
 
-test('renders Sovereign Coder title bar', () => {
+test('renders Sovereign Code title bar', () => {
   render(<Coding />)
-  expect(screen.getByText('Sovereign Coder')).toBeInTheDocument()
+  expect(screen.getByText('Sovereign Code')).toBeInTheDocument()
 })
 
 test('renders file tree panel', () => {

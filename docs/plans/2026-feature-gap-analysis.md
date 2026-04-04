@@ -1,13 +1,13 @@
 > Plan Status: Closed on 2026-04-04. This file is a historical planning artifact; execution tracking is consolidated in docs/plans/2026-04-04-plan-closure-report.md.
 
-# Sovereign Coder — Feature Gap Analysis vs PRD & LM Studio Reference
+# Sovereign Code — Feature Gap Analysis vs PRD & LM Studio Reference
 _Last updated: 2026-04-19_
 
 ---
 
 ## Executive Summary
 
-This document is a comprehensive gap analysis comparing (a) the current `apps/desktop` codebase, (b) the Sovereign Coder PRD v2.0, and (c) the LM Studio UX reference (3 screenshots reviewed). It identifies every disconnected, hardcoded, or missing feature and provides a prioritised implementation plan.
+This document is a comprehensive gap analysis comparing (a) the current `apps/desktop` codebase, (b) the Sovereign Code PRD v2.0, and (c) the LM Studio UX reference (3 screenshots reviewed). It identifies every disconnected, hardcoded, or missing feature and provides a prioritised implementation plan.
 
 **The single most critical gap:** There is **no HuggingFace model download entry point** anywhere in the UI. The backend service and hook both exist but were never wired to the Models screen. A user literally cannot download a model from HuggingFace inside the app today.
 
@@ -128,9 +128,9 @@ Note: `FederationCore.tsx` (nav item "Fed Core") is the properly implemented rep
 
 ### 2.3 LM Studio UX Parity Gaps
 
-These features exist in LM Studio but are missing or weaker in Sovereign Coder:
+These features exist in LM Studio but are missing or weaker in Sovereign Code:
 
-| LM Studio Feature | LM Studio | Sovereign Coder | Gap |
+| LM Studio Feature | LM Studio | Sovereign Code | Gap |
 |-------------------|-----------|-----------------|-----|
 | HuggingFace model browser | Full embedded browser with staff picks, search, model cards | Not present | ❌ Missing entirely |
 | Model categories | LLMs / Text Embedding / Multimodal tabs in sidebar | Not present | ❌ Missing |
@@ -257,7 +257,7 @@ Rewrite `MirrorSelector.tsx`:
 
 #### Task 5: Model Metadata Display
 
-**Why:** LM Studio shows params (7B/13B), architecture (llama/mistral), format (GGUF/GGML/MLX), and capabilities badges. Sovereign Coder's model detail only shows digest/size/modified date.
+**Why:** LM Studio shows params (7B/13B), architecture (llama/mistral), format (GGUF/GGML/MLX), and capabilities badges. Sovereign Code's model detail only shows digest/size/modified date.
 
 **Implementation:**
 

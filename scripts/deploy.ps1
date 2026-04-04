@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Sovereign Coder Deployment Automation Script
+    Sovereign Code Deployment Automation Script
     
 .DESCRIPTION
-    Automated deployment script for creating production packages of Sovereign Coder.
+    Automated deployment script for creating production packages of Sovereign Code.
     Handles testing, building, and creating distribution packages for Windows, macOS, and Linux.
     
 .PARAMETER Version
@@ -33,7 +33,7 @@
     
 .NOTES
     File: scripts/deploy.ps1
-    Author: Sovereign Coder Team
+    Author: Sovereign Code Team
     Status: Production Ready
 #>
 
@@ -249,7 +249,7 @@ function Create-WindowsPackage {
     Push-Location $DESKTOP_DIR
     try {
         Log-Info "Building Windows installer (NSIS)..."
-        $output = npm run dist:win 2>&1
+        $output = npm run build:win 2>&1
         
         if ($LASTEXITCODE -ne 0) {
             Log-Error "Windows package creation failed"
@@ -274,7 +274,7 @@ function Create-MacOSPackage {
     Push-Location $DESKTOP_DIR
     try {
         Log-Info "Building macOS DMG installers..."
-        $output = npm run dist:mac 2>&1
+        $output = npm run build:mac 2>&1
         
         if ($LASTEXITCODE -ne 0) {
             Log-Error "macOS package creation failed"
@@ -299,7 +299,7 @@ function Create-LinuxPackage {
     Push-Location $DESKTOP_DIR
     try {
         Log-Info "Building Linux AppImage..."
-        $output = npm run dist:linux 2>&1
+        $output = npm run build:linux 2>&1
         
         if ($LASTEXITCODE -ne 0) {
             Log-Error "Linux package creation failed"
@@ -363,7 +363,7 @@ function Create-Checksum {
 
 # Main execution
 function Main {
-    Log-Section "Sovereign Coder Deployment v$Version"
+    Log-Section "Sovereign Code Deployment v$Version"
     Log-Info "Platform: $Platform"
     Log-Info "SkipTests: $SkipTests"
     Log-Info "SignCode: $SignCode"

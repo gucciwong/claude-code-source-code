@@ -9,25 +9,25 @@ export interface SovereignStatusBar {
 
 export function createStatusBar(): SovereignStatusBar {
   const item = vscode.window.createStatusBarItem(
-    'sovereign-coder',
+    'sovereign-code',
     vscode.StatusBarAlignment.Right,
     100,
   )
-  item.command = 'sovereign-coder.toggleCompletions'
+  item.command = 'sovereign-code.toggleCompletions'
   item.show()
 
   return {
     setOnline(model: string) {
       item.text = `$(sparkle) ${model}`
-      item.tooltip = `Sovereign Coder: Active — ${model}`
+      item.tooltip = `Sovereign Code: Active — ${model}`
     },
     setOffline() {
       item.text = '$(warning) Sovereign Offline'
-      item.tooltip = 'Sovereign Coder: Ollama not reachable'
+      item.tooltip = 'Sovereign Code: Ollama not reachable'
     },
     setLoading() {
       item.text = '$(loading~spin) Sovereign'
-      item.tooltip = 'Sovereign Coder: Connecting…'
+      item.tooltip = 'Sovereign Code: Connecting…'
     },
     dispose() {
       item.dispose()

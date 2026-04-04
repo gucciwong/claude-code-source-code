@@ -88,7 +88,7 @@ npm run dev
 
 ### 3. VSCode Extension Integration ✅
 
-**Location:** `extensions/sovereign-coder-training/`  
+**Location:** `extensions/sovereign-code-training/`  
 **Status:** Production-ready, fully tested
 
 | Component | Details |
@@ -124,7 +124,7 @@ Status bar shows: "Training: ON (N events)"
 
 **Start command (development):**
 ```bash
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install
 npm run build
 code --extensionDevelopmentPath=.
@@ -161,7 +161,7 @@ code --extensionDevelopmentPath=.
 - Posts to training service on acceptance
 - Shows status bar indicator
 
-**Testing:** `extensions/sovereign-coder-training/TESTING.md`
+**Testing:** `extensions/sovereign-code-training/TESTING.md`
 ```bash
 # Quick verify
 1. Start service: python -m uvicorn main:app
@@ -279,7 +279,7 @@ Step 6: Training (When Initiated)
 │   ├── INTEGRATION_VERIFICATION.md (Testing guide)
 │   └── package.json
 │
-├── 🔧 extensions/sovereign-coder-training/  (VSCode)
+├── 🔧 extensions/sovereign-code-training/  (VSCode)
 │   ├── src/
 │   │   ├── extension.ts           (Main + status bar + completion hook)
 │   │   └── services/
@@ -377,7 +377,7 @@ npm run dev
 
 ### Terminal 3: Start VSCode Extension (Development Testing)
 ```bash
-cd extensions/sovereign-coder-training
+cd extensions/sovereign-code-training
 npm install
 npm run build
 code --extensionDevelopmentPath=.

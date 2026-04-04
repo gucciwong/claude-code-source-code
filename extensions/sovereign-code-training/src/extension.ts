@@ -6,7 +6,7 @@ let trainingStatusItem: vscode.StatusBarItem
 let serviceHealthy = false
 
 export async function activate(context: vscode.ExtensionContext) {
-  console.log('Sovereign Coder Training extension activated')
+  console.log('Sovereign Code Training extension activated')
 
   const client = getTrainingClient()
 
@@ -147,5 +147,5 @@ async function updateCompletionCount(): Promise<void> {
 }
 
 export function deactivate() {
-  console.log('Sovereign Coder Training extension deactivated')
+  console.log('Sovereign Code Training extension deactivated')
 }

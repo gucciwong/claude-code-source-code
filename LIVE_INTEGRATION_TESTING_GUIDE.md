@@ -1,8 +1,8 @@
-﻿# Live Integration Testing Guide
+# Live Integration Testing Guide
 
 ## Overview
 
-This guide documents how to perform end-to-end (E2E) testing of the Sovereign Coder platform by starting all services and verifying they work together. This is the final verification step before production deployment.
+This guide documents how to perform end-to-end (E2E) testing of the Sovereign Code platform by starting all services and verifying they work together. This is the final verification step before production deployment.
 
 ## Architecture Overview
 
@@ -55,7 +55,7 @@ Before starting integration testing, ensure:
 
 ### Project Structure
 ```
-sovereign-coder/
+sovereign-code/
 ├── apps/
 │   └── desktop/                 ← React + Electron app
 │       ├── src/

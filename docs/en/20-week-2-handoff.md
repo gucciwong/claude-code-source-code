@@ -1,4 +1,4 @@
-# Sovereign Coder — Week 2 Handoff & Blocker Log
+# Sovereign Code — Week 2 Handoff & Blocker Log
 
 > Date: 2026-04-03
 > Author: Platform Lead

@@ -5,7 +5,7 @@ build-backend = "setuptools.backends.legacy:build"
 [project]
 name = "enterprise-data-service"
 version = "0.1.0"
-description = "Sovereign Coder — Enterprise Data Connector Service"
+description = "Sovereign Code — Enterprise Data Connector Service"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.109.0",

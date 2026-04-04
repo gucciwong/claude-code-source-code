@@ -1,7 +1,7 @@
-# Sovereign Coder Epics and Tickets
+# Sovereign Code Epics and Tickets
 
 > Status: Draft for execution
-> PRD Baseline: Sovereign Coder PRD v1.0
+> PRD Baseline: Sovereign Code PRD v1.0
 > Date: 2026-03-31
 
 ## Epic F1: Local Inference Engine (Phase 1)

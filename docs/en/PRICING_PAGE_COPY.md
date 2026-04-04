@@ -1,4 +1,4 @@
-# Sovereign Coder Pricing
+# Sovereign Code Pricing
 
 Last updated: 2026-04-04
 
@@ -25,7 +25,7 @@ Start free, scale when your organization needs more power.
 
 We optimize for adoption in year one.
 
-If your organization grows beyond 5 users, you can keep using Sovereign Coder for free with capacity limits. Upgrade only when you need:
+If your organization grows beyond 5 users, you can keep using Sovereign Code for free with capacity limits. Upgrade only when you need:
 
 - More automation/API capacity
 - Advanced security and compliance
@@ -53,7 +53,7 @@ We never hard-stop your team without warning.
 
 ## FAQ
 
-### Is Sovereign Coder really free for individuals?
+### Is Sovereign Code really free for individuals?
 Yes. Individual accounts are free forever.
 
 ### Is it free for small organizations?
@@ -72,4 +72,4 @@ Yes. Enterprise plan supports invoicing and custom annual contracts.
 
 For organizations with advanced compliance, procurement, or custom terms:
 
-sales@sovereign-coder.example
+sales@sovereign-code.example

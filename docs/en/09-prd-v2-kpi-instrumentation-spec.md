@@ -1,13 +1,13 @@
-# Sovereign Coder KPI Instrumentation Spec
+# Sovereign Code KPI Instrumentation Spec
 
 > Status: Draft
-> PRD Baseline: Sovereign Coder PRD v1.0
+> PRD Baseline: Sovereign Code PRD v1.0
 > Date: 2026-03-31
 > Owners: Product, Data, Engineering
 
 ## 1. Purpose
 
-Define instrumentation and reporting requirements for Sovereign Coder success metrics across product adoption, technical quality, and business growth.
+Define instrumentation and reporting requirements for Sovereign Code success metrics across product adoption, technical quality, and business growth.
 
 ## 2. Metric Taxonomy
 

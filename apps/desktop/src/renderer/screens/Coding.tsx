@@ -66,7 +66,7 @@ export function Coding() {
       {/* ── Top status bar — VS Code style ────────────────────────── */}
       <div className="flex items-center justify-between px-3 h-7 bg-accent-600 text-white text-[12px] flex-shrink-0 select-none">
         <div className="flex items-center gap-3">
-          <span className="font-semibold tracking-wide">Sovereign Coder</span>
+          <span className="font-semibold tracking-wide">Sovereign Code</span>
           {activeTab && (
             <span className="opacity-70 flex items-center gap-1">
               <ChevronRightIcon size={10} aria-hidden="true" />

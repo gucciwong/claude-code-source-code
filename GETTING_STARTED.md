@@ -1,4 +1,4 @@
-﻿# Getting Started with Sovereign Code v0.2.0
+# Getting Started with Sovereign Code v0.2.0
 
 Welcome to **Sovereign Code**! This guide will have you up and running in **5 minutes**.
 
@@ -24,8 +24,8 @@ git --version               # Should show a version
 
 ```bash
 # Clone this repository
-git clone https://github.com/YOUR_ORG/sovereign-coder.git
-cd sovereign-coder
+git clone https://github.com/YOUR_ORG/sovereign-code.git
+cd sovereign-code
 
 # Go to desktop app directory
 cd apps/desktop

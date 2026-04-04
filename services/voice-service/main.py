@@ -103,6 +103,18 @@ class SpeakResponse(BaseModel):
     error: Optional[str] = None
 
 
+class SynthesizeRequest(BaseModel):
+    """JSON request body for /synthesize endpoint."""
+    text: str
+    language: str = "en"
+
+
+class SynthesizeResponse(BaseModel):
+    """JSON response for /synthesize endpoint (desktop client format)."""
+    audio_url: str
+    duration: float
+
+
 # Lifespan event handlers
 @app.on_event("startup")
 async def startup():
@@ -314,6 +326,45 @@ async def speak(text: str = Form(...), language: str = Form("en")):
 @app.post("/api/voice/speak", response_model=SpeakResponse)
 async def speak_api_alias(text: str = Form(...), language: str = Form("en")):
     return await speak(text=text, language=language)
+
+
+@app.post("/synthesize", response_model=SynthesizeResponse)
+async def synthesize(request: SynthesizeRequest):
+    """Synthesize text to speech (JSON endpoint for desktop client).
+
+    Accepts JSON body with {text, language} and returns {audio_url, duration}.
+    This is the endpoint the desktop app calls via useVoiceService hook.
+    """
+    global tts_model
+
+    if not tts_model or not tts_model.is_loaded:
+        raise HTTPException(status_code=503, detail="TTS model not available")
+
+    try:
+        logger.info(f"Synthesize request: {request.text[:50]}...")
+
+        if request.language != tts_model.lang:
+            tts_model.set_language(request.language)
+
+        output_dir = Path(os.getenv("TTS_OUTPUT_DIR", "/tmp"))
+        output_dir.mkdir(parents=True, exist_ok=True)
+        output_file = output_dir / f"tts_{hash(request.text)}.mp3"
+
+        result = tts_model.synthesize(request.text, str(output_file))
+
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result.get("error", "TTS failed"))
+
+        return SynthesizeResponse(
+            audio_url=f"/audio/{output_file.name}",
+            duration=float(result["duration"])
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Synthesize error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/models/asr")

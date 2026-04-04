@@ -18,10 +18,10 @@ export function activate(context: vscode.ExtensionContext): void {
   let retriever: Retriever | null = null
   const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
   if (workspaceRoot) {
-    const dbDir = path.join(workspaceRoot, '.sovereign-coder')
+    const dbDir = path.join(workspaceRoot, '.sovereign-code')
     fs.mkdirSync(dbDir, { recursive: true })
     const dbPath = path.join(dbDir, 'rag.db')
-    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const cfg = vscode.workspace.getConfiguration('sovereign-code')
     const ollamaUrl = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
     const embeddingModel = cfg.get<string>('embeddingModel', 'nomic-embed-text')
     const store = new ChunkStore(dbPath)
@@ -41,9 +41,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register toggle command
   const commandDisposable = vscode.commands.registerCommand(
-    'sovereign-coder.toggleCompletions',
+    'sovereign-code.toggleCompletions',
     () => {
-      const config = vscode.workspace.getConfiguration('sovereign-coder')
+      const config = vscode.workspace.getConfiguration('sovereign-code')
       const current = config.get<boolean>('enabled', true)
       void config.update('enabled', !current, vscode.ConfigurationTarget.Global)
     },
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Online check + periodic polling
   async function checkOnline(): Promise<void> {
-    const cfg = vscode.workspace.getConfiguration('sovereign-coder')
+    const cfg = vscode.workspace.getConfiguration('sovereign-code')
     const url = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
     const model = cfg.get<string>('model', 'qwen2.5-coder:7b')
     const online = await checkOllamaOnline(url)

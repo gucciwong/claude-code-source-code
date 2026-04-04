@@ -1,4 +1,4 @@
-﻿# INDEX — Sovereign Code v0.2.0 Complete Deliverables
+# INDEX — Sovereign Code v0.2.0 Complete Deliverables
 
 **Status**: ✅ PRODUCTION READY (Foundation Layer)  
 **Build Date**: 2026-04-02  
@@ -35,7 +35,7 @@ Tracking: **[FINAL_VERIFICATION_LOG.md](FINAL_VERIFICATION_LOG.md)** — Verific
 ## 📁 Project Structure
 
 ```
-sovereign-coder/
+sovereign-code/
 │
 ├─ apps/desktop/                          ← Electron + React desktop app
 │  ├─ src/
@@ -61,7 +61,7 @@ sovereign-coder/
 │     ├─ requirements.txt
 │     └─ voice_service/
 │
-├─ src/                                  ← Sovereign Coder v2.1.88 (research only)
+├─ src/                                  ← Sovereign Code v2.1.88 (research only)
 │  └─ [100+ modules - reference code]
 │
 ├─ docs/
@@ -70,7 +70,7 @@ sovereign-coder/
 │  │  ├─ 2026-04-02-phase2-training-implementation-plan.md
 │  │  └─ 2026-04-02-vibevoice-implementation-plan.md
 │  │
-│  └─ en/ & zh/                          ← Sovereign Coder analysis (research)
+│  └─ en/ & zh/                          ← Sovereign Code analysis (research)
 │
 ├─ scripts/
 │  └─ deploy.ps1                         ← Automated deployment
@@ -176,7 +176,7 @@ sovereign-coder/
 
 ### Option 1: 5-Minute Quick Start
 ```bash
-git clone https://github.com/YOUR_ORG/sovereign-coder.git
+git clone https://github.com/YOUR_ORG/sovereign-code.git
 cd apps/desktop
 npm install
 npm run dev
@@ -285,8 +285,8 @@ Use [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) or run:
 - [Architecture](CLAUDE.md) — Design reference
 
 **GitHub:**
-- [Issues](https://github.com/YOUR_ORG/sovereign-coder/issues) — Bug reports
-- [Discussions](https://github.com/YOUR_ORG/sovereign-coder/discussions) — Questions
+- [Issues](https://github.com/YOUR_ORG/sovereign-code/issues) — Bug reports
+- [Discussions](https://github.com/YOUR_ORG/sovereign-code/discussions) — Questions
 
 ---
 
