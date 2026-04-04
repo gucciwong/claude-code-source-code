@@ -173,6 +173,10 @@ export function Models() {
 
   const lastError = useModelManagerStore(s => s.last_error)
 
+  useEffect(() => {
+    return () => useModelManagerStore.getState().cleanup_polls()
+  }, [])
+
   return (
     <div data-testid="screen-models" className="flex flex-col h-full">
       {lastError && (
