@@ -10,9 +10,11 @@ export interface RetrievedChunk {
 
 export class Retriever {
   private _ready = false
+  private _disposed = false
 
   get isReady(): boolean { return this._ready }
-  setReady(v: boolean): void { this._ready = v }
+  setReady(v: boolean): void { if (!this._disposed) this._ready = v }
+  dispose(): void { this._disposed = true; this._ready = false }
 
   constructor(
     private readonly store: ChunkStore,
@@ -25,7 +27,7 @@ export class Retriever {
    * Returns [] if embedding fails, the store is empty, or the indexer hasn't finished.
    */
   async query(text: string, topK: number): Promise<RetrievedChunk[]> {
-    if (!this._ready) return []
+    if (!this._ready || this._disposed) return []
     const embedding = await getEmbedding(this.ollamaUrl, this.embeddingModel, text)
     if (!embedding) return []
 

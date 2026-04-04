@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext): void {
       }).catch(() => {
         // Index failed — completions work without RAG
       })
-      context.subscriptions.push({ dispose: () => { indexer.stop(); store.dispose() } })
+      context.subscriptions.push({ dispose: () => { retriever?.dispose(); indexer.stop(); store.dispose() } })
     } catch {
       vscode.window.showWarningMessage(
         'Sovereign Code: RAG features disabled — database initialization failed'
