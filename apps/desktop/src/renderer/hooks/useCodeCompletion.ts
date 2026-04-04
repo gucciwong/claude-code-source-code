@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
 import { useCodeCompletionStore } from '../store/codeCompletionStore'
 import type { Completion, CompletionRequest, CompletionFeedback } from '../../shared/codeCompletion'
+import { parseResponse } from '../services/parseResponse'
+import { CompletionsResponseSchema } from '../services/schemas'
 
 const BASE_URL = 'http://localhost:8015'
 
@@ -18,7 +20,7 @@ export function useCodeCompletion() {
         signal: AbortSignal.timeout(10_000),
       })
       if (!res.ok) return []
-      const data: { completions: Completion[] } = await res.json()
+      const data = parseResponse(CompletionsResponseSchema, await res.json())
       setCompletions(data.completions)
       return data.completions
     } catch (e) {

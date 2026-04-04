@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
 import { useMemoryStore } from '../store/memoryStore'
 import type { Memory, MemorySearchResult, ContextSummary } from '../../shared/conversationMemory'
+import { parseResponse } from '../services/parseResponse'
+import { MemoriesResponseSchema, MemorySchema, MemorySearchResponseSchema, ContextSummarySchema } from '../services/schemas'
 
 const BASE_URL = 'http://localhost:8016'
 
@@ -11,7 +13,7 @@ export function useConversationMemory() {
     try {
       const res = await fetch(`${BASE_URL}/memories`)
       if (!res.ok) return []
-      const data: { memories: Memory[] } = await res.json()
+      const data = parseResponse(MemoriesResponseSchema, await res.json())
       setMemories(data.memories)
       return data.memories
     } catch {
@@ -27,7 +29,7 @@ export function useConversationMemory() {
         body: JSON.stringify({ text, tags }),
       })
       if (!res.ok) return null
-      const mem: Memory = await res.json()
+      const mem = parseResponse(MemorySchema, await res.json())
       addMemory(mem)
       return mem
     } catch {
@@ -39,7 +41,7 @@ export function useConversationMemory() {
     try {
       const res = await fetch(`${BASE_URL}/memories/search?q=${encodeURIComponent(query)}&top_k=${top_k}`)
       if (!res.ok) return []
-      const data: { results: MemorySearchResult[] } = await res.json()
+      const data = parseResponse(MemorySearchResponseSchema, await res.json())
       setSearchResults(data.results)
       return data.results
     } catch {
@@ -66,7 +68,7 @@ export function useConversationMemory() {
         body: JSON.stringify({ query, top_k }),
       })
       if (!res.ok) return null
-      const data: ContextSummary = await res.json()
+      const data = parseResponse(ContextSummarySchema, await res.json())
       setContextSummary(data)
       return data
     } catch (e) {

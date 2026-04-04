@@ -1,6 +1,9 @@
 import { useCallback } from 'react'
 import { useAnalyticsStore } from '../store/analyticsStore'
 import type { MetricEvent, AnalyticsReport, ProductivityMetrics, QualityTrend, TrainingROI } from '../../shared/analytics'
+import { parseResponse } from '../services/parseResponse'
+import { ProductivityMetricsSchema, QualityTrendSchema, TrainingROISchema } from '../services/schemas'
+import { z } from 'zod'
 
 const BASE_URL = 'http://localhost:8009'
 
@@ -32,9 +35,9 @@ export function useAnalytics() {
       ])
       if (!prodRes.ok || !qualRes.ok || !roiRes.ok) throw new Error('Failed to fetch metrics')
       const [productivity, quality_trends, training_roi] = await Promise.all([
-        prodRes.json() as Promise<ProductivityMetrics>,
-        qualRes.json() as Promise<QualityTrend[]>,
-        roiRes.json() as Promise<TrainingROI>,
+        prodRes.json().then(d => parseResponse(ProductivityMetricsSchema, d)),
+        qualRes.json().then(d => parseResponse(z.array(QualityTrendSchema), d)),
+        roiRes.json().then(d => parseResponse(TrainingROISchema, d)),
       ])
       const report: AnalyticsReport = {
         generated_at: Date.now() / 1000,

@@ -12,6 +12,9 @@ bitsandbytes==0.41.0
 accelerate==0.24.0
 datasets==2.14.0
 
+# Rate limiting
+slowapi==0.1.9
+
 # Utilities
 tqdm==4.66.0
 aiofiles==23.2.1

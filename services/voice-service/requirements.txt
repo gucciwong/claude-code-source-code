@@ -17,6 +17,7 @@ psutil>=7.0.0,<8.0.0  # For GPU/CPU monitoring
 # Install manually where compiler/toolchain is available.
 # webrtcvad-wheels>=2.0.14
 python-dotenv==1.0.0  # Environment variable management
+slowapi==0.1.9  # Rate limiting
 onnxruntime>=1.24.1,<2.0.0  # ONNX Runtime for optimized inference
 redis==5.0.1  # Redis client for distributed session store and caching
 fakeredis==2.31.0  # In-memory Redis fallback for tests/local development

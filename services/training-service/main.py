@@ -10,6 +10,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, BackgroundTasks, File, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from starlette.requests import Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import logging
 import os
 
@@ -132,6 +136,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # Mount finetune sub-router
 app.include_router(finetune_router)
 
@@ -157,7 +165,8 @@ app.add_middleware(
 # ============================================================================
 
 @app.get("/health", response_model=HealthResponse)
-async def health_check():
+@limiter.limit("60/minute")
+async def health_check(request: Request):
     """Health check endpoint"""
     try:
         db = SessionLocal()
@@ -176,7 +185,8 @@ async def health_check():
 
 
 @app.post("/api/v1/training/event", status_code=201)
-async def log_completion_event(request: CompletionEventRequest):
+@limiter.limit("10/minute")
+async def log_completion_event(request: Request, payload: CompletionEventRequest):
     """Log a completion or inference lifecycle event for training"""
     
     db = next(get_db())
@@ -184,47 +194,47 @@ async def log_completion_event(request: CompletionEventRequest):
     
     try:
         # Validate event type against known values
-        if request.event_type not in [e.value for e in EventType]:
-            raise ValueError(f"Invalid event_type: {request.event_type}")
+        if payload.event_type not in [e.value for e in EventType]:
+            raise ValueError(f"Invalid event_type: {payload.event_type}")
         
         # Add to store with full KPI envelope
         event_id = store.add_completion_event(
-            event_type=request.event_type,
-            prompt=request.prompt,
-            completion=request.completion,
-            language=request.language,
-            file_path=request.file_path,
-            model_id=request.model_id,
-            tokens_generated=request.tokens_generated,
-            temperature=request.temperature,
-            top_p=request.top_p,
-            metadata=request.metadata,
+            event_type=payload.event_type,
+            prompt=payload.prompt,
+            completion=payload.completion,
+            language=payload.language,
+            file_path=payload.file_path,
+            model_id=payload.model_id,
+            tokens_generated=payload.tokens_generated,
+            temperature=payload.temperature,
+            top_p=payload.top_p,
+            metadata=payload.metadata,
             # §3.1 envelope
-            event_name=request.event_name,
-            event_version=request.event_version,
-            correlation_id=request.correlation_id,
-            session_id=request.session_id,
-            installation_id_hash=request.installation_id_hash,
-            project_id_hash=request.project_id_hash,
-            client_version=request.client_version,
-            platform=request.platform,
-            runtime_backend=request.runtime_backend,
+            event_name=payload.event_name,
+            event_version=payload.event_version,
+            correlation_id=payload.correlation_id,
+            session_id=payload.session_id,
+            installation_id_hash=payload.installation_id_hash,
+            project_id_hash=payload.project_id_hash,
+            client_version=payload.client_version,
+            platform=payload.platform,
+            runtime_backend=payload.runtime_backend,
             # §3.2 completion
-            completion_type=request.completion_type,
-            suggestion_length_tokens=request.suggestion_length_tokens,
-            accepted_boolean=request.accepted_boolean,
-            edit_distance_after_accept=request.edit_distance_after_accept,
+            completion_type=payload.completion_type,
+            suggestion_length_tokens=payload.suggestion_length_tokens,
+            accepted_boolean=payload.accepted_boolean,
+            edit_distance_after_accept=payload.edit_distance_after_accept,
             # §3.2 inference
-            first_token_latency_ms=request.first_token_latency_ms,
-            tokens_per_second=request.tokens_per_second,
-            backend_name=request.backend_name,
-            model_quantization=request.model_quantization,
-            prompt_tokens=request.prompt_tokens,
-            completion_tokens=request.completion_tokens,
-            error_message=request.error_message,
+            first_token_latency_ms=payload.first_token_latency_ms,
+            tokens_per_second=payload.tokens_per_second,
+            backend_name=payload.backend_name,
+            model_quantization=payload.model_quantization,
+            prompt_tokens=payload.prompt_tokens,
+            completion_tokens=payload.completion_tokens,
+            error_message=payload.error_message,
         )
         
-        logger.info(f"✓ Logged event {event_id} ({request.event_type})")
+        logger.info(f"✓ Logged event {event_id} ({payload.event_type})")
         
         return {
             "event_id": event_id,
@@ -242,7 +252,8 @@ async def log_completion_event(request: CompletionEventRequest):
 
 
 @app.post("/api/v1/training/task", status_code=201)
-async def log_task_trajectory(request: TaskTrajectoryRequest):
+@limiter.limit("10/minute")
+async def log_task_trajectory(request: Request, payload: TaskTrajectoryRequest):
     """Log an agent task execution for training"""
     
     db = next(get_db())
@@ -250,18 +261,18 @@ async def log_task_trajectory(request: TaskTrajectoryRequest):
     
     try:
         task_id = store.add_task_trajectory(
-            task_id=request.task_id,
-            task_description=request.task_description,
-            task_type=request.task_type,
-            steps=request.steps,
-            outcome=request.outcome,
-            final_code=request.final_code,
-            error_message=request.error_message,
-            execution_time_seconds=request.execution_time_seconds,
-            tokens_consumed=request.tokens_consumed,
+            task_id=payload.task_id,
+            task_description=payload.task_description,
+            task_type=payload.task_type,
+            steps=payload.steps,
+            outcome=payload.outcome,
+            final_code=payload.final_code,
+            error_message=payload.error_message,
+            execution_time_seconds=payload.execution_time_seconds,
+            tokens_consumed=payload.tokens_consumed,
         )
         
-        logger.info(f"✓ Logged task {task_id} ({request.outcome})")
+        logger.info(f"✓ Logged task {task_id} ({payload.outcome})")
         
         return {
             "task_id": task_id,
@@ -279,7 +290,8 @@ async def log_task_trajectory(request: TaskTrajectoryRequest):
 
 
 @app.get("/api/v1/training/stats", response_model=TrainingStatsResponse)
-async def get_training_stats():
+@limiter.limit("30/minute")
+async def get_training_stats(request: Request):
     """Get training data statistics"""
     
     db = next(get_db())
@@ -297,7 +309,9 @@ async def get_training_stats():
 
 
 @app.get("/api/v1/training/export")
+@limiter.limit("30/minute")
 async def export_training_data(
+    request: Request,
     format: str = "jsonlines",
     max_samples: int = 5000,
     language: Optional[str] = None,
@@ -367,7 +381,8 @@ async def export_training_data(
 
 
 @app.post("/api/v1/training/cleanup")
-async def cleanup_old_events(days_old: int = 90):
+@limiter.limit("10/minute")
+async def cleanup_old_events(request: Request, days_old: int = 90):
     """Delete training events older than N days"""
     
     db = next(get_db())
@@ -393,7 +408,8 @@ async def cleanup_old_events(days_old: int = 90):
 # ============================================================================
 
 @app.get("/api/v1/training/status")
-async def get_training_status():
+@limiter.limit("30/minute")
+async def get_training_status(request: Request):
     """Get current training orchestrator status (for UI).
     
     Returns:
@@ -423,7 +439,8 @@ async def get_training_status():
 
 
 @app.get("/api/v1/training/version/{model_id}")
-async def get_model_version(model_id: str):
+@limiter.limit("30/minute")
+async def get_model_version(request: Request, model_id: str):
     """Get current active model version.
     
     Returns:
@@ -452,7 +469,8 @@ async def get_model_version(model_id: str):
 
 
 @app.get("/api/v1/training/versions/{model_id}")
-async def get_version_history(model_id: str, limit: int = 5):
+@limiter.limit("30/minute")
+async def get_version_history(request: Request, model_id: str, limit: int = 5):
     """Get version history for display in UI.
     
     Returns: [
@@ -475,7 +493,8 @@ async def get_version_history(model_id: str, limit: int = 5):
 # ============================================================================
 
 @app.get("/")
-async def root():
+@limiter.limit("60/minute")
+async def root(request: Request):
     """API root"""
     return {
         "service": "Sovereign Code Training Service",

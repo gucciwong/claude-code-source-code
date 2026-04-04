@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { parseResponse } from '../services/parseResponse'
+import { ModelsResponseSchema, DownloadStatusSchema, SearchModelsSchema } from '../services/schemas'
 
 const pollIntervals = new Map<string, ReturnType<typeof setInterval>>()
 
@@ -61,7 +63,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
       const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       
-      const data = await response.json()
+      const data = parseResponse(ModelsResponseSchema, await response.json())
       set({
         cached_models: data.cached_models || [],
         active_model: data.active_model,
@@ -81,7 +83,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
       const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       
-      const data = await response.json()
+      const data = parseResponse(ModelsResponseSchema, await response.json())
       const total_size = (data.cached_models || []).reduce(
         (sum: number, m: any) => sum + (m.size_bytes || 0),
         0
@@ -125,7 +127,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
             'http://localhost:8002/api/v1/downloads/status',
             { signal: AbortSignal.timeout(10_000) },
           )
-          const status = await statusResponse.json()
+          const status = parseResponse(DownloadStatusSchema, await statusResponse.json())
           failCount = 0 // reset on success
           
           if (status.queue?.[model_id]) {
@@ -215,7 +217,7 @@ export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
       )
       
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      return await response.json()
+      return parseResponse(SearchModelsSchema, await response.json())
     } catch (err) {
       set({ last_error: `Search failed: ${err}` })
       return []

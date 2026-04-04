@@ -1,5 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react'
 import { useVoiceStore } from '../store/voiceStore'
+import { parseResponse } from '../services/parseResponse'
+import { HealthResponseSchema, TranscribeResponseSchema, SynthesizeResponseSchema } from '../services/schemas'
 
 const VOICE_SERVICE_URL = 'http://localhost:8000'
 const HEALTH_CHECK_INTERVAL = 5000
@@ -31,8 +33,8 @@ export const useVoiceService = () => {
     try {
       const response = await fetch(`${VOICE_SERVICE_URL}/health`, { signal: AbortSignal.timeout(5_000) })
       if (response.ok) {
-        const data = (await response.json()) as HealthResponse
-        setServiceReady(data.asr_loaded && data.tts_loaded)
+        const data = parseResponse(HealthResponseSchema, await response.json())
+        setServiceReady(data.models?.asr_loaded && data.models?.tts_loaded || false)
         setTranscriptionError(null)
         return true
       } else {
@@ -74,7 +76,7 @@ export const useVoiceService = () => {
         })
 
         if (response.ok) {
-          const data = (await response.json()) as TranscribeResponse
+          const data = parseResponse(TranscribeResponseSchema, await response.json())
           setTranscriptionError(null)
           return data
         } else {
@@ -103,7 +105,7 @@ export const useVoiceService = () => {
         })
 
         if (response.ok) {
-          const data = (await response.json()) as SynthesizeResponse
+          const data = parseResponse(SynthesizeResponseSchema, await response.json())
           setTranscriptionError(null)
           return data
         } else {

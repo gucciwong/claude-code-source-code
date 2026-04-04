@@ -7,6 +7,10 @@ Supports mirror for China access (hf-mirror.com)
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import os
 import json
 import asyncio
@@ -34,6 +38,10 @@ app = FastAPI(
     version="0.2.0",
     description="Independent model management and inference via Huggingface"
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
@@ -218,7 +226,8 @@ async def _simulate_download(model_id: str, size_gb: float):
 
 
 @app.get("/health")
-async def health():
+@limiter.limit("60/minute")
+async def health(request: Request):
     """Health check endpoint"""
     return {
         "status": "ok",
@@ -233,7 +242,8 @@ async def health():
 
 
 @app.get("/api/v1/mirror")
-async def get_mirror_info():
+@limiter.limit("30/minute")
+async def get_mirror_info(request: Request):
     """Get current mirror configuration"""
     return {
         "current_mirror": HF_MIRROR,
@@ -264,7 +274,8 @@ async def get_mirror_info():
 
 
 @app.post("/api/v1/mirror/switch")
-async def switch_mirror(mirror_name: str = "huggingface"):
+@limiter.limit("10/minute")
+async def switch_mirror(request: Request, mirror_name: str = "huggingface"):
     """Switch active mirror for subsequent API requests within this process."""
     global HF_MIRROR, HF_ENDPOINT, HF_API_ENDPOINT
 
@@ -290,7 +301,8 @@ async def switch_mirror(mirror_name: str = "huggingface"):
     }
 
 @app.get("/api/v1/models")
-async def list_models():
+@limiter.limit("30/minute")
+async def list_models(request: Request):
     """List all models — local file cache + Ollama-managed models."""
     import pathlib
     cached_models = []
@@ -344,7 +356,8 @@ async def list_models():
 
 
 @app.get("/api/v1/models/search")
-async def search_models(q: str = "", limit: int = 20):
+@limiter.limit("30/minute")
+async def search_models(request: Request, q: str = "", limit: int = 20):
     """Search HuggingFace Hub for models"""
     import urllib.request
     try:
@@ -374,7 +387,8 @@ async def search_models(q: str = "", limit: int = 20):
 
 
 @app.post("/api/v1/models/{model_id:path}/download")
-async def download_model(model_id: str):
+@limiter.limit("10/minute")
+async def download_model(request: Request, model_id: str):
     """
     Pull a model via Ollama (real download + inference-ready).
     Falls back to simulation only when Ollama is unreachable.
@@ -421,7 +435,8 @@ async def download_model(model_id: str):
 
 
 @app.post("/api/v1/models/{model_id:path}/set-active")
-async def set_active_model(model_id: str):
+@limiter.limit("10/minute")
+async def set_active_model(request: Request, model_id: str):
     """Set the active model for inference"""
     global active_model
     
@@ -441,7 +456,9 @@ async def set_active_model(model_id: str):
 
 
 @app.post("/api/v1/inference")
+@limiter.limit("10/minute")
 async def inference(
+    request: Request,
     prompt: str,
     model_id: Optional[str] = None,
     max_tokens: int = 512,
@@ -472,7 +489,8 @@ async def inference(
 
 
 @app.get("/api/v1/downloads/status")
-async def download_status():
+@limiter.limit("30/minute")
+async def download_status(request: Request):
     """Get status of all active downloads"""
     return {
         "queue": download_queue,
@@ -481,7 +499,8 @@ async def download_status():
 
 
 @app.delete("/api/v1/models/{model_id:path}")
-async def delete_model(model_id: str):
+@limiter.limit("10/minute")
+async def delete_model(request: Request, model_id: str):
     """Delete a cached model"""
     model_path = os.path.join(MODEL_CACHE_PATH, model_id)
     
@@ -503,7 +522,8 @@ async def delete_model(model_id: str):
 
 
 @app.post("/api/v1/downloads/{model_id:path}/cancel")
-async def cancel_download(model_id: str):
+@limiter.limit("10/minute")
+async def cancel_download(request: Request, model_id: str):
     """Cancel an in-progress download"""
     if model_id in download_queue:
         download_queue[model_id]["status"] = "cancelled"

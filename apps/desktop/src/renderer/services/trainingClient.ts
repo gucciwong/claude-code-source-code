@@ -4,6 +4,8 @@
  */
 
 import type { TelemetryEnvelope } from './telemetry'
+import { parseResponse } from './parseResponse'
+import { TrainingEventResponseSchema, TrainingStatsSchema, TrainingStatusSchema, TrainingVersionSchema } from './schemas'
 
 /** §3.2 Completion event payload — envelope + completion-specific KPI fields */
 export interface CompletionEventPayload extends Partial<TelemetryEnvelope> {
@@ -74,7 +76,7 @@ export class TrainingServiceClient {
       throw new Error(`[Training] Failed to log event: ${response.status}`)
     }
 
-    return await response.json()
+    return parseResponse(TrainingEventResponseSchema, await response.json())
   }
 
   /**
@@ -109,7 +111,7 @@ export class TrainingServiceClient {
         return null
       }
 
-      return await response.json()
+      return parseResponse(TrainingStatsSchema, await response.json())
     } catch (error) {
       console.error('[Training] Error fetching stats:', error)
       return null
@@ -128,7 +130,7 @@ export class TrainingServiceClient {
         return null
       }
 
-      return await response.json()
+      return parseResponse(TrainingStatusSchema, await response.json())
     } catch (error) {
       console.error('[Training] Error fetching status:', error)
       return null
@@ -147,7 +149,7 @@ export class TrainingServiceClient {
         return null
       }
 
-      return await response.json()
+      return parseResponse(TrainingVersionSchema, await response.json())
     } catch (error) {
       console.error('[Training] Error fetching version:', error)
       return null

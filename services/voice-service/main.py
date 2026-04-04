@@ -3,6 +3,10 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from starlette.requests import Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import logging
 import os
 from pathlib import Path
@@ -45,6 +49,10 @@ app = FastAPI(
     description="Voice I/O service for VSCode + Desktop",
     version="0.1.0"
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS config
 ALLOWED_ORIGINS = os.getenv(
@@ -200,14 +208,16 @@ async def shutdown():
 
 # Routes - Metrics
 @app.get("/metrics")
-async def metrics():
+@limiter.limit("30/minute")
+async def metrics(request: Request):
     """Prometheus metrics endpoint."""
     return generate_latest(registry)
 
 
 # Routes
 @app.get("/health")
-async def health_check():
+@limiter.limit("60/minute")
+async def health_check(request: Request):
     """Health check endpoint with device information."""
     device_info = DeviceConfig.get_device_info()
     
@@ -229,12 +239,14 @@ async def health_check():
 
 # Backward-compatible aliases expected by some clients/tests.
 @app.post("/api/voice/transcribe", response_model=TranscribeResponse)
-async def transcribe_api_alias(file: UploadFile = File(...), language: Optional[str] = None):
-    return await transcribe(file=file, language=language)
+@limiter.limit("10/minute")
+async def transcribe_api_alias(request: Request, file: UploadFile = File(...), language: Optional[str] = None):
+    return await transcribe(request=request, file=file, language=language)
 
 
 @app.post("/transcribe", response_model=TranscribeResponse)
-async def transcribe(file: UploadFile = File(...), language: Optional[str] = None):
+@limiter.limit("10/minute")
+async def transcribe(request: Request, file: UploadFile = File(...), language: Optional[str] = None):
     """Transcribe audio to text."""
     global asr_model
     
@@ -283,7 +295,8 @@ async def transcribe(file: UploadFile = File(...), language: Optional[str] = Non
 
 
 @app.post("/speak", response_model=SpeakResponse)
-async def speak(text: str = Form(...), language: str = Form("en")):
+@limiter.limit("10/minute")
+async def speak(request: Request, text: str = Form(...), language: str = Form("en")):
     """Synthesize text to speech."""
     global tts_model
     
@@ -322,12 +335,14 @@ async def speak(text: str = Form(...), language: str = Form("en")):
 
 
 @app.post("/api/voice/speak", response_model=SpeakResponse)
-async def speak_api_alias(text: str = Form(...), language: str = Form("en")):
-    return await speak(text=text, language=language)
+@limiter.limit("10/minute")
+async def speak_api_alias(request: Request, text: str = Form(...), language: str = Form("en")):
+    return await speak(request=request, text=text, language=language)
 
 
 @app.post("/synthesize", response_model=SynthesizeResponse)
-async def synthesize(request: SynthesizeRequest):
+@limiter.limit("10/minute")
+async def synthesize(request: Request, synth_req: SynthesizeRequest):
     """Synthesize text to speech (JSON endpoint for desktop client).
 
     Accepts JSON body with {text, language} and returns {audio_url, duration}.
@@ -339,16 +354,16 @@ async def synthesize(request: SynthesizeRequest):
         raise HTTPException(status_code=503, detail="TTS model not available")
 
     try:
-        logger.info(f"Synthesize request: {request.text[:50]}...")
+        logger.info(f"Synthesize request: {synth_req.text[:50]}...")
 
-        if request.language != tts_model.lang:
-            tts_model.set_language(request.language)
+        if synth_req.language != tts_model.lang:
+            tts_model.set_language(synth_req.language)
 
         output_dir = Path(os.getenv("TTS_OUTPUT_DIR", "/tmp"))
         output_dir.mkdir(parents=True, exist_ok=True)
-        output_file = output_dir / f"tts_{hash(request.text)}.mp3"
+        output_file = output_dir / f"tts_{hash(synth_req.text)}.mp3"
 
-        result = tts_model.synthesize(request.text, str(output_file))
+        result = tts_model.synthesize(synth_req.text, str(output_file))
 
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result.get("error", "TTS failed"))
@@ -366,7 +381,8 @@ async def synthesize(request: SynthesizeRequest):
 
 
 @app.get("/models/asr")
-async def get_asr_info():
+@limiter.limit("30/minute")
+async def get_asr_info(request: Request):
     """Get ASR model info."""
     if not asr_model:
         raise HTTPException(status_code=503, detail="ASR model not initialized")
@@ -381,7 +397,8 @@ async def get_asr_info():
 
 
 @app.get("/models/tts")
-async def get_tts_info():
+@limiter.limit("30/minute")
+async def get_tts_info(request: Request):
     """Get TTS model info."""
     if not tts_model:
         raise HTTPException(status_code=503, detail="TTS model not initialized")
@@ -395,7 +412,8 @@ async def get_tts_info():
 
 
 @app.get("/device")
-async def get_device_info():
+@limiter.limit("30/minute")
+async def get_device_info(request: Request):
     """Get GPU/device information."""
     return DeviceConfig.get_device_info()
 
