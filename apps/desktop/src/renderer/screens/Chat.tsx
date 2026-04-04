@@ -106,7 +106,7 @@ export function Chat() {
               language: 'text',
               completion_type: 'chat',
               accepted_boolean: undefined, // not yet known
-            })
+            }).catch(() => { /* telemetry fire-and-forget */ })
           }
         }
         chunkCount++

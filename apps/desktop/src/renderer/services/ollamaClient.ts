@@ -60,8 +60,6 @@ export const ollamaClient = {
           }
         }
       }
-    } catch (e) {
-      throw e
     } finally {
       reader.releaseLock()
     }

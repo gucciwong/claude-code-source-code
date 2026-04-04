@@ -37,7 +37,7 @@ export const useVoiceService = () => {
         return true
       } else {
         setServiceReady(false)
-        setTranscriptionError(null)
+        setTranscriptionError(`Health check failed: ${response.status}`)
         return false
       }
     } catch (error) {
