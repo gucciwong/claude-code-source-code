@@ -14,11 +14,15 @@ export default function App() {
   return (
     <AppShell>
       <div className="relative flex flex-1 overflow-hidden">
-        <Sidebar />
+        <ErrorBoundary label="Sidebar">
+          <Sidebar />
+        </ErrorBoundary>
         <ErrorBoundary label="Main content">
           <MainContent />
         </ErrorBoundary>
-        <VoicePanelDrawer />
+        <ErrorBoundary label="VoicePanel">
+          <VoicePanelDrawer />
+        </ErrorBoundary>
       </div>
       <StatusBar />
       <CommandPalette />

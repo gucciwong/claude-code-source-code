@@ -23,6 +23,7 @@ import { CodeCompletion } from '../../screens/CodeCompletion'
 import { ConversationMemory } from '../../screens/ConversationMemory'
 import { Developer } from '../../screens/Developer'
 import { DataHub } from '../../screens/DataHub'
+import HealthDashboard from '../../screens/HealthDashboard'
 
 const screens = {
   dashboard: Dashboard,
@@ -47,6 +48,7 @@ const screens = {
   codecompletion: CodeCompletion,
   developer: Developer,
   memory: ConversationMemory,
+  health: HealthDashboard,
   settings: Settings,
 }
 
