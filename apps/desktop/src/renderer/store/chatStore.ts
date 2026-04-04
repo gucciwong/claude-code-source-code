@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface ChatMessage {
   id: string
@@ -17,7 +18,9 @@ type ChatStore = {
   clear: () => void
 }
 
-export const useChatStore = create<ChatStore>(set => ({
+export const useChatStore = create<ChatStore>()(
+  persist(
+    set => ({
   messages: [],
   knowledgeContext: '',
   addMessage: msg => set(state => ({ messages: [...state.messages, msg] })),
@@ -39,4 +42,12 @@ export const useChatStore = create<ChatStore>(set => ({
     }),
   setKnowledgeContext: ctx => set({ knowledgeContext: ctx }),
   clear: () => set({ messages: [] }),
-}))
+    }),
+    {
+      name: 'sovereign-chat-history',
+      partialize: (state) => ({
+        messages: state.messages.filter(m => !m.streaming),
+      }),
+    },
+  ),
+)

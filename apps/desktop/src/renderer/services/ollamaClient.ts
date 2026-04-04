@@ -32,12 +32,14 @@ export const ollamaClient = {
 
   async *streamChat(
     model: string,
-    messages: { role: string; content: string }[]
+    messages: { role: string; content: string }[],
+    signal?: AbortSignal
   ): AsyncGenerator<string> {
     const res = await fetch(`${BASE}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, messages, stream: true }),
+      signal,
     })
     if (!res.body) return
     const reader = res.body.getReader()

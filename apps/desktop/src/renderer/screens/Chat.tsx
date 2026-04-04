@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send, Zap, ChevronDown } from 'lucide-react'
+import { Send, Square, Zap, ChevronDown } from 'lucide-react'
 import { useChatStore, ChatMessage } from '../store/chatStore'
 import { useSystemStore } from '../store/systemStore'
 import { useAgentStore } from '../store/agentStore'
@@ -42,6 +42,7 @@ export function Chat() {
   const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastUserPromptRef = useRef<string>('')
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: 'smooth' })
@@ -69,6 +70,9 @@ export function Chat() {
     addMessage(assistantMsg)
     setIsStreaming(true)
 
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
     const model = activeModel || 'llama3.1:8b'
     const apiMessages = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }))
 
@@ -85,7 +89,7 @@ export function Chat() {
     })
 
     try {
-      for await (const chunk of streamChat(model, apiMessages)) {
+      for await (const chunk of streamChat(model, apiMessages, controller.signal)) {
         // ── inference_first_token_emitted (once) ──────────────────
         if (chunkCount === 0) {
           firstTokenTime = performance.now()
@@ -150,9 +154,14 @@ export function Chat() {
         error_message: err instanceof Error ? err.message : String(err),
       })
     } finally {
+      abortControllerRef.current = null
       setLastStreaming(false)
       setIsStreaming(false)
     }
+  }
+
+  function handleStop() {
+    abortControllerRef.current?.abort()
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -239,14 +248,24 @@ export function Chat() {
             aria-label="Chat message input"
             disabled={isStreaming || isProcessing}
           />
-          <button
-            className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary rounded-lg p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={handleSend}
-            disabled={isStreaming || isProcessing || !input.trim()}
-            aria-label="Send message"
-          >
-            <Send size={16} aria-hidden="true" />
-          </button>
+          {isStreaming ? (
+            <button
+              className="bg-red-600 hover:bg-red-500 active:bg-red-700 text-white rounded-lg p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+              onClick={handleStop}
+              aria-label="Stop generating"
+            >
+              <Square size={16} aria-hidden="true" />
+            </button>
+          ) : (
+            <button
+              className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary rounded-lg p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleSend}
+              disabled={isProcessing || !input.trim()}
+              aria-label="Send message"
+            >
+              <Send size={16} aria-hidden="true" />
+            </button>
+          )}
         </div>
       </div>
 
