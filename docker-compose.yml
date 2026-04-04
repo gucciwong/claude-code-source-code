@@ -42,6 +42,53 @@ services:
     networks:
       - sovereign-network
 
+  model-manager:
+    build:
+      context: ./services/model-manager
+    ports:
+      - "8100:8100"
+    environment:
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8100/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sovereign-network
+
+  training-service:
+    build:
+      context: ./services/training-service
+    ports:
+      - "8200:8200"
+    environment:
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8200/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sovereign-network
+
+  orchestration-service:
+    build:
+      context: ./services/orchestration-service
+    ports:
+      - "8300:8300"
+    environment:
+      - MODEL_MANAGER_URL=http://model-manager:8100
+      - TRAINING_SERVICE_URL=http://training-service:8200
+      - VOICE_SERVICE_URL=http://voice-service:8000
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8300/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sovereign-network
+
   redis:
     image: redis:7.2-alpine
     container_name: sovereign-redis
