@@ -18,17 +18,28 @@ export function activate(context: vscode.ExtensionContext): void {
   let retriever: Retriever | null = null
   const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
   if (workspaceRoot) {
-    const dbDir = path.join(workspaceRoot, '.sovereign-code')
-    fs.mkdirSync(dbDir, { recursive: true })
-    const dbPath = path.join(dbDir, 'rag.db')
-    const cfg = vscode.workspace.getConfiguration('sovereign-code')
-    const ollamaUrl = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
-    const embeddingModel = cfg.get<string>('embeddingModel', 'nomic-embed-text')
-    const store = new ChunkStore(dbPath)
-    retriever = new Retriever(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
-    const indexer = new Indexer(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
-    void indexer.start(workspaceRoot)
-    context.subscriptions.push({ dispose: () => { indexer.stop(); store.dispose() } })
+    try {
+      const dbDir = path.join(workspaceRoot, '.sovereign-code')
+      fs.mkdirSync(dbDir, { recursive: true })
+      const dbPath = path.join(dbDir, 'rag.db')
+      const cfg = vscode.workspace.getConfiguration('sovereign-code')
+      const ollamaUrl = cfg.get<string>('ollamaUrl', 'http://localhost:11434')
+      const embeddingModel = cfg.get<string>('embeddingModel', 'nomic-embed-text')
+      const store = new ChunkStore(dbPath)
+      retriever = new Retriever(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
+      const indexer = new Indexer(store, ollamaUrl ?? 'http://localhost:11434', embeddingModel ?? 'nomic-embed-text')
+      indexer.start(workspaceRoot).then(() => {
+        retriever?.setReady(true)
+      }).catch(() => {
+        // Index failed — completions work without RAG
+      })
+      context.subscriptions.push({ dispose: () => { indexer.stop(); store.dispose() } })
+    } catch {
+      vscode.window.showWarningMessage(
+        'Sovereign Code: RAG features disabled — database initialization failed'
+      )
+      // retriever stays null, completions work without RAG
+    }
   }
 
   // Register inline completion provider for all files

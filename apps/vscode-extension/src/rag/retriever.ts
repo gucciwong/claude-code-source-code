@@ -9,6 +9,11 @@ export interface RetrievedChunk {
 }
 
 export class Retriever {
+  private _ready = false
+
+  get isReady(): boolean { return this._ready }
+  setReady(v: boolean): void { this._ready = v }
+
   constructor(
     private readonly store: ChunkStore,
     private readonly ollamaUrl: string,
@@ -17,9 +22,10 @@ export class Retriever {
 
   /**
    * Embed the query text and return the topK most similar chunks from the store.
-   * Returns [] if embedding fails or the store is empty.
+   * Returns [] if embedding fails, the store is empty, or the indexer hasn't finished.
    */
   async query(text: string, topK: number): Promise<RetrievedChunk[]> {
+    if (!this._ready) return []
     const embedding = await getEmbedding(this.ollamaUrl, this.embeddingModel, text)
     if (!embedding) return []
 

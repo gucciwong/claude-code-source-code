@@ -76,10 +76,10 @@ export class ChunkStore {
    * Loads all embeddings into memory and scores via cosine similarity.
    * Suitable for repos up to ~50K chunks.
    */
-  search(queryEmbedding: number[], topK: number): StoredChunk[] {
+  search(queryEmbedding: number[], topK: number, maxChunks = 50_000): StoredChunk[] {
     const rows = this.db
-      .prepare('SELECT id, file_path, start_line, end_line, content, embedding FROM chunks')
-      .all() as RawRow[]
+      .prepare('SELECT id, file_path, start_line, end_line, content, embedding FROM chunks LIMIT ?')
+      .all(maxChunks) as RawRow[]
 
     if (rows.length === 0) return []
 

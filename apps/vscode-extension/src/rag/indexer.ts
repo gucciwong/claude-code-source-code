@@ -9,6 +9,12 @@ const EXCLUDE_GLOB = '{**/node_modules/**,**/out/**,**/.git/**,**/dist/**,**/.so
 
 export class Indexer {
   private watcher?: vscode.FileSystemWatcher
+  private _ready = false
+  private _resolveReady!: () => void
+  private readonly _readyPromise = new Promise<void>(r => { this._resolveReady = r })
+
+  get ready(): boolean { return this._ready }
+  waitUntilReady(): Promise<void> { return this._readyPromise }
 
   constructor(
     private readonly store: ChunkStore,
@@ -22,6 +28,9 @@ export class Indexer {
     for (const uri of uris) {
       await this.indexFile(uri.fsPath)
     }
+
+    this._ready = true
+    this._resolveReady()
 
     // Incremental watch
     this.watcher = vscode.workspace.createFileSystemWatcher(
