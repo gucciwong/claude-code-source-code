@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
@@ -34,7 +34,9 @@ function ModelDetail({ model }: { model: OllamaModel }) {
   const isActive = model.name === activeModel
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const isMountedRef = useRef(true)
 
+  useEffect(() => { return () => { isMountedRef.current = false } }, [])
   useEffect(() => { setConfirmDelete(false) }, [model.name])
 
   return (
@@ -148,10 +150,14 @@ function ModelDetail({ model }: { model: OllamaModel }) {
                 try {
                   await useModelsStore.getState().deleteModel(model.name)
                 } catch (e) {
-                  useModelManagerStore.setState({ last_error: `Delete failed: ${e instanceof Error ? e.message : 'Unknown error'}` })
+                  if (isMountedRef.current) {
+                    useModelManagerStore.setState({ last_error: `Delete failed: ${e instanceof Error ? e.message : 'Unknown error'}` })
+                  }
                 } finally {
-                  setDeleting(false)
-                  setConfirmDelete(false)
+                  if (isMountedRef.current) {
+                    setDeleting(false)
+                    setConfirmDelete(false)
+                  }
                 }
               }}
               aria-label={`Confirm delete ${model.name}`}
@@ -163,6 +169,7 @@ function ModelDetail({ model }: { model: OllamaModel }) {
               type="button"
               className="border border-border-default text-text-secondary hover:text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
               onClick={() => setConfirmDelete(false)}
+              aria-label="Cancel delete"
             >
               Cancel
             </button>
