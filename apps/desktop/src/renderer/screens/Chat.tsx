@@ -7,6 +7,7 @@ import { streamChat } from '../services/ollamaClient'
 import { ToolTrace } from '../components/chat/ToolTrace'
 import { DiffViewer } from '../components/chat/DiffViewer'
 import { VoicePanel } from '../components/common/VoicePanel'
+import { ThinkingAnimation } from '../components/chat/ThinkingAnimation'
 import { useVoiceStore } from '../store/voiceStore'
 import { useTrainingService } from '../hooks/useTrainingService'
 import { buildEnvelope } from '../services/telemetry'
@@ -19,6 +20,8 @@ import { formatModelSizeFromBytes } from '../utils/modelSize'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
+  const isThinking = message.streaming && !message.content
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
       <div
@@ -28,8 +31,12 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             : 'bg-bg-surface-2 border border-border-default text-text-primary'
         }`}
       >
-        <p className="whitespace-pre-wrap">{message.content}</p>
-        {message.streaming && (
+        {isThinking ? (
+          <ThinkingAnimation />
+        ) : (
+          <p className="whitespace-pre-wrap">{message.content}</p>
+        )}
+        {message.streaming && message.content && (
           <span className="inline-block w-2 h-4 bg-accent-400 animate-pulse ml-1 align-middle" aria-hidden="true" />
         )}
         {!message.streaming && message.role === 'assistant' && message.tokensPerSec != null && (
