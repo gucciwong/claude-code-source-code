@@ -338,7 +338,8 @@ export class TrainingServiceClient {
    * Submit a new experiment for a program
    */
   async submitExperiment(programId: string, config: Record<string, unknown>): Promise<any> {
-    const response = await fetch(`${this.baseUrl}/api/v1/research/programs/${programId}/experiments`, {
+    // POST /programs/{id}/start initiates the autonomous experiment loop
+    const response = await fetch(`${this.baseUrl}/api/v1/research/programs/${programId}/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ config }),

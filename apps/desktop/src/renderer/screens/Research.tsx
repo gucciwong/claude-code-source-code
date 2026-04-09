@@ -63,11 +63,12 @@ export function Research() {
     }
   }
 
-  const handleSubmitExperiment = async (config: Record<string, unknown>) => {
+  const handleSubmitExperiment = async () => {
     if (!selectedProgram) return
 
     try {
-      await submitExperiment(selectedProgram, config)
+      // Pass empty config — backend uses program's search_dimensions defaults
+      await submitExperiment(selectedProgram, {})
     } catch (err) {
       console.error('Failed to submit experiment:', err)
     }
@@ -172,7 +173,7 @@ export function Research() {
               />
 
               <button
-                onClick={() => setShowEditor(true)}
+                onClick={handleSubmitExperiment}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors font-medium"
                 disabled={isLoading}
               >
