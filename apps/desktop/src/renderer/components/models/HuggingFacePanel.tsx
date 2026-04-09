@@ -155,6 +155,7 @@ export function HuggingFacePanel() {
   const bulkMergeDone = useDownloadStore((s) => s.bulkMergeDone)
   const syncFromBackendStatus = useDownloadStore((s) => s.syncFromBackendStatus)
   const clearDownload = useDownloadStore((s) => s.clearDownload)
+  const clearDoneDownloads = useDownloadStore((s) => s.clearDoneDownloads)
   const [isOffline, setIsOffline] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null)
   const [isSearching, setIsSearching] = useState(false)
@@ -322,6 +323,15 @@ export function HuggingFacePanel() {
     const id = setInterval(poll, 1000)
     return () => clearInterval(id)
   }, [activeDownloads.length, getDownloadStatus, syncFromBackendStatus])
+
+  // When all active downloads have completed (activeDownloads is empty),
+  // clear all done entries — the sidebar should disappear only when
+  // EVERYTHING is finished, not per-download.
+  useEffect(() => {
+    if (activeDownloads.length === 0) {
+      clearDoneDownloads()
+    }
+  }, [activeDownloads.length, clearDoneDownloads])
 
   function getModelCompatibility(sizeGb: number, params: string, name: string): { status: CompatibilityStatus; label: string; detail?: string } | undefined {
     if (!hwProfile) return undefined

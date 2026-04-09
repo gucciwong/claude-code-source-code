@@ -1,9 +1,6 @@
 import { create } from 'zustand'
 import { DownloadQueueEntry } from '../hooks/useModelManager'
 
-// Track models already scheduled for auto-clear to avoid duplicate timeouts
-const pendingClears = new Map<string, ReturnType<typeof setTimeout>>()
-
 export type DownloadStatus = 'idle' | 'pending' | 'downloading' | 'done' | 'error'
 
 interface DownloadStoreState {
@@ -17,6 +14,8 @@ interface DownloadStoreState {
   setDownloadDetails: (details: Record<string, DownloadQueueEntry>) => void
   syncFromBackendStatus: (details: Record<string, DownloadQueueEntry>) => void
   clearDownload: (modelId: string) => void
+  /** Remove all 'done' entries — called when activeDownloads reaches 0 */
+  clearDoneDownloads: () => void
 }
 
 export const useDownloadStore = create<DownloadStoreState>((set) => ({
@@ -45,12 +44,6 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
           delete nextDetails[id]
           changed = true
         }
-        // Clean up any pending auto-clear timeout for this model since it's now marked done
-        const timeoutId = pendingClears.get(id)
-        if (timeoutId !== undefined) {
-          clearTimeout(timeoutId)
-          pendingClears.delete(id)
-        }
       }
       return changed ? { downloadStatuses: next, downloadDetails: nextDetails } : state
     }),
@@ -77,10 +70,10 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
         }
 
         if (entry.status === 'done') {
-          // Skip if a clear is already pending — let the scheduled clearDownload run
-          if (pendingClears.has(id)) {
-            continue
-          }
+          // Keep status as 'downloading' with progress 100 so completed entries
+          // stay visible in the sidebar alongside remaining active downloads.
+          // All done entries are cleared at once by clearDoneDownloads() when
+          // activeDownloads (filtering 'downloading'|'pending') becomes empty.
           const prior = nextDetails[id]
           next.set(id, 'downloading')
           nextDetails[id] = {
@@ -93,11 +86,6 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
             started_at: entry.started_at ?? prior?.started_at ?? Math.floor(Date.now() / 1000),
           }
           changed = true
-          const timeoutId = setTimeout(() => {
-            pendingClears.delete(id)
-            useDownloadStore.getState().clearDownload(id)
-          }, 3000)
-          pendingClears.set(id, timeoutId)
           continue
         }
 
@@ -125,5 +113,20 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
       const nextDetails = { ...state.downloadDetails }
       delete nextDetails[modelId]
       return { downloadStatuses: next, downloadDetails: nextDetails }
+    }),
+
+  clearDoneDownloads: () =>
+    set((state) => {
+      const next = new Map(state.downloadStatuses)
+      const nextDetails = { ...state.downloadDetails }
+      let changed = false
+      for (const [id, status] of next.entries()) {
+        if (status === 'done') {
+          next.set(id, 'idle')
+          delete nextDetails[id]
+          changed = true
+        }
+      }
+      return changed ? { downloadStatuses: next, downloadDetails: nextDetails } : state
     }),
 }))
