@@ -6,6 +6,7 @@ services:
       context: ./services/voice-service
       dockerfile: Dockerfile
     container_name: sovereign-voice-service
+    restart: always
     ports:
       - "8000:8000"
     environment:
@@ -45,6 +46,7 @@ services:
   model-manager:
     build:
       context: ./services/model-manager
+    restart: always
     ports:
       - "8002:8002"
     environment:
@@ -60,6 +62,7 @@ services:
   training-service:
     build:
       context: ./services/training-service
+    restart: always
     ports:
       - "8001:8001"
     environment:
@@ -75,6 +78,7 @@ services:
   orchestration-service:
     build:
       context: ./services/orchestration-service
+    restart: always
     ports:
       - "8006:8006"
     environment:
@@ -92,6 +96,7 @@ services:
   analytics-service:
     build:
       context: ./services/analytics-service
+    restart: always
     ports:
       - "8009:8009"
     environment:
@@ -107,6 +112,7 @@ services:
   award-service:
     build:
       context: ./services/award-service
+    restart: always
     ports:
       - "8011:8011"
     environment:
@@ -122,6 +128,7 @@ services:
   code-completion-service:
     build:
       context: ./services/code-completion-service
+    restart: always
     ports:
       - "8007:8007"
     environment:
@@ -137,6 +144,7 @@ services:
   enterprise-data-service:
     build:
       context: ./services/enterprise-data-service
+    restart: always
     ports:
       - "8004:8004"
     environment:
@@ -152,6 +160,7 @@ services:
   execution-trace-service:
     build:
       context: ./services/execution-trace-service
+    restart: always
     ports:
       - "8005:8005"
     environment:
@@ -167,6 +176,7 @@ services:
   federation-service:
     build:
       context: ./services/federation-service
+    restart: always
     ports:
       - "8008:8008"
     environment:
@@ -182,6 +192,7 @@ services:
   knowledge-service:
     build:
       context: ./services/knowledge-service
+    restart: always
     ports:
       - "8003:8003"
     environment:
@@ -200,6 +211,7 @@ services:
   memory-service:
     build:
       context: ./services/memory-service
+    restart: always
     ports:
       - "8010:8010"
     environment:
@@ -215,6 +227,7 @@ services:
   messaging-bridge-service:
     build:
       context: ./services/messaging-bridge-service
+    restart: always
     ports:
       - "8012:8012"
     environment:
@@ -230,6 +243,7 @@ services:
   org-intelligence-service:
     build:
       context: ./services/org-intelligence-service
+    restart: always
     ports:
       - "8013:8013"
     environment:
@@ -245,6 +259,7 @@ services:
   persona-council-service:
     build:
       context: ./services/persona-council-service
+    restart: always
     ports:
       - "8014:8014"
     environment:
@@ -260,6 +275,7 @@ services:
   plugin-registry-service:
     build:
       context: ./services/plugin-registry-service
+    restart: always
     ports:
       - "8015:8015"
     environment:
@@ -275,6 +291,7 @@ services:
   pr-review-service:
     build:
       context: ./services/pr-review-service
+    restart: always
     ports:
       - "8016:8016"
     environment:
@@ -290,6 +307,7 @@ services:
   semantic-search-service:
     build:
       context: ./services/semantic-search-service
+    restart: always
     ports:
       - "8017:8017"
     environment:
@@ -305,6 +323,7 @@ services:
   redis:
     image: redis:7.2-alpine
     container_name: sovereign-redis
+    restart: always
     ports:
       - "6379:6379"
     environment:
