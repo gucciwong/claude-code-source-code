@@ -19,6 +19,41 @@ export interface ResearchProgram {
   status: 'active' | 'completed' | 'failed'
 }
 
+/** Shape sent by ResearchProgramEditor */
+export interface EditorFormData {
+  name: string
+  description: string
+  model_id: string
+  dataset_id: string
+  config: Record<string, unknown>
+}
+
+/** Transform editor form data to the backend CreateResearchProgramRequest schema */
+function transformToBackend(data: EditorFormData) {
+  // Slugify name for run_tag
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  const runTag = `research/${slugify(data.name)}`
+  const goal = `Optimize model performance for ${data.name}`
+
+  return {
+    run_tag: runTag,
+    goal,
+    description: data.description || `Research program: ${data.name}`,
+    primary_metric: 'val_loss',
+    time_budget_seconds: 600,
+    max_experiments: null,
+    base_model: data.model_id,
+    dataset_path: data.dataset_id,
+    search_dimensions: [
+      { name: 'learning_rate', type: 'float', min_val: 1e-5, max_val: 1e-3, current: data.config.learning_rate ?? 0.001 },
+      { name: 'batch_size', type: 'int', min_val: 1, max_val: 128, current: data.config.batch_size ?? 32 },
+      { name: 'epochs', type: 'int', min_val: 1, max_val: 20, current: data.config.epochs ?? 10 },
+      { name: 'warmup_steps', type: 'int', min_val: 0, max_val: 500, current: data.config.warmup_steps ?? 100 },
+    ],
+  }
+}
+
 export interface Preset {
   preset_id: string
   name: string
@@ -108,7 +143,9 @@ export function useResearchProgram(): UseResearchProgramReturn {
       setIsLoading(true)
       setError(null)
       try {
-        const program = await client.createProgram(data)
+        // Transform editor form data to backend request schema
+        const backendPayload = transformToBackend(data as EditorFormData)
+        const program = await client.createProgram(backendPayload)
         setPrograms((prev) => [...prev, program])
         return program
       } catch (err) {
