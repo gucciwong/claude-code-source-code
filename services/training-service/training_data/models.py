@@ -164,6 +164,34 @@ class TaskTrajectory(Base):
         }
 
 
+class ChatMessage(Base):
+    """Training data from chat messages (user/assistant conversations)"""
+    __tablename__ = "chat_messages"
+
+    id = Column(String, primary_key=True)  # UUID
+    session_id = Column(String)  # Conversation session identifier
+
+    # Message content
+    role = Column(String, nullable=False)  # "user" or "assistant"
+    content = Column(String, nullable=False)
+
+    # Metadata
+    model_id = Column(String)  # Which model generated this (for assistant messages)
+
+    # Timestamps
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self.id,
+            "session_id": self.session_id,
+            "role": self.role,
+            "content": self.content,
+            "model_id": self.model_id,
+            "created_at": self.created_at.isoformat(),
+        }
+
+
 class TrainingRun(Base):
     """Metadata for a training cycle"""
     __tablename__ = "training_runs"

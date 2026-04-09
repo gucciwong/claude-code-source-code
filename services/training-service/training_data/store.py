@@ -7,7 +7,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
-from .models import CompletionEvent, TaskTrajectory, TrainingRun, EventType
+from .models import CompletionEvent, TaskTrajectory, TrainingRun, ChatMessage, EventType
 
 
 class TrainingDataStore:
@@ -347,12 +347,104 @@ class TrainingDataStore:
     
     def clear_old_events(self, days_old: int = 90):
         """Delete old training events (management task)"""
-        
+
         cutoff = datetime.now(timezone.utc) - timedelta(days=days_old)
         deleted = self.db.query(CompletionEvent).filter(
             CompletionEvent.created_at < cutoff
         ).delete()
-        
+
         self.db.commit()
-        
+
         return deleted
+
+    def add_chat_message(
+        self,
+        role: str,
+        content: str,
+        session_id: Optional[str] = None,
+        model_id: Optional[str] = None,
+    ) -> str:
+        """Add a chat message to the store."""
+        if role not in ("user", "assistant"):
+            raise ValueError(f"Invalid role: {role}. Must be 'user' or 'assistant'.")
+
+        message_id = str(uuid.uuid4())
+        message = ChatMessage(
+            id=message_id,
+            session_id=session_id,
+            role=role,
+            content=self._sanitize_code(content) if role == "assistant" else content,
+            model_id=model_id,
+        )
+
+        self.db.add(message)
+        self.db.commit()
+
+        return message_id
+
+    def add_chat_messages_batch(self, messages: List[Dict[str, Any]]) -> int:
+        """Add multiple chat messages in batch. Returns count of added messages."""
+        if not messages:
+            return 0
+
+        ids = []
+        for msg in messages:
+            role = msg.get("role", "")
+            if role not in ("user", "assistant"):
+                continue
+
+            message_id = str(uuid.uuid4())
+            content = msg.get("content", "")
+            message = ChatMessage(
+                id=message_id,
+                session_id=msg.get("session_id"),
+                role=role,
+                content=self._sanitize_code(content) if role == "assistant" else content,
+                model_id=msg.get("model_id"),
+            )
+            self.db.add(message)
+            ids.append(message_id)
+
+        self.db.commit()
+        return len(ids)
+
+    def get_chat_conversations(
+        self,
+        max_pairs: int = 500,
+    ) -> List[Dict[str, Any]]:
+        """Get user-assistant message pairs for training.
+
+        Returns pairs where a user message is followed by an assistant message
+        in the same session, ordered by recency.
+        """
+        # Get all messages ordered by created_at
+        all_messages = (
+            self.db.query(ChatMessage)
+            .order_by(ChatMessage.session_id, ChatMessage.created_at)
+            .all()
+        )
+
+        pairs = []
+        for i in range(len(all_messages) - 1):
+            current = all_messages[i]
+            next_msg = all_messages[i + 1]
+
+            # Check if same session and user->assistant transition
+            if (
+                current.session_id == next_msg.session_id
+                and current.role == "user"
+                and next_msg.role == "assistant"
+            ):
+                pairs.append({
+                    "prompt": current.content,
+                    "completion": next_msg.content,
+                    "session_id": current.session_id,
+                })
+                if len(pairs) >= max_pairs:
+                    break
+
+        return pairs
+
+    def get_chat_message_count(self) -> int:
+        """Get total number of chat messages stored."""
+        return self.db.query(ChatMessage).count()

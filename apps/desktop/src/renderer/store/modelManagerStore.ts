@@ -1,301 +1,206 @@
 import { create } from 'zustand'
-import { parseResponse } from '../services/parseResponse'
-import { ModelsResponseSchema, DownloadStatusSchema, SearchModelsSchema } from '../services/schemas'
+import { modelManagerAPI, ModelMetadata, TrainingJob, TrainingConfig, AutoTrainingOptions } from '../services/modelManagerAPI'
+import { useSystemStore } from './systemStore'
 
-const pollIntervals = new Map<string, ReturnType<typeof setInterval>>()
-
-export type Quantization = 'fp32' | 'int8' | 'int4'
-
-export interface ModelInfo {
-  id: string                    // huggingface.co model id
-  name: string                  // Display name
-  size_gb: number              // Approximate size
-  cached: boolean              // Is downloaded locally
-  downloaded: boolean          // Fully downloaded
-  downloading: boolean         // Currently downloading
-  download_progress: number    // 0-100
-  quantizations: Quantization[] // Available quantization options
-  selected_quantization?: Quantization
-  requires_hf_token?: boolean
-}
-
-export interface ModelManagerStore {
+export interface ModelManagerState {
   // Model lists
-  available_models: ModelInfo[]
-  cached_models: ModelInfo[]
-  active_model: ModelInfo | null
-  
-  // Download state
-  download_queue: string[]
-  downloads_in_progress: Record<string, number> // model_id -> progress %
-  cache_usage_gb: number
-  
+  models: ModelMetadata[]
+  selectedModel: ModelMetadata | null
+
+  // Training state
+  trainingJobs: TrainingJob[]
+  activeTrainingJob: TrainingJob | null
+
+  // UI state
+  isLoading: boolean
+  error: string | null
+
   // Actions
-  list_available: () => Promise<void>
-  list_cached: () => Promise<void>
-  download_model: (model_id: string, quantization?: Quantization) => Promise<void>
-  set_active_model: (model_id: string) => Promise<void>
-  delete_model: (model_id: string) => Promise<void>
-  search_models: (query: string) => Promise<ModelInfo[]>
-  cancel_download: (model_id: string) => Promise<void>
-  cleanup_polls: () => void
-  get_popular_models: () => ModelInfo[]
+  loadModels: () => Promise<void>
+  selectModel: (id: string) => void
+  setActiveModel: (modelId: string, loadConfig?: Record<string, unknown>) => Promise<void>
+  deleteModel: (modelId: string) => Promise<void>
+  startTraining: (config: TrainingConfig) => Promise<void>
+  startOneClickTraining: (options?: AutoTrainingOptions, chatMessages?: Array<{ role: string; content: string; session_id?: string; model_id?: string }>) => Promise<void>
+  getTrainingStatus: (jobId: string) => Promise<TrainingJob>
+  exportModel: (modelId: string) => Promise<void>
+  refreshModels: () => Promise<void>
   
-  // Status tracking
-  is_model_available: (model_id: string) => boolean
-  get_download_progress: (model_id: string) => number
-  is_service_available: boolean
+  // Status
+  isServiceAvailable: boolean
+  checkServiceAvailable: () => Promise<boolean>
+
+  // Error display
   last_error: string | null
+
+  // Cleanup
+  cleanup_polls: () => void
 }
 
-export const useModelManagerStore = create<ModelManagerStore>((set, get) => ({
-  available_models: [],
-  cached_models: [],
-  active_model: null,
-  download_queue: [],
-  downloads_in_progress: {},
-  cache_usage_gb: 0,
-  is_service_available: false,
+export const useModelManagerStore = create<ModelManagerState>((set, get) => ({
+  models: [],
+  selectedModel: null,
+  trainingJobs: [],
+  activeTrainingJob: null,
+  isLoading: false,
+  error: null,
+  isServiceAvailable: false,
   last_error: null,
 
-  list_available: async () => {
+  loadModels: async () => {
+    set({ isLoading: true, error: null, last_error: null })
     try {
-      const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      
-      const data = parseResponse(ModelsResponseSchema, await response.json())
-      set({
-        cached_models: data.cached_models || [],
-        active_model: data.active_model,
-        is_service_available: true,
-        last_error: null
-      })
-    } catch (err) {
-      set({
-        last_error: `Failed to list models: ${err}`,
-        is_service_available: false
-      })
-    }
-  },
-
-  list_cached: async () => {
-    try {
-      const response = await fetch('http://localhost:8002/api/v1/models', { signal: AbortSignal.timeout(10_000) })
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      
-      const data = parseResponse(ModelsResponseSchema, await response.json())
-      const total_size = (data.cached_models || []).reduce(
-        (sum: number, m: any) => sum + (m.size_bytes || 0),
-        0
-      )
-      
-      set({
-        cached_models: data.cached_models || [],
-        cache_usage_gb: total_size / (1024 ** 3)
-      })
-    } catch (err) {
-      set({ last_error: `Failed to list cached models: ${err}` })
-    }
-  },
-
-  download_model: async (model_id: string, quantization?: Quantization) => {
-    if (get().downloads_in_progress[model_id] !== undefined) return // already downloading
-
-    try {
-      const response = await fetch(
-        `http://localhost:8002/api/v1/models/${model_id}/download`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantization: quantization || 'fp32' }),
-          signal: AbortSignal.timeout(10_000),
-        }
-      )
-      
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      
-      set(state => ({
-        download_queue: [...state.download_queue, model_id],
-        downloads_in_progress: { ...state.downloads_in_progress, [model_id]: 0 }
-      }))
-
-      // Poll download progress
-      let failCount = 0
-      const pollInterval = setInterval(async () => {
-        try {
-          const statusResponse = await fetch(
-            'http://localhost:8002/api/v1/downloads/status',
-            { signal: AbortSignal.timeout(10_000) },
-          )
-          const status = parseResponse(DownloadStatusSchema, await statusResponse.json())
-          failCount = 0 // reset on success
-          
-          if (status.queue?.[model_id]) {
-            set(state => ({
-              downloads_in_progress: {
-                ...state.downloads_in_progress,
-                [model_id]: status.queue[model_id].progress || 0
-              }
-            }))
-          } else {
-            // Download complete
-            clearInterval(pollInterval)
-            pollIntervals.delete(model_id)
-            await get().list_cached()
-            set(state => {
-              const { [model_id]: _, ...rest } = state.downloads_in_progress
-              return {
-                downloads_in_progress: rest,
-                download_queue: state.download_queue.filter(m => m !== model_id)
-              }
-            })
-          }
-        } catch (err) {
-          failCount++
-          if (failCount >= 5) {
-            clearInterval(pollInterval)
-            pollIntervals.delete(model_id)
-            set(state => {
-              const { [model_id]: _, ...rest } = state.downloads_in_progress
-              return {
-                downloads_in_progress: rest,
-                download_queue: state.download_queue.filter(m => m !== model_id),
-                last_error: `Download status polling failed after 5 retries`
-              }
-            })
-          }
-        }
-      }, 1000)
-      pollIntervals.set(model_id, pollInterval)
-    } catch (err) {
-      set({ last_error: `Download failed: ${err}` })
-    }
-  },
-
-  set_active_model: async (model_id: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8002/api/v1/models/${model_id}/set-active`,
-        { method: 'POST', signal: AbortSignal.timeout(10_000) }
-      )
-      
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      
-      const cached = get().cached_models.find(m => m.id === model_id)
-      if (cached) {
-        set({ active_model: cached })
+      const { models, activeModel } = await modelManagerAPI.listModels()
+      // Sync active model to systemStore
+      if (activeModel) {
+        useSystemStore.setState({ activeModel })
       }
+      set({
+        models,
+        selectedModel: models[0] || null,
+        isServiceAvailable: true,
+      })
     } catch (err) {
-      set({ last_error: `Failed to set active model: ${err}` })
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg, isServiceAvailable: false })
+    } finally {
+      set({ isLoading: false })
     }
   },
 
-  delete_model: async (model_id: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8002/api/v1/models/${model_id}`,
-        { method: 'DELETE', signal: AbortSignal.timeout(10_000) }
-      )
-      
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      
-      set(state => ({
-        cached_models: state.cached_models.filter(m => m.id !== model_id),
-        active_model: state.active_model?.id === model_id ? null : state.active_model
-      }))
-    } catch (err) {
-      set({ last_error: `Delete failed: ${err}` })
+  selectModel: (id: string) => {
+    const model = get().models.find(m => m.id === id || m.name === id)
+    if (model) {
+      set({ selectedModel: model })
     }
   },
 
-  search_models: async (query: string) => {
+  setActiveModel: async (modelId: string, loadConfig?: Record<string, unknown>) => {
+    set({ isLoading: true, error: null, last_error: null })
     try {
-      const params = new URLSearchParams({ q: query })
-      const response = await fetch(
-        `http://localhost:8002/api/v1/models/search?${params}`,
-        { signal: AbortSignal.timeout(10_000) },
-      )
-      
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      return parseResponse(SearchModelsSchema, await response.json())
+      const result = await modelManagerAPI.setActiveModel(modelId, loadConfig)
+      useSystemStore.setState({ activeModel: result.active_model })
+      await get().loadModels()
     } catch (err) {
-      set({ last_error: `Search failed: ${err}` })
-      return []
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg, last_error: errorMsg })
+      throw err
+    } finally {
+      set({ isLoading: false })
     }
   },
 
-  cancel_download: async (model_id: string) => {
+  deleteModel: async (modelId: string) => {
+    set({ isLoading: true, error: null, last_error: null })
     try {
-      await fetch(
-        `http://localhost:8002/api/v1/downloads/${model_id}/cancel`,
-        { method: 'POST', signal: AbortSignal.timeout(10_000) }
-      )
-      
-      const existingInterval = pollIntervals.get(model_id)
-      if (existingInterval) {
-        clearInterval(existingInterval)
-        pollIntervals.delete(model_id)
+      await modelManagerAPI.deleteModel(modelId)
+      if (useSystemStore.getState().activeModel === modelId) {
+        useSystemStore.setState({ activeModel: null })
       }
-
       set(state => {
-        const { [model_id]: _, ...rest } = state.downloads_in_progress
+        const updated = state.models.filter(m => m.id !== modelId)
         return {
-          downloads_in_progress: rest,
-          download_queue: state.download_queue.filter(m => m !== model_id)
+          models: updated,
+          selectedModel: state.selectedModel?.id === modelId ? updated[0] || null : state.selectedModel,
         }
       })
     } catch (err) {
-      set({ last_error: `Cancel failed: ${err}` })
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg, last_error: errorMsg })
+      throw err
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  startTraining: async (config: TrainingConfig) => {
+    set({ isLoading: true, error: null })
+    try {
+      const job = await modelManagerAPI.startTraining(config)
+      set(state => ({
+        trainingJobs: [...state.trainingJobs, job],
+        activeTrainingJob: job,
+      }))
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  startOneClickTraining: async (options?: AutoTrainingOptions, chatMessages?: Array<{ role: string; content: string; session_id?: string; model_id?: string }>) => {
+    set({ isLoading: true, error: null })
+    try {
+      // If use_chat_history is enabled and we have chat messages, submit them first
+      if (options?.use_chat_history && chatMessages && chatMessages.length > 0) {
+        await modelManagerAPI.submitChatMessages(chatMessages)
+      }
+
+      const result = await modelManagerAPI.startOneClickTraining(options)
+      const job: TrainingJob = {
+        job_id: result.job_id,
+        model_name: result.base_model ?? 'auto',
+        status: result.status ?? 'queued',
+        progress: 0,
+        created_at: new Date().toISOString(),
+      }
+      set(state => ({
+        trainingJobs: [...state.trainingJobs, job],
+        activeTrainingJob: job,
+      }))
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg })
+      throw err
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  getTrainingStatus: async (jobId: string) => {
+    try {
+      const job = await modelManagerAPI.getTrainingStatus(jobId)
+      set(state => ({
+        trainingJobs: state.trainingJobs.map(j => j.job_id === jobId ? job : j),
+        activeTrainingJob: state.activeTrainingJob?.job_id === jobId ? job : state.activeTrainingJob,
+      }))
+      return job
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg })
+      throw err
+    }
+  },
+
+  exportModel: async (modelId: string) => {
+    set({ isLoading: true, error: null })
+    try {
+      await modelManagerAPI.exportModel(modelId)
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      set({ error: errorMsg })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  refreshModels: async () => {
+    return get().loadModels()
+  },
+
+  checkServiceAvailable: async () => {
+    try {
+      const available = await modelManagerAPI.isServiceAvailable()
+      set({ isServiceAvailable: available })
+      return available
+    } catch {
+      set({ isServiceAvailable: false })
+      return false
     }
   },
 
   cleanup_polls: () => {
-    for (const [, interval] of pollIntervals) {
-      clearInterval(interval)
-    }
-    pollIntervals.clear()
+    // Polling is managed locally inside HuggingFacePanel; this is a no-op cleanup hook
   },
-
-  get_popular_models: () => [
-    {
-      id: 'mistralai/Mistral-7B-Instruct-v0.1',
-      name: 'Mistral 7B Instruct',
-      size_gb: 14,
-      cached: false,
-      downloaded: false,
-      downloading: false,
-      download_progress: 0,
-      quantizations: ['fp32', 'int8', 'int4'] as Quantization[]
-    },
-    {
-      id: 'NousResearch/Nous-Hermes-2-7b-DPO',
-      name: 'Nous Hermes 2 7B',
-      size_gb: 14,
-      cached: false,
-      downloaded: false,
-      downloading: false,
-      download_progress: 0,
-      quantizations: ['fp32', 'int8', 'int4'] as Quantization[]
-    },
-    {
-      id: 'meta-llama/Llama-2-70b-chat-hf',
-      name: 'Llama 2 70B Chat',
-      size_gb: 140,
-      cached: false,
-      downloaded: false,
-      downloading: false,
-      download_progress: 0,
-      quantizations: ['int8', 'int4'] as Quantization[],
-      requires_hf_token: true
-    }
-  ],
-
-  is_model_available: (model_id: string) => {
-    const cached = get().cached_models.find(m => m.id === model_id)
-    return cached?.downloaded || false
-  },
-
-  get_download_progress: (model_id: string) => {
-    return get().downloads_in_progress[model_id] || 0
-  }
 }))
