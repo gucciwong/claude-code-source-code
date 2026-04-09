@@ -1,0 +1,20 @@
+{
+  "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF": {
+    "model_id": "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF",
+    "local_path": "D:\\Users\\Admin\\Documents\\GitHub\\claude-code-source-code\\services\\model-manager\\models\\bartowski--Meta-Llama-3.1-8B-Instruct-GGUF\\Meta-Llama-3.1-8B-Instruct-IQ2_M.gguf",
+    "format": "gguf",
+    "size_bytes": 2948285856,
+    "source": "huggingface",
+    "registered_at": "2026-04-09T08:17:21.354284",
+    "status": "ready"
+  },
+  "Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF": {
+    "model_id": "Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF",
+    "local_path": "D:\\Users\\Admin\\Documents\\GitHub\\claude-code-source-code\\services\\model-manager\\models\\Jackrong--Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF\\Qwen3.5-9B.Q4_K_M.gguf",
+    "format": "gguf",
+    "size_bytes": 5629105024,
+    "source": "huggingface",
+    "registered_at": "2026-04-09T09:35:38.493964",
+    "status": "ready"
+  }
+}
