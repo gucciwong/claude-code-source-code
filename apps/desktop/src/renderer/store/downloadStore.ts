@@ -77,6 +77,10 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
         }
 
         if (entry.status === 'done') {
+          // Skip if a clear is already pending — let the scheduled clearDownload run
+          if (pendingClears.has(id)) {
+            continue
+          }
           const prior = nextDetails[id]
           next.set(id, 'downloading')
           nextDetails[id] = {
@@ -89,13 +93,11 @@ export const useDownloadStore = create<DownloadStoreState>((set) => ({
             started_at: entry.started_at ?? prior?.started_at ?? Math.floor(Date.now() / 1000),
           }
           changed = true
-          if (!pendingClears.has(id)) {
-            const timeoutId = setTimeout(() => {
-              pendingClears.delete(id)
-              useDownloadStore.getState().clearDownload(id)
-            }, 3000)
-            pendingClears.set(id, timeoutId)
-          }
+          const timeoutId = setTimeout(() => {
+            pendingClears.delete(id)
+            useDownloadStore.getState().clearDownload(id)
+          }, 3000)
+          pendingClears.set(id, timeoutId)
           continue
         }
 
