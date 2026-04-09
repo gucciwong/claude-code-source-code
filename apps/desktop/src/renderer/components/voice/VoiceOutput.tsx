@@ -37,7 +37,7 @@ export const VoiceOutput: React.FC<VoiceOutputProps> = ({
       formData.append('text', text)
       formData.append('language', selectedLanguage)
 
-      const response = await fetch('http://localhost:8000/speak', {
+      const response = await fetch(`${import.meta.env.VITE_VOICE_SERVICE_URL ?? 'http://localhost:8000'}/speak`, {
         method: 'POST',
         body: formData,
       })
@@ -58,6 +58,11 @@ export const VoiceOutput: React.FC<VoiceOutputProps> = ({
 
       if (audioRef.current) {
         audioRef.current.src = audioUrl
+        audioRef.current.onended = () => {
+          URL.revokeObjectURL(audioUrl)
+          setIsPlaying(false)
+          onStop?.()
+        }
         audioRef.current.play()
         setIsPlaying(true)
       }

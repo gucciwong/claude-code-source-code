@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send, Square, Zap, ChevronDown } from 'lucide-react'
+import { Send, Square, Zap, ChevronDown, Settings2 } from 'lucide-react'
 import { useChatStore, ChatMessage } from '../store/chatStore'
 import { useSystemStore } from '../store/systemStore'
 import { useAgentStore } from '../store/agentStore'
@@ -10,6 +10,12 @@ import { VoicePanel } from '../components/common/VoicePanel'
 import { useVoiceStore } from '../store/voiceStore'
 import { useTrainingService } from '../hooks/useTrainingService'
 import { buildEnvelope } from '../services/telemetry'
+import { ModelParameters } from '../components/chat/ModelParameters'
+import { useModelParamsStore } from '../store/modelParamsStore'
+import { useModelManagerStore } from '../store/modelManagerStore'
+import { modelManagerAPI } from '../services/modelManagerAPI'
+import { useModelsStore } from '../store/modelsStore'
+import { formatModelSizeFromBytes } from '../utils/modelSize'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -26,6 +32,9 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         {message.streaming && (
           <span className="inline-block w-2 h-4 bg-accent-400 animate-pulse ml-1 align-middle" aria-hidden="true" />
         )}
+        {!message.streaming && message.role === 'assistant' && message.tokensPerSec != null && (
+          <p className="text-[10px] text-text-muted/60 mt-1 select-none">{message.tokensPerSec} tok/s</p>
+        )}
       </div>
     </div>
   )
@@ -35,11 +44,13 @@ export function Chat() {
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   const [voicePanelExpanded, setVoicePanelExpanded] = useState(false)
-  const { messages, addMessage, appendToLast, setLastStreaming, clear } = useChatStore()
+  const { messages, addMessage, appendToLast, setLastStreaming, setLastTokPerSec, clear } = useChatStore()
   const activeModel = useSystemStore(s => s.activeModel)
   const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
   const { isProcessing } = useVoiceStore()
   const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
+  const availableModels = useModelManagerStore(s => s.models)
+  const ollamaModels = useModelsStore(s => s.installed)
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastUserPromptRef = useRef<string>('')
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -76,7 +87,20 @@ export function Chat() {
     abortControllerRef.current = controller
 
     const model = activeModel || 'llama3.1:8b'
+    const mmModel = availableModels.find(m => m.id === model || m.name === model)
+    const runtimeBackend = mmModel ? 'model-manager' : 'ollama'
     const apiMessages = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }))
+
+    // Route inference: model-manager GGUF models use the standalone llama.cpp endpoint;
+    // everything else goes through Ollama's OpenAI-compatible API.
+    const tokenSource: AsyncIterable<string> = mmModel
+      ? (() => {
+          const prompt = [...messages, userMsg]
+            .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+            .join('\n') + '\nAssistant:'
+          return modelManagerAPI.streamInference(prompt, { model_id: model, signal: controller.signal })
+        })()
+      : streamChat(model, apiMessages, controller.signal)
 
     // §3.2 Inference instrumentation — shared correlation_id ties all 4 lifecycle events
     const correlationId = crypto.randomUUID()
@@ -87,17 +111,17 @@ export function Chat() {
 
     // ── inference_request_started ──────────────────────────────────
     void logInference({
-      ...buildEnvelope('inference_request_started', model, 'ollama', 'local', correlationId),
+      ...buildEnvelope('inference_request_started', model, runtimeBackend, 'local', correlationId),
     })
 
     try {
-      for await (const chunk of streamChat(model, apiMessages, controller.signal)) {
+      for await (const chunk of tokenSource) {
         // ── inference_first_token_emitted (once) ──────────────────
         if (chunkCount === 0) {
           firstTokenTime = performance.now()
           const firstTokenLatencyMs = firstTokenTime - inferenceStart
           void logInference({
-            ...buildEnvelope('inference_first_token_emitted', model, 'ollama', 'local', correlationId),
+            ...buildEnvelope('inference_first_token_emitted', model, runtimeBackend, 'local', correlationId),
             first_token_latency_ms: Math.round(firstTokenLatencyMs),
           })
 
@@ -106,13 +130,14 @@ export function Chat() {
           if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
             void logTrainingCompletion({
               ...buildEnvelope('completion_suggested', model, 'ollama', 'local', correlationId),
+              runtime_backend: runtimeBackend,
               prompt: lastUserPromptRef.current,
               completion: chunk,
               event_type: 'completion_suggested',
               language: 'text',
               completion_type: 'chat',
               accepted_boolean: undefined, // not yet known
-            }).catch(() => { /* telemetry fire-and-forget */ })
+            }).catch((err) => { console.warn('Telemetry completion_suggested failed:', err) })
           }
         }
         chunkCount++
@@ -124,10 +149,12 @@ export function Chat() {
       const totalMs = performance.now() - inferenceStart
       const estimatedTokens = Math.round(totalChars / 4) // ~4 chars/token
       const tokensPerSecond = totalMs > 0 ? (estimatedTokens / totalMs) * 1000 : 0
+      const tpsRounded = Math.round(tokensPerSecond * 10) / 10
+      if (tpsRounded > 0) setLastTokPerSec(tpsRounded)
       void logInference({
-        ...buildEnvelope('inference_request_completed', model, 'ollama', 'local', correlationId),
+        ...buildEnvelope('inference_request_completed', model, runtimeBackend, 'local', correlationId),
         completion_tokens: estimatedTokens,
-        tokens_per_second: Math.round(tokensPerSecond * 10) / 10,
+        tokens_per_second: tpsRounded,
         first_token_latency_ms: firstTokenTime != null ? Math.round(firstTokenTime - inferenceStart) : undefined,
       })
 
@@ -136,7 +163,7 @@ export function Chat() {
       if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
         try {
           await logTrainingCompletion({
-            ...buildEnvelope('completion_accepted', model, 'ollama', 'local', correlationId),
+            ...buildEnvelope('completion_accepted', model, runtimeBackend, 'local', correlationId),
             prompt: lastUserPromptRef.current,
             completion: lastMessage.content,
             event_type: 'completion_accepted',
@@ -154,9 +181,10 @@ export function Chat() {
       if (!(err instanceof DOMException && err.name === 'AbortError')) {
         // ── inference_request_failed ──────────────────────────────────
         void logInference({
-          ...buildEnvelope('inference_request_failed', model, 'ollama', 'local', correlationId),
+          ...buildEnvelope('inference_request_failed', model, runtimeBackend, 'local', correlationId),
           error_message: err instanceof Error ? err.message : String(err),
         })
+        appendToLast(`\n\n⚠️ ${err instanceof Error ? err.message : 'Stream failed. Please try again.'}`)
       }
     } finally {
       isStreamingRef.current = false
@@ -178,13 +206,49 @@ export function Chat() {
   }
 
   const modelName = activeModel || 'llama3.1:8b'
+  const toggleParamsSidebar = useModelParamsStore(s => s.toggleParamsSidebar)
+  const paramsSidebarOpen = useModelParamsStore(s => s.paramsSidebarOpen)
 
   return (
-    <div data-testid="screen-chat" className="flex flex-col h-full">
+    <div data-testid="screen-chat" className="flex h-full">
+      {/* Main Chat Area */}
+      <div className="flex flex-col flex-1 min-w-0">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-border-default bg-bg-surface-1 shrink-0">
-        <h2 className="text-sm font-semibold text-text-primary">{modelName}</h2>
+        <div className="flex items-center gap-2">
+          {/* Model Picker */}
+          <select
+            value={activeModel || ''}
+            onChange={e => {
+              if (e.target.value) useSystemStore.setState({ activeModel: e.target.value })
+            }}
+            className="bg-bg-surface-2 border border-border-default rounded px-2 py-1 text-sm font-semibold text-text-primary cursor-pointer max-w-[200px]"
+            aria-label="Select model"
+          >
+            {!activeModel && ollamaModels.length === 0 && availableModels.length === 0 && (
+              <option value="">No model loaded</option>
+            )}
+            {ollamaModels.map(m => (
+              <option key={`ollama:${m.name}`} value={m.name}>{`${m.name} (${formatModelSizeFromBytes(m.size) ?? 'Unknown size'}, Ollama)`}</option>
+            ))}
+            {availableModels.map(m => (
+              <option key={m.id} value={m.id}>{`${m.name}${formatModelSizeFromBytes(m.size_bytes) ? ` (${formatModelSizeFromBytes(m.size_bytes)})` : ''}`}</option>
+            ))}
+            {activeModel && !ollamaModels.find(m => m.name === activeModel) && !availableModels.find(m => m.id === activeModel) && (
+              <option value={activeModel}>{activeModel}</option>
+            )}
+          </select>
+        </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleParamsSidebar}
+            className={`p-1.5 rounded transition cursor-pointer ${paramsSidebarOpen ? 'bg-accent-500/20 text-accent-400' : 'hover:bg-bg-surface-2 text-text-muted'}`}
+            title="Toggle model parameters"
+            aria-label="Toggle model parameters sidebar"
+            aria-pressed={paramsSidebarOpen}
+          >
+            <Settings2 size={16} />
+          </button>
           {agentMode && (
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -264,7 +328,8 @@ export function Chat() {
             </button>
           ) : (
             <button
-              className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary rounded-lg p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-text-primary rounded-[13px] p-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed transition-shadow hover:shadow-[rgba(0,0,0,0.18)_0px_0.5rem_1.5rem]"
+              style={{ backgroundColor: '#79628c', border: '1px solid #584674', boxShadow: 'rgba(0,0,0,0.1) 0px 1px 3px 0px inset' }}
               onClick={handleSend}
               disabled={isProcessing || !input.trim()}
               aria-label="Send message"
@@ -296,6 +361,9 @@ export function Chat() {
           </div>
         )}
       </div>
+      </div>
+      {/* Model Parameters Sidebar */}
+      <ModelParameters />
     </div>
   )
 }

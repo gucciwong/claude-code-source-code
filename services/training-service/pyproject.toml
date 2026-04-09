@@ -39,8 +39,9 @@ training = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["training_data"]
+testpaths = ["training_data", "autoresearch"]
 addopts = "-v --cov=training_data --cov-report=term-missing"
+asyncio_mode = "auto"
 
 [tool.black]
 line-length = 100

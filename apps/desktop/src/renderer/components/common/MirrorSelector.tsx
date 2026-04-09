@@ -33,8 +33,8 @@ export function MirrorSelector() {
       .then(config => {
         if (config?.current_mirror) setSelected(config.current_mirror)
       })
-      .catch(() => {
-        // Keep hardcoded default ('huggingface') — no UI change needed
+      .catch((err) => {
+        console.warn('Failed to fetch mirror info:', err)
       })
   }, [getMirrorInfo])
 

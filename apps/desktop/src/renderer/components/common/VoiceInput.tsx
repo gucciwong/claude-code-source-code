@@ -45,7 +45,7 @@ export function VoiceInput({ onTranscriptionComplete }: VoiceInputProps) {
 
       // Create AudioContext for visualization
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext!)()
       }
 
       const source = audioContextRef.current.createMediaStreamSource(stream)

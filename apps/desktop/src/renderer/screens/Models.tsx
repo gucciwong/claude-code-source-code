@@ -3,12 +3,17 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { useModelsStore, OllamaModel } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
 import { useModelManagerStore } from '../store/modelManagerStore'
+import { ModelMetadata } from '../services/modelManagerAPI'
 import { Server, WifiOff, CheckCircle2, Zap, Trash2, Loader2 } from 'lucide-react'
 import { HuggingFacePanel } from '../components/models/HuggingFacePanel'
 import { OrgInsightsPanel } from '../components/models/OrgInsightsPanel'
+import { useHardwareProfile } from '../hooks/useHardwareProfile'
+import { HardwareCompatibilityCard } from '../components/common/HardwareCompatibilityCard'
+import { evaluateHardwareCompatibility } from '../utils/modelCompatibility'
+import { formatModelSizeFromBytes } from '../utils/modelSize'
 
 function formatSize(bytes: number): string {
-  return (bytes / 1e9).toFixed(1) + ' GB'
+  return formatModelSizeFromBytes(bytes) ?? '0.0 GB'
 }
 
 function formatDate(dateStr: string): string {
@@ -32,9 +37,16 @@ function EmptySelection() {
 function ModelDetail({ model }: { model: OllamaModel }) {
   const activeModel = useSystemStore(s => s.activeModel)
   const isActive = model.name === activeModel
+  const hardwareProfile = useHardwareProfile()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const isMountedRef = useRef(true)
+  const compatibilityReport = evaluateHardwareCompatibility(hardwareProfile, {
+    name: model.name,
+    sizeBytes: model.size,
+    format: model.details?.format ?? 'gguf',
+    parameterText: model.details?.parameter_size ?? model.name,
+  })
 
   useEffect(() => { return () => { isMountedRef.current = false } }, [])
   useEffect(() => { setConfirmDelete(false) }, [model.name])
@@ -109,11 +121,14 @@ function ModelDetail({ model }: { model: OllamaModel }) {
         </div>
       </div>
 
+      <HardwareCompatibilityCard report={compatibilityReport} title="Hardware Fit" />
+
       {/* Action Buttons */}
       <div className="flex gap-2 flex-wrap">
         <button
           type="button"
-          className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          className="text-text-primary text-sm font-medium uppercase tracking-wide px-4 py-2 rounded-[13px] cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-shadow hover:shadow-[rgba(0,0,0,0.18)_0px_0.5rem_1.5rem]"
+          style={{ backgroundColor: '#79628c', border: '1px solid #584674', boxShadow: 'rgba(0,0,0,0.1) 0px 1px 3px 0px inset' }}
           onClick={() => useSystemStore.setState({ activeModel: model.name })}
           aria-label={`Set ${model.name} as active`}
         >
@@ -180,11 +195,144 @@ function ModelDetail({ model }: { model: OllamaModel }) {
   )
 }
 
+function MmModelDetail({ model }: { model: ModelMetadata }) {
+  const activeModel = useSystemStore(s => s.activeModel)
+  const isActive = model.name === activeModel || model.id === activeModel
+  const mmError = useModelManagerStore(s => s.error)
+  const hardwareProfile = useHardwareProfile()
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const compatibilityReport = evaluateHardwareCompatibility(hardwareProfile, {
+    name: model.name,
+    sizeBytes: model.size_bytes,
+    format: model.format,
+    parameterText: model.name,
+  })
+
+  return (
+    <div className="p-6 space-y-6 max-w-2xl">
+      <div>
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <h2
+              className="text-2xl font-semibold text-text-primary break-words flex items-center gap-2 flex-wrap"
+              title={model.name}
+            >
+              {model.name}
+              {model.format && (
+                <span className="bg-bg-surface-3 text-text-muted text-xs px-2 py-0.5 rounded font-normal">
+                  {model.format.toUpperCase()}
+                </span>
+              )}
+            </h2>
+          </div>
+          {isActive && (
+            <CheckCircle2 size={24} className="text-green-500 flex-shrink-0" role="img" aria-label="Active model" />
+          )}
+        </div>
+        <p className="text-sm text-text-muted">{(model.size_bytes / 1e9).toFixed(2)} GB • Downloaded</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Format</p>
+          <p className="text-xs text-text-primary font-mono">{model.format || '\u2014'}</p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Size</p>
+          <p className="text-xs text-text-primary font-mono">{(model.size_bytes / 1e9).toFixed(2)} GB</p>
+        </div>
+        <div className="bg-bg-surface-2 rounded-md border border-border-default px-3 py-3 flex flex-col">
+          <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5 font-semibold">Status</p>
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-yellow-500'}`} aria-hidden="true" />
+            <p className="text-xs text-text-primary font-mono">{isActive ? 'Active' : 'Ready'}</p>
+          </div>
+        </div>
+      </div>
+
+      <HardwareCompatibilityCard report={compatibilityReport} title="Hardware Fit" />
+
+      {mmError && <p className="text-sm text-red-400">{mmError}</p>}
+
+      <div className="flex gap-2 flex-wrap">
+        <button
+          type="button"
+          disabled={loading}
+          className="disabled:opacity-50 text-text-primary text-sm font-medium uppercase tracking-wide px-4 py-2 rounded-[13px] cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-shadow hover:shadow-[rgba(0,0,0,0.18)_0px_0.5rem_1.5rem]"
+          style={{ backgroundColor: '#79628c', border: '1px solid #584674', boxShadow: 'rgba(0,0,0,0.1) 0px 1px 3px 0px inset' }}
+          onClick={async () => {
+            setLoading(true)
+            try {
+              await useModelManagerStore.getState().setActiveModel(model.id)
+            } catch (e) {
+              useModelManagerStore.setState({ last_error: `Load failed: ${e instanceof Error ? e.message : 'Unknown error'}` })
+            } finally {
+              setLoading(false)
+            }
+          }}
+          aria-label={`Load ${model.name}`}
+        >
+          {loading ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <CheckCircle2 size={14} aria-hidden="true" />}
+          {loading ? 'Loading…' : 'Load & Use'}
+        </button>
+        {!confirmDelete ? (
+          <button
+            type="button"
+            className="border border-border-default text-red-400 hover:bg-red-500/10 text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+            onClick={() => setConfirmDelete(true)}
+            aria-label={`Delete ${model.name}`}
+          >
+            <Trash2 size={14} aria-hidden="true" />
+            Delete
+          </button>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 transition-colors"
+              onClick={async () => {
+                setDeleting(true)
+                try {
+                  await useModelManagerStore.getState().deleteModel(model.id)
+                } catch (e) {
+                  useModelManagerStore.setState({ last_error: `Delete failed: ${e instanceof Error ? e.message : 'Unknown error'}` })
+                } finally {
+                  setDeleting(false)
+                  setConfirmDelete(false)
+                }
+              }}
+              aria-label={`Confirm delete ${model.name}`}
+            >
+              {deleting ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Trash2 size={14} aria-hidden="true" />}
+              {deleting ? 'Deleting…' : 'Confirm Delete'}
+            </button>
+            <button
+              type="button"
+              className="border border-border-default text-text-secondary hover:text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+              onClick={() => setConfirmDelete(false)}
+              aria-label="Cancel delete"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function Models() {
   const { installed, selected, setSelected, setModelDetails } = useModelsStore()
   const activeModel = useSystemStore(s => s.activeModel)
   const ollamaOnline = useSystemStore(s => s.ollamaOnline)
   const selectedModel = installed.find(m => m.name === selected) ?? null
+  const mmModels = useModelManagerStore(s => s.models)
+  const mmLoadModels = useModelManagerStore(s => s.loadModels)
+  const [selectedMmId, setSelectedMmId] = useState<string | null>(null)
+  const selectedMmModel = mmModels.find(m => m.id === selectedMmId) ?? null
 
   useEffect(() => {
     if (!selected) return
@@ -208,13 +356,19 @@ export function Models() {
       })
       .catch(err => {
         if ((err as Error).name !== 'AbortError') {
-          // Network error or Ollama not running — leave details undefined
+          console.warn('Failed to fetch model details:', err)
         }
       })
     return () => controller.abort()
   }, [selected, setModelDetails])
 
   const lastError = useModelManagerStore(s => s.last_error)
+
+  useEffect(() => {
+    mmLoadModels()
+    const interval = setInterval(mmLoadModels, 8000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     return () => useModelManagerStore.getState().cleanup_polls()
@@ -245,7 +399,7 @@ export function Models() {
             value="installed"
             className="px-4 py-2.5 text-sm font-medium text-text-secondary cursor-pointer border-b-2 border-transparent data-[state=active]:border-accent-500 data-[state=active]:text-text-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors -mb-px"
           >
-            Installed ({installed.length})
+            Installed ({installed.length + mmModels.length})
           </Tabs.Trigger>
           <Tabs.Trigger
             value="download"
@@ -268,7 +422,7 @@ export function Models() {
             <p className="px-4 pt-4 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide">
               Installed
             </p>
-            {installed.length === 0 ? (
+            {installed.length === 0 && mmModels.length === 0 ? (
               <p className="px-4 py-2 text-xs text-text-muted">No models installed</p>
             ) : (
               <ul role="list" aria-label="Installed models">
@@ -284,20 +438,60 @@ export function Models() {
                         title={model.name}
                         className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
                           isSelected
-                            ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-500'
+                            ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-lime'
                             : 'text-text-secondary hover:bg-bg-surface-3'
                         }`}
-                        onClick={() => setSelected(model.name)}
+                        onClick={() => { setSelected(model.name); setSelectedMmId(null) }}
                       >
                         {isActive && (
                           <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
                         )}
-                        <span className="truncate flex-1" title={model.name}>{model.name}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="block truncate" title={model.name}>{model.name}</span>
+                          <span className="block text-xs text-text-muted font-mono">{formatSize(model.size)}</span>
+                        </div>
                       </button>
                     </li>
                   )
                 })}
               </ul>
+            )}
+            {mmModels.length > 0 && (
+              <>
+                <p className="px-4 pt-3 pb-2 text-xs font-semibold text-text-secondary uppercase tracking-wide">
+                  Downloaded (GGUF)
+                </p>
+                <ul role="list" aria-label="Downloaded models">
+                  {mmModels.map(model => {
+                    const isSelected = model.id === selectedMmId
+                    const isActive = model.name === activeModel || model.id === activeModel
+                    return (
+                      <li key={model.id}>
+                        <button
+                          type="button"
+                          aria-pressed={isSelected}
+                          aria-label={isActive ? `${model.name} (active)` : model.name}
+                          title={model.name}
+                          className={`w-full text-left px-4 py-2.5 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-500 flex items-center gap-2 ${
+                            isSelected
+                              ? 'bg-accent-500/10 text-text-primary border-l-2 border-accent-lime'
+                              : 'text-text-secondary hover:bg-bg-surface-3'
+                          }`}
+                          onClick={() => { setSelectedMmId(model.id); setSelected('') }}
+                        >
+                          {isActive && (
+                            <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" aria-hidden="true" />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <span className="block truncate" title={model.name}>{model.name}</span>
+                            <span className="block text-xs text-text-muted font-mono">{formatSize(model.size_bytes)}</span>
+                          </div>
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </>
             )}
             {!ollamaOnline && (
               <div className="px-4 py-2 text-xs text-text-muted flex items-center gap-1.5">
@@ -309,7 +503,7 @@ export function Models() {
 
           {/* Right panel */}
           <div className="flex-1 bg-bg-base overflow-auto">
-            {selectedModel ? <ModelDetail model={selectedModel} /> : <EmptySelection />}
+            {selectedModel ? <ModelDetail model={selectedModel} /> : selectedMmModel ? <MmModelDetail model={selectedMmModel} /> : <EmptySelection />}
           </div>
         </Tabs.Content>
 

@@ -6,6 +6,7 @@ Handles training data collection, orchestration, and evaluation
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, File, UploadFile
 from fastapi.responses import StreamingResponse
@@ -20,6 +21,8 @@ import os
 from training_data.models import init_db, get_session_maker, EventType
 from training_data.store import TrainingDataStore
 from finetune.router import router as finetune_router
+from experiments.store import ExperimentStore
+from experiments.router import router as experiments_router, set_store
 
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
@@ -112,6 +115,13 @@ os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 engine = init_db(DB_PATH)
 SessionLocal = get_session_maker(DB_PATH)
 
+# Initialize experiment store
+EXPERIMENTS_DB_DIR = os.getenv(
+    "EXPERIMENTS_DB_DIR",
+    str(os.path.expanduser("~/.sovereign-code"))
+)
+experiment_store = ExperimentStore(db_dir=Path(EXPERIMENTS_DB_DIR))
+
 
 def get_db():
     """Dependency: get database session"""
@@ -142,6 +152,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Mount finetune sub-router
 app.include_router(finetune_router)
+
+# Initialize and mount experiments router
+set_store(experiment_store)
+app.include_router(experiments_router)
 
 # CORS
 from starlette.middleware.cors import CORSMiddleware
