@@ -2,9 +2,28 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { SystemHealth } from './SystemHealth'
 import { useSystemStore } from '../../store/systemStore'
+import { useModelsStore } from '../../store/modelsStore'
+import { useModelManagerStore } from '../../store/modelManagerStore'
 
 describe('SystemHealth', () => {
   beforeEach(() => {
+    Object.defineProperty(window.navigator, 'hardwareConcurrency', {
+      configurable: true,
+      value: 12,
+    })
+    Object.defineProperty(window.navigator, 'deviceMemory', {
+      configurable: true,
+      value: 32,
+    })
+    Object.defineProperty(window.navigator, 'storage', {
+      configurable: true,
+      value: {
+        estimate: vi.fn().mockResolvedValue({
+          quota: 500 * 1024 * 1024 * 1024,
+          usage: 120 * 1024 * 1024 * 1024,
+        }),
+      },
+    })
     useSystemStore.setState({
       gpuTemp: 65,
       vramUsed: 12,
@@ -12,6 +31,22 @@ describe('SystemHealth', () => {
       tokensPerSec: 45,
       activeModel: 'llama3.1:8b',
     })
+    useModelsStore.setState({
+      installed: [
+        {
+          name: 'llama3.1:8b',
+          size: 4_500_000_000,
+          digest: 'abc',
+          modified_at: '2024-01-01T00:00:00Z',
+          details: {
+            parameter_size: '8B',
+            format: 'gguf',
+          },
+        },
+      ],
+      selected: 'llama3.1:8b',
+    })
+    useModelManagerStore.setState({ models: [], selectedModel: null, last_error: null })
   })
 
   it('renders system health header', () => {
@@ -135,5 +170,14 @@ describe('SystemHealth', () => {
     render(<SystemHealth />)
     expect(screen.getByLabelText(/GPU Temperature/)).toBeInTheDocument()
     expect(screen.getByLabelText(/VRAM Usage/)).toBeInTheDocument()
+  })
+
+  it('renders hardware fit details for the active model', async () => {
+    render(<SystemHealth />)
+    expect(await screen.findByText('Hardware Fit')).toBeInTheDocument()
+    expect(screen.getByText('CPU Threads')).toBeInTheDocument()
+    expect(screen.getByText('RAM')).toBeInTheDocument()
+    expect(screen.getByText('GPU / VRAM')).toBeInTheDocument()
+    expect(screen.getByText('SSD / Storage')).toBeInTheDocument()
   })
 })

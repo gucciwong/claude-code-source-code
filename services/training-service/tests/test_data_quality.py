@@ -70,7 +70,7 @@ def _bulk_insert_completion(store, n, *, omit_field=None, bad_type_field=None):
             project_id_hash="proj1",
             client_version="0.8.0",
             platform="Win32",
-            runtime_backend="ollama",
+            runtime_backend="local",
             completion_type="inline",
             suggestion_length_tokens=8,
             accepted_boolean=True,
@@ -212,7 +212,7 @@ def test_null_rate_passes_when_only_optional_fields_are_null(tmp_path):
             session_id=f"sess-{i}",
             installation_id_hash="hash",
             platform="Linux",
-            runtime_backend="ollama",
+            runtime_backend="local",
             # project_id_hash and error_message intentionally omitted (optional)
         )
     rows = session.query(CompletionEvent).all()

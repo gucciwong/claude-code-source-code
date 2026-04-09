@@ -6,11 +6,12 @@ const defaultProps = {
   id: 'meta-llama/Llama-3.1-8B-Instruct',
   name: 'Llama 3.1 8B Instruct',
   params: '8B',
+  sizeLabel: '4.9 GB',
   arch: 'llama',
   format: 'GGUF',
   description: 'Test description for the model',
   downloadStatus: 'idle' as const,
-  onDownload: vi.fn(),
+  onPickFiles: vi.fn(),
 }
 
 beforeEach(() => {
@@ -21,6 +22,7 @@ test('renders model name, params, arch, format', () => {
   render(<ModelCard {...defaultProps} />)
   expect(screen.getByText('Llama 3.1 8B Instruct')).toBeInTheDocument()
   expect(screen.getByText('8B')).toBeInTheDocument()
+  expect(screen.getByText('4.9 GB')).toBeInTheDocument()
   expect(screen.getByText('llama')).toBeInTheDocument()
   expect(screen.getByText('GGUF')).toBeInTheDocument()
 })
@@ -51,16 +53,16 @@ test('renders "Retry" button when status is error', () => {
 
 test('calls onDownload with correct model ID when Download button clicked', async () => {
   const user = userEvent.setup()
-  const onDownload = vi.fn()
-  render(<ModelCard {...defaultProps} downloadStatus="idle" onDownload={onDownload} />)
+  const onPickFiles = vi.fn()
+  render(<ModelCard {...defaultProps} downloadStatus="idle" onPickFiles={onPickFiles} />)
   await user.click(screen.getByRole('button', { name: /Download/ }))
-  expect(onDownload).toHaveBeenCalledWith('meta-llama/Llama-3.1-8B-Instruct')
+  expect(onPickFiles).toHaveBeenCalledWith('meta-llama/Llama-3.1-8B-Instruct')
 })
 
 test('calls onDownload when Retry button clicked', async () => {
   const user = userEvent.setup()
-  const onDownload = vi.fn()
-  render(<ModelCard {...defaultProps} downloadStatus="error" onDownload={onDownload} />)
+  const onPickFiles = vi.fn()
+  render(<ModelCard {...defaultProps} downloadStatus="error" onPickFiles={onPickFiles} />)
   await user.click(screen.getByRole('button', { name: /Retry/ }))
-  expect(onDownload).toHaveBeenCalledWith('meta-llama/Llama-3.1-8B-Instruct')
+  expect(onPickFiles).toHaveBeenCalledWith('meta-llama/Llama-3.1-8B-Instruct')
 })

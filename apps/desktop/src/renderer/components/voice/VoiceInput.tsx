@@ -62,7 +62,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         formData.append('language', selectedLanguage)
       }
 
-      const response = await fetch('http://localhost:8000/transcribe', {
+      const response = await fetch(`${import.meta.env.VITE_VOICE_SERVICE_URL ?? 'http://localhost:8000'}/transcribe`, {
         method: 'POST',
         body: formData,
       })

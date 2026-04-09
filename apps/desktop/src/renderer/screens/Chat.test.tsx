@@ -5,16 +5,30 @@ import { useChatStore } from '../store/chatStore'
 import { useSystemStore } from '../store/systemStore'
 import { useAgentStore } from '../store/agentStore'
 import { useVoiceStore } from '../store/voiceStore'
+import { useModelManagerStore } from '../store/modelManagerStore'
+import { useModelsStore } from '../store/modelsStore'
+import * as ollamaClient from '../services/ollamaClient'
+import { modelManagerAPI } from '../services/modelManagerAPI'
 
 // Mock streamChat to avoid real HTTP calls
 vi.mock('../services/ollamaClient', () => ({
-  streamChat: async function* () {
+  streamChat: vi.fn(async function* () {
     yield 'Hello '
     yield 'world'
+  }),
+}))
+
+vi.mock('../services/modelManagerAPI', () => ({
+  modelManagerAPI: {
+    streamInference: vi.fn(async function* () {
+      yield 'Model '
+      yield 'manager'
+    }),
   },
 }))
 
 beforeEach(() => {
+  vi.clearAllMocks()
   useChatStore.setState({ messages: [] })
   useSystemStore.setState({ activeModel: 'llama3.1:8b' })
   useAgentStore.setState({
@@ -24,6 +38,17 @@ beforeEach(() => {
     dryRun: false,
   })
   useVoiceStore.setState({ isProcessing: false })
+  useModelManagerStore.setState({
+    models: [],
+    selectedModel: null,
+    trainingJobs: [],
+    activeTrainingJob: null,
+    isLoading: false,
+    error: null,
+    isServiceAvailable: true,
+    last_error: null,
+  })
+  useModelsStore.setState({ installed: [], selected: null })
 })
 
 test('renders chat screen', () => {
@@ -39,6 +64,33 @@ test('shows empty state when no messages', () => {
 test('renders model name in header', () => {
   render(<Chat />)
   expect(screen.getByText('llama3.1:8b')).toBeInTheDocument()
+})
+
+test('shows model sizes in the picker when available', () => {
+  useSystemStore.setState({ activeModel: 'tiny-gguf' })
+  useModelsStore.setState({
+    installed: [{ name: 'llama3.1:8b', size: 4_500_000_000, digest: 'abc123', modified_at: '2024-01-15T10:00:00Z' }],
+    selected: null,
+  })
+  useModelManagerStore.setState({
+    models: [
+      {
+        id: 'tiny-gguf',
+        name: 'tiny-gguf',
+        cached: true,
+        size_bytes: 2_200_000_000,
+        local_path: 'C:/models/tiny.gguf',
+        format: 'gguf',
+        source: 'local',
+        status: 'ready',
+      },
+    ],
+  })
+
+  render(<Chat />)
+
+  expect(screen.getByRole('option', { name: 'llama3.1:8b (4.50 GB, Ollama)' })).toBeInTheDocument()
+  expect(screen.getByRole('option', { name: 'tiny-gguf (2.20 GB)' })).toBeInTheDocument()
 })
 
 test('send button is disabled when input is empty', () => {
@@ -225,4 +277,42 @@ test('renders both tool trace and diff viewer in agent mode', () => {
   render(<Chat />)
   expect(screen.getByText('Tool Calls')).toBeInTheDocument()
   expect(screen.getByText('File Changes')).toBeInTheDocument()
+})
+
+test('shows error message in assistant bubble when stream fails', async () => {
+  vi.mocked(ollamaClient.streamChat).mockImplementationOnce(async function* () {
+    throw new Error('Connection reset')
+  })
+  const user = userEvent.setup()
+  render(<Chat />)
+  await user.type(screen.getByRole('textbox', { name: /chat message input/i }), 'hello')
+  await user.click(screen.getByRole('button', { name: 'Send message' }))
+  expect(await screen.findByText(/Connection reset/i)).toBeInTheDocument()
+})
+
+test('routes chat through model-manager when the active model is a model-manager model', async () => {
+  const user = userEvent.setup()
+  useSystemStore.setState({ activeModel: 'tiny-gguf' })
+  useModelManagerStore.setState({
+    models: [
+      {
+        id: 'tiny-gguf',
+        name: 'tiny-gguf',
+        cached: true,
+        size_bytes: 123,
+        local_path: 'C:/models/tiny.gguf',
+        format: 'gguf',
+        source: 'local',
+        status: 'ready',
+      },
+    ],
+  })
+
+  render(<Chat />)
+  await user.type(screen.getByRole('textbox', { name: /chat message input/i }), 'hello')
+  await user.click(screen.getByRole('button', { name: 'Send message' }))
+
+  expect(await screen.findByText(/Model manager/i)).toBeInTheDocument()
+  expect(modelManagerAPI.streamInference).toHaveBeenCalled()
+  expect(ollamaClient.streamChat).not.toHaveBeenCalled()
 })

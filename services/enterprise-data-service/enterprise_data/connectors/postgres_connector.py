@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import logging
+import re
 from typing import Any
 
 from enterprise_data.connector import BaseConnector
+
+logger = logging.getLogger(__name__)
+
+_SAFE_SQL_RE = re.compile(r"^\s*SELECT\b", re.IGNORECASE)
 
 
 class PostgresConnector(BaseConnector):
@@ -19,6 +25,11 @@ class PostgresConnector(BaseConnector):
         if not sql:
             return []
 
+        # Only allow SELECT statements to prevent SQL injection via read-path abuse
+        if not _SAFE_SQL_RE.match(sql):
+            logger.warning("Blocked non-SELECT query in PostgresConnector.query")
+            return []
+
         try:
             conn = psycopg2.connect(self.config.get("connection_string", ""))
             conn.set_session(readonly=True)
@@ -28,6 +39,7 @@ class PostgresConnector(BaseConnector):
             conn.close()
             return rows
         except Exception:
+            logger.exception("PostgresConnector.query failed")
             return []
 
     def get_schema(self) -> list[dict]:
@@ -63,4 +75,5 @@ class PostgresConnector(BaseConnector):
 
             return [{"name": t, "columns": cols} for t, cols in tables.items()]
         except Exception:
+            logger.exception("PostgresConnector.get_schema failed")
             return []

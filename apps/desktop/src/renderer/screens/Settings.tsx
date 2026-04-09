@@ -32,7 +32,7 @@ function StyledSelect({
 
 export function Settings() {
   const [activeTab, setActiveTab] = useState<'general' | 'inference' | 'privacy'>('general')
-  const { theme, setTheme } = useSystemStore()
+  const { theme, setTheme, uiTemplate, setUiTemplate } = useSystemStore()
 
   return (
     <div data-testid="screen-settings" className="h-full overflow-y-auto p-6 space-y-6">
@@ -95,6 +95,113 @@ export function Settings() {
                   <option value="16">16px (Large)</option>
                   <option value="18">18px (Extra Large)</option>
                 </StyledSelect>
+              </div>
+            </div>
+
+            {/* UI Template Section */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-text-primary">UI Template</h3>
+              <p className="text-xs text-text-muted">Choose your interface design aesthetic</p>
+              <div className="grid grid-cols-2 gap-3">
+                {/* Sentry card */}
+                <button
+                  data-testid="theme-card-sentry"
+                  onClick={() => setUiTemplate('sentry')}
+                  aria-pressed={uiTemplate === 'sentry'}
+                  aria-label="Select Sentry theme"
+                  className={`relative p-3 rounded-lg border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
+                    uiTemplate === 'sentry'
+                      ? 'border-accent-500 bg-bg-surface-3'
+                      : 'border-border-default bg-bg-surface-2 hover:border-border-strong'
+                  }`}
+                >
+                  {uiTemplate === 'sentry' && (
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent-lime" aria-hidden="true" />
+                  )}
+                  <div className="flex gap-1 mb-2" aria-hidden="true">
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#1f1633' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#6a5fc1' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#c2ef4e' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#79628c' }} />
+                  </div>
+                  <p className="text-sm font-medium text-text-primary">Sentry</p>
+                  <p className="text-xs text-text-muted mt-0.5">Deep purple · Rubik · 13px radius</p>
+                </button>
+
+                {/* Sanity card */}
+                <button
+                  data-testid="theme-card-sanity"
+                  onClick={() => setUiTemplate('sanity')}
+                  aria-pressed={uiTemplate === 'sanity'}
+                  aria-label="Select Sanity theme"
+                  className={`relative p-3 rounded-lg border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
+                    uiTemplate === 'sanity'
+                      ? 'border-accent-500 bg-bg-surface-3'
+                      : 'border-border-default bg-bg-surface-2 hover:border-border-strong'
+                  }`}
+                >
+                  {uiTemplate === 'sanity' && (
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent-lime" aria-hidden="true" />
+                  )}
+                  <div className="flex gap-1 mb-2" aria-hidden="true">
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#0b0b0b', border: '1px solid #353535' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#0052ef' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#f36458' }} />
+                    <span className="w-4 h-4 rounded-sm inline-block" style={{ background: '#19d600' }} />
+                  </div>
+                  <p className="text-sm font-medium text-text-primary">Sanity</p>
+                  <p className="text-xs text-text-muted mt-0.5">Near-black · IBM Plex Mono · Pill</p>
+                </button>
+
+                {/* Mistral card */}
+                <button
+                  data-testid="theme-card-mistral"
+                  onClick={() => setUiTemplate('mistral')}
+                  aria-pressed={uiTemplate === 'mistral'}
+                  aria-label="Select Mistral theme"
+                  className={`relative p-3 rounded-lg border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
+                    uiTemplate === 'mistral'
+                      ? 'border-accent-500 bg-bg-surface-3'
+                      : 'border-border-default bg-bg-surface-2 hover:border-border-strong'
+                  }`}
+                >
+                  {uiTemplate === 'mistral' && (
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent-lime" aria-hidden="true" />
+                  )}
+                  <div className="flex gap-1 mb-2" aria-hidden="true">
+                    <span className="w-4 h-4 inline-block" style={{ background: '#fffaeb', border: '1px solid #ffd06a' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#fa520f' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#ffd900' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#1f1f1f' }} />
+                  </div>
+                  <p className="text-sm font-medium text-text-primary">Mistral</p>
+                  <p className="text-xs text-text-muted mt-0.5">Warm ivory · Arial · Sharp</p>
+                </button>
+
+                {/* Replicate card */}
+                <button
+                  data-testid="theme-card-replicate"
+                  onClick={() => setUiTemplate('replicate')}
+                  aria-pressed={uiTemplate === 'replicate'}
+                  aria-label="Select Replicate theme"
+                  className={`relative p-3 rounded-lg border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
+                    uiTemplate === 'replicate'
+                      ? 'border-accent-500 bg-bg-surface-3'
+                      : 'border-border-default bg-bg-surface-2 hover:border-border-strong'
+                  }`}
+                >
+                  {uiTemplate === 'replicate' && (
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent-lime" aria-hidden="true" />
+                  )}
+                  <div className="flex gap-1 mb-2" aria-hidden="true">
+                    <span className="w-4 h-4 inline-block" style={{ background: '#ffffff', border: '1px solid #202020' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#ea2804' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#2b9a66' }} />
+                    <span className="w-4 h-4 inline-block" style={{ background: '#202020' }} />
+                  </div>
+                  <p className="text-sm font-medium text-text-primary">Replicate</p>
+                  <p className="text-xs text-text-muted mt-0.5">White canvas · Basier Square · Pill</p>
+                </button>
               </div>
             </div>
 

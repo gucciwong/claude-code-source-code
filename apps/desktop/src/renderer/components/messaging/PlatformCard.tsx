@@ -2,6 +2,7 @@ import React from 'react'
 import { CheckCircle2, XCircle, Trash2, Settings } from 'lucide-react'
 import type { PlatformStatus } from '../../../shared/messaging'
 import { IM_PLATFORM_LABELS } from '../../../shared/messaging'
+import { PlatformLogo } from './PlatformLogo'
 
 interface PlatformCardProps {
   platform: PlatformStatus
@@ -20,6 +21,7 @@ export function PlatformCard({ platform, onRemove, onConfigure }: PlatformCardPr
         ) : (
           <XCircle size={16} aria-hidden="true" className="text-text-muted" />
         )}
+        <PlatformLogo platform={platform.platform as Parameters<typeof PlatformLogo>[0]['platform']} size={20} />
         <div>
           <p className="text-text-primary text-sm font-medium">{label}</p>
           <p className="text-text-muted text-xs">

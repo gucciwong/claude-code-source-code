@@ -5,6 +5,7 @@ import { Models } from '../../screens/Models'
 import { Chat } from '../../screens/Chat'
 import { Coding } from '../../screens/Coding'
 import { Training } from '../../screens/Training'
+import { Research } from '../../screens/Research'
 import { Federation } from '../../screens/Federation'
 import { Settings } from '../../screens/Settings'
 import { Knowledge } from '../../screens/Knowledge'
@@ -24,6 +25,7 @@ import { ConversationMemory } from '../../screens/ConversationMemory'
 import { Developer } from '../../screens/Developer'
 import { DataHub } from '../../screens/DataHub'
 import HealthDashboard from '../../screens/HealthDashboard'
+import { Awards } from '../../screens/Awards'
 
 const screens = {
   dashboard: Dashboard,
@@ -31,6 +33,7 @@ const screens = {
   chat: Chat,
   coding: Coding,
   training: Training,
+  research: Research,
   federation: Federation,
   knowledge: Knowledge,
   enterprise: Enterprise,
@@ -48,6 +51,7 @@ const screens = {
   codecompletion: CodeCompletion,
   developer: Developer,
   memory: ConversationMemory,
+  awards: Awards,
   health: HealthDashboard,
   settings: Settings,
 }

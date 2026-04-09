@@ -5,7 +5,7 @@
 
 import { useState, useCallback } from 'react'
 
-const MODEL_MANAGER_BASE_URL = 'http://localhost:8002'
+const MODEL_MANAGER_BASE_URL = import.meta.env.VITE_MODEL_MANAGER_URL ?? 'http://localhost:8002'
 
 export interface MirrorConfig {
   current_mirror: string
@@ -60,12 +60,13 @@ export interface SearchResult {
 }
 
 export interface DownloadQueueEntry {
-  status: 'pending' | 'downloading' | 'done' | 'cancelled' | 'error'
+  status: 'pending' | 'downloading' | 'done' | 'cancelled' | 'error' | 'paused'
   progress: number
   total_size_gb: number
   downloaded_gb: number
   model_name: string
   started_at: number
+  speed_mbps?: number
   error?: string
 }
 
@@ -185,11 +186,16 @@ export function useModelManager() {
   }, [])
 
   // Search HuggingFace models via backend
-  const searchModels = useCallback(async (query: string, limit = 20): Promise<SearchResult[] | null> => {
+  const searchModels = useCallback(async (query: string, filters?: import('../components/models/HFFilterData').HFActiveFilters, limit = 20): Promise<SearchResult[] | null> => {
     setLoading(true)
     setError(null)
     try {
       const params = new URLSearchParams({ q: query, limit: String(limit) })
+      if (filters?.task)     params.set('task',     filters.task)
+      if (filters?.library)  params.set('library',  filters.library)
+      if (filters?.language) params.set('language', filters.language)
+      if (filters?.license)  params.set('license',  filters.license)
+      if (filters?.other)    params.set('other',    filters.other)
       const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/search?${params}`)
       if (!response.ok) throw new Error(`Search failed: ${response.statusText}`)
       return await response.json()
@@ -224,6 +230,41 @@ export function useModelManager() {
     }
   }, [])
 
+  // Pause an in-progress download
+  const pauseDownload = useCallback(async (modelId: string): Promise<boolean> => {
+    try {
+      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/pause`, { method: 'POST' })
+      return true
+    } catch {
+      return false
+    }
+  }, [])
+
+  // Resume a paused download
+  const resumeDownload = useCallback(async (modelId: string): Promise<boolean> => {
+    try {
+      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/resume`, { method: 'POST' })
+      return true
+    } catch {
+      return false
+    }
+  }, [])
+
+  // Fetch all files in a HuggingFace repository (for the file picker)
+  const fetchModelFiles = useCallback(async (
+    modelId: string,
+  ): Promise<{ path: string; size_bytes: number; is_gguf: boolean }[] | null> => {
+    try {
+      const encoded = encodeURIComponent(modelId).replace(/%2F/g, '/')
+      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/${encoded}/files`)
+      if (!response.ok) throw new Error(`Files fetch failed: ${response.statusText}`)
+      const data = await response.json()
+      return data.files ?? null
+    } catch {
+      return null
+    }
+  }, [])
+
   return {
     loading,
     error,
@@ -234,7 +275,10 @@ export function useModelManager() {
     downloadModel,
     setActiveModel,
     searchModels,
+    fetchModelFiles,
     getDownloadStatus,
     cancelDownload,
+    pauseDownload,
+    resumeDownload,
   }
 }

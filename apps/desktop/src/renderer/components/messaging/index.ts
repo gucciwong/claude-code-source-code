@@ -1,4 +1,5 @@
 export { PlatformCard } from './PlatformCard'
 export { PlatformConfigDialog } from './PlatformConfigDialog'
+export { PlatformLogo } from './PlatformLogo'
 export { MessageLog } from './MessageLog'
 export { CommandReference } from './CommandReference'

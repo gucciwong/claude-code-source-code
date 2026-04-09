@@ -165,5 +165,47 @@ describe('RAG context injection', () => {
     expect(result).toBeInstanceOf(Array)
     expect((result as vscode.InlineCompletionItem[]).length).toBe(1)
   })
+
+  test('returns [] when cancellation happens between RAG query and completion fetch', async () => {
+    let resolveQuery!: (chunks: unknown[]) => void
+    const mockRetriever = {
+      query: vi.fn().mockImplementation(
+        () => new Promise<unknown[]>(resolve => { resolveQuery = resolve }),
+      ),
+    } as unknown as Retriever
+
+    let callCount = 0
+    const flipToken = {
+      get isCancellationRequested() { return callCount++ > 0 },
+      onCancellationRequested: undefined,
+    } as unknown as vscode.CancellationToken
+
+    vi.mocked(vscode.workspace.getConfiguration).mockReturnValue({
+      get: vi.fn().mockImplementation((key: string) => {
+        const cfg: Record<string, unknown> = {
+          enabled: true,
+          ollamaUrl: 'http://localhost:11434',
+          model: 'qwen2.5-coder:7b',
+          maxTokens: 64,
+          triggerOnTyping: true,
+          ragEnabled: true,
+          ragTopK: 3,
+          ragMaxContextChars: 2000,
+        }
+        return cfg[key]
+      }),
+    } as unknown as vscode.WorkspaceConfiguration)
+
+    const ragProvider = new SovereignCompletionProvider(mockRetriever)
+    const doc = makeDoc('const x = ')
+    const promise = ragProvider.provideInlineCompletionItems(doc, makePos(0, 10), ctx, flipToken)
+
+    // Resolve the RAG query — token is now cancelled (callCount > 0)
+    resolveQuery([])
+
+    const result = await promise
+    expect(result).toEqual([])
+    expect(ollamaClient.getCompletion).not.toHaveBeenCalled()
+  })
 })
 

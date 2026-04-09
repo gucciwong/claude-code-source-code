@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { usePersonaCouncilStore } from '../store/personaCouncilStore'
 import type { ReviewRequest, CouncilReport } from '../../shared/personaCouncil'
 
-const BASE_URL = 'http://localhost:8008'
+const BASE_URL = 'http://localhost:8014'
 
 export function usePersonaCouncil() {
   const { addReport, setActiveReport, setReviewing, setError } = usePersonaCouncilStore()

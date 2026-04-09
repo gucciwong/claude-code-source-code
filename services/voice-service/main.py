@@ -149,8 +149,10 @@ async def startup():
     device_info = DeviceConfig.get_device_info()
     logger.info(f"Device Info: {device_info}")
     
+    # Auto-detect best device (CUDA → MPS → CPU)
+    # Defined outside try so it's available for streaming transcriber even if ASR fails
+    device = "cpu"  # safe default
     try:
-        # Auto-detect best device (CUDA → MPS → CPU)
         device = DeviceConfig.get_device_with_fallback(
             os.getenv("DEVICE", "auto")
         )

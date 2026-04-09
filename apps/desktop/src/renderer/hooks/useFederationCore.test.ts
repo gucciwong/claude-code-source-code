@@ -33,7 +33,7 @@ describe('useFederationCore', () => {
     vi.stubGlobal('fetch', makeFetch(true, [mockPeer]))
     const { result } = renderHook(() => useFederationCore())
     await act(async () => { await result.current.fetchPeers() })
-    expect(fetch).toHaveBeenCalledWith('http://localhost:8014/peers')
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8008/peers')
     expect(useFederationCoreStore.getState().peers).toEqual([mockPeer])
     vi.unstubAllGlobals()
   })
@@ -54,7 +54,7 @@ describe('useFederationCore', () => {
     await act(async () => { ok = await result.current.registerPeer(mockPeer) })
     expect(ok).toBe(true)
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8014/peers/register',
+      'http://localhost:8008/peers/register',
       expect.objectContaining({ method: 'POST' })
     )
     expect(useFederationCoreStore.getState().peers).toContainEqual(mockPeer)
@@ -76,7 +76,7 @@ describe('useFederationCore', () => {
     const { result } = renderHook(() => useFederationCore())
     await act(async () => { await result.current.unregisterPeer('p1') })
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8014/peers/p1',
+      'http://localhost:8008/peers/p1',
       expect.objectContaining({ method: 'DELETE' })
     )
     expect(useFederationCoreStore.getState().peers).toHaveLength(0)
@@ -89,7 +89,7 @@ describe('useFederationCore', () => {
     let round: FederationRound | null = null
     await act(async () => { round = await result.current.startRound() })
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8014/rounds/start',
+      'http://localhost:8008/rounds/start',
       expect.objectContaining({ method: 'POST' })
     )
     expect(round).toEqual(mockRound)
@@ -110,7 +110,7 @@ describe('useFederationCore', () => {
     vi.stubGlobal('fetch', makeFetch(true, [mockRound]))
     const { result } = renderHook(() => useFederationCore())
     await act(async () => { await result.current.fetchHistory() })
-    expect(fetch).toHaveBeenCalledWith('http://localhost:8014/rounds/history')
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8008/rounds/history')
     expect(useFederationCoreStore.getState().roundHistory).toEqual([mockRound])
     vi.unstubAllGlobals()
   })

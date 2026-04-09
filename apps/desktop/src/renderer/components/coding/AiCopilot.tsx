@@ -1,8 +1,13 @@
 import { useRef, useEffect, useState, KeyboardEvent } from 'react'
 import { Bot, X, Send, Sparkles, FileCode2 } from 'lucide-react'
+import { ThinkingAnimation } from '../chat/ThinkingAnimation'
 import { useCodingStore } from '../../store/codingStore'
 import { useSystemStore } from '../../store/systemStore'
 import { streamChat } from '../../services/ollamaClient'
+import { useModelManagerStore } from '../../store/modelManagerStore'
+import { useModelsStore } from '../../store/modelsStore'
+import { modelManagerAPI } from '../../services/modelManagerAPI'
+import { formatModelSizeFromBytes } from '../../utils/modelSize'
 
 const QUICK_PROMPTS = [
   { label: 'Explain', prompt: 'Explain what this code does in plain English.' },
@@ -20,9 +25,21 @@ export function AiCopilot() {
   } = useCodingStore()
 
   const activeModel = useSystemStore(s => s.activeModel)
+  const mmModels = useModelManagerStore(s => s.models)
+  const ollamaModels = useModelsStore(s => s.installed)
   const [isStreaming, setIsStreaming] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  const activeModelMeta = mmModels.find(m => m.id === activeModel || m.name === activeModel)
+    ?? ollamaModels.find(m => m.name === activeModel)
+  const activeModelLabel = activeModel ? activeModel.split(':')[0] : 'No model'
+  const activeModelSize = activeModelMeta && 'size_bytes' in activeModelMeta
+    ? formatModelSizeFromBytes(activeModelMeta.size_bytes)
+    : activeModelMeta && 'size' in activeModelMeta
+      ? formatModelSizeFromBytes(activeModelMeta.size)
+      : null
+  const activeModelBadge = activeModelSize ? `${activeModelLabel} · ${activeModelSize}` : activeModelLabel
 
   useEffect(() => {
     const target = bottomRef.current
@@ -51,6 +68,7 @@ export function AiCopilot() {
 
     try {
       const model = activeModel || 'llama3.1:8b'
+      const mmModel = mmModels.find(m => m.id === model || m.name === model)
       const apiMessages = [
         { role: 'system' as const, content: systemPrompt },
         ...copilotMessages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
@@ -58,7 +76,11 @@ export function AiCopilot() {
       ]
 
       let accumulated = ''
-      for await (const chunk of streamChat(model, apiMessages)) {
+      const tokenSource: AsyncIterable<string> = mmModel
+        ? modelManagerAPI.streamInference(`${systemPrompt}\n\nUser: ${userText}\nAssistant:`, { model_id: model })
+        : streamChat(model, apiMessages)
+
+      for await (const chunk of tokenSource) {
         accumulated += chunk
         // Update the last assistant message live
         useCodingStore.setState(state => ({
@@ -67,10 +89,12 @@ export function AiCopilot() {
           ),
         }))
       }
-    } catch {
+    } catch (err) {
       useCodingStore.setState(state => ({
         copilotMessages: state.copilotMessages.map(m =>
-          m.id === assistantId ? { ...m, content: 'Error: could not reach the model. Is Ollama running?' } : m
+          m.id === assistantId
+            ? { ...m, content: `Error: ${err instanceof Error ? err.message : 'could not reach the selected model.'}` }
+            : m
         ),
       }))
     } finally {
@@ -95,7 +119,7 @@ export function AiCopilot() {
           <Bot size={16} className="text-accent-400" aria-hidden="true" />
           <span className="text-[13px] font-semibold text-text-primary">AI Copilot</span>
           <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent-500/20 text-accent-400 font-medium">
-            {activeModel ? activeModel.split(':')[0] : 'No model'}
+            {activeModelBadge}
           </span>
         </div>
         <button
@@ -132,8 +156,8 @@ export function AiCopilot() {
                 ? 'bg-accent-500/20 text-text-primary'
                 : 'bg-bg-surface-2 text-text-primary border border-border-subtle',
             ].join(' ')}>
-              {msg.content || (isStreaming && msg.role === 'assistant' ? (
-                <span className="opacity-50">Thinking...</span>
+              {msg.content || (isStreaming && msg.role === 'assistant' && i === copilotMessages.length - 1 ? (
+                <ThinkingAnimation />
               ) : null)}
             </div>
           </div>

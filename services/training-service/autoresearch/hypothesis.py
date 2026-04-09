@@ -23,8 +23,12 @@ from typing import Dict, Any, List, Optional
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-import optuna
-from optuna.samplers import TPESampler
+try:
+    import optuna
+    from optuna.samplers import TPESampler
+except ImportError:
+    optuna = None
+    TPESampler = None
 
 # Try to import from runner, but provide fallback for testing
 try:
@@ -46,7 +50,16 @@ from experiments.models import Experiment
 try:
     import anthropic
 except ImportError:
-    anthropic = None
+    class _MissingAnthropicClient:
+        def __init__(self, *args, **kwargs):
+            raise ValueError(
+                "anthropic library not installed. Install with: pip install anthropic"
+            )
+
+    class _AnthropicShim:
+        Anthropic = _MissingAnthropicClient
+
+    anthropic = _AnthropicShim()
 
 logger = logging.getLogger(__name__)
 
@@ -80,12 +93,21 @@ class BayesianHypothesisGenerator(HypothesisGenerator):
         self.program = program
         self.history: List[Dict[str, Any]] = []  # Tracked experiments with metrics
 
-        # Create Optuna study with TPESampler
-        self.sampler = TPESampler(seed=42)
-        self.study = optuna.create_study(
-            direction="minimize",  # Assuming we minimize primary metric
-            sampler=self.sampler,
-        )
+        # Create Optuna study with TPESampler when available.
+        # Fallback mode keeps behavior functional in lightweight test envs.
+        self._use_optuna = optuna is not None and TPESampler is not None
+        if self._use_optuna:
+            self.sampler = TPESampler(seed=42)
+            self.study = optuna.create_study(
+                direction="minimize",  # Assuming we minimize primary metric
+                sampler=self.sampler,
+            )
+        else:
+            self.sampler = None
+            self.study = None
+            logger.warning(
+                "optuna not installed; BayesianHypothesisGenerator is running in random fallback mode"
+            )
 
         logger.info(f"Initialized BayesianHypothesisGenerator for {program.run_tag}")
 
@@ -112,20 +134,21 @@ class BayesianHypothesisGenerator(HypothesisGenerator):
                 }
             )
 
-            # Add trial to Optuna study if not already present
-            try:
-                # Map experiment config to Optuna trial
-                trial_params = self._config_to_optuna_params(exp.config)
-                self.study.tell(
-                    optuna.trial.create_trial(
-                        state=optuna.trial.TrialState.COMPLETE,
-                        value=exp.primary_metric,
-                        datetime_complete=datetime.now(),
-                        params=trial_params,
+            # Add trial to Optuna study if available
+            if self._use_optuna and self.study is not None:
+                try:
+                    # Map experiment config to Optuna trial
+                    trial_params = self._config_to_optuna_params(exp.config)
+                    self.study.tell(
+                        optuna.trial.create_trial(
+                            state=optuna.trial.TrialState.COMPLETE,
+                            value=exp.primary_metric,
+                            datetime_complete=datetime.now(),
+                            params=trial_params,
+                        )
                     )
-                )
-            except Exception as e:
-                logger.warning(f"Could not add trial to Optuna study: {e}")
+                except Exception as e:
+                    logger.warning(f"Could not add trial to Optuna study: {e}")
 
         logger.info(f"Updated history with {len(experiments)} experiments")
 
@@ -148,6 +171,11 @@ class BayesianHypothesisGenerator(HypothesisGenerator):
         # If no history, return random valid config
         if not self.history:
             logger.info("No history - generating random initial config")
+            return self._generate_random_config()
+
+        if not self._use_optuna or self.study is None:
+            # Graceful fallback when optional dependency is unavailable.
+            logger.info("Optuna unavailable - using random config fallback")
             return self._generate_random_config()
 
         # Create trial and ask for next params
@@ -342,11 +370,6 @@ class AgentHypothesisGenerator(HypothesisGenerator):
         Raises:
             ValueError: If ANTHROPIC_API_KEY not set or anthropic not installed
         """
-        if anthropic is None:
-            raise ValueError(
-                "anthropic library not installed. Install with: pip install anthropic"
-            )
-
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise ValueError(

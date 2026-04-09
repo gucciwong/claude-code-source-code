@@ -6,11 +6,12 @@ python-dotenv==1.0.0
 # Model management
 transformers==4.36.0
 torch==2.1.1
-huggingface-hub==0.19.0
+huggingface-hub==0.19.3
 peft==0.7.0
 bitsandbytes==0.41.0
 accelerate==0.24.0
 datasets==2.14.0
+llama-cpp-python>=0.2.0
 
 # Rate limiting
 slowapi==0.1.9
@@ -18,3 +19,4 @@ slowapi==0.1.9
 # Utilities
 tqdm==4.66.0
 aiofiles==23.2.1
+psutil>=5.9.0

@@ -16,8 +16,8 @@ function VramBar({ used, total }: { used: number | null; total: number | null })
       aria-label="VRAM usage"
     >
       <div
-        className="h-full bg-accent-500 rounded-full transition-all duration-300"
-        style={{ width: `${pct}%` }}
+        className="h-full rounded-full transition-all duration-300"
+        style={{ width: `${pct}%`, backgroundColor: '#c2ef4e' }}
       />
     </div>
   )
@@ -42,7 +42,7 @@ export function Dashboard() {
   return (
     <div data-testid="screen-dashboard" className="p-6 space-y-6">
       {/* Hero: Active Model Card */}
-      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
+      <div className="bg-bg-deeper border border-border-subtle rounded-lg p-6 space-y-4">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-xl font-semibold text-text-primary">
@@ -66,7 +66,8 @@ export function Dashboard() {
         </p>
 
         <button
-          className="bg-accent-500 hover:bg-accent-400 active:bg-accent-600 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          className="text-text-primary text-sm font-medium uppercase tracking-wide px-4 py-2 rounded-[13px] cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-shadow hover:shadow-[rgba(0,0,0,0.18)_0px_0.5rem_1.5rem]"
+          style={{ backgroundColor: '#79628c', border: '1px solid #584674', boxShadow: 'rgba(0,0,0,0.1) 0px 1px 3px 0px inset' }}
           onClick={() => setActive('chat')}
         >
           <MessageSquare size={16} aria-hidden="true" />
@@ -93,29 +94,33 @@ export function Dashboard() {
       {/* Quick actions */}
       <div className="flex flex-wrap gap-3">
         <button
-          className="border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          className="border text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          style={{ borderColor: '#362d59' }}
           onClick={() => setActive('chat')}
         >
           <MessageSquare size={16} aria-hidden="true" />
           Open Chat
         </button>
         <button
-          className="border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          className="border text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          style={{ borderColor: '#362d59' }}
           onClick={() => setActive('training')}
         >
           <Zap size={16} aria-hidden="true" />
           Start Training
         </button>
         <button
-          className="border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+          className="border text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          style={{ borderColor: '#362d59' }}
           onClick={() => setActive('models')}
         >
           <BookOpen size={16} aria-hidden="true" />
           Browse Models
         </button>
         <button
-          className="border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
-          onClick={() => setActive('settings')}
+          className="border text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors"
+          style={{ borderColor: '#362d59' }}
+          onClick={() => setActive('health')}
         >
           <Activity size={16} aria-hidden="true" />
           System Health

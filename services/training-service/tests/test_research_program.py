@@ -668,3 +668,56 @@ def test_research_program_status_default():
     )
     
     assert program.status == "pending"
+
+
+# ============================================================================
+# Test: Research Health Endpoint
+# ============================================================================
+
+def test_research_health_endpoint_with_store():
+    """Research health endpoint returns ok when store is initialized"""
+    from fastapi.testclient import TestClient
+    from autoresearch.router import router, set_store
+    from autoresearch.store import ResearchProgramStore
+    from fastapi import FastAPI
+    import tempfile
+
+    app = FastAPI()
+    app.include_router(router)
+
+    # Initialize store
+    with tempfile.TemporaryDirectory() as tmpdir:
+        store = ResearchProgramStore(db_dir=tmpdir)
+        set_store(store)
+
+        client = TestClient(app)
+        response = client.get("/api/v1/research/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ok"
+        assert data["store_initialized"] is True
+
+
+def test_research_health_endpoint_without_store():
+    """Research health endpoint returns degraded when store is not initialized"""
+    from fastapi.testclient import TestClient
+    from autoresearch.router import router
+    from fastapi import FastAPI
+    import autoresearch.router as router_module
+
+    app = FastAPI()
+    app.include_router(router)
+
+    # Temporarily unset the store
+    original_store = router_module._store
+    router_module._store = None
+
+    try:
+        client = TestClient(app)
+        response = client.get("/api/v1/research/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "degraded"
+        assert data["store_initialized"] is False
+    finally:
+        router_module._store = original_store

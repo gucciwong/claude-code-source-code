@@ -37,7 +37,7 @@ describe('useConversationMemory', () => {
     vi.stubGlobal('fetch', makeFetch({ memories: [mem] }))
     const { result } = renderHook(() => useConversationMemory())
     await act(async () => { await result.current.fetchMemories() })
-    expect(fetch).toHaveBeenCalledWith('http://localhost:8016/memories')
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8010/memories')
     expect(useMemoryStore.getState().memories).toEqual([mem])
   })
 
@@ -55,7 +55,7 @@ describe('useConversationMemory', () => {
     const { result } = renderHook(() => useConversationMemory())
     await act(async () => { await result.current.addMemoryItem('test memory') })
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8016/memories',
+      'http://localhost:8010/memories',
       expect.objectContaining({ method: 'POST' })
     )
     expect(useMemoryStore.getState().memories).toContainEqual(mem)
@@ -86,7 +86,7 @@ describe('useConversationMemory', () => {
     const { result } = renderHook(() => useConversationMemory())
     await act(async () => { await result.current.deleteMemory('del-1') })
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8016/memories/del-1',
+      'http://localhost:8010/memories/del-1',
       expect.objectContaining({ method: 'DELETE' })
     )
     expect(useMemoryStore.getState().memories).toHaveLength(0)
@@ -103,7 +103,7 @@ describe('useConversationMemory', () => {
     const { result } = renderHook(() => useConversationMemory())
     await act(async () => { await result.current.buildContext('test') })
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8016/context/build',
+      'http://localhost:8010/context/build',
       expect.objectContaining({ method: 'POST' })
     )
     expect(useMemoryStore.getState().contextSummary).toEqual(summary)

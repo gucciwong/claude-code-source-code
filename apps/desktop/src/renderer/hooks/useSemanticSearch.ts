@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useSemanticSearchStore } from '../store/semanticSearchStore'
 import type { CodeSnippet, IndexStatus, IndexRequest } from '../../shared/semanticSearch'
 
-const BASE_URL = 'http://localhost:8011'
+const BASE_URL = 'http://localhost:8017'
 
 export function useSemanticSearch() {
   const { setResults, setIndexStatus, setSearching, setIndexing, setError } = useSemanticSearchStore()

@@ -67,6 +67,9 @@ export const window = {
   }),
   showErrorMessage: vi.fn(),
   showInformationMessage: vi.fn(),
+  showWarningMessage: vi.fn(),
+  showQuickPick: vi.fn().mockResolvedValue(undefined),
+  registerWebviewViewProvider: vi.fn().mockReturnValue({ dispose: vi.fn() }),
 }
 
 export const languages = {

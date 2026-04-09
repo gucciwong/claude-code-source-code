@@ -4,6 +4,14 @@ import { vi } from 'vitest'
 import { Models } from './Models'
 import { useModelsStore } from '../store/modelsStore'
 import { useSystemStore } from '../store/systemStore'
+import { useModelManagerStore } from '../store/modelManagerStore'
+import * as modelManagerAPI from '../services/modelManagerAPI'
+
+vi.mock('../services/modelManagerAPI', () => ({
+  downloadFromHuggingFace: vi.fn().mockResolvedValue({ status: 'queued' }),
+  getDownloadStatus: vi.fn().mockResolvedValue({}),
+  cancelDownload: vi.fn().mockResolvedValue(undefined),
+}))
 
 const mockModels = [
   { name: 'llama3.1:8b', size: 4_500_000_000, digest: 'abc123def456', modified_at: '2024-01-15T10:00:00Z' },
@@ -11,11 +19,35 @@ const mockModels = [
 ]
 
 beforeEach(() => {
+  Object.defineProperty(window.navigator, 'hardwareConcurrency', {
+    configurable: true,
+    value: 12,
+  })
+  Object.defineProperty(window.navigator, 'deviceMemory', {
+    configurable: true,
+    value: 32,
+  })
+  Object.defineProperty(window.navigator, 'storage', {
+    configurable: true,
+    value: {
+      estimate: vi.fn().mockResolvedValue({
+        quota: 500 * 1024 * 1024 * 1024,
+        usage: 120 * 1024 * 1024 * 1024,
+      }),
+    },
+  })
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
     json: () => Promise.resolve({}),
   }))
   useModelsStore.setState({ installed: mockModels, selected: null })
   useSystemStore.setState({ ollamaOnline: true, activeModel: '' })
+  useModelManagerStore.setState({
+    models: [],
+    selectedModel: null,
+    loadModels: vi.fn().mockResolvedValue(undefined),
+    cleanup_polls: vi.fn(),
+    last_error: null,
+  })
 })
 
 afterEach(() => {
@@ -26,6 +58,8 @@ test('renders installed models list', () => {
   render(<Models />)
   expect(screen.getByText('llama3.1:8b')).toBeInTheDocument()
   expect(screen.getByText('mistral:7b')).toBeInTheDocument()
+  expect(screen.getAllByText('4.50 GB')[0]).toBeInTheDocument()
+  expect(screen.getAllByText('3.80 GB')[0]).toBeInTheDocument()
 })
 
 test('shows INSTALLED section header', () => {
@@ -49,7 +83,7 @@ test('model detail shows size formatted as GB', async () => {
   const user = userEvent.setup()
   render(<Models />)
   await user.click(screen.getByRole('button', { name: /llama3.1:8b/ }))
-  expect(screen.getByText('4.5 GB')).toBeInTheDocument()
+  expect(screen.getAllByText('4.50 GB').length).toBeGreaterThanOrEqual(2)
 })
 
 test('model detail shows info grid with Parameters, Size, Status, Modified', async () => {
@@ -153,7 +187,66 @@ test('quantization_level badge renders when present', () => {
   expect(screen.getByText('Q4_K_M')).toBeInTheDocument()
 })
 
+test('selected model detail shows hardware fit evaluation', async () => {
+  const user = userEvent.setup()
+  const modelWithDetails = [
+    { ...mockModels[0], details: { parameter_size: '7.2B', quantization_level: 'Q4_K_M', family: 'llama', format: 'gguf' } },
+    ...mockModels.slice(1),
+  ]
+  useModelsStore.setState({ installed: modelWithDetails, selected: null })
+  render(<Models />)
+  await user.click(screen.getByRole('button', { name: /llama3.1:8b/ }))
+  expect(await screen.findByText('Hardware Fit')).toBeInTheDocument()
+  expect(screen.getByText(/Ready for local use|lower context/i)).toBeInTheDocument()
+})
+
 test('Installed tab shows installed model count', () => {
   render(<Models />)
   expect(screen.getByRole('tab', { name: /Installed \(2\)/ })).toBeInTheDocument()
+})
+
+describe('Download tab', () => {
+  async function openDownloadTab() {
+    const user = userEvent.setup()
+    render(<Models />)
+    await user.click(screen.getByRole('tab', { name: /Download from HuggingFace/ }))
+    return user
+  }
+
+  test('shows model ID input on download tab', async () => {
+    await openDownloadTab()
+    expect(screen.getByRole('textbox', { name: /HuggingFace model ID/i })).toBeInTheDocument()
+  })
+
+  test('download button disabled when model ID input is empty', async () => {
+    await openDownloadTab()
+    expect(screen.getByRole('button', { name: /^Download$/i })).toBeDisabled()
+  })
+
+  test('download button enabled when model ID is entered', async () => {
+    const user = await openDownloadTab()
+    await user.type(screen.getByRole('textbox', { name: /HuggingFace model ID/i }), 'TheBloke/Llama-2-7B-GGUF')
+    expect(screen.getByRole('button', { name: /^Download$/i })).toBeEnabled()
+  })
+
+  test('calls downloadFromHuggingFace with model ID on submit', async () => {
+    const user = await openDownloadTab()
+    await user.type(screen.getByRole('textbox', { name: /HuggingFace model ID/i }), 'TheBloke/Llama-2-7B-GGUF')
+    await user.click(screen.getByRole('button', { name: /^Download$/i }))
+    expect(modelManagerAPI.downloadFromHuggingFace).toHaveBeenCalledWith('TheBloke/Llama-2-7B-GGUF', '')
+  })
+
+  test('shows in-progress download status when getDownloadStatus returns active download', async () => {
+    vi.mocked(modelManagerAPI.getDownloadStatus).mockResolvedValue({
+      'TheBloke/Llama-2-7B-GGUF': {
+        status: 'downloading',
+        progress: 42,
+        total_size_gb: 4.1,
+        downloaded_gb: 1.7,
+        model_name: 'TheBloke/Llama-2-7B-GGUF',
+      },
+    })
+    await openDownloadTab()
+    expect(await screen.findByText(/42%/)).toBeInTheDocument()
+  })
 })

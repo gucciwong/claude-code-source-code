@@ -4,7 +4,7 @@ import type { Completion, CompletionRequest, CompletionFeedback } from '../../sh
 import { parseResponse } from '../services/parseResponse'
 import { CompletionsResponseSchema } from '../services/schemas'
 
-const BASE_URL = 'http://localhost:8015'
+const BASE_URL = import.meta.env.VITE_CODE_COMPLETION_URL ?? 'http://localhost:8007'
 
 export function useCodeCompletion() {
   const { setCompletions, setLoading, setError } = useCodeCompletionStore()

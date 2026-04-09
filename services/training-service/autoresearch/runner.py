@@ -21,22 +21,29 @@ Key principles:
 - Experiments build on prior best (evolutionary)
 """
 
+from __future__ import annotations
+
 import asyncio
 import logging
 import uuid
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, Any, AsyncGenerator
+from typing import TYPE_CHECKING, Optional, Dict, Any, AsyncGenerator
 from abc import ABC, abstractmethod
 from enum import Enum
 import random
 
 from experiments.models import Experiment, ExperimentStatus
 from experiments.store import ExperimentStore
-from training.qla_trainer import QLORATrainer
-from evaluation.runner import EvaluationHarness
-from datasets import Dataset
+
+if TYPE_CHECKING:
+    # Heavy ML imports — only evaluated by type checkers, not at runtime.
+    # This keeps the FastAPI server startable regardless of transformers/peft
+    # version compatibility.
+    from training.qla_trainer import QLORATrainer
+    from evaluation.runner import EvaluationHarness
+    from datasets import Dataset
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Activity, Thermometer, Zap, HardDrive, Cpu, AlertCircle } from 'lucide-react'
 import { useSystemStore } from '../../store/systemStore'
+import { useModelsStore } from '../../store/modelsStore'
+import { useModelManagerStore } from '../../store/modelManagerStore'
+import { useHardwareProfile } from '../../hooks/useHardwareProfile'
+import { HardwareCompatibilityCard } from './HardwareCompatibilityCard'
+import { evaluateHardwareCompatibility } from '../../utils/modelCompatibility'
 
 interface HealthMetric {
   name: string
@@ -11,7 +16,30 @@ interface HealthMetric {
 
 export function SystemHealth() {
   const { gpuTemp, vramUsed, vramTotal, tokensPerSec, activeModel } = useSystemStore()
+  const installedModels = useModelsStore(s => s.installed)
+  const modelManagerModels = useModelManagerStore(s => s.models)
+  const hardwareProfile = useHardwareProfile()
   const [metrics, setMetrics] = useState<HealthMetric[]>([])
+
+  const activeInstalledModel = activeModel ? installedModels.find(model => model.name === activeModel) ?? null : null
+  const activeManagedModel = activeModel
+    ? modelManagerModels.find(model => model.id === activeModel || model.name === activeModel) ?? null
+    : null
+  const compatibilityReport = activeInstalledModel
+    ? evaluateHardwareCompatibility(hardwareProfile, {
+        name: activeInstalledModel.name,
+        sizeBytes: activeInstalledModel.size,
+        format: activeInstalledModel.details?.format ?? 'gguf',
+        parameterText: activeInstalledModel.details?.parameter_size ?? activeInstalledModel.name,
+      })
+    : activeManagedModel
+      ? evaluateHardwareCompatibility(hardwareProfile, {
+          name: activeManagedModel.name,
+          sizeBytes: activeManagedModel.size_bytes,
+          format: activeManagedModel.format,
+          parameterText: activeManagedModel.name,
+        })
+      : null
 
   useEffect(() => {
     const newMetrics: HealthMetric[] = []
@@ -147,6 +175,14 @@ export function SystemHealth() {
           </div>
         </div>
       )}
+
+      <div className="mt-6">
+        <HardwareCompatibilityCard
+          report={compatibilityReport}
+          title="Hardware Fit"
+          emptyState="Load a model to compare local CPU, RAM, GPU, VRAM, and storage headroom."
+        />
+      </div>
     </div>
   )
 }

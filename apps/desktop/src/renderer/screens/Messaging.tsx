@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Smartphone, Plus, RefreshCw } from 'lucide-react'
+import { Smartphone, RefreshCw } from 'lucide-react'
 import { useMessaging } from '../hooks/useMessaging'
 import { useMessagingStore } from '../store/messagingStore'
 import {
@@ -9,7 +9,7 @@ import {
   MessageLog,
   CommandReference,
 } from '../components/messaging'
-import type { IMPlatform } from '../../shared/messaging'
+import type { IMPlatform, PlatformStatus } from '../../shared/messaging'
 
 const ALL_PLATFORMS: IMPlatform[] = [
   'telegram',
@@ -36,6 +36,19 @@ export function Messaging() {
     })
   }, [listPlatforms, fetchMessageLog])
 
+  // Merge all 8 platforms with configured status from the backend
+  const allPlatformStatuses: PlatformStatus[] = useMemo(() => {
+    const configured = new Map(platforms.map(p => [p.platform, p]))
+    return ALL_PLATFORMS.map(platform =>
+      configured.get(platform) ?? {
+        platform,
+        connected: false,
+        allowed_user_ids: [],
+        enabled: false,
+      }
+    )
+  }, [platforms])
+
   const handleConfigurePlatform = (platform: string) => {
     setSelectedPlatform(platform as IMPlatform)
     setDialogOpen(true)
@@ -61,31 +74,19 @@ export function Messaging() {
               Monitor and remote-control Sovereign Code via Telegram, Slack, Discord and more
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => listPlatforms()}
-              disabled={isLoading}
-              className="flex items-center gap-2 border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50"
-              aria-label="Refresh platform list"
-            >
-              <RefreshCw
-                size={14}
-                aria-hidden="true"
-                className={isLoading ? 'animate-spin' : ''}
-              />
-              Refresh
-            </button>
-            <button
-              onClick={() => {
-                setSelectedPlatform('telegram')
-                setDialogOpen(true)
-              }}
-              className="flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-text-primary text-sm font-medium px-4 py-2 rounded-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
-            >
-              <Plus size={14} aria-hidden="true" />
-              Add Platform
-            </button>
-          </div>
+          <button
+            onClick={() => listPlatforms()}
+            disabled={isLoading}
+            className="flex items-center gap-2 border border-border-default text-text-secondary hover:bg-bg-surface-3 rounded-md px-3 py-2 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 disabled:opacity-50"
+            aria-label="Refresh platform list"
+          >
+            <RefreshCw
+              size={14}
+              aria-hidden="true"
+              className={isLoading ? 'animate-spin' : ''}
+            />
+            Refresh
+          </button>
         </div>
       </div>
 
@@ -111,32 +112,16 @@ export function Messaging() {
         </Tabs.List>
 
         <Tabs.Content value="platforms" className="flex-1 overflow-y-auto p-6">
-          {platforms.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 gap-3">
-              <Smartphone size={36} aria-hidden="true" className="text-text-muted" />
-              <p className="text-text-muted text-sm">No platforms configured</p>
-              <button
-                onClick={() => {
-                  setSelectedPlatform('telegram')
-                  setDialogOpen(true)
-                }}
-                className="text-accent-400 text-sm hover:underline cursor-pointer"
-              >
-                Add your first platform
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {platforms.map(p => (
-                <PlatformCard
-                  key={p.platform}
-                  platform={p}
-                  onRemove={handleRemovePlatform}
-                  onConfigure={handleConfigurePlatform}
-                />
-              ))}
-            </div>
-          )}
+          <div className="space-y-3">
+            {allPlatformStatuses.map(p => (
+              <PlatformCard
+                key={p.platform}
+                platform={p}
+                onRemove={handleRemovePlatform}
+                onConfigure={handleConfigurePlatform}
+              />
+            ))}
+          </div>
         </Tabs.Content>
 
         <Tabs.Content value="log" className="flex-1 overflow-y-auto p-6">

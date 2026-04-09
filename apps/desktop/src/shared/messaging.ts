@@ -19,10 +19,23 @@ export const IM_PLATFORM_LABELS: Record<IMPlatform, string> = {
   line: 'LINE',
 }
 
+/** Brand hex color (no #) for each platform */
+export const IM_PLATFORM_COLORS: Record<IMPlatform, string> = {
+  telegram: '26A5E4',
+  slack: '4A154B',
+  discord: '5865F2',
+  feishu: '3370FF',
+  dingtalk: '1677FF',
+  wechat_work: '07C160',
+  whatsapp: '25D366',
+  line: '00B900',
+}
+
 export interface PlatformConfig {
   platform: IMPlatform
   bot_token?: string
   webhook_url?: string
+  channel_id?: string
   allowed_user_ids: string[]
   enabled: boolean
 }

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useMessagingStore } from '../store/messagingStore'
 import type { PlatformConfig, PlatformStatus, MessageLogEntry } from '../../shared/messaging'
 
-const BASE_URL = 'http://localhost:8010'
+const BASE_URL = 'http://localhost:8012'
 
 export function useMessaging() {
   const { setPlatforms, setLoading, setError, addLogEntry } = useMessagingStore()

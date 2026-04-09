@@ -13,6 +13,8 @@ interface SystemState {
   ollamaConnectionError: string | null
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
+  uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate'
+  setUiTemplate: (uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate') => void
 }
 
 export const useSystemStore = create<SystemState>((set) => ({
@@ -28,4 +30,6 @@ export const useSystemStore = create<SystemState>((set) => ({
   ollamaConnectionError: null,
   theme: 'dark',
   setTheme: (theme) => set({ theme }),
+  uiTemplate: 'mistral',
+  setUiTemplate: (uiTemplate) => set({ uiTemplate }),
 }))

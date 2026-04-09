@@ -74,4 +74,45 @@ describe('Settings Screen', () => {
     render(<Settings />)
     expect(screen.getByTestId('screen-settings')).toBeInTheDocument()
   })
+
+  test('general tab shows UI template section', () => {
+    render(<Settings />)
+    expect(screen.getByText('UI Template')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-card-sentry')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-card-sanity')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-card-mistral')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-card-replicate')).toBeInTheDocument()
+  })
+
+  test('mistral theme is selected by default', () => {
+    render(<Settings />)
+    expect(screen.getByTestId('theme-card-mistral')).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByTestId('theme-card-sentry')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-sanity')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-replicate')).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('clicking sanity card selects it', async () => {
+    const user = userEvent.setup()
+    render(<Settings />)
+
+    await user.click(screen.getByTestId('theme-card-sanity'))
+
+    expect(screen.getByTestId('theme-card-sanity')).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByTestId('theme-card-sentry')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-mistral')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-replicate')).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('clicking replicate card selects it', async () => {
+    const user = userEvent.setup()
+    render(<Settings />)
+
+    await user.click(screen.getByTestId('theme-card-replicate'))
+
+    expect(screen.getByTestId('theme-card-replicate')).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByTestId('theme-card-sentry')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-sanity')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByTestId('theme-card-mistral')).toHaveAttribute('aria-pressed', 'false')
+  })
 })

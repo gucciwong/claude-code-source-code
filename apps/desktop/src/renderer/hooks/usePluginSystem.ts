@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { usePluginStore } from '../store/pluginStore'
 import type { PluginManifest, HookEvent } from '../../shared/pluginSystem'
 
-const BASE_URL = 'http://localhost:8012'
+const BASE_URL = 'http://localhost:8015'
 
 export function usePluginSystem() {
   const { setPlugins, addPlugin, removePlugin, setEnabled, setLoading, setError } = usePluginStore()

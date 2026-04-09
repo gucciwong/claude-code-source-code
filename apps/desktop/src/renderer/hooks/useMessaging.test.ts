@@ -29,7 +29,7 @@ describe('useMessaging', () => {
     )
     expect(success).toBe(true)
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8010/platforms/configure',
+      'http://localhost:8012/platforms/configure',
       expect.objectContaining({ method: 'POST' })
     )
   })
@@ -57,7 +57,7 @@ describe('useMessaging', () => {
     await act(() => result.current.listPlatforms())
     expect(useMessagingStore.getState().platforms).toHaveLength(1)
     expect(useMessagingStore.getState().platforms[0].platform).toBe('telegram')
-    expect(fetch).toHaveBeenCalledWith('http://localhost:8010/platforms')
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8012/platforms')
   })
 
   it('listPlatforms returns empty array when fetch fails', async () => {
@@ -73,7 +73,7 @@ describe('useMessaging', () => {
     const success = await act(() => result.current.removePlatform('telegram'))
     expect(success).toBe(true)
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8010/platforms/telegram',
+      'http://localhost:8012/platforms/telegram',
       expect.objectContaining({ method: 'DELETE' })
     )
   })

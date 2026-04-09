@@ -1,4 +1,4 @@
-import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, DatabaseZap, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code, Code2, Brain, Terminal, Activity } from 'lucide-react'
+import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, DatabaseZap, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code, Code2, Brain, Terminal, Activity, Microscope, Trophy } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
 
@@ -15,6 +15,7 @@ const navItems: NavItem[] = [
   { id: 'coding', label: 'Coding', icon: Code2 },
   { id: 'developer', label: 'Developer', icon: Terminal },
   { id: 'training', label: 'Training', icon: Zap },
+  { id: 'research', label: 'Research', icon: Microscope },
   { id: 'federation', label: 'Federation', icon: Network },
   { id: 'knowledge', label: 'Knowledge', icon: BookOpen },
   { id: 'enterprise', label: 'Enterprise', icon: Database },
@@ -31,6 +32,7 @@ const navItems: NavItem[] = [
   { id: 'finetune', label: 'Fine-tune', icon: FlaskConical },
   { id: 'codecompletion', label: 'Completions', icon: Code },
   { id: 'memory', label: 'Memory', icon: Brain },
+  { id: 'awards', label: 'Awards', icon: Trophy },
   { id: 'health', label: 'Health', icon: Activity },
 ]
 
@@ -52,7 +54,7 @@ export function Sidebar() {
         className={[
           'w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
           isActive
-            ? 'bg-accent-500/10 text-accent-400 border-l-2 border-accent-500'
+            ? 'bg-accent-500/15 text-accent-400 border-l-2 border-accent-lime'
             : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
         ].join(' ')}
       >
@@ -69,7 +71,7 @@ export function Sidebar() {
     >
       {/* Logo area */}
       <div className="px-4 py-4 border-b border-border-subtle">
-        <span className="text-text-primary font-semibold text-sm">Sovereign Code</span>
+        <span className="text-text-primary font-semibold text-sm tracking-wide" style={{ fontFamily: 'Rubik, sans-serif' }}>Sovereign Code</span>
       </div>
 
       {/* Main navigation */}
@@ -87,7 +89,7 @@ export function Sidebar() {
           className={[
             'w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
             isPanelOpen
-              ? 'bg-accent-500/10 text-accent-400 border-l-2 border-accent-500'
+              ? 'bg-accent-500/15 text-accent-400 border-l-2 border-accent-lime'
               : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
           ].join(' ')}
         >

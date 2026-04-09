@@ -23,9 +23,11 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.html = this._getHtml()
 
-    webviewView.webview.onDidReceiveMessage(async (data) => {
+    webviewView.webview.onDidReceiveMessage((data) => {
       if (data.type === 'send') {
-        await this._handleSend(data.text)
+        this._handleSend(data.text).catch((err) => {
+          console.error('[sovereign-code] _handleSend error:', err)
+        })
       } else if (data.type === 'stop') {
         this._abortController?.abort()
       } else if (data.type === 'clear') {
@@ -54,7 +56,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         this._view.webview.postMessage({ type: 'streamChunk', text: chunk })
       }
     } catch (err) {
-      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+      if (!(err instanceof Error && err.name === 'AbortError')) {
         this._view.webview.postMessage({ type: 'error', text: 'Failed to get response' })
       }
     }

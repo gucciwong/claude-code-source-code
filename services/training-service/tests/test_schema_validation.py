@@ -68,7 +68,7 @@ def test_completion_event_roundtrip_with_full_envelope():
         project_id_hash="local",
         client_version="0.8.0",
         platform="Win32",
-        runtime_backend="ollama",
+        runtime_backend="local",
         event_type="completion_accepted",
         prompt="def foo():",
         completion=" return 42",
@@ -115,7 +115,7 @@ def test_inference_event_roundtrip():
         first_token_latency_ms=312.5,
         tokens_per_second=45.2,
         completion_tokens=128,
-        backend_name="ollama",
+        backend_name="local",
         model_quantization="Q4_K_M",
     )
     assert req.first_token_latency_ms == 312.5

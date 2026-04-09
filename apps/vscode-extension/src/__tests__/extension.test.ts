@@ -52,7 +52,7 @@ test('activate registers toggleCompletions command', () => {
 test('activate pushes disposables to subscriptions', () => {
   const ctx = makeContext()
   activate(ctx)
-  expect(ctx.subscriptions.length).toBe(4)
+  expect(ctx.subscriptions.length).toBe(6)
 })
 
 test('activate creates status bar', () => {

@@ -49,9 +49,9 @@ describe('Messaging screen', () => {
     expect(screen.getByRole('tab', { name: 'Setup Guide' })).toBeInTheDocument()
   })
 
-  it('renders "Add Platform" button', () => {
+  it('renders "Refresh" button with aria-label', () => {
     render(<Messaging />)
-    expect(screen.getByText('Add Platform')).toBeInTheDocument()
+    expect(screen.getByLabelText('Refresh platform list')).toBeInTheDocument()
   })
 
   it('renders "Refresh" button', () => {

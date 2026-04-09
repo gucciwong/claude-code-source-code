@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFederationCoreStore } from '../store/federationCoreStore'
 import type { PeerInfo, FederationRound, GradientUpdate } from '../../../shared/federationCore'
 
-const BASE_URL = 'http://localhost:8014'
+const BASE_URL = 'http://localhost:8008'
 
 export function useFederationCore() {
   const { setPeers, addPeer, removePeer, setCurrentRound, setRoundHistory, setLoading, setError } =

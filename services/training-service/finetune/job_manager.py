@@ -14,7 +14,7 @@ class FinetuneJobManager:
         job_id = str(uuid.uuid4())
         job = FinetuneJob(
             job_id=job_id,
-            config=config.dict(),
+            config=config.model_dump(),
             status="queued",
             total_epochs=config.epochs,
             created_at=datetime.utcnow().isoformat(),

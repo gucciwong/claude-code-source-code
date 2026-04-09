@@ -4,7 +4,7 @@ import type { Memory, MemorySearchResult, ContextSummary } from '../../shared/co
 import { parseResponse } from '../services/parseResponse'
 import { MemoriesResponseSchema, MemorySchema, MemorySearchResponseSchema, ContextSummarySchema } from '../services/schemas'
 
-const BASE_URL = 'http://localhost:8016'
+const BASE_URL = 'http://localhost:8010'
 
 export function useConversationMemory() {
   const { setMemories, addMemory, removeMemory, setSearchResults, setContextSummary, setLoading, setError } = useMemoryStore()

@@ -6,6 +6,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
   streaming?: boolean
+  tokensPerSec?: number
 }
 
 type ChatStore = {
@@ -14,6 +15,7 @@ type ChatStore = {
   addMessage: (msg: ChatMessage) => void
   appendToLast: (chunk: string) => void
   setLastStreaming: (streaming: boolean) => void
+  setLastTokPerSec: (tps: number) => void
   setKnowledgeContext: (ctx: string) => void
   clear: () => void
 }
@@ -38,6 +40,14 @@ export const useChatStore = create<ChatStore>()(
       const last = messages[messages.length - 1]
       if (!last) return state
       messages[messages.length - 1] = { ...last, streaming }
+      return { messages }
+    }),
+  setLastTokPerSec: tps =>
+    set(state => {
+      const messages = [...state.messages]
+      const last = messages[messages.length - 1]
+      if (!last) return state
+      messages[messages.length - 1] = { ...last, tokensPerSec: tps }
       return { messages }
     }),
   setKnowledgeContext: ctx => set({ knowledgeContext: ctx }),

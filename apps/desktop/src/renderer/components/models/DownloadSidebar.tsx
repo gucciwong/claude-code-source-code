@@ -1,14 +1,23 @@
-import { X, Download, AlertCircle } from 'lucide-react'
+import { X, Download, AlertCircle, Pause, Play } from 'lucide-react'
 import { DownloadQueueEntry } from '../../hooks/useModelManager'
 
 export interface DownloadSidebarProps {
   downloads: Record<string, DownloadQueueEntry>
   onCancel: (modelId: string) => void
+  onPause: (modelId: string) => void
+  onResume: (modelId: string) => void
 }
 
 function formatGb(gb: number): string {
   if (gb === 0) return '0 GB'
   return `${gb.toFixed(1)} GB`
+}
+
+function formatSpeed(mbps: number | undefined): string | null {
+  if (mbps == null || mbps <= 0) return null
+  if (mbps >= 1000) return `${(mbps / 1000).toFixed(2)} GB/s`
+  if (mbps >= 100) return `${Math.round(mbps)} MB/s`
+  return `${mbps.toFixed(1)} MB/s`
 }
 
 function formatEta(startedAt: number, progress: number): string {
@@ -25,10 +34,10 @@ function formatEta(startedAt: number, progress: number): string {
   return `~${m}m left`
 }
 
-export function DownloadSidebar({ downloads, onCancel }: DownloadSidebarProps) {
+export function DownloadSidebar({ downloads, onCancel, onPause, onResume }: DownloadSidebarProps) {
   const allEntries = Object.entries(downloads)
   const activeEntries = allEntries.filter(
-    ([, d]) => d.status === 'pending' || d.status === 'downloading'
+    ([, d]) => d.status === 'pending' || d.status === 'downloading' || d.status === 'paused'
   )
   const errorEntries = allEntries.filter(([, d]) => d.status === 'error')
 
@@ -70,7 +79,7 @@ export function DownloadSidebar({ downloads, onCancel }: DownloadSidebarProps) {
               key={modelId}
               className="px-4 py-3 border-b border-border-subtle last:border-b-0 flex flex-col gap-2"
             >
-              {/* Name + cancel */}
+              {/* Name + pause/resume + cancel */}
               <div className="flex items-start justify-between gap-2">
                 <span
                   className="text-sm font-medium text-text-primary leading-snug min-w-0 truncate flex-1"
@@ -78,14 +87,35 @@ export function DownloadSidebar({ downloads, onCancel }: DownloadSidebarProps) {
                 >
                   {modelName}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => onCancel(modelId)}
-                  className="text-text-muted hover:text-red-400 cursor-pointer flex-shrink-0 mt-0.5 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500"
-                  aria-label={`Cancel download of ${modelName}`}
-                >
-                  <X size={14} aria-hidden="true" />
-                </button>
+                <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
+                  {info.status === 'paused' ? (
+                    <button
+                      type="button"
+                      onClick={() => onResume(modelId)}
+                      className="text-text-muted hover:text-accent-400 cursor-pointer rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500"
+                      aria-label={`Resume download of ${modelName}`}
+                    >
+                      <Play size={14} aria-hidden="true" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onPause(modelId)}
+                      className="text-text-muted hover:text-accent-400 cursor-pointer rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500"
+                      aria-label={`Pause download of ${modelName}`}
+                    >
+                      <Pause size={14} aria-hidden="true" />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => onCancel(modelId)}
+                    className="text-text-muted hover:text-red-400 cursor-pointer rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500"
+                    aria-label={`Cancel download of ${modelName}`}
+                  >
+                    <X size={14} aria-hidden="true" />
+                  </button>
+                </div>
               </div>
 
               {/* Progress bar */}
@@ -98,22 +128,33 @@ export function DownloadSidebar({ downloads, onCancel }: DownloadSidebarProps) {
                 aria-label={`${modelName} download progress`}
               >
                 <div
-                  className="h-full bg-accent-500 rounded-full transition-all duration-500"
-                  style={{ width: `${progress}%` }}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${progress}%`,
+                    backgroundColor: info.status === 'paused' ? '#6b7280' : '#c2ef4e',
+                  }}
                 />
               </div>
 
-              {/* Stats: percent · downloaded/total   ETA */}
+              {/* Stats: percent · downloaded/total · speed   ETA */}
               <div className="flex items-center justify-between gap-2 text-xs text-text-muted">
-                <span>
+                <span className="truncate">
+                  {info.status === 'paused' ? (
+                    <span className="text-text-muted/70">Paused · </span>
+                  ) : null}
                   {Math.round(progress)}%
                   {totalSize > 0 && (
                     <span className="text-text-muted/70">
                       {' '}· {formatGb(downloadedGb)} / {formatGb(totalSize)}
                     </span>
                   )}
+                  {info.status !== 'paused' && formatSpeed(info.speed_mbps) && (
+                    <span className="text-text-muted/70"> · {formatSpeed(info.speed_mbps)}</span>
+                  )}
                 </span>
-                <span className="flex-shrink-0">{formatEta(info.started_at, progress)}</span>
+                <span className="flex-shrink-0">
+                  {info.status === 'paused' ? '—' : formatEta(info.started_at, progress)}
+                </span>
               </div>
             </li>
           )
@@ -172,8 +213,8 @@ export function DownloadSidebar({ downloads, onCancel }: DownloadSidebarProps) {
           aria-label="Overall download progress"
         >
           <div
-            className="h-full bg-accent-400 rounded-full transition-all duration-500"
-            style={{ width: `${avgProgress}%` }}
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${avgProgress}%`, backgroundColor: '#c2ef4e' }}
           />
         </div>
       </div>

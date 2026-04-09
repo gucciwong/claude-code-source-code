@@ -32,6 +32,7 @@ describe('Retriever', () => {
     ])
 
     const retriever = new Retriever(store, 'http://localhost:11434', 'nomic-embed-text')
+    retriever.setReady(true)
     const results = await retriever.query('function foo', 1)
 
     expect(results.length).toBe(1)
@@ -44,6 +45,7 @@ describe('Retriever', () => {
     ])
 
     const retriever = new Retriever(store, 'http://localhost:11434', 'nomic-embed-text')
+    retriever.setReady(true)
     const results = await retriever.query('def hello', 5)
 
     expect(results[0]).toMatchObject({
@@ -73,6 +75,7 @@ describe('Retriever', () => {
     const spy = vi.spyOn(embedderModule, 'getEmbedding').mockResolvedValue(VEC)
 
     const retriever = new Retriever(store, 'http://my-host:11434', 'nomic-embed-text')
+    retriever.setReady(true)
     await retriever.query('some code', 3)
 
     expect(spy).toHaveBeenCalledWith('http://my-host:11434', 'nomic-embed-text', 'some code')

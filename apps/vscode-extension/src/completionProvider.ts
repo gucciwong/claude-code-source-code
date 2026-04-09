@@ -43,6 +43,7 @@ export class SovereignCompletionProvider implements vscode.InlineCompletionItemP
     let contextBlock = ''
     if (ragEnabled && this.retriever) {
       const chunks = await this.retriever.query(prefix.slice(-RAG_QUERY_CHARS), ragTopK ?? 5)
+      if (token.isCancellationRequested) return []
       if (chunks.length > 0) {
         const parts = chunks.map(c => `// ${c.filePath}:${c.startLine}-${c.endLine}\n${c.content}`)
         contextBlock = `// Context from workspace:\n${parts.join('\n\n')}\n\n`.slice(

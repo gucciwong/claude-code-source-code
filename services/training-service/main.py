@@ -15,6 +15,7 @@ from starlette.requests import Request
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy import text
 import logging
 import os
 
@@ -23,6 +24,9 @@ from training_data.store import TrainingDataStore
 from finetune.router import router as finetune_router
 from experiments.store import ExperimentStore
 from experiments.router import router as experiments_router, set_store
+from autoresearch.store import ResearchProgramStore
+from autoresearch.router import router as autoresearch_router, set_store as set_autoresearch_store
+from model_manager.router import router as model_manager_router
 
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
@@ -122,6 +126,13 @@ EXPERIMENTS_DB_DIR = os.getenv(
 )
 experiment_store = ExperimentStore(db_dir=Path(EXPERIMENTS_DB_DIR))
 
+# Initialize research program store
+RESEARCH_PROGRAMS_DB_DIR = os.getenv(
+    "RESEARCH_PROGRAMS_DB_DIR",
+    str(os.path.expanduser("~/.sovereign-code"))
+)
+research_program_store = ResearchProgramStore(db_dir=Path(RESEARCH_PROGRAMS_DB_DIR))
+
 
 def get_db():
     """Dependency: get database session"""
@@ -157,6 +168,13 @@ app.include_router(finetune_router)
 set_store(experiment_store)
 app.include_router(experiments_router)
 
+# Initialize and mount autoresearch router
+set_autoresearch_store(research_program_store)
+app.include_router(autoresearch_router)
+
+# Mount model manager router
+app.include_router(model_manager_router)
+
 # CORS
 from starlette.middleware.cors import CORSMiddleware
 
@@ -184,7 +202,7 @@ async def health_check(request: Request):
     """Health check endpoint"""
     try:
         db = SessionLocal()
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db.close()
         db_ok = True
     except Exception as e:

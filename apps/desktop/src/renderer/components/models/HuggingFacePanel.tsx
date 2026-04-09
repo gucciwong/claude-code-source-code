@@ -1,16 +1,23 @@
 ﻿import { useState, useEffect, useRef, useCallback } from 'react'
 import { Search, WifiOff, Clock, Star, TrendingUp, Loader2 } from 'lucide-react'
 import { ModelCard } from './ModelCard'
+import { ModelFilePickerDialog } from './ModelFilePickerDialog'
 import { DownloadSidebar } from './DownloadSidebar'
-import { useModelManager, ModelInfo, SearchResult, DownloadQueueEntry } from '../../hooks/useModelManager'
-
-type DownloadStatus = 'idle' | 'pending' | 'downloading' | 'done' | 'error'
+import { HFFilters } from './HFFilters'
+import type { HFActiveFilters } from './HFFilterData'
+import { useModelManager, ModelInfo, SearchResult } from '../../hooks/useModelManager'
+import { useDownloadStore, DownloadStatus } from '../../store/downloadStore'
+import * as modelManagerAPI from '../../services/modelManagerAPI'
+import { formatModelSizeFromGigabytes } from '../../utils/modelSize'
+import { useHardwareProfile } from '../../hooks/useHardwareProfile'
+import { evaluateHardwareCompatibility, CompatibilityStatus } from '../../utils/modelCompatibility'
 type SortOrder = 'newest' | 'stars' | 'downloads'
 
 interface HFModel {
   id: string
   name: string
   params: string
+  sizeGb: number
   arch: string
   format: string
   description: string
@@ -25,11 +32,14 @@ const SORT_OPTIONS: { value: SortOrder; label: string; icon: React.ComponentType
   { value: 'downloads', label: 'Downloads', icon: TrendingUp },
 ]
 
+// All staff picks use GGUF repos so they can run on CPU without safetensors errors.
+// Sizes reflect the Q4_K_M quantization variant (the default that gets auto-selected).
 const STAFF_PICKS: HFModel[] = [
   {
-    id: 'meta-llama/Llama-3.1-8B-Instruct',
+    id: 'bartowski/Meta-Llama-3.1-8B-Instruct-GGUF',
     name: 'Llama 3.1 8B Instruct',
     params: '8B',
+    sizeGb: 4.9,
     arch: 'llama',
     format: 'GGUF',
     description: "Meta's latest instruction-tuned Llama model, excellent for coding and chat",
@@ -38,9 +48,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-07-15',
   },
   {
-    id: 'mistralai/Mistral-7B-Instruct-v0.3',
+    id: 'bartowski/Mistral-7B-Instruct-v0.3-GGUF',
     name: 'Mistral 7B Instruct v0.3',
     params: '7B',
+    sizeGb: 4.1,
     arch: 'mistral',
     format: 'GGUF',
     description: 'Fast and capable instruction model from Mistral AI',
@@ -49,9 +60,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-05-22',
   },
   {
-    id: 'Qwen/Qwen2.5-Coder-7B-Instruct',
+    id: 'Qwen/Qwen2.5-Coder-7B-Instruct-GGUF',
     name: 'Qwen 2.5 Coder 7B',
     params: '7B',
+    sizeGb: 4.7,
     arch: 'qwen2',
     format: 'GGUF',
     description: 'Specialized coding model with strong code generation',
@@ -60,9 +72,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-09-19',
   },
   {
-    id: 'microsoft/Phi-3.5-mini-instruct',
+    id: 'bartowski/Phi-3.5-mini-instruct-GGUF',
     name: 'Phi-3.5 Mini Instruct',
     params: '3.8B',
+    sizeGb: 2.4,
     arch: 'phi3',
     format: 'GGUF',
     description: "Microsoft's compact model with surprisingly strong reasoning",
@@ -71,9 +84,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-08-20',
   },
   {
-    id: 'google/gemma-2-9b-it',
+    id: 'bartowski/gemma-2-9b-it-GGUF',
     name: 'Gemma 2 9B Instruct',
     params: '9B',
+    sizeGb: 5.4,
     arch: 'gemma2',
     format: 'GGUF',
     description: "Google's latest efficient instruction model",
@@ -82,9 +96,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-07-25',
   },
   {
-    id: 'deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct',
+    id: 'bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF',
     name: 'DeepSeek Coder V2 Lite',
     params: '16B',
+    sizeGb: 9.1,
     arch: 'deepseek',
     format: 'GGUF',
     description: 'Powerful coding model with strong algorithmic reasoning',
@@ -93,9 +108,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-06-14',
   },
   {
-    id: 'NousResearch/Hermes-3-Llama-3.1-8B',
+    id: 'bartowski/Hermes-3-Llama-3.1-8B-GGUF',
     name: 'Hermes 3 Llama 3.1 8B',
     params: '8B',
+    sizeGb: 4.9,
     arch: 'llama',
     format: 'GGUF',
     description: 'Fine-tuned for function calling and agentic tasks',
@@ -104,9 +120,10 @@ const STAFF_PICKS: HFModel[] = [
     addedDate: '2024-08-12',
   },
   {
-    id: 'codellama/CodeLlama-13b-Instruct-hf',
+    id: 'TheBloke/CodeLlama-13B-Instruct-GGUF',
     name: 'Code Llama 13B Instruct',
     params: '13B',
+    sizeGb: 7.8,
     arch: 'llama',
     format: 'GGUF',
     description: "Meta's specialized code generation model",
@@ -126,18 +143,27 @@ function sortModels(models: HFModel[], order: SortOrder): HFModel[] {
 }
 
 export function HuggingFacePanel() {
-  const { checkHealth, listModels, downloadModel, searchModels, getDownloadStatus, cancelDownload } = useModelManager()
+  const { checkHealth, listModels, downloadModel, searchModels, getDownloadStatus, cancelDownload, pauseDownload, resumeDownload, fetchModelFiles } = useModelManager()
+  const hwProfile = useHardwareProfile()
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [sortOrder, setSortOrder] = useState<SortOrder>('downloads')
-  const [downloadStatuses, setDownloadStatuses] = useState<Map<string, DownloadStatus>>(new Map())
+  const downloadStatuses = useDownloadStore((s) => s.downloadStatuses)
+  const downloadDetails = useDownloadStore((s) => s.downloadDetails)
+  const setDownloadStatus = useDownloadStore((s) => s.setDownloadStatus)
+  const setDownloadDetails = useDownloadStore((s) => s.setDownloadDetails)
+  const bulkMergeDone = useDownloadStore((s) => s.bulkMergeDone)
+  const syncFromBackendStatus = useDownloadStore((s) => s.syncFromBackendStatus)
+  const clearDownload = useDownloadStore((s) => s.clearDownload)
   const [isOffline, setIsOffline] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null)
   const [isSearching, setIsSearching] = useState(false)
-  const [downloadDetails, setDownloadDetails] = useState<Record<string, DownloadQueueEntry>>({})
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [directModelId, setDirectModelId] = useState('')
+  const [directStatuses, setDirectStatuses] = useState<Record<string, { status: string; progress: number }>>({})
+  const [filters, setFilters] = useState<HFActiveFilters>({})
+  const [pickerModelId, setPickerModelId] = useState<string | null>(null)
 
-  // Check service health on mount
   useEffect(() => {
     checkHealth().then(result => {
       setIsOffline(result === null)
@@ -155,72 +181,123 @@ export function HuggingFacePanel() {
     }
   }, [searchQuery])
 
-  // Call backend search when debounced query changes
+  // Call backend search when debounced query or filters change
   useEffect(() => {
-    if (!debouncedQuery.trim()) {
+    const hasFilters = Object.values(filters).some(Boolean)
+    if (!debouncedQuery.trim() && !hasFilters) {
       setSearchResults(null)
       return
     }
     setIsSearching(true)
-    searchModels(debouncedQuery.trim()).then(results => {
+    searchModels(debouncedQuery.trim(), filters).then(results => {
       setSearchResults(results)
       setIsSearching(false)
     })
-  }, [debouncedQuery, searchModels])
+  }, [debouncedQuery, filters, searchModels])
 
   // Poll listModels every 3 seconds while panel is mounted (and immediately on mount)
   useEffect(() => {
     const poll = async () => {
       const result = await listModels()
       if (!result) return
-      setDownloadStatuses(prev => {
-        const next = new Map(prev)
-        result.cached_models.forEach((m: ModelInfo) => {
-          if (m.cached && prev.get(m.id) !== 'done') {
-            next.set(m.id, 'done')
-          }
-        })
-        return next
-      })
+      const cachedIds = result.cached_models
+        .filter((m: ModelInfo) => m.cached)
+        .map((m: ModelInfo) => m.id)
+      bulkMergeDone(cachedIds)
     }
     void poll()
     const id = setInterval(poll, 3000)
     return () => clearInterval(id)
-  }, [listModels])
+  }, [listModels, bulkMergeDone])
 
-  const handleDownload = useCallback(
-    async (modelId: string) => {
-      setDownloadStatuses(prev => new Map(prev).set(modelId, 'downloading'))
+  const handlePickFiles = useCallback(
+    (modelId: string) => {
+      setPickerModelId(modelId)
+    },
+    []
+  )
+
+  const handleConfirmDownload = useCallback(
+    async (modelId: string, filePath: string) => {
+      setPickerModelId(null)
+      setDownloadStatus(modelId, 'downloading')
       try {
-        const result = await downloadModel(modelId)
+        const result = await modelManagerAPI.downloadFromHuggingFace(modelId, filePath)
         if (!result) {
-          setDownloadStatuses(prev => new Map(prev).set(modelId, 'error'))
+          setDownloadStatus(modelId, 'error')
         }
       } catch {
-        setDownloadStatuses(prev => new Map(prev).set(modelId, 'error'))
+        setDownloadStatus(modelId, 'error')
       }
     },
-    [downloadModel]
+    [setDownloadStatus]
   )
 
   const handleCancelDownload = useCallback(
     async (modelId: string) => {
       await cancelDownload(modelId)
-      setDownloadStatuses(prev => {
-        const next = new Map(prev)
-        next.set(modelId, 'idle')
-        return next
-      })
-      setDownloadDetails(prev => {
-        const next = { ...prev }
-        delete next[modelId]
-        return next
-      })
+      clearDownload(modelId)
     },
-    [cancelDownload]
+    [cancelDownload, clearDownload]
   )
 
-  const showSearchResults = debouncedQuery.trim().length > 0
+  const handlePauseDownload = useCallback(
+    async (modelId: string) => {
+      // Optimistic update: flip button to Resume immediately, before the poll confirms it
+      const current = useDownloadStore.getState().downloadDetails
+      if (current[modelId]) {
+        setDownloadDetails({ ...current, [modelId]: { ...current[modelId], status: 'paused' } })
+      }
+      await pauseDownload(modelId)
+    },
+    [pauseDownload, setDownloadDetails]
+  )
+
+  const handleResumeDownload = useCallback(
+    async (modelId: string) => {
+      // Optimistic update: flip button back to Pause immediately
+      const current = useDownloadStore.getState().downloadDetails
+      if (current[modelId]) {
+        setDownloadDetails({ ...current, [modelId]: { ...current[modelId], status: 'pending' } })
+      }
+      await resumeDownload(modelId)
+    },
+    [resumeDownload, setDownloadDetails]
+  )
+
+  const handleDirectDownload = useCallback(async () => {
+    const modelId = directModelId.trim()
+    if (!modelId) return
+
+    setDownloadStatus(modelId, 'downloading')
+    try {
+      const result = await modelManagerAPI.downloadFromHuggingFace(modelId, '')
+      if (!result) {
+        setDownloadStatus(modelId, 'error')
+        return
+      }
+      setDirectModelId('')
+    } catch {
+      setDownloadStatus(modelId, 'error')
+    }
+  }, [directModelId, setDownloadStatus])
+
+  // Poll download status from API directly for direct-download progress display
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const result = await modelManagerAPI.getDownloadStatus()
+        if (result) setDirectStatuses(result as Record<string, { status: string; progress: number }>)
+      } catch {
+        // ignore errors when service is offline
+      }
+    }
+    void poll()
+    const id = setInterval(poll, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const showSearchResults = debouncedQuery.trim().length > 0 || Object.values(filters).some(Boolean)
   const staffPicksFiltered = sortModels(STAFF_PICKS, sortOrder)
 
   // Active downloads — anything not yet settled (pending / downloading)
@@ -239,25 +316,33 @@ export function HuggingFacePanel() {
     const poll = async () => {
       const status = await getDownloadStatus()
       if (!status) return
-      setDownloadDetails(status)
-      // Sync done/error entries back into downloadStatuses
-      setDownloadStatuses(prev => {
-        const next = new Map(prev)
-        for (const [id, entry] of Object.entries(status)) {
-          if (entry.status === 'done' && prev.get(id) !== 'done') {
-            next.set(id, 'done')
-          }
-          if (entry.status === 'error' && prev.get(id) !== 'error') {
-            next.set(id, 'error')
-          }
-        }
-        return next
-      })
+      syncFromBackendStatus(status)
     }
     void poll()
     const id = setInterval(poll, 1000)
     return () => clearInterval(id)
-  }, [activeDownloads.length, getDownloadStatus])
+  }, [activeDownloads.length, getDownloadStatus, syncFromBackendStatus])
+
+  function getModelCompatibility(sizeGb: number, params: string, name: string): { status: CompatibilityStatus; label: string; detail?: string } | undefined {
+    if (!hwProfile) return undefined
+    const report = evaluateHardwareCompatibility(hwProfile, {
+      name,
+      sizeBytes: sizeGb * 1e9,
+      format: 'gguf',
+      parameterText: params,
+    })
+    const labels: Record<string, string> = {
+      pass: 'Fits your hardware',
+      warn: 'Tight fit',
+      fail: 'Needs more resources',
+      unknown: 'Checking…',
+    }
+    return {
+      status: report.overallStatus,
+      label: labels[report.overallStatus] ?? 'Unknown',
+      detail: report.summary,
+    }
+  }
 
   return (
     <div className="flex h-full overflow-hidden">
@@ -270,6 +355,35 @@ export function HuggingFacePanel() {
           Models are downloaded via the local Model Manager service
         </p>
       </div>
+
+      {/* Direct download by model ID */}
+      <div className="flex gap-2">
+        <input
+          type="text"
+          aria-label="HuggingFace model ID"
+          placeholder="e.g. TheBloke/Llama-2-7B-GGUF"
+          value={directModelId}
+          onChange={e => setDirectModelId(e.target.value)}
+          className="flex-1 bg-bg-surface-2 border border-border-default rounded-md px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+        />
+        <button
+          type="button"
+          disabled={!directModelId.trim()}
+          onClick={() => { void handleDirectDownload() }}
+          className="px-4 py-2 bg-accent-500 text-white rounded-md text-sm font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Download
+        </button>
+      </div>
+
+      {/* Direct download progress */}
+      {Object.entries(directStatuses).map(([id, s]) =>
+        s.status === 'downloading' ? (
+          <div key={id} className="text-sm text-text-secondary">
+            {id}: {Math.round(s.progress)}%
+          </div>
+        ) : null
+      )}
 
       {/* Offline warning */}
       {isOffline && (
@@ -306,6 +420,9 @@ export function HuggingFacePanel() {
           aria-label="Search HuggingFace models"
         />
       </div>
+
+      {/* HuggingFace-style filter panel */}
+      <HFFilters filters={filters} onChange={setFilters} />
 
       {/* Active downloads section — replaced by DownloadSidebar, hidden here */}
 
@@ -367,6 +484,7 @@ export function HuggingFacePanel() {
                       id={model.id}
                       name={model.name}
                       params=""
+                      sizeLabel={formatModelSizeFromGigabytes(model.size_gb)}
                       arch=""
                       format="GGUF"
                       description={`by ${owner}`}
@@ -374,7 +492,8 @@ export function HuggingFacePanel() {
                       downloads={0}
                       addedDate=""
                       downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
-                      onDownload={handleDownload}
+                      onPickFiles={handlePickFiles}
+                      compatibility={model.size_gb != null ? getModelCompatibility(model.size_gb, '', model.name) : undefined}
                     />
                   </li>
                 )
@@ -389,10 +508,12 @@ export function HuggingFacePanel() {
               <li key={model.id}>
                 <ModelCard
                   {...model}
+                  sizeLabel={formatModelSizeFromGigabytes(model.sizeGb)}
                   stars={model.stars}
                   downloads={model.downloads}
                   downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
-                  onDownload={handleDownload}
+                  onPickFiles={handlePickFiles}
+                  compatibility={getModelCompatibility(model.sizeGb, model.params, model.name)}
                 />
               </li>
             ))}
@@ -403,7 +524,16 @@ export function HuggingFacePanel() {
 
       {/* Download progress sidebar — visible when ≥1 active or errored download */}
       {sidebarDownloads.length > 0 && (
-        <DownloadSidebar downloads={downloadDetails} onCancel={handleCancelDownload} />
+        <DownloadSidebar downloads={downloadDetails} onCancel={handleCancelDownload} onPause={handlePauseDownload} onResume={handleResumeDownload} />
+      )}
+
+      {pickerModelId && (
+        <ModelFilePickerDialog
+          modelId={pickerModelId}
+          onFetchFiles={fetchModelFiles}
+          onConfirm={handleConfirmDownload}
+          onClose={() => setPickerModelId(null)}
+        />
       )}
     </div>
   )

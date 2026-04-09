@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { usePRReviewStore } from '../store/prReviewStore'
 import type { ReviewResult, ReviewRule } from '../../shared/prReview'
 
-const BASE_URL = 'http://localhost:8013'
+const BASE_URL = 'http://localhost:8016'
 
 export function usePRReview() {
   const { setResult, setRules, setReviewing, setError } = usePRReviewStore()

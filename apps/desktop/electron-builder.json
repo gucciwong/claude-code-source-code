@@ -11,6 +11,10 @@
     "out/renderer/**/*",
     "package.json"
   ],
+  "extraResources": [
+    { "from": "../../services", "to": "services", "filter": ["**/*", "!**/__pycache__/**", "!**/*.pyc"] },
+    { "from": "../../.venv", "to": ".venv" }
+  ],
   "win": {
     "target": [
       {

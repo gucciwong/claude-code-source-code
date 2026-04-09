@@ -1,36 +1,195 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-base: #0D0D0D;
-  --color-bg-surface-1: #161616;
-  --color-bg-surface-2: #1E1E1E;
-  --color-bg-surface-3: #252525;
-  --color-bg-elevated: #2D2D2D;
-  --color-border-subtle: #2A2A2A;
-  --color-border-default: #363636;
-  --color-border-strong: #484848;
-  --color-text-primary: #F5F5F5;
-  --color-text-secondary: #A3A3A3;
-  --color-text-muted: #737373;
-  --color-text-code: #E5E5E5;
-  --color-accent-400: #A78BFA;
-  --color-accent-500: #8B5CF6;
-  --color-accent-600: #7C3AED;
+  /* Sentry-inspired deep purple palette */
+  --color-bg-base:      #1f1633;
+  --color-bg-deeper:    #150f23;
+  --color-bg-surface-1: #1a1230;
+  --color-bg-surface-2: #231840;
+  --color-bg-surface-3: #2a1f4a;
+  --color-bg-elevated:  #2e2255;
+  --color-border-subtle:  #362d59;
+  --color-border-default: #584674;
+  --color-border-strong:  #6b5a87;
+
+  /* Text */
+  --color-text-primary:   #ffffff;
+  --color-text-secondary: #e5e7eb;
+  --color-text-muted:     #8b7fa8;
+  --color-text-code:      #dcdcaa;
+
+  /* Interactive / accent */
+  --color-accent-400: #a594f9;
+  --color-accent-500: #6a5fc1;
+  --color-accent-600: #422082;
+  --color-accent-lime: #c2ef4e;
+  --color-interactive: #6a5fc1;
+
+  /* Button */
+  --color-btn-bg:     #79628c;
+  --color-btn-border: #584674;
+
+  /* Status colors — kept vivid for functional meaning */
   --color-green-400: #4ADE80;
   --color-green-500: #22C55E;
-  --color-red-400: #F87171;
-  --color-red-500: #EF4444;
+  --color-red-400:   #F87171;
+  --color-red-500:   #EF4444;
   --color-yellow-400: #FACC15;
   --color-yellow-500: #EAB308;
-  --color-blue-400: #60A5FA;
-  --color-blue-500: #3B82F6;
-  --color-local-badge-bg: #1A2744;
-  --color-local-badge-fg: #60A5FA;
+  --color-blue-400:  #60A5FA;
+  --color-blue-500:  #3B82F6;
+  --color-coral:     #ffb287;
+
+  --color-local-badge-bg: #231840;
+  --color-local-badge-fg: #a594f9;
 
   /* Border radius */
   --radius-sm:   4px;
   --radius-md:   6px;
   --radius-lg:   8px;
   --radius-xl:   12px;
+  --radius-btn:  13px;
   --radius-full: 9999px;
+}
+
+/* Apply Rubik as the global UI font */
+body {
+  font-family: 'Rubik', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Sanity theme overrides — active when html[data-theme="sanity"]
+   Near-black achromatic palette · IBM Plex Mono · pill buttons
+   ────────────────────────────────────────────────────────────── */
+[data-theme="sanity"] {
+  --color-bg-base:      #0b0b0b;
+  --color-bg-deeper:    #000000;
+  --color-bg-surface-1: #212121;
+  --color-bg-surface-2: #212121;
+  --color-bg-surface-3: #353535;
+  --color-bg-elevated:  #353535;
+  --color-border-subtle:  #212121;
+  --color-border-default: #353535;
+  --color-border-strong:  #797979;
+  --color-text-primary:   #ffffff;
+  --color-text-secondary: #b9b9b9;
+  --color-text-muted:     #797979;
+  --color-accent-400: #55beff;
+  --color-accent-500: #0052ef;
+  --color-accent-600: #003db5;
+  --color-accent-lime: #19d600;
+  --color-btn-bg:     #f36458;
+  --color-btn-border: transparent;
+  --radius-btn: 99999px;
+}
+
+[data-theme="sanity"] body {
+  font-family: 'IBM Plex Mono', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Mistral theme overrides — active when html[data-theme="mistral"]
+   Warm ivory palette · Arial · Sharp corners · Golden amber accent
+   ────────────────────────────────────────────────────────────── */
+[data-theme="mistral"] {
+  /* Warm ivory canvas */
+  --color-bg-base:      #fffaeb;
+  --color-bg-deeper:    #fffde8;
+  --color-bg-surface-1: #fff8d6;
+  --color-bg-surface-2: #fff0c2;
+  --color-bg-surface-3: #ffe8a0;
+  --color-bg-elevated:  #ffffff;
+
+  /* Warm golden borders */
+  --color-border-subtle:  #ffe295;
+  --color-border-default: #ffd06a;
+  --color-border-strong:  #ffb83e;
+
+  /* Dark warm text */
+  --color-text-primary:   #1f1f1f;
+  --color-text-secondary: #3d3530;
+  --color-text-muted:     #7a6a4a;
+  --color-text-code:      #b34400;
+
+  /* Mistral orange accent */
+  --color-accent-400: #fb6424;
+  --color-accent-500: #fa520f;
+  --color-accent-600: #d94000;
+  --color-accent-lime: #ffa110;
+  --color-interactive: #fa520f;
+
+  /* Dark primary button (Mistral Black on warm page) */
+  --color-btn-bg:     #1f1f1f;
+  --color-btn-border: transparent;
+
+  /* Sharp, architectural corners */
+  --radius-sm:   1px;
+  --radius-md:   2px;
+  --radius-lg:   2px;
+  --radius-xl:   3px;
+  --radius-btn:  0px;
+  --radius-full: 9999px;
+
+  --color-local-badge-bg: #fff0c2;
+  --color-local-badge-fg: #fa520f;
+}
+
+[data-theme="mistral"] body {
+  font-family: Arial, 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Replicate theme overrides — active when html[data-theme="replicate"]
+   High-contrast white canvas · Pill geometry · Orange-red brand
+   Massive display typography · Developer-community energy
+   ────────────────────────────────────────────────────────────── */
+[data-theme="replicate"] {
+  /* Clean white canvas */
+  --color-bg-base:      #ffffff;
+  --color-bg-deeper:    #f7f7f7;
+  --color-bg-surface-1: #fafafa;
+  --color-bg-surface-2: #f4f4f4;
+  --color-bg-surface-3: #eeeeee;
+  --color-bg-elevated:  #ffffff;
+
+  /* Dark borders — primary containment mechanism */
+  --color-border-subtle:  #e0e0e0;
+  --color-border-default: #202020;
+  --color-border-strong:  #000000;
+
+  /* Near-black text on white */
+  --color-text-primary:   #202020;
+  --color-text-secondary: #646464;
+  --color-text-muted:     #8d8d8d;
+  --color-text-code:      #24292e;
+
+  /* Replicate Red brand accent */
+  --color-accent-400: #ff4d2e;
+  --color-accent-500: #ea2804;
+  --color-accent-600: #c41e00;
+  --color-accent-lime: #2b9a66;
+  --color-interactive: #ea2804;
+
+  /* Dark pill buttons */
+  --color-btn-bg:     #202020;
+  --color-btn-border: transparent;
+
+  /* Exclusively pill-shaped geometry */
+  --radius-sm:   9999px;
+  --radius-md:   9999px;
+  --radius-lg:   9999px;
+  --radius-xl:   9999px;
+  --radius-btn:  9999px;
+  --radius-full: 9999px;
+
+  --color-local-badge-bg: #e8f8ef;
+  --color-local-badge-fg: #2b9a66;
+
+  /* Status green for operational badges */
+  --color-green-400: #2b9a66;
+  --color-green-500: #2b9a66;
+}
+
+[data-theme="replicate"] body {
+  font-family: 'basier-square', 'Inter', ui-sans-serif, system-ui, sans-serif;
 }

@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Pause, Play, Square, Zap, TrendingUp, Archive } from 'lucide-react'
+import { Pause, Play, Square, Zap, Archive, Loader2, AlertCircle, Sparkles } from 'lucide-react'
 import { useTrainingService } from '../hooks/useTrainingService'
 import { useSystemStore } from '../store/systemStore'
-
-interface TrainingRun {
-  id: string
-  version: string
-  sample_count: number
-  validation_loss: number
-  improvement: number
-  training_time: string
-  status: 'completed' | 'rejected'
-  timestamp: string
-}
+import { useModelManagerStore } from '../store/modelManagerStore'
+import { TrainingStartDialog } from '../components/training/TrainingStartDialog'
 
 interface TrainingStats {
   total_events: number
@@ -27,13 +18,17 @@ interface TrainingStats {
 export function Training() {
   const [schedule, setSchedule] = useState<'manual' | 'auto' | 'scheduled'>('auto')
   const [stats, setStats] = useState<TrainingStats | null>(null)
+  const [startDialogOpen, setStartDialogOpen] = useState(false)
+  const [activeJobId, setActiveJobId] = useState<string | null>(null)
+  
   const { trainingStatus, isTraining, eventCount, isServiceAvailable, getStats } = useTrainingService()
   const { vramUsed, vramTotal, gpuTemp } = useSystemStore()
+  const { activeTrainingJob, trainingJobs, isServiceAvailable: modelServiceAvailable } = useModelManagerStore()
 
-  const isRunning = isTraining
-  const progress = trainingStatus && trainingStatus.is_training
+  const isRunning = isTraining || (activeTrainingJob?.status === 'running' || activeTrainingJob?.status === 'queued')
+  const progress = activeTrainingJob?.progress || (trainingStatus && trainingStatus.is_training
     ? Math.round((trainingStatus.quick_train_count / Math.max(trainingStatus.quick_train_count + trainingStatus.next_full_train_in, 1)) * 100)
-    : 0
+    : 0)
 
   useEffect(() => {
     if (isServiceAvailable) {
@@ -43,8 +38,16 @@ export function Training() {
     }
   }, [isServiceAvailable, getStats])
 
-  // Training runs history — no list API available yet; populated when service exposes it
-  const trainingRuns: TrainingRun[] = []
+  if (!isServiceAvailable && !modelServiceAvailable) {
+    return (
+      <div data-testid="screen-training" className="flex items-center justify-center h-full">
+        <div className="text-center space-y-4">
+          <AlertCircle size={48} className="text-yellow-500 mx-auto" />
+          <h2 className="text-lg font-semibold text-text-primary">Training service unavailable</h2>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div data-testid="screen-training" className="p-6 space-y-6">
@@ -53,6 +56,32 @@ export function Training() {
         <h1 className="text-2xl font-bold text-text-primary">Training Console</h1>
         <p className="text-sm text-text-muted mt-1">Monitor and schedule QLoRA fine-tuning runs</p>
       </div>
+
+      {/* One-Click Training Banner — visible when idle */}
+      {!isRunning && (
+        <div className="rounded-xl bg-gradient-to-r from-accent-500/15 via-purple-500/10 to-accent-500/5 border border-accent-500/30 p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-lg bg-accent-500/20 flex-shrink-0">
+                <Sparkles size={20} className="text-accent-400" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-text-primary text-sm">Train on Your Personal Data</h2>
+                <p className="text-xs text-text-muted mt-1 leading-relaxed max-w-sm">
+                  Sovereign Code has been quietly learning from your usage. One click fine-tunes the model on your accepted completions, corrections, and completed tasks — no configuration needed.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setStartDialogOpen(true)}
+              className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg text-sm font-semibold transition whitespace-nowrap"
+            >
+              <Zap size={15} />
+              One-Click Train
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Current Run */}
       <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
@@ -65,9 +94,11 @@ export function Training() {
           </div>
           <div className="text-sm text-text-secondary">
             {isRunning ? (
-              <>
-                Cycle: {trainingStatus?.active_cycle ?? '—'} · Quick trains: {trainingStatus?.quick_train_count ?? '—'} · Full in: {trainingStatus?.next_full_train_in ?? '—'}
-              </>
+              activeTrainingJob ? (
+                <>Model: {activeTrainingJob.model_name} · Status: {activeTrainingJob.status}</> 
+              ) : (
+                <>Cycle: {trainingStatus?.active_cycle ?? '—'} · Quick trains: {trainingStatus?.quick_train_count ?? '—'} · Full in: {trainingStatus?.next_full_train_in ?? '—'}</>
+              )
             ) : (
               'No training active'
             )}
@@ -121,13 +152,15 @@ export function Training() {
 
             <div className="flex gap-2 pt-2">
               <button
-                className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer"
+                className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={true}
               >
                 <Pause size={14} aria-hidden="true" />
                 Pause
               </button>
               <button
-                className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-red-400 hover:bg-red-500/10 cursor-pointer"
+                className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-border-default text-red-400 hover:bg-red-500/10 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={true}
               >
                 <Square size={14} aria-hidden="true" />
                 Stop
@@ -141,12 +174,77 @@ export function Training() {
 
         {!isRunning && (
           <button
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-400 text-text-primary rounded font-medium cursor-pointer"
+            onClick={() => setStartDialogOpen(true)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-bg-surface-3 hover:bg-bg-surface-2 text-text-muted border border-border-default rounded font-medium cursor-pointer transition text-sm"
           >
-            <Play size={16} aria-hidden="true" />
-            Start Training
+            <Play size={14} aria-hidden="true" />
+            Advanced Setup
           </button>
         )}
+      </div>
+
+      {/* Version History */}
+      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
+        <h2 className="font-semibold text-text-primary flex items-center gap-2">
+          <Zap size={18} aria-hidden="true" />
+          Version History
+        </h2>
+        {trainingJobs.length === 0 ? (
+          <p className="text-sm text-text-muted">No training history available</p>
+        ) : (
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {trainingJobs.slice(0, 5).map((job) => (
+              <div key={job.job_id} className="p-3 bg-bg-surface-3 border border-border-default rounded-md text-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-text-primary">{job.model_name}</span>
+                  <span className={`text-xs px-2 py-1 rounded ${
+                    job.status === 'completed' ? 'bg-green-500/10 text-green-600' :
+                    job.status === 'running' ? 'bg-yellow-500/10 text-yellow-600' :
+                    job.status === 'failed' ? 'bg-red-500/10 text-red-600' :
+                    'bg-blue-500/10 text-blue-600'
+                  }`}>
+                    {job.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span>Progress: {job.progress}%</span>
+                  <span>{new Date(job.created_at).toLocaleDateString()}</span>
+                </div>
+                {job.progress > 0 && job.progress < 100 && (
+                  <div className="mt-2 w-full h-1.5 bg-bg-base rounded overflow-hidden">
+                    <div
+                      className="h-full bg-accent-500 transition-all"
+                      style={{ width: `${job.progress}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Training Schedule */}
+      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
+        <h2 className="font-semibold text-text-primary">Training Schedule</h2>
+        <fieldset className="space-y-2">
+          <legend className="sr-only">Training schedule</legend>
+          <div className="flex items-center gap-2 text-sm">
+            <input type="radio" id="schedule-manual" name="schedule" value="manual"
+                   checked={schedule === 'manual'} onChange={() => setSchedule('manual')} />
+            <label htmlFor="schedule-manual">Manual (start manually)</label>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <input type="radio" id="schedule-auto" name="schedule" value="auto"
+                   checked={schedule === 'auto'} onChange={() => setSchedule('auto')} />
+            <label htmlFor="schedule-auto">Auto (train when GPU idle &gt; 10 min)</label>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <input type="radio" id="schedule-scheduled" name="schedule" value="scheduled"
+                   checked={schedule === 'scheduled'} onChange={() => setSchedule('scheduled')} />
+            <label htmlFor="schedule-scheduled">Scheduled — Set Time...</label>
+          </div>
+        </fieldset>
       </div>
 
       {/* Data Collection */}
@@ -163,21 +261,21 @@ export function Training() {
                 <p className="text-text-muted">Completion Pairs</p>
                 <p className="text-2xl font-bold text-text-primary">{stats?.completion_accepted ?? '—'}</p>
                 <p className="text-xs text-text-muted">
-                  {stats?.completion_accepted != null ? `${stats.completion_accepted} completion pairs` : 'Loading...'}
+                  {stats?.completion_accepted != null ? `${stats.completion_accepted} pairs` : 'Loading...'}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-text-muted">Agent Trajectories</p>
                 <p className="text-2xl font-bold text-text-primary">{stats?.task_completed_total ?? '—'}</p>
                 <p className="text-xs text-text-muted">
-                  {stats?.task_completed_total != null ? `${stats.task_completed_total} agent trajectories` : 'Loading...'}
+                  {stats?.task_completed_total != null ? `${stats.task_completed_total} trajectories` : 'Loading...'}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-text-muted">Correction Pairs</p>
                 <p className="text-2xl font-bold text-text-primary">{stats?.completion_edited ?? '—'}</p>
                 <p className="text-xs text-text-muted">
-                  {stats?.completion_edited != null ? `${stats.completion_edited} correction pairs` : 'Loading...'}
+                  {stats?.completion_edited != null ? `${stats.completion_edited} pairs` : 'Loading...'}
                 </p>
               </div>
             </div>
@@ -197,107 +295,30 @@ export function Training() {
                 <span className="text-text-primary font-semibold">{eventCount}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-text-muted">Service uptime:</span>
-                <span className="text-text-primary font-semibold">{trainingStatus?.uptime_seconds ? Math.floor(trainingStatus.uptime_seconds / 3600) + 'h' : '-'}</span>
+                <span className="text-text-muted">24h events:</span>
+                <span className="text-text-primary font-semibold">{stats?.recent_events_24h ?? '—'}</span>
               </div>
+            </div>
+
+            <div className="flex gap-2 pt-2 border-t border-border-subtle">
+              <button className="px-3 py-1.5 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
+                Clear Dataset
+              </button>
+              <button className="px-3 py-1.5 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
+                Preview Samples
+              </button>
+              <button className="px-3 py-1.5 text-sm rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
+                Export Dataset
+              </button>
             </div>
           </>
         ) : (
-          <div className="space-y-2 text-sm">
-            <p className="text-red-400">⚠ Training service unavailable</p>
-            <p className="text-text-secondary">Make sure the training service is running at <code className="text-xs bg-bg-surface-3 px-2 py-1 rounded">http://localhost:8001</code></p>
-            <p className="text-text-muted text-xs mt-2">See TRAINING_INTEGRATION.md for setup instructions.</p>
-          </div>
+          <p className="text-sm text-text-muted">Training service unavailable</p>
         )}
-
-        <div className="flex flex-wrap gap-2 pt-2">
-          <button className="px-3 py-1.5 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
-            Clear Dataset
-          </button>
-          <button className="px-3 py-1.5 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
-            Preview Samples
-          </button>
-          <button className="px-3 py-1.5 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-3 cursor-pointer">
-            Export Dataset
-          </button>
-        </div>
       </div>
 
-      {/* Schedule */}
-      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
-        <h2 className="font-semibold text-text-primary">Schedule</h2>
-
-        <div className="space-y-3">
-          {(['manual', 'auto', 'scheduled'] as const).map((mode) => (
-            <label key={mode} className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="schedule"
-                value={mode}
-                checked={schedule === mode}
-                onChange={(e) => setSchedule(e.target.value as typeof mode)}
-                className="w-4 h-4 rounded-full"
-              />
-              <span className="text-sm text-text-secondary">
-                {mode === 'manual' && 'Manual (start manually)'}
-                {mode === 'auto' && 'Auto (train when GPU idle > 10 min)'}
-                {mode === 'scheduled' && 'Scheduled — Set Time...'}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Version History */}
-      <div className="bg-bg-surface-2 border border-border-default rounded-lg p-6 space-y-4">
-        <h2 className="font-semibold text-text-primary flex items-center gap-2">
-          <TrendingUp size={18} aria-hidden="true" />
-          Version History
-        </h2>
-
-        <div className="space-y-3">
-          {trainingRuns.length === 0 ? (
-            <p className="text-sm text-text-muted">No training history available from service.</p>
-          ) : trainingRuns.map((run) => (
-            <div
-              key={run.id}
-              className="flex items-center justify-between p-3 border border-border-subtle rounded-lg hover:bg-bg-surface-3 transition-colors"
-            >
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-text-primary">{run.version}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded ${
-                    run.status === 'completed'
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-red-500/20 text-red-400'
-                  }`}>
-                    {run.status === 'completed' ? '✓ Submitted' : '✗ Rejected'}
-                  </span>
-                </div>
-                <p className="text-xs text-text-muted">
-                  {run.sample_count} samples · {run.training_time} training · Val loss: {run.validation_loss}
-                </p>
-              </div>
-
-              <div className="text-right space-y-1">
-                <p className="text-sm font-semibold text-text-primary">
-                  {run.improvement > 0 ? '+' : ''}{run.improvement}% HumanEval
-                </p>
-                <p className="text-xs text-text-muted">{run.timestamp}</p>
-              </div>
-
-              <div className="flex gap-2 ml-4">
-                <button className="px-2 py-1 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-1 cursor-pointer">
-                  Load
-                </button>
-                <button className="px-2 py-1 text-xs rounded border border-border-default text-text-secondary hover:bg-bg-surface-1 cursor-pointer">
-                  Export
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Dialogs */}
+      <TrainingStartDialog open={startDialogOpen} onOpenChange={setStartDialogOpen} />
     </div>
   )
 }

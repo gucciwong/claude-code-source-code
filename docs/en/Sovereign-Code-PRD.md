@@ -1,10 +1,10 @@
 # Sovereign Code - Product Requirements Document
 
-**Version:** 2.0  
-**Date:** 2026-04-02  
+**Version:** 3.0  
+**Date:** 2026-04-09  
 **Status:** Active Development  
 **Author:** Sovereign AI Labs  
-**Previous Version:** 1.0 (2026-03-31)
+**Previous Version:** 2.0 (2026-04-05)
 
 ---
 
@@ -24,6 +24,7 @@
 12. [Success Metrics](#12-success-metrics)
 13. [Risk Analysis](#13-risk-analysis)
 14. [Appendix](#14-appendix)
+15. [Breakthrough Innovations](#15-breakthrough-innovations)
 
 ---
 
@@ -31,7 +32,7 @@
 
 ### 1.1 What is Sovereign Code?
 
-**Sovereign Code** (formerly Sovereign Code) is an enterprise AI coding platform that runs 100% locally. It has evolved from a personal coding tool into an organization-wide knowledge management system where every staff member — not just developers — can:
+**Sovereign Code** is an enterprise AI coding platform that runs 100% locally. It has evolved from a personal coding tool into an organization-wide knowledge management system where every staff member — not just developers — can:
 
 1. **Build tools quickly** — Use AI assistance to rapidly create scripts, automations, and internal tools to solve daily problems
 2. **Build a personal knowledge library** — AI learns from how you work and builds a searchable memory of your domain expertise; the more you use it, the smarter it gets about *your* patterns
@@ -57,7 +58,7 @@ Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Code ensures
 | Collaboration barriers | Share code to share knowledge | Federated learning — share insights, not code |
 | Capability ceiling | Limited by provider's model | Continuously improving via self-training |
 | No business context | AI doesn't know your ERP/CRM data | Enterprise data integration (IT-approved) |
-| Access from China | Slow/blocked Huggingface downloads | Built-in hf-mirror.com support |
+| Access from China | Slow/blocked Hugging Face downloads | Built-in hf-mirror.com support |
 
 ### 1.3 Key Differentiators
 
@@ -96,7 +97,7 @@ The desktop application and service ecosystem are production-oriented with broad
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Electron desktop app | ✅ Built | React 18 + Tailwind v4, 314 tests passing |
-| Local model inference | ✅ Built | Huggingface integration, GGUF support |
+| Local model inference | ✅ Built | Hugging Face integration, GGUF support |
 | Model manager service | ✅ Built | FastAPI on port 8002 |
 | Training service | ✅ Built | FastAPI on port 8001, QLoRA pipeline |
 | Voice I/O (VibeVoice) | ✅ Built | Whisper ASR + Google TTS |
@@ -183,7 +184,7 @@ Addressable Market Analysis (2026)
 | P0 | Local LLM Inference | Run 10B-70B models on consumer GPU | High | v0.1 ✅ |
 | P0 | Code Completion | Inline suggestions and multi-line completions | Medium | v0.1 ✅ |
 | P0 | Context Awareness | Project-level understanding via RAG | High | v0.2 ✅ |
-| P0 | Model Management | Download, switch, quantize models via HuggingFace | Medium | v0.2 ✅ |
+| P0 | Model Management | Download, switch, quantize models via Hugging Face | Medium | v0.2 ✅ |
 | P0 | China Mirror Support | hf-mirror.com toggle for China users | Low | v0.3 ✅ |
 | P1 | Agent Mode | Autonomous task execution | Very High | v0.3 ✅ |
 | P1 | Local Training | QLoRA fine-tuning on user data | Very High | v0.3 ✅ |
@@ -285,7 +286,7 @@ Context-aware code completion supporting single-line, multi-line, and whole-func
 #### 4.2.3 Agent Mode (Autonomous Task Execution)
 
 **Description:**
-Sovereign Code agent-like agent capable of autonomously reading, writing, and modifying code across entire projects.
+An autonomous agent capable of reading, writing, and modifying code across entire projects.
 
 **Requirements:**
 
@@ -811,7 +812,7 @@ Instead of a single model answer, four specialized LoRA adapters run in parallel
 ┌──────────────────────────────────────────────────────────────────┐
 │                     TECHNOLOGY STACK                              │
 ├──────────────────────────────────────────────────────────────────┤
-││
+│                                                                   │
 │  CORE APPLICATION                                                  │
 │  ├── Language: TypeScript + Python                                │
 │  ├── Framework: Electron (desktop) / CLI (terminal)              │
@@ -1340,7 +1341,7 @@ An IT admin console (web UI, accessible at `http://localhost:8080/admin`) provid
 │  • 314 unit tests, Windows EXE packaging                               │
 │                                                                          │
 │  v0.2 — Model Management                                                 │
-│  • HuggingFace model download/management (independent)                 │
+│  • Hugging Face model download/management (independent)                 │
 │  • FastAPI model-manager service (port 8002)                           │
 │  • QLoRA training pipeline (FastAPI training service, port 8001)       │
 │  • Renamed "Sovereign Code", v0.2 branding                             │
@@ -1463,7 +1464,7 @@ Current planning focus should remain on v1.0 deliverables and hardening work.
 | NPS (Net Promoter Score) | 40 | 55 | 70 |
 | Annual ROI per 500-person org | — | $2M | $5.7M |
 
-### 12.4 Pricing And Billing Canonical Policy (Year 1)
+### 12.4 Pricing and Billing Canonical Policy (Year 1)
 
 The monetization strategy for the first 12 months prioritizes adoption over short-term ARPU.
 
@@ -1552,7 +1553,7 @@ Detailed references:
 
 ```
 Related Open Source Projects:
-├── Sovereign Code - Inspiration for agent capabilities
+├── Claude Code - Inspiration for agent capabilities
 ├── Aider (paul-gauthier) - Local coding agent reference
 ├── Continue (continuedev) - VSCode extension architecture
 ├── Ollama - Local LLM inference
@@ -1580,7 +1581,248 @@ For questions or collaboration inquiries:
 
 ---
 
-**Document Version**: 2.0  
-**Last Updated**: 2026-04-02  
-**Status**: Active Development  
+**Document Version**: 3.0  
+**Last Updated**: 2026-04-09  
+**Status**: Active Development
+
+---
+
+## 15. Breakthrough Innovations
+
+*Added in v3.0 — Ten unique innovations that differentiate Sovereign Code from all existing AI coding tools.*
+
+### 15.1 Intent-to-Code Pipeline (I2CP)
+
+**Problem:** Current AI coding tools generate code from prompts, but the user's *intent* is often lost in translation. The model sees text, not the reasoning behind it.
+
+**Innovation:** A bidirectional intent layer between the user and the model. When a user describes what they want, the system first generates an **Intent Graph** — a structured representation of goals, constraints, and success criteria — then generates code that satisfies every node in the graph. After generation, the system validates each code block against the intent graph and highlights any unsatisfied intents.
+
+**Why Unique:** No coding tool captures *why* code is written. I2CP makes intent a first-class artifact that can be versioned, shared, and reused. Teams can search by intent ("find all code written to optimize database queries") rather than by keyword.
+
+**User Benefit:** 40-60% reduction in "that's not what I meant" iterations.
+
+**Technical Approach:**
+- New `IntentGraph` data structure in `knowledge-service` (port 8003)
+- Intent extraction via structured prompt → JSON schema
+- Post-generation validation: each code block mapped back to intent nodes
+- Intent versioning alongside git commits
+- UI: Intent panel in desktop app showing satisfied/unsatisfied intents
+
+**Priority:** P1 | **Service:** knowledge-service (port 8003)
+
+---
+
+### 15.2 Predictive Bug Radar (PBR)
+
+**Problem:** Bugs are found *after* code is written. The model sees static code but not runtime behavior.
+
+**Innovation:** Combines the existing Live Execution Trace Injection (§4.2.8) with a predictive model that identifies *likely* bugs *before* code runs. The system analyzes code as you type, predicts which lines are most likely to produce runtime errors based on patterns from your personal knowledge library and execution traces, and shows a "bug probability heatmap" directly in the editor.
+
+**Why Unique:** Existing tools do linting (static analysis) or runtime tracing (after execution). PBR bridges the gap with *predictive* analysis — it tells you "this line has an 87% chance of throwing a KeyError based on your past patterns" *before* you ever run the code.
+
+**User Benefit:** Catch 30-50% of bugs before first execution.
+
+**Technical Approach:**
+- Extend `execution-trace-service` (port 8005) with `PredictiveBugEngine`
+- Train a lightweight classifier on user's past execution traces + error patterns
+- Bug probability scores injected as inline diagnostics in the editor
+- Heatmap overlay in VS Code extension showing risk zones
+- Personal model improves over time via PKL feedback loop
+
+**Priority:** P1 | **Service:** execution-trace-service (port 8005)
+
+---
+
+### 15.3 Context-Aware Model Router (CAMR)
+
+**Problem:** Users pick one model and use it for everything. But different tasks need different models — a 7B model is fast for completions, a 32B model is better for complex reasoning, and a specialized model is best for domain-specific work.
+
+**Innovation:** An intelligent model router that automatically selects the optimal model for each request based on: (1) task type (completion, chat, refactoring, testing), (2) code language and complexity, (3) available VRAM, (4) user's personal model performance history. The router learns from acceptance rates per model per task type.
+
+**Why Unique:** No local AI tool does dynamic model switching. Cloud tools use one model. Sovereign Code has multiple local models — CAMR makes this an advantage, not a complexity.
+
+**User Benefit:** Always get the best model for the job without thinking about it. 2-5x faster for simple tasks, higher quality for complex ones.
+
+**Technical Approach:**
+- New `ModelRouter` class in `model-manager` (port 8002)
+- Task classifier: lightweight heuristic + learned preferences from PKL
+- VRAM-aware scheduling: check available VRAM before loading
+- Performance tracking: acceptance rate, latency, quality per model per task type
+- UI: "Auto" mode in model selector, with manual override
+- Hot-swap models mid-conversation when task type changes
+
+**Priority:** P1 | **Service:** model-manager (port 8002)
+
+---
+
+### 15.4 Living Documentation Engine (LDE)
+
+**Problem:** Documentation rots. Code changes but docs stay static. No tool keeps docs in sync with code automatically.
+
+**Innovation:** Documentation that *evolves* with the code. Every time code changes, the LDE detects which documentation sections are affected and proposes updates. It maintains a bidirectional link between code and docs — click a doc section to see the code it describes, click code to see the doc that explains it. Documentation becomes a living artifact, not a static file.
+
+**Why Unique:** Existing tools generate docs once. LDE maintains a *living* documentation graph that stays synchronized. It's not "generate docs" — it's "keep docs alive."
+
+**User Benefit:** Documentation that's always accurate. 80% reduction in doc maintenance effort. New team members onboard 3x faster.
+
+**Technical Approach:**
+- New `DocGraph` in `knowledge-service` (port 8003)
+- Bidirectional code↔doc links stored as embeddings
+- On file save: detect changed code regions → find affected doc sections → propose updates
+- VS Code extension: "Doc Lens" showing inline doc status (fresh/stale/missing)
+- Desktop app: Documentation dashboard with freshness scores
+- Auto-generate missing docs, auto-update stale ones
+
+**Priority:** P2 | **Service:** knowledge-service (port 8003)
+
+---
+
+### 15.5 Privacy-Preserving Team Patterns (PPTP)
+
+**Problem:** The PRD describes federated learning (§4.2.7) for model training, but teams also need to share *patterns* (not code) — "how do we handle auth?" "what's our error handling pattern?" — without exposing proprietary code.
+
+**Innovation:** Extends the Personal Knowledge Library with a **Pattern Exchange** that lets team members share anonymized coding patterns. When Alice writes a clever auth handler, the system extracts the *pattern* (structure, approach, constraints) without the *implementation* (actual code, business logic). Bob can then see "there's a team pattern for JWT auth with refresh tokens" and apply it to his own codebase.
+
+**Why Unique:** Federated learning shares model weights. PPTP shares *human-readable patterns* — the "why" and "how" without the "what." This is knowledge transfer, not model training.
+
+**User Benefit:** Teams learn from each other without code review bottlenecks. 50% faster onboarding for new team members.
+
+**Technical Approach:**
+- Extend `org-intelligence-service` (port 8007) with `PatternExchange`
+- Pattern extraction: AST-based structural pattern mining (not regex)
+- Anonymization: replace variable names, string literals, business logic with placeholders
+- Pattern matching: when user starts coding, suggest relevant team patterns
+- Privacy guarantee: patterns contain zero executable code, zero business data
+- UI: "Team Patterns" tab in Knowledge screen
+
+**Priority:** P2 | **Service:** org-intelligence-service (port 8007)
+
+---
+
+### 15.6 Conversational Test Generation (CTG)
+
+**Problem:** Writing tests is the most neglected part of development. Existing tools generate tests from code, but they don't understand *what behavior matters* to the user.
+
+**Innovation:** A conversational test generator that interviews the user about what matters. Instead of "generate tests for this function," it asks: "What should happen if the input is negative? Should this ever return null? What's the maximum input size?" Then it generates tests that match the user's *intent*, not just code coverage.
+
+**Why Unique:** Existing test generators optimize for coverage percentage. CTG optimizes for *behavioral correctness* — testing what the user cares about, not what's easy to cover.
+
+**User Benefit:** Tests that actually catch bugs users care about. 70% reduction in "works but wrong behavior" bugs.
+
+**Technical Approach:**
+- New `TestInterviewer` in `code-completion-service` (port 8007)
+- Structured interview: ask about edge cases, invariants, error handling
+- Generate tests from interview answers + code analysis
+- Integration with execution trace: validate tests against real runtime behavior
+- PKL integration: learn from user's past bug patterns to ask better questions
+- UI: Chat-style interview panel in desktop app
+
+**Priority:** P2 | **Service:** code-completion-service (port 8007)
+
+---
+
+### 15.7 Semantic Dependency Graph (SDG)
+
+**Problem:** When you change one file, you need to know which other files depend on it. Current tools use static imports, but semantic dependencies ("this function's behavior depends on that config") are invisible.
+
+**Innovation:** A semantic dependency graph that goes beyond imports. It tracks: (1) data flow dependencies (which functions consume which data shapes), (2) behavioral dependencies (which code paths are affected by which configs), (3) temporal dependencies (which code was written in response to which other code). When you change a file, SDG tells you not just "these files import this" but "these features will behave differently."
+
+**Why Unique:** Existing dependency graphs are syntactic (imports, calls). SDG is *semantic* — it understands what changes *mean*, not just what they reference.
+
+**User Benefit:** Change with confidence. Know the full blast radius of any change. 60% fewer "I didn't realize that would break X" incidents.
+
+**Technical Approach:**
+- Extend `semantic-search-service` (port 8017) with `SemanticDependencyGraph`
+- Build graph from: AST analysis + execution traces + git history
+- Node types: DataShape, BehaviorPattern, ConfigDependency, APISurface
+- On file change: compute semantic diff → identify affected features
+- VS Code extension: "Impact View" showing what a change affects
+- Desktop app: Dependency dashboard with interactive graph visualization
+
+**Priority:** P1 | **Service:** semantic-search-service (port 8017)
+
+---
+
+### 15.8 Adaptive Context Window (ACW)
+
+**Problem:** LLM context windows are limited. Current tools either truncate context (losing important info) or stuff everything in (wasting tokens on irrelevant code).
+
+**Innovation:** An intelligent context window manager that dynamically adjusts what goes into the context based on the *current task*. For a bug fix, it prioritizes the buggy function + its callers + recent changes. For a new feature, it prioritizes the API surface + similar existing features + the user's PKL patterns. The context composition changes in real-time as the task evolves.
+
+**Why Unique:** Existing tools use fixed context strategies (last N files, all open files, etc.). ACW is *task-aware* — it knows you're debugging vs. writing new code vs. refactoring, and adjusts context accordingly.
+
+**User Benefit:** 3-5x more relevant context in the same token budget. Better completions with less noise. Works great even with smaller models.
+
+**Technical Approach:**
+- New `ContextComposer` in `knowledge-service` (port 8003)
+- Task classifier: detect current activity (debugging, writing, refactoring, testing)
+- Context budget: allocate tokens based on task priority
+- Dynamic sources: open files, PKL patterns, execution traces, git history, team patterns
+- Real-time adjustment: as user types, re-rank context sources
+- Feedback loop: track which context sources led to accepted completions
+
+**Priority:** P1 | **Service:** knowledge-service (port 8003)
+
+---
+
+### 15.9 Zero-Trust Local AI (ZTLA)
+
+**Problem:** The PRD emphasizes privacy, but there's no verification that the local model *actually* stays local. A compromised model could exfiltrate data through model outputs, and users have no way to verify.
+
+**Innovation:** A zero-trust security layer for local AI that: (1) monitors all model outputs for potential data exfiltration patterns (unusual base64, encoded URLs, suspicious repetition), (2) provides cryptographic proof that no data leaves the machine (network egress monitoring + signed audit log), (3) runs model inference in a hardened sandbox with no network access, verified by the user.
+
+**Why Unique:** Every other "local AI" tool trusts the model. ZTLA *verifies* the trust. It's the difference between "we promise it's local" and "we can prove it's local."
+
+**User Benefit:** Verifiable privacy guarantee. Required for regulated industries (finance, healthcare, defense). Audit-ready compliance documentation.
+
+**Technical Approach:**
+- New `ZeroTrustMonitor` in `enterprise-data-service` (port 8004)
+- Output scanner: regex + ML model to detect data exfiltration patterns in model outputs
+- Network egress monitor: verify no outbound connections during inference
+- Sandbox: run inference in isolated process with no network capability
+- Audit log: signed, append-only log of all model interactions
+- UI: "Trust Dashboard" showing real-time security status
+- Compliance export: generate SOC2/HIPAA audit reports
+
+**Priority:** P1 | **Service:** enterprise-data-service (port 8004)
+
+---
+
+### 15.10 Code Archaeology Engine (CAE)
+
+**Problem:** The PRD's Temporal Decision Graph (§4.2.9) captures *why* decisions were made, but it requires manual annotation. Most developers don't annotate their commits.
+
+**Innovation:** An automated "code archaeology" engine that reconstructs decision history from git data *without any manual input*. It analyzes: (1) commit messages + diffs to infer intent, (2) branch patterns to understand experimentation, (3) code survival rates (how long code lives before being replaced) to identify contested decisions, (4) blame patterns to find "decision-dense" code regions. The result is an automatically generated decision graph that gets richer over time.
+
+**Why Unique:** The PRD's Temporal Decision Graph requires manual input. CAE builds it *automatically* from data every project already has (git history). Zero-effort decision archaeology.
+
+**User Benefit:** Understand *why* code is the way it is without asking anyone. "Why is auth structured this way?" → instant answer with evidence. 90% reduction in "who wrote this and why" investigations.
+
+**Technical Approach:**
+- Extend `execution-trace-service` (port 8005) with `CodeArchaeologyEngine`
+- Git history analyzer: parse commits, branches, merges, reverts
+- Intent inference: LLM-based commit message analysis → decision nodes
+- Code survival analysis: track how long code lives before replacement
+- Decision density heatmap: identify code regions with many decisions
+- Natural language query: "Why is X done this way?" → causal chain with evidence
+- UI: "Archaeology" tab in desktop app with timeline + graph visualization
+
+**Priority:** P2 | **Service:** execution-trace-service (port 8005)
+
+---
+
+### 15.11 Implementation Priority Matrix
+
+| # | Innovation | Impact | Effort | Priority | Service Port |
+|---|------------|--------|--------|----------|-------------|
+| 1 | Intent-to-Code Pipeline (I2CP) | Very High | Medium | P1 | 8003 |
+| 2 | Predictive Bug Radar (PBR) | Very High | Medium | P1 | 8005 |
+| 3 | Context-Aware Model Router (CAMR) | High | Low | P1 | 8002 |
+| 4 | Living Documentation Engine (LDE) | High | Medium | P2 | 8003 |
+| 5 | Privacy-Preserving Team Patterns (PPTP) | High | Medium | P2 | 8007 |
+| 6 | Conversational Test Generation (CTG) | Medium | Medium | P2 | 8007 |
+| 7 | Semantic Dependency Graph (SDG) | Very High | High | P1 | 8017 |
+| 8 | Adaptive Context Window (ACW) | Very High | Medium | P1 | 8003 |
+| 9 | Zero-Trust Local AI (ZTLA) | Critical (enterprise) | Medium | P1 | 8004 |
+| 10 | Code Archaeology Engine (CAE) | High | Medium | P2 | 8005 |  
 

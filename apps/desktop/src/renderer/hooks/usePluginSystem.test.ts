@@ -37,7 +37,7 @@ describe('usePluginSystem', () => {
       await result.current.fetchPlugins()
     })
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:8012/plugins')
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8015/plugins')
     expect(usePluginStore.getState().plugins).toEqual(mockPlugins)
   })
 
@@ -66,7 +66,7 @@ describe('usePluginSystem', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8012/plugins/register',
+      'http://localhost:8015/plugins/register',
       expect.objectContaining({ method: 'POST' })
     )
     expect(success).toBe(true)
@@ -96,7 +96,7 @@ describe('usePluginSystem', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8012/plugins/hook-test-plugin',
+      'http://localhost:8015/plugins/hook-test-plugin',
       expect.objectContaining({ method: 'DELETE' })
     )
   })
@@ -113,7 +113,7 @@ describe('usePluginSystem', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8012/plugins/hook-test-plugin/enable',
+      'http://localhost:8015/plugins/hook-test-plugin/enable',
       expect.objectContaining({ method: 'PUT' })
     )
   })
@@ -130,7 +130,7 @@ describe('usePluginSystem', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8012/plugins/hook-test-plugin/disable',
+      'http://localhost:8015/plugins/hook-test-plugin/disable',
       expect.objectContaining({ method: 'PUT' })
     )
   })
@@ -148,7 +148,7 @@ describe('usePluginSystem', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:8012/hooks/dispatch',
+      'http://localhost:8015/hooks/dispatch',
       expect.objectContaining({ method: 'POST' })
     )
     expect(handledBy).toEqual(['plugin-a'])

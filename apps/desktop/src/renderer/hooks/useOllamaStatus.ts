@@ -11,6 +11,7 @@ export function useOllamaStatus() {
       try {
         const online = await ollamaClient.isOnline()
         const models = online ? await ollamaClient.getModels() : []
+        const currentActiveModel = useSystemStore.getState().activeModel
 
         if (online) {
           failCountRef.current = 0
@@ -20,13 +21,11 @@ export function useOllamaStatus() {
 
         useSystemStore.setState({
           ollamaOnline: online,
-          activeModel: models.length > 0 ? models[0].name : null,
+          activeModel: currentActiveModel ?? (models.length > 0 ? models[0].name : null),
           ollamaConnectionError: online ? null :
             failCountRef.current >= 3 ? 'Ollama is not responding. Check that it is running.' : null,
         })
-        if (models.length > 0) {
-          useModelsStore.getState().setInstalled(models)
-        }
+        useModelsStore.getState().setInstalled(models)
       } catch {
         failCountRef.current++
         useSystemStore.setState({

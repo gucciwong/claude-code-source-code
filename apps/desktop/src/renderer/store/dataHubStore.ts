@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { testConnector } from './connectorApi'
 
 export type ConnectorStatus = 'disconnected' | 'connected' | 'syncing' | 'error'
 export type ConnectorCategory = 'hrm' | 'social'
@@ -57,7 +58,11 @@ const DEFAULT_CONNECTORS = [...HRM_CONNECTORS, ...SOCIAL_CONNECTORS]
 interface DataHubState {
   connectors: Connector[]
   syncLog: SyncEvent[]
+  /** Stored credentials keyed by connectorId — never persisted to disk */
+  credentials: Record<string, Record<string, string>>
+  setCredentials: (connectorId: string, creds: Record<string, string>) => void
   connectConnector: (id: string) => void
+  connectWithCredentials: (id: string) => Promise<boolean>
   disconnectConnector: (id: string) => void
   importFile: (id: string, fileName: string) => void
 }
@@ -65,6 +70,64 @@ interface DataHubState {
 export const useDataHubStore = create<DataHubState>((set, get) => ({
   connectors: DEFAULT_CONNECTORS,
   syncLog: [],
+  credentials: {},
+
+  setCredentials: (connectorId, creds) => {
+    set(state => ({ credentials: { ...state.credentials, [connectorId]: creds } }))
+  },
+
+  connectWithCredentials: async (id) => {
+    const connector = get().connectors.find(c => c.id === id)
+    if (!connector) return false
+    const creds = get().credentials[id] ?? {}
+
+    set(state => ({
+      connectors: state.connectors.map(c =>
+        c.id === id ? { ...c, status: 'syncing', errorMessage: undefined } : c
+      ),
+    }))
+
+    const result = await testConnector(id, creds)
+
+    if (result.ok) {
+      set(state => ({
+        connectors: state.connectors.map(c =>
+          c.id === id ? { ...c, status: 'connected', lastSyncAt: new Date().toISOString(), errorMessage: undefined } : c
+        ),
+        syncLog: [
+          {
+            id: crypto.randomUUID(),
+            connectorId: id,
+            connectorName: connector.name,
+            eventType: 'connect',
+            status: 'success',
+            timestamp: new Date().toISOString(),
+          },
+          ...state.syncLog,
+        ],
+      }))
+      return true
+    } else {
+      set(state => ({
+        connectors: state.connectors.map(c =>
+          c.id === id ? { ...c, status: 'error', errorMessage: result.error } : c
+        ),
+        syncLog: [
+          {
+            id: crypto.randomUUID(),
+            connectorId: id,
+            connectorName: connector.name,
+            eventType: 'connect',
+            status: 'failed',
+            timestamp: new Date().toISOString(),
+            detail: result.error,
+          },
+          ...state.syncLog,
+        ],
+      }))
+      return false
+    }
+  },
 
   connectConnector: (id) => {
     const connector = get().connectors.find(c => c.id === id)

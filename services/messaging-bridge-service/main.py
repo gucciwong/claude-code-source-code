@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -6,12 +7,27 @@ import time
 
 from messaging.registry import platform_registry, command_processor
 
+from starlette.requests import Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 app = FastAPI(title="Sovereign Code Messaging Bridge", version="0.1.0")
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175",
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "DELETE", "PUT", "PATCH"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 
@@ -30,27 +46,31 @@ class WebhookPayload(BaseModel):
     metadata: Dict[str, Any] = {}
 
 
+@limiter.limit("60/minute")
 @app.post("/platforms/configure")
-async def configure_platform(config: PlatformConfigRequest):
+async def configure_platform(request: Request, config: PlatformConfigRequest):
     platform_registry.configure(config.model_dump())
     return {"status": "ok", "platform": config.platform}
 
 
+@limiter.limit("60/minute")
 @app.get("/platforms")
-async def list_platforms():
+async def list_platforms(request: Request):
     return platform_registry.list()
 
 
+@limiter.limit("60/minute")
 @app.delete("/platforms/{platform_name}")
-async def remove_platform(platform_name: str):
+async def remove_platform(request: Request, platform_name: str):
     removed = platform_registry.remove(platform_name)
     if not removed:
         raise HTTPException(status_code=404, detail=f"Platform '{platform_name}' not configured")
     return {"status": "ok", "removed": platform_name}
 
 
+@limiter.limit("60/minute")
 @app.post("/webhooks/{platform}")
-async def receive_webhook(platform: str, payload: WebhookPayload):
+async def receive_webhook(request: Request, platform: str, payload: WebhookPayload):
     config = platform_registry.get(platform)
     if not config:
         raise HTTPException(status_code=404, detail=f"Platform '{platform}' not configured")
@@ -70,13 +90,15 @@ async def receive_webhook(platform: str, payload: WebhookPayload):
     }
 
 
+@limiter.limit("60/minute")
 @app.get("/messages/log")
-async def get_message_log():
+async def get_message_log(request: Request):
     return command_processor.get_log()
 
 
+@limiter.limit("60/minute")
 @app.get("/health")
-async def health():
+async def health(request: Request):
     return {
         "status": "ok",
         "version": "0.1.0",

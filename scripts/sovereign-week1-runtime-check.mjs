@@ -109,11 +109,22 @@ function withTimeout(promise, timeoutMs) {
 }
 
 async function fetchJson(url, timeoutMs) {
-  const response = await withTimeout(fetch(url), timeoutMs)
-  if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`)
+  const controller = new AbortController()
+  const timerId = setTimeout(() => controller.abort(new Error(`timeout after ${timeoutMs}ms`)), timeoutMs)
+  try {
+    const response = await fetch(url, { signal: controller.signal })
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`)
+    }
+    return await response.json()
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw controller.signal.reason || error
+    }
+    throw error
+  } finally {
+    clearTimeout(timerId)
   }
-  return response.json()
 }
 
 export function normalizeTier(vram) {

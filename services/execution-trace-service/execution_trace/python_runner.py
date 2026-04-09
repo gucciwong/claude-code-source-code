@@ -1,12 +1,61 @@
 import sys
 import io
 import time
+import re
 from .sandbox import ResourceLimits, run_with_timeout, TimeoutError
+
+
+# Minimal safe builtins — no __import__, no open, no eval/exec/compile
+_SAFE_BUILTINS = {
+    'abs': abs, 'all': all, 'any': any, 'bin': bin, 'bool': bool,
+    'chr': chr, 'dict': dict, 'divmod': divmod, 'enumerate': enumerate,
+    'filter': filter, 'float': float, 'format': format, 'frozenset': frozenset,
+    'hash': hash, 'hex': hex, 'int': int, 'isinstance': isinstance,
+    'issubclass': issubclass, 'iter': iter, 'len': len, 'list': list,
+    'map': map, 'max': max, 'min': min, 'next': next, 'oct': oct,
+    'ord': ord, 'pow': pow, 'print': print, 'range': range, 'repr': repr,
+    'reversed': reversed, 'round': round, 'set': set, 'slice': slice,
+    'sorted': sorted, 'str': str, 'sum': sum, 'tuple': tuple, 'type': type,
+    'zip': zip, 'True': True, 'False': False, 'None': None,
+    'Exception': Exception, 'ValueError': ValueError, 'TypeError': TypeError,
+    'KeyError': KeyError, 'IndexError': IndexError, 'AttributeError': AttributeError,
+    'RuntimeError': RuntimeError, 'StopIteration': StopIteration,
+    'NotImplementedError': NotImplementedError, 'AssertionError': AssertionError,
+}
 
 
 class PythonRunner:
     def __init__(self, limits: ResourceLimits = None):
         self.limits = limits or ResourceLimits()
+
+    @staticmethod
+    def _detect_forbidden_imports(code: str, forbidden: list) -> str | None:
+        """Detect forbidden module imports using AST-aware regex patterns.
+        
+        Catches: import X, import X as Y, from X import Y, from X import *,
+        __import__('X'), importlib.import_module('X'), and multi-line variants.
+        """
+        # Strip comments and string literals to avoid false positives
+        stripped = re.sub(r'#.*$', '', code, flags=re.MULTILINE)
+        stripped = re.sub(r'"""[\s\S]*?"""', '""', stripped)
+        stripped = re.sub(r"'''[\s\S]*?'''", "''", stripped)
+        stripped = re.sub(r'"[^"]*"', '""', stripped)
+        stripped = re.sub(r"'[^']*'", "''", stripped)
+
+        for module in forbidden:
+            # import X / import X as Y / import X, Y
+            if re.search(rf'\bimport\s+{re.escape(module)}\b', stripped):
+                return module
+            # from X import ... / from X import *
+            if re.search(rf'\bfrom\s+{re.escape(module)}\b', stripped):
+                return module
+            # __import__('X') / __import__("X")
+            if re.search(rf"__import__\s*\(\s*['\"]({re.escape(module)})['\"]", stripped):
+                return module
+            # importlib.import_module('X')
+            if re.search(rf"import_module\s*\(\s*['\"]({re.escape(module)})['\"]", stripped):
+                return module
+        return None
 
     def run(self, code: str, timeout_ms: int = 5000) -> dict:
         """
@@ -16,12 +65,26 @@ class PythonRunner:
         trace_events = []
         start = time.perf_counter()
 
-        # Check for forbidden modules
-        for module in self.limits.forbidden_modules:
-            if f'import {module}' in code or f'from {module}' in code:
+        # Check for forbidden modules using AST-aware detection
+        forbidden = self._detect_forbidden_imports(code, self.limits.forbidden_modules)
+        if forbidden:
+            return {
+                "lines": [],
+                "error": f"Module '{forbidden}' is not allowed",
+                "duration_ms": 0.0,
+                "language": "python",
+            }
+
+        # Block direct use of __import__ and other dangerous builtins
+        dangerous_names = ['__import__', 'eval', 'exec', 'compile', 'open',
+                          'globals', 'locals', 'vars', 'dir', 'getattr',
+                          'setattr', 'delattr', 'breakpoint', 'exit', 'quit']
+        for name in dangerous_names:
+            # Match name( which indicates a call
+            if re.search(rf'\b{name}\s*\(', code):
                 return {
                     "lines": [],
-                    "error": f"Module '{module}' is not allowed",
+                    "error": f"Use of '{name}()' is not allowed in sandbox",
                     "duration_ms": 0.0,
                     "language": "python",
                 }
@@ -70,7 +133,7 @@ class PythonRunner:
             def do_exec():
                 # Compile first to catch syntax errors
                 compiled = compile(code, '<sandbox>', 'exec')
-                namespace = {'__builtins__': __builtins__}
+                namespace = {'__builtins__': _SAFE_BUILTINS}
                 sys.settrace(tracer)
                 try:
                     exec(compiled, namespace)

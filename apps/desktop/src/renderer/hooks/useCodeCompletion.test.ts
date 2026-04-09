@@ -34,7 +34,7 @@ describe('useCodeCompletion', () => {
     })
 
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8015/complete',
+      'http://localhost:8007/complete',
       expect.objectContaining({
         method: 'POST',
         body: expect.stringContaining('"prefix":"def"'),
@@ -113,7 +113,7 @@ describe('useCodeCompletion', () => {
     })
 
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8015/feedback',
+      'http://localhost:8007/feedback',
       expect.objectContaining({
         method: 'POST',
         body: expect.stringContaining('"accepted":true'),
@@ -130,7 +130,7 @@ describe('useCodeCompletion', () => {
     })
 
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8015/feedback',
+      'http://localhost:8007/feedback',
       expect.objectContaining({
         method: 'POST',
         body: expect.stringContaining('"accepted":false'),

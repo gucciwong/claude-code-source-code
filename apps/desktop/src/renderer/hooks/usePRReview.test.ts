@@ -44,7 +44,7 @@ describe('usePRReview', () => {
     const { result } = renderHook(() => usePRReview())
     await act(() => result.current.reviewDiff('diff --git a/foo.py b/foo.py', 'python', []))
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8013/review',
+      'http://localhost:8016/review',
       expect.objectContaining({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

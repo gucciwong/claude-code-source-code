@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useOrgIntelligenceStore } from '../store/orgIntelligenceStore'
 import type { ContributeRequest, SharedPattern, SkillGapReport, Bottleneck } from '../../../shared/orgIntelligence'
 
-const BASE_URL = 'http://localhost:8007'
+const BASE_URL = 'http://localhost:8013'
 
 export function useOrgIntelligence() {
   const { addPattern, setSharedPatterns, setSkillGapReport, setBottlenecks, setSearchResults, setLoading, setError } = useOrgIntelligenceStore()

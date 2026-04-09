@@ -22,7 +22,7 @@ class FederationRoundManager:
         self._rounds[round_id] = round_obj
         self._updates[round_id] = []
         self._current_round_id = round_id
-        return round_obj.dict()
+        return round_obj.model_dump()
 
     def submit_update(self, update: dict) -> Optional[dict]:
         round_id = update.get("round_id")
@@ -40,7 +40,7 @@ class FederationRoundManager:
                 and round_obj.participating_peers):
             self._finalize_round(round_id)
 
-        return round_obj.dict()
+        return round_obj.model_dump()
 
     def _finalize_round(self, round_id: str) -> None:
         round_obj = self._rounds[round_id]
@@ -53,10 +53,10 @@ class FederationRoundManager:
     def get_current_round(self) -> Optional[dict]:
         if not self._current_round_id:
             return None
-        return self._rounds[self._current_round_id].dict()
+        return self._rounds[self._current_round_id].model_dump()
 
     def history(self) -> list:
-        return [r.dict() for r in self._rounds.values()]
+        return [r.model_dump() for r in self._rounds.values()]
 
     def count_rounds(self) -> int:
         return len(self._rounds)
