@@ -316,7 +316,7 @@ export function Chat() {
       <div className="shrink-0 px-6 py-4 border-t border-border-default bg-bg-surface-1">
         <div className="flex gap-3 items-end">
           <textarea
-            className="flex-1 bg-bg-surface-2 border border-border-default text-text-primary text-sm rounded-lg px-4 py-3 resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 placeholder:text-text-muted min-h-[44px] max-h-[160px]"
+            className="flex-1 bg-bg-surface-2 border border-border-default text-text-primary text-sm rounded-lg px-4 py-3 resize-y focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 placeholder:text-text-muted min-h-[44px] max-h-[300px]"
             placeholder="Message..."
             value={input}
             onChange={e => setInput(e.target.value)}
