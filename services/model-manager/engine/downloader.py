@@ -75,6 +75,8 @@ class ModelDownloader:
 
         # Set the mirror endpoint used by huggingface_hub
         os.environ["HF_ENDPOINT"] = self.hf_endpoint
+        # Disable xet protocol — it hangs on mirror redirects (hf-mirror.com → cas-bridge.xethub.hf.co)
+        os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
 
         dest_dir = os.path.join(self.cache_dir, model_id.replace("/", "--"))
 
@@ -139,6 +141,7 @@ class ModelDownloader:
     def _list_gguf_sync(self, model_id: str) -> list:
         from huggingface_hub import list_repo_files
         os.environ["HF_ENDPOINT"] = self.hf_endpoint
+        os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
         all_files = list_repo_files(model_id, token=self.hf_token or None)
         return [f for f in all_files if f.endswith(".gguf")]
 
@@ -154,6 +157,7 @@ class ModelDownloader:
         from huggingface_hub import list_repo_tree
         from huggingface_hub.hf_api import RepoFile
         os.environ["HF_ENDPOINT"] = self.hf_endpoint
+        os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
         entries = list_repo_tree(model_id, token=self.hf_token or None, recursive=True)
         result = []
         for entry in entries:
