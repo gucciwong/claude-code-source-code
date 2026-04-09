@@ -231,7 +231,6 @@ def ztla_egress_check(request: Request, body: EgressCheckRequest) -> dict:
     """Verify no unauthorized outbound connections."""
     result = _zt_monitor.check_network_egress()
     result["allowed"] = result.get("status") == "clean"
-    result["violations"] = []
     return result
 
 
@@ -252,7 +251,6 @@ def ztla_sandbox_verify(request: Request, body: SandboxVerifyRequest) -> dict:
         "memory_isolated": result.get("memory_isolated", False),
         "capabilities_restricted": result.get("capabilities_restricted", False),
     }
-    result["issues"] = []
     return result
 
 

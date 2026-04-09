@@ -202,8 +202,8 @@ async def shutdown():
     try:
         redis_client.close()
         logger.info("Redis connection closed")
-    except:
-        pass
+    except Exception as exc:
+        logger.warning(f"Error closing Redis connection: {exc}")
     
     logger.info(f"Instance {INSTANCE_ID} shutting down")
 
@@ -292,8 +292,8 @@ async def transcribe(request: Request, file: UploadFile = File(...), language: O
         if temp_file and Path(temp_file).exists():
             try:
                 os.remove(temp_file)
-            except:
-                pass
+            except Exception as exc:
+                logger.warning(f"Failed to clean up temp file {temp_file}: {exc}")
 
 
 @app.post("/speak", response_model=SpeakResponse)
@@ -535,8 +535,8 @@ async def websocket_transcribe(websocket: WebSocket):
                 "type": "error",
                 "message": f"Connection error: {str(e)}"
             })
-        except:
-            pass
+        except Exception as exc:
+            logger.warning(f"Failed to send WebSocket error message: {exc}")
     finally:
         # Connection cleanup
         connection_duration = asyncio.get_event_loop().time() - connection_start_time

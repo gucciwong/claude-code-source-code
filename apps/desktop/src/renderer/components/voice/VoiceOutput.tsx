@@ -22,6 +22,7 @@ export const VoiceOutput: React.FC<VoiceOutputProps> = ({
   const [error, setError] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const [selectedLanguage, setSelectedLanguage] = useState('en')
+  const audioUrlRef = useRef<string>('')
 
   const synthesizeSpeech = useCallback(async () => {
     if (!text.trim()) {
@@ -55,11 +56,13 @@ export const VoiceOutput: React.FC<VoiceOutputProps> = ({
       const audioResponse = await fetch(data.path)
       const audioBlob = await audioResponse.blob()
       const audioUrl = URL.createObjectURL(audioBlob)
+      audioUrlRef.current = audioUrl
 
       if (audioRef.current) {
         audioRef.current.src = audioUrl
         audioRef.current.onended = () => {
-          URL.revokeObjectURL(audioUrl)
+          URL.revokeObjectURL(audioUrlRef.current)
+          audioUrlRef.current = ''
           setIsPlaying(false)
           onStop?.()
         }
@@ -76,6 +79,11 @@ export const VoiceOutput: React.FC<VoiceOutputProps> = ({
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
+      audioRef.current.src = ''
+    }
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current)
+      audioUrlRef.current = ''
     }
     setIsPlaying(false)
     onStop?.()
