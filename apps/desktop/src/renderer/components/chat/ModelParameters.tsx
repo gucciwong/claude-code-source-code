@@ -13,6 +13,9 @@ import {
   InferenceParams,
 } from '../../store/modelParamsStore'
 import { useModelManagerStore } from '../../store/modelManagerStore'
+import { useResize } from '../../hooks/useResize'
+import { useUILayoutStore } from '../../store/uiLayoutStore'
+import { ResizeHandle } from '../common/ResizeHandle'
 
 /* ------------------------------------------------------------------ */
 /*  Compact building blocks for the sidebar                           */
@@ -158,11 +161,30 @@ export function ModelParameters() {
     resetInferenceParams,
   } = useModelParamsStore()
   const models = useModelManagerStore(s => s.models)
+  const modelParamsWidth = useUILayoutStore(s => s.modelParamsWidth)
+  const setModelParamsWidth = useUILayoutStore(s => s.setModelParamsWidth)
+
+  const { containerStyle, onMouseDown } = useResize({
+    value: modelParamsWidth,
+    min: 240,
+    max: 480,
+    direction: 'horizontal',
+    onValueChange: setModelParamsWidth,
+  })
 
   if (!paramsSidebarOpen) return null
 
   return (
-    <div className="w-80 shrink-0 border-l border-border-default bg-bg-surface-1 flex flex-col h-full overflow-hidden">
+    <>
+      <ResizeHandle
+        orientation="vertical"
+        ariaLabel="Resize model parameters panel"
+        onMouseDown={onMouseDown}
+      />
+      <div
+        className="shrink-0 border-l border-border-default bg-bg-surface-1 flex flex-col h-full overflow-hidden"
+        style={containerStyle}
+      >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border-default shrink-0">
         <div className="flex items-center gap-2">
@@ -353,6 +375,7 @@ export function ModelParameters() {
           />
         </Section>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

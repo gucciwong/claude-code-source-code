@@ -1,5 +1,8 @@
 import { X, Download, AlertCircle, Pause, Play } from 'lucide-react'
 import { DownloadQueueEntry } from '../../hooks/useModelManager'
+import { useResize } from '../../hooks/useResize'
+import { useUILayoutStore } from '../../store/uiLayoutStore'
+import { ResizeHandle } from '../common/ResizeHandle'
 
 export interface DownloadSidebarProps {
   downloads: Record<string, DownloadQueueEntry>
@@ -41,6 +44,17 @@ export function DownloadSidebar({ downloads, onCancel, onPause, onResume }: Down
   )
   const errorEntries = allEntries.filter(([, d]) => d.status === 'error')
 
+  const downloadSidebarWidth = useUILayoutStore(s => s.downloadSidebarWidth)
+  const setDownloadSidebarWidth = useUILayoutStore(s => s.setDownloadSidebarWidth)
+
+  const { containerStyle, onMouseDown } = useResize({
+    value: downloadSidebarWidth,
+    min: 220,
+    max: 400,
+    direction: 'horizontal',
+    onValueChange: setDownloadSidebarWidth,
+  })
+
   if (activeEntries.length === 0 && errorEntries.length === 0) return null
 
   const totalGb = activeEntries.reduce((sum, [, d]) => sum + (d.total_size_gb ?? 0), 0)
@@ -50,10 +64,17 @@ export function DownloadSidebar({ downloads, onCancel, onPause, onResume }: Down
       : 0
 
   return (
-    <aside
-      aria-label="Download progress"
-      className="w-[280px] flex-shrink-0 border-l border-border-subtle bg-bg-surface-1 flex flex-col overflow-hidden"
-    >
+    <>
+      <ResizeHandle
+        orientation="vertical"
+        ariaLabel="Resize download sidebar"
+        onMouseDown={onMouseDown}
+      />
+      <aside
+        aria-label="Download progress"
+        className="flex-shrink-0 border-l border-border-subtle bg-bg-surface-1 flex flex-col overflow-hidden"
+        style={containerStyle}
+      >
       {/* Header */}
       <div className="px-4 py-3 border-b border-border-subtle flex items-center gap-2 flex-shrink-0">
         <Download size={14} className="text-accent-400" aria-hidden="true" />
@@ -220,5 +241,6 @@ export function DownloadSidebar({ downloads, onCancel, onPause, onResume }: Down
       </div>
       )}
     </aside>
+    </>
   )
 }

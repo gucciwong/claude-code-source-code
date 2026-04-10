@@ -96,7 +96,9 @@ export function Chat() {
     const model = activeModel || 'llama3.1:8b'
     const mmModel = availableModels.find(m => m.id === model || m.name === model)
     const runtimeBackend = mmModel ? 'model-manager' : 'ollama'
-    const apiMessages = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }))
+    // Build apiMessages fresh from store state at send time to avoid stale closure
+    const currentMessages = useChatStore.getState().messages
+    const apiMessages = [...currentMessages, userMsg].map(m => ({ role: m.role, content: m.content }))
 
     // Route inference: model-manager GGUF models use the standalone llama.cpp endpoint;
     // everything else goes through Ollama's OpenAI-compatible API.
@@ -135,7 +137,7 @@ export function Chat() {
           // §3.2 completion_suggested: response has started rendering
           const lastMessage = useChatStore.getState().messages.at(-1)
           if (lastMessage && lastUserPromptRef.current && isTrainingServiceAvailable) {
-            void logTrainingCompletion({
+            const p = logTrainingCompletion({
               ...buildEnvelope('completion_suggested', model, 'ollama', 'local', correlationId),
               runtime_backend: runtimeBackend,
               prompt: lastUserPromptRef.current,
@@ -144,7 +146,8 @@ export function Chat() {
               language: 'text',
               completion_type: 'chat',
               accepted_boolean: undefined, // not yet known
-            }).catch((err) => { console.warn('Telemetry completion_suggested failed:', err) })
+            })
+            p.catch((err) => { console.warn('Telemetry completion_suggested failed:', err) })
           }
         }
         chunkCount++

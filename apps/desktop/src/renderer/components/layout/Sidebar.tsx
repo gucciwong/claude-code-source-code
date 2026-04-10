@@ -1,6 +1,7 @@
 import { LayoutDashboard, Cpu, MessageSquare, Zap, Network, Settings, Mic, BookOpen, Database, DatabaseZap, GitBranch, Workflow, Users, Shield, BarChart2, Smartphone, Search, Puzzle, GitPullRequest, FlaskConical, Code, Code2, Brain, Terminal, Activity, Microscope, Trophy } from 'lucide-react'
 import { useNavigationStore, NavSection } from '../../store/navigationStore'
 import { useVoiceStore } from '../../store/voiceStore'
+import { useUILayoutStore } from '../../store/uiLayoutStore'
 
 interface NavItem {
   id: NavSection
@@ -43,6 +44,7 @@ const bottomItems: NavItem[] = [
 export function Sidebar() {
   const { active, setActive } = useNavigationStore()
   const { isPanelOpen, setPanelOpen } = useVoiceStore()
+  const sidebarWidth = useUILayoutStore(s => s.sidebarWidth)
 
   const navButton = (item: NavItem) => {
     const isActive = active === item.id
@@ -66,7 +68,8 @@ export function Sidebar() {
 
   return (
     <aside
-      className="w-[220px] flex flex-col bg-bg-surface-1 border-r border-border-subtle flex-shrink-0"
+      className="flex flex-col bg-bg-surface-1 border-r border-border-subtle flex-shrink-0"
+      style={{ width: sidebarWidth }}
       aria-label="Main navigation"
     >
       {/* Logo area */}

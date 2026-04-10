@@ -30,8 +30,8 @@ try:
 except ImportError:
     HF_TOKEN = os.getenv("HF_TOKEN", "")
     HF_MIRROR = os.getenv("HF_MIRROR", "huggingface").lower()
-    HF_API_ENDPOINT = "https://hf-mirror.com/api" if HF_MIRROR == "mirror" else "https://huggingface.co/api"
-    HF_ENDPOINT = "https://hf-mirror.com" if HF_MIRROR == "mirror" else "https://huggingface.co"
+    HF_API_ENDPOINT = "https://hf-mirror.com/api" if HF_MIRROR in ("mirror", "hf-mirror") else "https://huggingface.co/api"
+    HF_ENDPOINT = "https://hf-mirror.com" if HF_MIRROR in ("mirror", "hf-mirror") else "https://huggingface.co"
     MODEL_CACHE_PATH = os.getenv("MODEL_CACHE_PATH", "./models")
     DEVICE = os.getenv("DEVICE", "cpu")
     MAX_CACHE_GB = int(os.getenv("MAX_CACHE_GB", "50"))
@@ -221,6 +221,8 @@ async def _track_download_progress(model_id: str, dest_dir: str, stop_event: asy
     """Periodically check download directory size and update download_queue progress."""
     import pathlib
     import time
+    import logging
+    logger = logging.getLogger(__name__)
     prev_downloaded_gb = 0.0
     prev_time = time.monotonic()
     while not stop_event.is_set():
@@ -246,12 +248,14 @@ async def _track_download_progress(model_id: str, dest_dir: str, stop_event: asy
                     speed_mbps = 0.0
                 prev_downloaded_gb = downloaded_gb
                 prev_time = now
-                if model_id in download_queue and download_queue[model_id]["status"] == "downloading":
+                # Update progress for both "downloading" and "pending" status
+                # so queued downloads show activity even before semaphore frees up
+                if model_id in download_queue and download_queue[model_id]["status"] in ("downloading", "pending"):
                     download_queue[model_id]["downloaded_gb"] = downloaded_gb
                     download_queue[model_id]["progress"] = progress
                     download_queue[model_id]["speed_mbps"] = speed_mbps
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"[model-manager] Progress tracking error for {model_id}: {e}")
         await asyncio.sleep(0.5)
 
 
@@ -273,6 +277,8 @@ async def _download_from_hf(model_id: str, gguf_file: Optional[str] = None):
     """Download model from HuggingFace Hub directly. Updates download_queue in-place."""
     import pathlib
     dest_dir = os.path.join(MODEL_CACHE_PATH, model_id.replace("/", "--"))
+    # Ensure destination directory exists before starting progress tracking
+    os.makedirs(dest_dir, exist_ok=True)
     stop_event = asyncio.Event()
     async with _download_semaphore:
         progress_task = asyncio.create_task(_track_download_progress(model_id, dest_dir, stop_event))
@@ -1083,6 +1089,10 @@ async def cancel_download(request: Request, model_id: str):
         task = download_queue[model_id].get("_task")
         if task and not task.done():
             task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
         del download_queue[model_id]
     return {"message": f"Download cancelled for {model_id}", "model_id": model_id}
 

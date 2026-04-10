@@ -4,6 +4,9 @@ import { Cpu, MessageSquare, Zap, Download } from 'lucide-react'
 import { useCommandPaletteStore } from '../store/commandPaletteStore'
 import { useModelsStore } from '../store/modelsStore'
 import { useNavigationStore } from '../store/navigationStore'
+import { useResize } from '../hooks/useResize'
+import { useUILayoutStore } from '../store/uiLayoutStore'
+import { ResizeHandle } from './common/ResizeHandle'
 
 const ACTIONS = [
   { id: 'chat', label: 'Open Chat', icon: MessageSquare, section: 'chat' as const },
@@ -17,6 +20,27 @@ export function CommandPalette() {
   const { setActive } = useNavigationStore()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const commandPaletteWidth = useUILayoutStore(s => s.commandPaletteWidth)
+  const commandPaletteHeight = useUILayoutStore(s => s.commandPaletteHeight)
+  const setCommandPaletteWidth = useUILayoutStore(s => s.setCommandPaletteWidth)
+  const setCommandPaletteHeight = useUILayoutStore(s => s.setCommandPaletteHeight)
+
+  const { onMouseDown: onWidthMouseDown, containerStyle: widthContainerStyle } = useResize({
+    value: commandPaletteWidth,
+    min: 400,
+    max: 800,
+    direction: 'horizontal',
+    onValueChange: setCommandPaletteWidth,
+  })
+
+  const { onMouseDown: onHeightMouseDown, containerStyle: heightContainerStyle } = useResize({
+    value: commandPaletteHeight,
+    min: 300,
+    max: 600,
+    direction: 'vertical',
+    onValueChange: setCommandPaletteHeight,
+  })
 
   // Global ⌘K / Ctrl+K listener — registered once here, not per-screen
   useEffect(() => {
@@ -47,8 +71,25 @@ export function CommandPalette() {
         <Dialog.Overlay className="fixed inset-0 bg-bg-base/60 z-50" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed top-[20%] left-1/2 -translate-x-1/2 w-[640px] max-h-[480px] bg-bg-deeper border border-border-subtle rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
+          className="fixed top-[20%] bg-bg-deeper border border-border-subtle rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
+          style={{
+            width: commandPaletteWidth,
+            maxHeight: commandPaletteHeight,
+            left: `calc(50% - ${commandPaletteWidth / 2}px)`,
+          }}
         >
+          {/* Horizontal resize handle at top for height resize */}
+          <ResizeHandle
+            orientation="horizontal"
+            ariaLabel="Resize command palette height"
+            onMouseDown={onHeightMouseDown}
+          />
+          {/* Vertical resize handle at left for width resize */}
+          <ResizeHandle
+            orientation="vertical"
+            ariaLabel="Resize command palette width"
+            onMouseDown={onWidthMouseDown}
+          />
           <Dialog.Title className="sr-only">Command Palette</Dialog.Title>
           <div className="px-4 py-3 border-b border-border-subtle">
             <input
