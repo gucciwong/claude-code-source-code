@@ -104,7 +104,7 @@ export function Chat() {
     // everything else goes through Ollama's OpenAI-compatible API.
     const tokenSource: AsyncIterable<string> = mmModel
       ? (() => {
-          const prompt = [...messages, userMsg]
+          const prompt = [...currentMessages, userMsg]
             .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
             .join('\n') + '\nAssistant:'
           return modelManagerAPI.streamInference(prompt, { model_id: model, signal: controller.signal })
