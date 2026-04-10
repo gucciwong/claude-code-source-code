@@ -25,13 +25,13 @@ def clean_redis():
     """Clean Redis before each test."""
     try:
         redis_client.client.flushdb()
-    except:
-        pass
+    except Exception as exc:
+        pytest.skip(f"Redis not available: {exc}")
     yield
     try:
         redis_client.client.flushdb()
-    except:
-        pass
+    except Exception:
+        pass  # best-effort cleanup after test
 
 
 @pytest.fixture

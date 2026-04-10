@@ -120,7 +120,7 @@ def _save_active_model_state(model_id: Optional[str]) -> None:
 @app.on_event("startup")
 async def _startup_sync_registry():
     """On service start, purge registry entries for models that were manually deleted."""
-    global active_model
+    global active_model, _download_queue_cleanup_task
     purged = registry.purge_missing()
     if purged:
         print(f"[model-manager] Startup: pruned {len(purged)} missing model(s) from registry: {purged}")
@@ -130,7 +130,22 @@ async def _startup_sync_registry():
     if saved and registry.get(saved):
         active_model = saved
         print(f"[model-manager] Restored active model: {active_model}")
+    # Start background cleanup for stale download queue entries
+    _download_queue_cleanup_task = asyncio.create_task(_cleanup_download_queue())
     print("[model-manager] Registry sync complete.")
+
+
+@app.on_event("shutdown")
+async def _shutdown_cleanup():
+    """Cancel background tasks on shutdown."""
+    global _download_queue_cleanup_task
+    if _download_queue_cleanup_task:
+        _download_queue_cleanup_task.cancel()
+        try:
+            await _download_queue_cleanup_task
+        except asyncio.CancelledError:
+            pass
+
 
 downloader = ModelDownloader(cache_dir=MODEL_CACHE_PATH, hf_token=HF_TOKEN or "")
 loader = ModelLoader(device=DEVICE)
@@ -144,6 +159,24 @@ download_queue: Dict[str, Any] = {}
 # Limit concurrent HuggingFace downloads so bandwidth is not split across all queued models.
 # The 3rd+ model waits in "pending" until a slot opens rather than stalling at 0 %.
 _download_semaphore = asyncio.Semaphore(2)
+# Track when entries reached a terminal state so cleanup can remove them after a delay.
+_download_queue_cleanup_task: asyncio.Task | None = None
+
+
+async def _cleanup_download_queue() -> None:
+    """Remove entries that reached a terminal state >60s ago to prevent unbounded growth."""
+    while True:
+        await asyncio.sleep(60)
+        now = time.time()
+        to_remove = [
+            mid for mid, entry in download_queue.items()
+            if entry.get("status") in ("done", "error")
+            and entry.get("finished_at", 0) < now - 60
+        ]
+        for mid in to_remove:
+            del download_queue[mid]
+        if to_remove:
+            print(f"[model-manager] Cleaned up {len(to_remove)} stale download entries")
 
 
 def _estimate_model_size_gb(model_id: str) -> float:
@@ -333,6 +366,7 @@ async def _download_from_hf(model_id: str, gguf_file: Optional[str] = None):
                     "total_size_gb": size_gb,
                     "downloaded_gb": size_gb,
                     "local_path": local,
+                    "finished_at": time.time(),
                 })
         except asyncio.CancelledError:
             stop_event.set()
@@ -348,6 +382,7 @@ async def _download_from_hf(model_id: str, gguf_file: Optional[str] = None):
             if model_id in download_queue:
                 download_queue[model_id]["status"] = "error"
                 download_queue[model_id]["error"] = str(e)
+                download_queue[model_id]["finished_at"] = time.time()
 
 
 @app.get("/api/v1/system/hardware")

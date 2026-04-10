@@ -192,19 +192,26 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     """Clean up on shutdown."""
-    global asr_model
-    
+    global asr_model, streaming_transcriber
+
     if asr_model:
         asr_model.unload()
         logger.info("ASR model unloaded")
-    
+
+    # streaming_transcriber holds its own WhisperASR instance that needs unloading
+    if streaming_transcriber and hasattr(streaming_transcriber, "asr_model"):
+        streaming_transcriber.asr_model.unload()
+        logger.info("Streaming transcriber ASR model unloaded")
+
+    # tts_model (gTTS) is stateless — no unload needed
+
     # Clean up Redis connection
     try:
         redis_client.close()
         logger.info("Redis connection closed")
     except Exception as exc:
         logger.warning(f"Error closing Redis connection: {exc}")
-    
+
     logger.info(f"Instance {INSTANCE_ID} shutting down")
 
 
