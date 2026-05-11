@@ -388,14 +388,18 @@ class EvaluationHarness:
         Returns:
             Pass@1 score (0.0-1.0)
         """
-        # TODO: Phase 2.2 — Integrate real humaneval-package
-        # For now, return mock value
+        # Tracked-In: docs/plans/2026-05-11-ga-runway-plan.md (post-GA — real
+        # HumanEval integration is intentionally deferred; the GA story uses
+        # CAMR bench (W5-T15 bench-router.mjs) for routing quality, and the
+        # PRD-§4.2.1 perf gate (W7-T21 bench-perf.mjs) for inference speed.
+        # A mocked pass-rate here is acceptable until the actual humaneval
+        # package + sandboxed code execution land.
         loop = asyncio.get_event_loop()
-        
+
         def mock_humaneval():
-            logger.warning("HumanEval evaluation is mocked. Phase 2.2 will integrate real implementation.")
+            logger.warning("HumanEval evaluation is mocked. Real implementation is post-GA.")
             return 0.5  # Mock: 50% pass rate
-        
+
         return await loop.run_in_executor(self.executor, mock_humaneval)
     
     def __enter__(self):

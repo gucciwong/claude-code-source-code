@@ -3,8 +3,8 @@ version: '3.8'
 services:
   voice-service:
     build:
-      context: ./services/voice-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/voice-service/Dockerfile
     container_name: sovereign-voice-service
     restart: always
     ports:
@@ -44,13 +44,18 @@ services:
       - sovereign-network
 
   model-manager:
+    # W3-T8b: build context is repo root so services/_shared can be COPYed
+    # into the image alongside the service. Dockerfile inside the service
+    # directory remains the build recipe.
     build:
-      context: ./services/model-manager
+      context: .
+      dockerfile: services/model-manager/Dockerfile
     restart: always
     ports:
       - "8002:8002"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173
+      - SOVEREIGN_LOCAL_TOKEN=${SOVEREIGN_LOCAL_TOKEN:-}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
       interval: 30s
@@ -60,13 +65,16 @@ services:
       - sovereign-network
 
   training-service:
+    # W3-T8b: repo-root context to include services/_shared in the image.
     build:
-      context: ./services/training-service
+      context: .
+      dockerfile: services/training-service/Dockerfile
     restart: always
     ports:
       - "8001:8001"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173
+      - SOVEREIGN_LOCAL_TOKEN=${SOVEREIGN_LOCAL_TOKEN:-}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
       interval: 30s
@@ -77,7 +85,8 @@ services:
 
   orchestration-service:
     build:
-      context: ./services/orchestration-service
+      context: .
+      dockerfile: services/orchestration-service/Dockerfile
     restart: always
     ports:
       - "8006:8006"
@@ -95,7 +104,8 @@ services:
 
   analytics-service:
     build:
-      context: ./services/analytics-service
+      context: .
+      dockerfile: services/analytics-service/Dockerfile
     restart: always
     ports:
       - "8009:8009"
@@ -111,7 +121,8 @@ services:
 
   award-service:
     build:
-      context: ./services/award-service
+      context: .
+      dockerfile: services/award-service/Dockerfile
     restart: always
     ports:
       - "8011:8011"
@@ -127,7 +138,8 @@ services:
 
   code-completion-service:
     build:
-      context: ./services/code-completion-service
+      context: .
+      dockerfile: services/code-completion-service/Dockerfile
     restart: always
     ports:
       - "8007:8007"
@@ -142,13 +154,16 @@ services:
       - sovereign-network
 
   enterprise-data-service:
+    # W3-T8b: repo-root context to include services/_shared in the image.
     build:
-      context: ./services/enterprise-data-service
+      context: .
+      dockerfile: services/enterprise-data-service/Dockerfile
     restart: always
     ports:
       - "8004:8004"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175
+      - SOVEREIGN_LOCAL_TOKEN=${SOVEREIGN_LOCAL_TOKEN:-}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/health')"]
       interval: 30s
@@ -158,13 +173,16 @@ services:
       - sovereign-network
 
   execution-trace-service:
+    # W3-T8b: repo-root context to include services/_shared in the image.
     build:
-      context: ./services/execution-trace-service
+      context: .
+      dockerfile: services/execution-trace-service/Dockerfile
     restart: always
     ports:
       - "8005:8005"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175
+      - SOVEREIGN_LOCAL_TOKEN=${SOVEREIGN_LOCAL_TOKEN:-}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8005/health')"]
       interval: 30s
@@ -175,7 +193,8 @@ services:
 
   federation-service:
     build:
-      context: ./services/federation-service
+      context: .
+      dockerfile: services/federation-service/Dockerfile
     restart: always
     ports:
       - "8008:8008"
@@ -191,7 +210,8 @@ services:
 
   knowledge-service:
     build:
-      context: ./services/knowledge-service
+      context: .
+      dockerfile: services/knowledge-service/Dockerfile
     restart: always
     ports:
       - "8003:8003"
@@ -210,7 +230,8 @@ services:
 
   memory-service:
     build:
-      context: ./services/memory-service
+      context: .
+      dockerfile: services/memory-service/Dockerfile
     restart: always
     ports:
       - "8010:8010"
@@ -226,7 +247,8 @@ services:
 
   messaging-bridge-service:
     build:
-      context: ./services/messaging-bridge-service
+      context: .
+      dockerfile: services/messaging-bridge-service/Dockerfile
     restart: always
     ports:
       - "8012:8012"
@@ -242,7 +264,8 @@ services:
 
   org-intelligence-service:
     build:
-      context: ./services/org-intelligence-service
+      context: .
+      dockerfile: services/org-intelligence-service/Dockerfile
     restart: always
     ports:
       - "8013:8013"
@@ -258,7 +281,8 @@ services:
 
   persona-council-service:
     build:
-      context: ./services/persona-council-service
+      context: .
+      dockerfile: services/persona-council-service/Dockerfile
     restart: always
     ports:
       - "8014:8014"
@@ -274,7 +298,8 @@ services:
 
   plugin-registry-service:
     build:
-      context: ./services/plugin-registry-service
+      context: .
+      dockerfile: services/plugin-registry-service/Dockerfile
     restart: always
     ports:
       - "8015:8015"
@@ -290,7 +315,8 @@ services:
 
   pr-review-service:
     build:
-      context: ./services/pr-review-service
+      context: .
+      dockerfile: services/pr-review-service/Dockerfile
     restart: always
     ports:
       - "8016:8016"
@@ -306,7 +332,8 @@ services:
 
   semantic-search-service:
     build:
-      context: ./services/semantic-search-service
+      context: .
+      dockerfile: services/semantic-search-service/Dockerfile
     restart: always
     ports:
       - "8017:8017"
@@ -338,10 +365,88 @@ services:
     volumes:
       - redis-data:/data
 
+  # ─── W6-T17 Observability stack ───────────────────────────────────────
+  # Prometheus scrapes every Sovereign service's /metrics (added by W6-T17).
+  # Grafana visualizes; Loki + promtail capture the JSON log lines emitted
+  # by `_shared.logging` (W6-T18). Tagged with profile=observability so
+  # `docker compose --profile observability up` opt-in starts them; default
+  # `docker compose up` doesn't burn resources for users who don't want them.
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: sovereign-prometheus
+    restart: unless-stopped
+    profiles: ["observability"]
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - sovereign-network
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: sovereign-grafana
+    restart: unless-stopped
+    profiles: ["observability"]
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+    networks:
+      - sovereign-network
+
+  loki:
+    image: grafana/loki:3.2.0
+    container_name: sovereign-loki
+    restart: unless-stopped
+    profiles: ["observability"]
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./infra/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    networks:
+      - sovereign-network
+
+  promtail:
+    image: grafana/promtail:3.2.0
+    container_name: sovereign-promtail
+    restart: unless-stopped
+    profiles: ["observability"]
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - ./infra/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - loki
+    networks:
+      - sovereign-network
+
 volumes:
   voice-cache:
   redis-data:
   knowledge-cache:
+  prometheus-data:
+  grafana-data:
+  loki-data:
 
 networks:
   sovereign-network:

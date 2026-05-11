@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { Sidebar } from './components/layout/Sidebar'
 import { StatusBar } from './components/layout/StatusBar'
@@ -10,10 +11,16 @@ import { useOllamaStatus } from './hooks/useOllamaStatus'
 import { useVoiceService } from './hooks/useVoiceService'
 import { useResize } from './hooks/useResize'
 import { useUILayoutStore } from './store/uiLayoutStore'
+import { useModelManagerStore } from './store/modelManagerStore'
 
 export default function App() {
   useOllamaStatus()
   useVoiceService()
+
+  // Load model-manager models on startup so Chat is ready
+  useEffect(() => {
+    useModelManagerStore.getState().loadModels()
+  }, [])
 
   const sidebarWidth = useUILayoutStore(s => s.sidebarWidth)
   const setSidebarWidth = useUILayoutStore(s => s.setSidebarWidth)

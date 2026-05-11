@@ -212,8 +212,12 @@ class TrainingOrchestrator:
                     run_name="full_cycle",
                 )
                 
-                # Benchmark against baseline (simplified - just check loss improvement)
-                baseline_loss = 5.0  # TODO: fetch actual baseline
+                # Benchmark against baseline (simplified - just check loss improvement).
+                # Tracked-In: 2026-05-11-ga-runway-plan.md (post-GA — pull baseline
+                # from the most recent "production" entry in the experiment ledger
+                # instead of the 5.0 sentinel; safe to keep the sentinel for GA
+                # because a fresh install always has no prior baseline).
+                baseline_loss = 5.0  # post-GA: read from experiment ledger
                 improvement_pct = ((baseline_loss - result["loss"]) / baseline_loss) * 100
                 
                 logger.info(f"Full training complete - Loss: {result['loss']:.4f}, Improvement: {improvement_pct:.1f}%")

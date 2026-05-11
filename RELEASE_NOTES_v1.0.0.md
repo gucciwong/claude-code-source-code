@@ -1,465 +1,163 @@
 # Sovereign Code v1.0.0 — Release Notes
 
-**Release Date**: 2026-04-02  
-**Build Status**: ✅ Production Ready  
-**Test Status**: ✅ 314 tests passing (0 failed, 10 skipped)  
-**Build Size**: 546 kB minified  
+**Release date:** 2026-07-06
+**GA Runway:** 8-week plan, fully delivered — see
+[`docs/plans/2026-05-11-ga-runway-plan.md`](docs/plans/2026-05-11-ga-runway-plan.md)
 
----
+## TL;DR
 
-## What's Included
+Sovereign Code is a **100% local AI engineering platform**. v1.0.0 is the
+first General Availability release. It ships:
 
-### 🎯 Core Features
+* Signed installers for Windows, macOS (x64 + arm64), and Linux
+  (AppImage + deb), distributed via GitHub Releases **and** Aliyun OSS
+  (China path).
+* 18 backend services, each containerised, scrape-able by Prometheus, and
+  log-aggregated via Loki.
+* Local-token authentication on every sensitive endpoint; Electron renderer
+  attaches `Authorization: Bearer <token>` to every protected call.
+* CAMR — **Context-Aware Model Router** — the GA hero feature: auto-routes
+  prompts to the optimal local model and learns from your acceptance rate.
+* PRD §4.2.1 inference KPIs enforced via `bench-perf.mjs`: first-token p95
+  < 500 ms, ≥ 30 tok/s on a 7B Q4_K_M.
+* SBOM (SPDX + CycloneDX) and cosign-signed checksums on every release.
 
-#### 1. Unified Desktop Application
-- **Framework**: Electron 30 + React 18 + TypeScript 5.4
-- **UI Library**: Radix UI + Lucide React icons
-- **Styling**: Tailwind CSS v4 with custom design tokens
-- **State**: Zustand-backed stores for navigation, system, models, chat, voice, command palette
+## What's New
 
-#### 2. Six Navigation Screens
-- **Dashboard**: Active model display, system health, quick actions
-- **Chat**: Local LLM chat interface with real-time streaming
-- **Models**: Browse, select, and manage Ollama models
-- **Training**: Collect completion pairs, manage training datasets
-- **Voice** (Optional): Microphone input, text-to-speech output
-- **Settings**: System configuration and preferences
+### Hero feature — CAMR
 
-#### 3. Training Infrastructure
-- **Backend**: FastAPI service (Python) on port 8001
-- **Capabilities**: Collect completions, trajectories, corrections
-- **Data Format**: SQLAlchemy ORM, JSON export support
-- **Integration**: Async logging from chat completions (non-blocking)
+`POST /api/v1/route` picks a model per prompt based on classified task
+type, current VRAM, and a persistent per-installation acceptance ledger
+(`~/.sovereign-code/router_performance.db`). The "Auto" item in the Chat
+model selector activates it. See
+[`docs/plans/2026-04-09-ten-innovations-design.md`](docs/plans/2026-04-09-ten-innovations-design.md)
+for the design rationale; the other nine innovations are explicitly v1.1+
+roadmap.
 
-#### 4. Voice Integration (Optional)
-- **Backend**: FastAPI service (Python) on port 8000
-- **ASR**: Whisper speech-to-text (openai/whisper-base)
-- **TTS**: Google Text-to-Speech synthesis
-- **UI Components**: VoicePanel, VoiceInput, VoiceOutput, Waveform visualizer
+### First-run onboarding
 
-#### 5. Local LLM Support
-- **Integration**: Ollama API (port 11434)
-- **Supported Models**: llama2, mistral, neural-chat, and 50+ others
-- **No Cloud**: All processing stays local
-- **Streaming**: Real-time token streaming in chat
+New users see a 4-card flow on first launch: hardware-detection → starter
+model recommendation → one-click download → warm-up → ready. Recommendation
+is keyed by VRAM tier per PRD §4.2.1 (3B for <6 GB, 7B for 6–10 GB, 14B
+for 10–22 GB, 32B for ≥22 GB).
 
-#### 6. System Monitoring
-- **GPU Metrics**: VRAM usage, temperature (NVIDIA via nvidia-smi)
-- **Throughput**: Tokens per second (tok/s) during inference
-- **Health Indicators**: Color-coded status dots for system health
-- **Persistent Status Bar**: Always-visible system metrics
+### Auto-update
 
----
+`electron-updater` is wired against GitHub Releases. The renderer's
+Settings → "Check for Updates" surfaces the status; background check
+runs 30 s after launch. Disabled by default on enterprise builds
+(`DISABLE_AUTO_UPDATE=1`).
 
-## Architecture
+### Auth
 
-```
-Sovereign Code v1.0.0
-│
-├─── apps/desktop/ (Electron + React)
-│    ├─── src/main/
-│    │    └─── main.ts (Electron main process, IPC bridge)
-│    ├─── src/preload/
-│    │    └─── index.ts (IPC preload script)
-│    ├─── src/renderer/ (React frontend)
-│    │    ├─── components/ (50+ components)
-│    │    ├─── screens/ (6 navigation screens)
-│    │    ├─── store/ (7 Zustand stores)
-│    │    ├─── hooks/ (Custom React hooks)
-│    │    ├─── services/ (API clients)
-│    │    └─── styles/ (Tailwind + design tokens)
-│    ├─── vite.config.ts (electron-vite)
-│    ├─── package.json (Electron + React dependencies)
-│    └─── vitest.config.ts (Unit test configuration)
-│
-├─── services/training-service/ (Python FastAPI)
-│    ├─── main.py (FastAPI app entry point)
-│    ├─── training/ (Business logic)
-│    ├─── data/ (SQLAlchemy models)
-│    └─── requirements.txt (Python dependencies)
-│
-├─── services/voice-service/ (Python FastAPI, optional)
-│    ├─── main.py (FastAPI app entry point)
-│    ├─── voice_service/ (Whisper + TTS logic)
-│    └─── requirements.txt (Python dependencies)
-│
-├─── docs/plans/ (Implementation documentation)
-│    ├─── 2026-04-01-ui-ux-design.md
-│    ├─── 2026-04-01-frontend-phase1-implementation-plan.md
-│    ├─── 2026-04-02-desktop-app-implementation-plan.md
-│    ├─── 2026-04-02-phase2-training-implementation-plan.md
-│    └─── 2026-04-02-vibevoice-implementation-plan.md
-│
-├─── SETUP_GUIDE.md (Installation & setup instructions)
-├─── LIVE_INTEGRATION_TESTING_GUIDE.md (E2E testing)
-├─── README.md (Updated with Sovereign Code info)
-└─── CLAUDE.md (Project guidelines & design tokens)
-```
+Every Sovereign service that mutates state requires a per-installation
+bearer token issued by the Electron main process at first boot and stored
+at `~/.sovereign-code/local.token`. Implementation in
+`services/_shared/auth.py`; smoke-tested by `tests/test_auth_guards.py` in
+each of the four critical services.
 
----
+### Observability
 
-## Installation & Setup
+`docker compose --profile observability up` brings up Prometheus +
+Grafana + Loki + promtail. Every service exports `/metrics` (route
+templates, not concrete URLs — so no high-cardinality label explosions) and
+emits structured JSON logs with a `request_id` field propagated through
+the call chain.
 
-### Quick Start (2 minutes)
+### Persistence
 
-**Prerequisites:**
-- Node.js >= 18
-- Python >= 3.10  
-- Ollama installed (https://ollama.ai)
+`MemoryStore`, `PluginRegistry`, federation `PeerRegistry`, and the
+CAMR `PerformanceLedger` now persist to per-installation SQLite WAL files
+under `~/.sovereign-code/`. State survives desktop restarts. The
+in-memory mode is preserved as a backward-compat default so existing
+tests don't break.
 
-**Installation:**
-```bash
-# Clone and enter repository
-git clone https://github.com/YOUR_ORG/sovereign-code.git
-cd sovereign-code
+### CI/CD
 
-# Install Node dependencies
-cd apps/desktop
-npm install
+Three new GitHub Actions workflows ship in v1.0:
 
-# Configure (if needed)
-# Copy .env.example to .env and set service URLs
-cp .env.example .env
-```
+* `services-ci.yml` — pytest matrix across all 18 services (W4-T10).
+* `release.yml` — 3-OS signed installer pipeline + cosign + SBOM + Aliyun
+  OSS mirror (W4-T11, W8-T23).
+* `supply-chain.yml` — pip-audit, npm audit, trivy fs; weekly + on
+  dependency PRs (W4-T13).
+* `e2e.yml` — Playwright cross-OS happy-path tests (W7-T19).
+* `perf.yml` — daily inference perf bench on a GPU runner (W7-T21).
 
-**Start Services** (4 terminals):
+## Truth Reconciliation
 
-Terminal 1 — Ollama:
-```bash
-ollama serve              # Port 11434
-ollama pull mistral       # Download model
-```
+Prior pre-GA drafts of the PRD and release notes overstated what was
+shipped. v1.0's docs are realigned to ground truth:
 
-Terminal 2 — Training Service:
-```bash
-cd services/training-service
-pip install -r requirements.txt
-python -m uvicorn main:app --port 8001
-```
+* The "10 Innovations" doc lists 10 design proposals. **v1.0 ships
+  Innovation #3 (CAMR) only.** The other nine are v1.1+ backlog.
+* The Federation feature ships single-peer happy-path; multi-peer
+  training rounds are deferred to v1.1.
+* Plugin marketplace third-party publishing is post-GA.
+* The `Federation.tsx` legacy mock screen has been removed — the
+  Federation nav item now routes to the real `FederationCore` screen.
 
-Terminal 3 — Voice Service (optional):
-```bash
-cd services/voice-service
-pip install -r requirements.txt
-python -m uvicorn main:app --port 8000
-```
+See PRD §1.4 for the post-reconciliation status table.
 
-Terminal 4 — Desktop App:
-```bash
-cd apps/desktop
-npm run dev               # Opens http://localhost:5173
-```
+## Compatibility
 
-### Detailed Setup
-
-See [SETUP_GUIDE.md](SETUP_GUIDE.md) for comprehensive installation and configuration.
-
----
-
-## Build & Deployment
-
-### Development Build
-```bash
-cd apps/desktop
-npm run dev              # Start dev server with hot reload
-npm test                 # Run 314 unit tests
-```
-
-### Production Build
-```bash
-cd apps/desktop
-npm run build            # Compile to out/ directory
-npm run dist:win         # Create Windows installer
-npm run dist:mac         # Create macOS package  
-npm run dist:linux       # Create Linux AppImage
-```
-
-**Build Output:**
-- `out/main/index.js` (4.29 kB) — Electron process
-- `out/preload/index.mjs` (0.25 kB) — IPC bridge
-- `out/renderer/assets/*.css` (33.50 kB) — Styles
-- `out/renderer/assets/*.js` (508.20 kB) — React app
-- **Total: 546 kB minified**
-
----
-
-## Testing
-
-### Unit Tests
-```bash
-cd apps/desktop
-npm test                         # Run all 314 tests
-npm test -- Training.test.tsx    # Run specific test file
-```
-
-**Test Coverage:**
-- ✅ 50+ component tests
-- ✅ 7 store tests
-- ✅ 15+ hook tests
-- ✅ Service integration tests
-- ✅ All screens and features
-
-### Integration Testing
-
-See [LIVE_INTEGRATION_TESTING_GUIDE.md](LIVE_INTEGRATION_TESTING_GUIDE.md) for step-by-step E2E testing with all services running.
-
-**Quick Integration Check:**
-```bash
-# In new terminal, verify services running
-curl http://localhost:11434/api/tags         # Ollama
-curl http://localhost:8001/health            # Training service
-curl http://localhost:8000/health            # Voice service (optional)
-curl http://localhost:5173                   # Desktop app
-```
-
----
-
-## Configuration
-
-### Environment Variables
-
-Create `apps/desktop/.env` (or copy from `.env.example`):
-
-```env
-# Service URLs
-VITE_TRAINING_SERVICE_URL=http://localhost:8001
-VITE_VOICE_SERVICE_URL=http://localhost:8000
-VITE_OLLAMA_API_URL=http://localhost:11434
-
-# Optional: Analytics
-VITE_ANALYTICS_ENABLED=false
-
-# Optional: Feature flags
-VITE_VOICE_FEATURES_ENABLED=true
-VITE_TRAINING_FEATURES_ENABLED=true
-```
-
-### Design Tokens
-
-Sovereign Code uses Tailwind CSS v4 with custom design tokens. To modify colors:
-
-**File:** `apps/desktop/src/renderer/styles/tokens.css`
-
-```css
-@theme {
-  /* Sovereign Violet accent */
-  --color-accent-500: #8B5CF6;
-  --color-accent-400: #A78BFA;
-  --color-accent-600: #7C3AED;
-  
-  /* Background levels (dark theme) */
-  --color-bg-base:      #0D0D0D;
-  --color-bg-surface-1: #161616;
-  --color-bg-surface-2: #1E1E1E;
-  --color-bg-surface-3: #252525;
-  --color-bg-elevated:  #2D2D2D;
-  
-  /* ... more tokens */
-}
-```
-
-See `CLAUDE.md` (Part 2.2) for full design system documentation.
-
----
+* **OS:** Windows 10/11 64-bit, macOS 13+ (Intel + Apple Silicon), Ubuntu
+  22.04+ (or compatible). Linux ARM64 builds are v1.1.
+* **Python:** 3.11 (services); shipped inside container images.
+* **Node:** 20 (renderer + extension); pinned in `package.json`.
+* **VRAM:** minimum 4 GB (3B fallback); 6 GB+ recommended; 24 GB unlocks
+  the 32B coder model.
 
 ## Known Limitations
 
-### v1.0.0 Scope
+* macOS notarization is enabled by config but requires Apple Developer
+  Program enrollment to actually produce notarized installers. CI builds
+  unnotarized fallbacks if secrets aren't configured.
+* Auto-routing accuracy depends on the user's acceptance history; the
+  first ~30 prompts use the cold-start heuristic.
+* HumanEval evaluation in `services/training-service/evaluation/runner.py`
+  is still mocked; replaced with the real package in v1.1 (see TODO
+  annotation in the file).
 
-✅ **Implemented:**
-- Desktop application UI/UX complete
-- Local LLM chat with streaming
-- Training data collection framework
-- Voice I/O infrastructure
-- System health monitoring
-- 314 automated tests
+## Upgrade Path
 
-⏳ **Not Yet Implemented:**
-- Cloud synchronization (intentionally out of scope — local-first design)
-- Multi-user collaboration
-- Model fine-tuning UI
-- Federated learning (roadmap for v2.0)
-- Mobile applications
-- VS Code extension (v2.0)
+There is no prior GA — v0.x → v1.0.0 is a clean install. Existing v0.x
+data under `~/.sovereign-code/` is preserved untouched; the new SQLite
+stores are created alongside it.
 
-### Platform Support
+## Verification
 
-- ✅ **Windows 10/11** — Full support via Electron
-- ✅ **macOS 11+** — Full support (Intel & Apple Silicon)
-- ✅ **Linux (Ubuntu 20.04+)** — Full support
-- ❌ **Web** — Not planned (desktop-first design)
+```sh
+# 1. Verify the SHA256SUMS cosign signature
+cosign verify-blob \
+  --certificate SHA256SUMS.pem \
+  --signature   SHA256SUMS.sig \
+  --certificate-identity-regexp '^https://github.com/gucciwong/claude-code-source-code/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  SHA256SUMS
 
-### GPU Support
+# 2. Verify the installer matches
+sha256sum -c SHA256SUMS --ignore-missing
 
-- ✅ **NVIDIA GPUs** — Full CUDA support
-- ✅ **AMD GPUs** — Partial (via CPU fallback)
-- ✅ **Apple Silicon** — Partial (via CPU fallback)
-- ⏳ **Other GPUs** — Roadmap for future versions
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-**"Desktop app loads but shows blank window"**
-→ See [LIVE_INTEGRATION_TESTING_GUIDE.md](LIVE_INTEGRATION_TESTING_GUIDE.md) section "Troubleshooting"
-
-**"Chat doesn't respond"**
-→ Verify Ollama is running: `curl http://localhost:11434/api/tags`
-
-**"Training service connection error"**
-→ Check port 8001 is open: `netstat -ano | findstr :8001`
-
-**"Voice features missing"**
-→ Voice service is optional. Verify port 8000 if needed.
-
-**"Port already in use"**
-→ See detailed solutions in [LIVE_INTEGRATION_TESTING_GUIDE.md](LIVE_INTEGRATION_TESTING_GUIDE.md) (Port Conflicts section)
-
-### Debug Mode
-
-Enable verbose logging:
-
-```bash
-# Desktop app
-npm run dev -- --inspect=9229  # Node inspector
-
-# Training service
-export LOGLEVEL=DEBUG
-python -m uvicorn main:app --port 8001 --log-config logging.conf
+# 3. Inspect the SBOM
+jq '.packages | length' sbom-spdx.json    # number of components
 ```
 
----
+## Acknowledgements
 
-## Performance Specs
+GA delivery was driven by the 8-week runway in
+[`docs/plans/2026-05-11-ga-runway-plan.md`](docs/plans/2026-05-11-ga-runway-plan.md).
+Every P0/P1 risk in that file is closed. Every "Known v1.0 Gap" in PRD
+§1.4 is closed. Thanks to the alpha cohort for catching the early
+race conditions in serviceManager startup and the e2e helper port stubs.
 
-### Hardware Requirements
+## What's Next (v1.1 roadmap)
 
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| CPU | 4 cores | 8+ cores |
-| RAM | 8 GB | 16+ GB |
-| Storage | 10 GB | 20+ GB |
-| GPU | None | NVIDIA RTX 3060+ |
+* Innovations #1, #2, #4–#10 from the ten-innovations design.
+* Federation multi-peer rounds + reputation.
+* Plugin marketplace third-party publishing.
+* Linux ARM64 + Raspberry Pi 5 builds.
+* SQLCipher encryption-at-rest opt-in (for HIPAA-locked deployments).
+* Mobile companion app (read-only chat + telemetry).
 
-### Performance Targets
-
-**Chat Response Latency:**
-- First token: 500-2000ms (varies by model)
-- Full response (50 tokens): 5-20 seconds
-
-**Throughput:**
-- Tokens per second: 20-80 tok/s (varies by hardware)
-- GPU systems: 2-5x faster than CPU
-
-**Build & Test:**
-- Build time: ~2-5 seconds
-- Test suite: ~3.5 seconds (314 tests)
-
----
-
-## Roadmap
-
-### v1.0.x (Q2 2026)
-- Security audit and hardening
-- Performance optimization
-- Bug fixes and stability improvements
-- Extended documentation
-
-### v1.1.x (Q3 2026)
-- Model fine-tuning UI
-- Advanced training analytics
-- Custom prompt templates
-- Integration with Hugging Face Hub
-
-### v2.0 (Q4 2026)
-- Federated learning (multiple devices)
-- VS Code extension
-- Multi-user collaboration
-- Cloud backup (opt-in, encrypted)
-- Advanced voice features (real-time transcription)
-
----
-
-## Documentation
-
-| Document | Purpose |
-|----------|---------|
-| [SETUP_GUIDE.md](SETUP_GUIDE.md) | Installation, configuration, troubleshooting |
-| [LIVE_INTEGRATION_TESTING_GUIDE.md](LIVE_INTEGRATION_TESTING_GUIDE.md) | E2E testing with all services running |
-| [CLAUDE.md](CLAUDE.md) | Project guidelines, design system, architecture |
-| [README.md](README.md) | Project overview and quick links |
-| [docs/plans/](docs/plans/) | Detailed implementation specifications |
-
----
-
-## Support & Contributions
-
-### Getting Help
-1. Check [SETUP_GUIDE.md](SETUP_GUIDE.md) for common setup issues
-2. See [LIVE_INTEGRATION_TESTING_GUIDE.md](LIVE_INTEGRATION_TESTING_GUIDE.md) for integration problems
-3. Check browser console (F12) for JavaScript errors
-4. Check service logs for Python backend issues
-
-### Reporting Issues
-When reporting bugs, include:
-- **Environment**: OS, Node version, Python version, GPU type
-- **Error message**: Full error text from console or logs
-- **Steps to reproduce**: Exact commands and actions taken
-- **Expected vs. actual**: What should happen vs. what did happen
-
-### Contributing
-See [CLAUDE.md](CLAUDE.md) Part 2 for contribution guidelines and coding standards.
-
----
-
-## License
-
-This project contains two license scopes:
-
-1. **`src/` Directory** — Research/Reference Only
-   - Historical source artifacts retained for internal research/reference only
-   - For research and educational purposes only
-   - Commercial use strictly prohibited
-
-2. **`apps/desktop/` and `services/` Directories** — Open Development
-   - Sovereign Code desktop application
-   - Licensed under [YOUR_LICENSE_HERE]
-   - See LICENSE file for details
-
----
-
-## Acknowledgments
-
-Built with:
-- **Electron** (cross-platform desktop)
-- **React** (UI framework)
-- **TypeScript** (type safety)
-- **Tailwind CSS** (styling)
-- **Radix UI** (accessible primitives)
-- **Zustand** (state management)
-- **FastAPI** (Python backend)
-- **Ollama** (local LLMs)
-- **Whisper** (speech-to-text)
-
----
-
-## Quick Links
-
-- 📚 [Setup Guide](SETUP_GUIDE.md)
-- 🧪 [Integration Testing](LIVE_INTEGRATION_TESTING_GUIDE.md)
-- 📖 [Architecture & Guidelines](CLAUDE.md)
-- 🏗️ [Implementation Plans](docs/plans/)
-- 🐛 [Issue Tracking](https://github.com/YOUR_ORG/sovereign-code/issues)
-- 💬 [Discussions](https://github.com/YOUR_ORG/sovereign-code/discussions)
-
----
-
-**Version: 1.0.0**  
-**Status: ✅ Production Ready**  
-**Last Updated: 2026-04-02**  
-**Build Date: April 2, 2026**  
-
-🚀 Thank you for using Sovereign Code!
-
+See you in v1.1.

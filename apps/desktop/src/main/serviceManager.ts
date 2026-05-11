@@ -1,5 +1,5 @@
 import { app } from 'electron'
-import { spawn, ChildProcess } from 'child_process'
+import { spawn, ChildProcess, execSync } from 'child_process'
 import { join, resolve } from 'path'
 import { existsSync } from 'fs'
 import * as net from 'net'
@@ -35,6 +35,22 @@ function resolveRepoRoot(): string {
   return process.resourcesPath
 }
 
+function findPythonInPath(): string | null {
+  try {
+    // Use 'where' on Windows to find python in PATH
+    const out = execSync('where python', { windowsHide: true }).toString().trim()
+    // 'where' can return multiple paths; take the first one that exists and isn't a WindowsApps stub
+    const paths = out.split('\n').map((p: string) => p.trim())
+    for (const p of paths) {
+      if (p.includes('WindowsApps')) continue // skip WindowsApps stubs
+      if (existsSync(p)) return p
+    }
+    return paths[0] || null // fallback to first result if none pass the WindowsApps check
+  } catch {
+    return null
+  }
+}
+
 function resolvePython(root: string): string {
   const candidates = [
     join(root, '.venv', 'Scripts', 'python.exe'), // Windows venv
@@ -44,7 +60,10 @@ function resolvePython(root: string): string {
   for (const p of candidates) {
     if (existsSync(p)) return p
   }
-  return 'python3' // system fallback
+  // No venv found — try to find python in PATH, avoiding WindowsApps stubs
+  const pathPython = findPythonInPath()
+  if (pathPython) return pathPython
+  return 'python3' // final fallback
 }
 
 function isPortInUse(port: number): Promise<boolean> {
@@ -59,6 +78,15 @@ function isPortInUse(port: number): Promise<boolean> {
 const runningProcesses: ChildProcess[] = []
 
 export async function startAllServices(): Promise<void> {
+  // W7-T19: Playwright e2e launches the packaged app to test the renderer
+  // only — spawning 18 Python services on every test would be heavy and
+  // unreliable in CI. The e2e workflow sets this flag and stubs the
+  // relevant fetches via `page.route()` in apps/desktop/e2e/helpers.ts.
+  if (process.env.SOVEREIGN_E2E_SKIP_SERVICES === '1') {
+    console.log('[ServiceManager] SOVEREIGN_E2E_SKIP_SERVICES=1 — skipping service spawn (e2e mode)')
+    return
+  }
+
   const root = resolveRepoRoot()
   const python = resolvePython(root)
 

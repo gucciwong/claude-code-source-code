@@ -1,0 +1,173 @@
+# W4-T13 — Supply-chain vulnerability scan.
+#
+# Runs three scanners in parallel:
+#   1. pip-audit  — Python dep vulnerabilities for each service
+#   2. npm audit  — JS dep vulnerabilities for apps/desktop + apps/vscode-extension
+#   3. trivy fs   — repo-wide filesystem scan for HIGH/CRITICAL CVEs and secrets
+#
+# Posture (per GA Runway Plan):
+#   - W4 phase: advisory (`continue-on-error: true`) so a noisy CVE doesn't
+#     block infrastructure landings while the team triages.
+#   - W8 phase: gates are flipped to blocking (remove the continue-on-error
+#     lines AND set fail-on for pip-audit/trivy). The W8-T24 ticket owns this.
+#
+# Artifacts (uploaded for every run):
+#   - pip-audit-report.json  (one per service in matrix)
+#   - npm-audit-{desktop,extension}.json
+#   - trivy-report.sarif      (also uploaded to GitHub code-scanning)
+
+name: Supply Chain
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'   # weekly Mon 03:00 UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'services/**/requirements.txt'
+      - 'apps/desktop/package*.json'
+      - 'apps/vscode-extension/package*.json'
+      - 'package*.json'
+      - '.github/workflows/supply-chain.yml'
+
+permissions:
+  contents: read
+  security-events: write   # for trivy SARIF upload
+
+concurrency:
+  group: supply-chain-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pip-audit:
+    name: pip-audit ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - analytics-service
+          - award-service
+          - code-completion-service
+          - enterprise-data-service
+          - execution-trace-service
+          - federation-service
+          - knowledge-service
+          - memory-service
+          - messaging-bridge-service
+          - model-manager
+          - orchestration-service
+          - org-intelligence-service
+          - persona-council-service
+          - plugin-registry-service
+          - pr-review-service
+          - semantic-search-service
+          - training-service
+          - voice-service
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'pip-audit>=2.7'
+
+      - name: Audit requirements.txt
+        id: audit
+        continue-on-error: true   # advisory in W4; W8-T24 flips this off
+        working-directory: services/${{ matrix.service }}
+        run: |
+          pip-audit \
+            --requirement requirements.txt \
+            --format json \
+            --output ../../pip-audit-${{ matrix.service }}.json \
+            --strict || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-${{ matrix.service }}
+          path: pip-audit-${{ matrix.service }}.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  npm-audit:
+    name: npm audit ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - apps/desktop
+          - apps/vscode-extension
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install deps (no scripts — safer for audit)
+        working-directory: ${{ matrix.app }}
+        run: npm ci --ignore-scripts
+
+      - name: Run npm audit (production)
+        id: audit
+        continue-on-error: true   # advisory in W4
+        working-directory: ${{ matrix.app }}
+        run: |
+          # `npm audit` exits non-zero on findings; we capture JSON either way.
+          npm audit --omit=dev --audit-level=high --json \
+            > ../../npm-audit-$(basename "${{ matrix.app }}").json || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-${{ matrix.app == 'apps/desktop' && 'desktop' || 'extension' }}
+          path: npm-audit-*.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  trivy:
+    name: Trivy filesystem scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.24.0
+        continue-on-error: true   # advisory in W4
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          format: sarif
+          output: trivy-report.sarif
+          exit-code: '0'
+          skip-dirs: 'node_modules,.venv,.venv-1,.venv-2,.venv-3,services/training-service/venv,services/training-service/venv_test'
+
+      - name: Upload SARIF to GitHub code-scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-report.sarif
+          category: trivy-fs
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.sarif
+          retention-days: 30

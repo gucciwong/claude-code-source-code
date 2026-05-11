@@ -4,7 +4,23 @@ coverage/
 .playwright-mcp/
 *.log
 .worktrees/
+.worktrees.bak/
 **/__pycache__/
 *.pyc
 apps/desktop/out/
+apps/desktop/test-results/
+apps/desktop/playwright-report/
 *.db
+
+# Model weights (multi-GB binaries downloaded at runtime)
+services/model-manager/models/
+
+# IDE / personal
+.claude/settings.local.json
+
+# Agent diagnostic / probe files (W6-W8 push session)
+.canary-*.txt
+.dc-*.ps1
+.dc-*.log
+.dc-*.txt
+.ga-*.log

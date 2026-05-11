@@ -17,6 +17,8 @@ import { useModelManagerStore } from '../store/modelManagerStore'
 import { modelManagerAPI } from '../services/modelManagerAPI'
 import { useModelsStore } from '../store/modelsStore'
 import { formatModelSizeFromBytes } from '../utils/modelSize'
+import { useRouterStore } from '../store/routerStore'
+import { feedback as sendRouterFeedback } from '../services/routerClient'
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
@@ -58,6 +60,12 @@ export function Chat() {
   const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
   const availableModels = useModelManagerStore(s => s.models)
   const ollamaModels = useModelsStore(s => s.installed)
+  // W5-T15: CAMR Auto mode. When `routerMode === 'auto'`, each send first
+  // asks the router which model to use for this prompt, then proceeds.
+  const routerMode = useRouterStore(s => s.mode)
+  const setRouterMode = useRouterStore(s => s.setMode)
+  const routerLastChoice = useRouterStore(s => s.lastChoice)
+  const decideRouter = useRouterStore(s => s.decide)
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastUserPromptRef = useRef<string>('')
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -93,7 +101,28 @@ export function Chat() {
     const controller = new AbortController()
     abortControllerRef.current = controller
 
-    const model = activeModel || 'llama3.1:8b'
+    // W5-T15: in Auto mode, ask CAMR which model to use for this prompt.
+    // The list of candidate ids is whatever the user currently has cached
+    // (model-manager + Ollama installations). VRAM is the system reported.
+    let chosenModel: string | null = activeModel || null
+    if (routerMode === 'auto') {
+      const candidateIds = [
+        ...availableModels.map(m => m.id),
+        ...ollamaModels.map(m => m.name),
+      ]
+      const vramTotal = useSystemStore.getState().vramTotal ?? undefined
+      const lastAssistant = [...useChatStore.getState().messages]
+        .reverse()
+        .find(m => m.role === 'assistant')
+      const decided = await decideRouter({
+        prompt: text,
+        context: lastAssistant?.content ?? '',
+        available_models: candidateIds.length > 0 ? candidateIds : undefined,
+        available_vram_gb: vramTotal,
+      })
+      if (decided) chosenModel = decided
+    }
+    const model = chosenModel || 'llama3.1:8b'
     const mmModel = availableModels.find(m => m.id === model || m.name === model)
     const runtimeBackend = mmModel ? 'model-manager' : 'ollama'
     // Build apiMessages fresh from store state at send time to avoid stale closure
@@ -186,6 +215,17 @@ export function Chat() {
           console.error('Failed to log training completion:', err)
         }
       }
+
+      // W5-T15: feed acceptance + latency back to CAMR so the router learns.
+      // Fire-and-forget; never block the chat UX on this.
+      if (routerLastChoice && routerLastChoice.model_id === model) {
+        void sendRouterFeedback({
+          model_id: model,
+          task_type: routerLastChoice.task_type,
+          accepted: true,
+          latency_ms: Math.round(totalMs),
+        })
+      }
     } catch (err) {
       // User-initiated abort is not a failure — skip telemetry
       if (!(err instanceof DOMException && err.name === 'AbortError')) {
@@ -226,15 +266,24 @@ export function Chat() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-border-default bg-bg-surface-1 shrink-0">
         <div className="flex items-center gap-2">
-          {/* Model Picker */}
+          {/* W5-T15: Model Picker with CAMR Auto mode.
+              The sentinel value `__auto__` toggles the router store; any
+              real model id selects that model and reverts to manual mode. */}
           <select
-            value={activeModel || ''}
+            value={routerMode === 'auto' ? '__auto__' : activeModel || ''}
             onChange={e => {
-              if (e.target.value) useSystemStore.setState({ activeModel: e.target.value })
+              const next = e.target.value
+              if (next === '__auto__') {
+                setRouterMode('auto')
+              } else if (next) {
+                setRouterMode('manual')
+                useSystemStore.setState({ activeModel: next })
+              }
             }}
             className="bg-bg-surface-2 border border-border-default rounded px-2 py-1 text-sm font-semibold text-text-primary cursor-pointer max-w-[200px]"
             aria-label="Select model"
           >
+            <option value="__auto__">Auto (CAMR — pick best model)</option>
             {!activeModel && ollamaModels.length === 0 && availableModels.length === 0 && (
               <option value="">No model loaded</option>
             )}
@@ -248,6 +297,15 @@ export function Chat() {
               <option value={activeModel}>{activeModel}</option>
             )}
           </select>
+          {routerMode === 'auto' && routerLastChoice && (
+            <span
+              className="text-[11px] text-text-muted/80 truncate max-w-[260px]"
+              title={routerLastChoice.reason}
+              data-testid="camr-reason"
+            >
+              {routerLastChoice.model_id} · {routerLastChoice.reason}
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <button

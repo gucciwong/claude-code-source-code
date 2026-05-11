@@ -1,0 +1,98 @@
+# W7-T21 — Inference performance bench gate.
+#
+# Runs `scripts/bench-perf.mjs` against a self-hosted runner with a GPU. We
+# label the runner `gpu-bench` and require it to have the reference model
+# (`qwen2.5-coder-7b` Q4_K_M) cached. The job is *advisory* through W7
+# (`continue-on-error: true`) and flipped to blocking in W8 — the runway
+# plan's W7-T21 acceptance criteria.
+#
+# Why a separate workflow?
+#   - The bench needs a GPU runner; the regular ubuntu-latest CI doesn't
+#     have one. Splitting keeps the matrix CI fast and the perf job
+#     scheduled-only by default.
+#   - The summary JSON is uploaded as an artifact so trends can be
+#     plotted by `scripts/sovereign-week1-trend.mjs`.
+
+name: Performance Bench
+
+on:
+  schedule:
+    # Daily at 02:00 UTC — captures perf trend independent of merge cadence.
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Model id to bench (default qwen2.5-coder-7b)'
+        required: false
+        type: string
+      runs:
+        description: 'Runs per prompt (default 5)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write   # so we can post results as a PR comment on dispatch
+
+concurrency:
+  group: perf-bench
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    name: Inference Bench
+    # `gpu-bench` is a self-hosted runner label; if not configured the job
+    # is skipped automatically (matches the W7 advisory posture).
+    runs-on: [self-hosted, gpu-bench]
+    timeout-minutes: 30
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Wait for model-manager
+        run: |
+          # The self-hosted runner is expected to keep model-manager running
+          # behind the proxy. We probe /health and bail early if it's down.
+          for i in {1..30}; do
+            if curl -sf http://localhost:8002/health >/dev/null; then
+              echo "model-manager up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::model-manager not reachable on :8002"
+          exit 2
+
+      - name: Run perf bench
+        id: bench
+        env:
+          MODEL: ${{ inputs.model || 'qwen2.5-coder-7b' }}
+          MODEL_MANAGER: http://localhost:8002
+        run: |
+          node scripts/bench-perf.mjs --n ${{ inputs.runs || '5' }} \
+            | tee perf-output.txt
+          # Extract the trailing JSON line for the artifact + PR comment.
+          tail -n 1 perf-output.txt | tee perf-summary.json
+
+      - name: Upload perf artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-summary-${{ github.run_id }}
+          path: |
+            perf-output.txt
+            perf-summary.json
+          retention-days: 90
+
+      - name: Post PR comment (if triggered from a PR)
+        if: github.event.pull_request != ''
+        run: |
+          BODY="### W7-T21 Perf Bench\n\n\`\`\`json\n$(cat perf-summary.json)\n\`\`\`"
+          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
