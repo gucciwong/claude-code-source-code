@@ -99,12 +99,16 @@ jobs:
             apps/desktop/package-lock.json
 
       - name: Install workspace deps
-        # See ci.yml — `npm ci` fails on cross-platform rollup optional deps.
-        run: npm install --no-audit --no-fund
+        # See ci.yml — npm/cli#4828 lockfile platform issue.
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Install desktop deps
         working-directory: apps/desktop
-        run: npm install --no-audit --no-fund
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Run desktop tests (sanity)
         working-directory: apps/desktop

@@ -147,7 +147,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.24.0
+        # Pin to @master because aquasecurity/trivy-action tagged releases
+        # (0.24.0 etc) are not guaranteed to be preserved long-term.
+        uses: aquasecurity/trivy-action@master
         continue-on-error: true   # advisory in W4
         with:
           scan-type: fs

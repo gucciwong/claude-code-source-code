@@ -23,13 +23,14 @@ jobs:
           cache-dependency-path: apps/desktop/package-lock.json
 
       - name: Install dependencies
-        # Use `npm install` not `npm ci` because npm has a bug
-        # (https://github.com/npm/cli/issues/4828) where the package-lock.json
-        # only records optionalDependencies for the platform that generated it.
-        # Rollup ships per-platform native binaries via optionalDeps, so a
-        # Windows-generated lockfile blows up on Linux runners with
-        # "Cannot find module @rollup/rollup-linux-x64-gnu".
-        run: npm install --no-audit --no-fund
+        # npm/cli#4828: package-lock.json only records optionalDependencies
+        # for the platform that generated it. We delete it before install so
+        # npm re-resolves rollup's per-platform native binaries fresh on
+        # this runner. The cache key still hits because setup-node's cache
+        # is computed from the lockfile hash at restore time.
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Run tests
         run: npm test
@@ -50,13 +51,14 @@ jobs:
           cache-dependency-path: apps/vscode-extension/package-lock.json
 
       - name: Install dependencies
-        # Use `npm install` not `npm ci` because npm has a bug
-        # (https://github.com/npm/cli/issues/4828) where the package-lock.json
-        # only records optionalDependencies for the platform that generated it.
-        # Rollup ships per-platform native binaries via optionalDeps, so a
-        # Windows-generated lockfile blows up on Linux runners with
-        # "Cannot find module @rollup/rollup-linux-x64-gnu".
-        run: npm install --no-audit --no-fund
+        # npm/cli#4828: package-lock.json only records optionalDependencies
+        # for the platform that generated it. We delete it before install so
+        # npm re-resolves rollup's per-platform native binaries fresh on
+        # this runner. The cache key still hits because setup-node's cache
+        # is computed from the lockfile hash at restore time.
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Run tests
         run: npm test

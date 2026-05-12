@@ -26,8 +26,11 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        # See ci.yml — `npm ci` fails on cross-platform rollup optional deps.
-        run: npm install --no-audit --no-fund
+        # See ci.yml — npm/cli#4828 means we have to drop the lockfile so
+        # rollup native binaries get re-resolved per-platform.
+        run: |
+          rm -f apps/desktop/package-lock.json
+          npm install --prefix apps/desktop --no-audit --no-fund
 
       - name: Build desktop app
         run: cd apps/desktop && npm run build

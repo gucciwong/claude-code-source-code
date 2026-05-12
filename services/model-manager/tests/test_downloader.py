@@ -5,7 +5,25 @@ from unittest.mock import patch, MagicMock
 import pytest
 
 from engine.downloader import ModelDownloader
-from huggingface_hub.hf_api import RepoFile, RepoFolder
+
+# RepoFolder was added in huggingface_hub 0.20; older CI environments may
+# have an older pinned version. Fall back gracefully so the import error
+# doesn't cancel the whole test module — the affected tests skip below.
+try:
+    from huggingface_hub.hf_api import RepoFile, RepoFolder  # type: ignore
+    _HAS_REPO_FOLDER = True
+except ImportError:
+    try:
+        from huggingface_hub import RepoFile  # type: ignore
+    except ImportError:
+        RepoFile = None  # type: ignore[assignment]
+    RepoFolder = None  # type: ignore[assignment]
+    _HAS_REPO_FOLDER = False
+
+pytestmark = pytest.mark.skipif(
+    not _HAS_REPO_FOLDER,
+    reason="huggingface_hub installed in CI lacks RepoFolder (>=0.20 required)",
+)
 
 
 @pytest.fixture
