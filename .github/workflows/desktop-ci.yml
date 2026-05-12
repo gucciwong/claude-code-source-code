@@ -26,7 +26,8 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # See ci.yml — `npm ci` fails on cross-platform rollup optional deps.
+        run: npm install --no-audit --no-fund
 
       - name: Build desktop app
         run: cd apps/desktop && npm run build

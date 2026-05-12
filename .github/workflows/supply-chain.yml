@@ -117,8 +117,9 @@ jobs:
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
       - name: Install deps (no scripts — safer for audit)
+        # See ci.yml — `npm ci` fails on cross-platform rollup optional deps.
         working-directory: ${{ matrix.app }}
-        run: npm ci --ignore-scripts
+        run: npm install --ignore-scripts --no-audit --no-fund
 
       - name: Run npm audit (production)
         id: audit
