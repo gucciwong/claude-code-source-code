@@ -37,7 +37,10 @@ export async function launchApp(): Promise<{ app: ElectronApplication; page: Pag
     },
     timeout: 60_000,
   })
-  const page = await app.firstWindow()
+  // firstWindow() has its own default timeout (30s) independent of
+  // electron.launch's timeout. Pass it explicitly so slow cold-start
+  // on hosted CI runners has 60s to surface the first BrowserWindow.
+  const page = await app.firstWindow({ timeout: 60_000 })
   await page.waitForLoadState('domcontentloaded')
   return { app, page }
 }
