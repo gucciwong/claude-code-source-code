@@ -99,16 +99,18 @@ jobs:
             apps/desktop/package-lock.json
 
       - name: Install workspace deps
-        # See ci.yml — npm/cli#4828 lockfile platform issue.
+        # See ci.yml — rm both lockfile + node_modules + force optional deps.
         run: |
           rm -f package-lock.json
-          npm install --no-audit --no-fund
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
 
       - name: Install desktop deps
         working-directory: apps/desktop
         run: |
           rm -f package-lock.json
-          npm install --no-audit --no-fund
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
 
       - name: Run desktop tests (sanity)
         working-directory: apps/desktop
