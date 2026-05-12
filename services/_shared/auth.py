@@ -31,8 +31,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import HTTPException, Request, status
 
 logger = logging.getLogger(__name__)
 
@@ -43,10 +42,6 @@ ENV_TOKEN_FILE = "SOVEREIGN_LOCAL_TOKEN_FILE"
 ENV_DISABLED = "SOVEREIGN_LOCAL_AUTH_DISABLED"
 
 DEFAULT_TOKEN_PATH = Path.home() / ".sovereign-code" / "local.token"
-
-# `auto_error=False` lets us return a clearer 401 message ourselves instead of
-# the default opaque "Not authenticated".
-_bearer_scheme = HTTPBearer(auto_error=False)
 
 # Internal flag so the "dev mode" warning is logged once per process, not once
 # per request.
@@ -113,11 +108,16 @@ def reset_dev_warning_for_tests() -> None:
     _dev_warning_emitted = False
 
 
-async def verify_local_token(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_scheme),
-) -> str:
+async def verify_local_token(request: Request) -> str:
     """FastAPI dependency: validate `Authorization: Bearer <token>` against the
     locally configured token.
+
+    We read the raw `Authorization` header (rather than going through
+    FastAPI's `HTTPBearer` security scheme) so we can distinguish three
+    failure modes:
+      - no header at all                  → "Missing Authorization header"
+      - non-Bearer scheme (Basic, Digest) → "Unsupported auth scheme; use Bearer"
+      - Bearer with wrong value           → "Invalid local token"
 
     Returns the validated token string on success. Raises `HTTPException(401)`
     on any failure unless the dev-mode bypass is active, in which case it
@@ -127,17 +127,29 @@ async def verify_local_token(
         _emit_dev_warning_once()
         return ""
 
-    if credentials is None or not credentials.scheme:
+    auth_header = (request.headers.get("authorization") or "").strip()
+    if not auth_header:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Missing Authorization header",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if credentials.scheme.lower() != "bearer":
+    # Split on the first run of whitespace; "Bearer  abc" still works.
+    parts = auth_header.split(None, 1)
+    scheme = parts[0]
+    if scheme.lower() != "bearer":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unsupported auth scheme; use Bearer",
+            detail=f"Unsupported auth scheme; use Bearer (got {scheme})",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    presented = (parts[1] if len(parts) > 1 else "").strip()
+    if not presented:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing Bearer token value",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -151,8 +163,7 @@ async def verify_local_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    presented = (credentials.credentials or "").strip()
-    # Use constant-time compare to avoid leaking token length / prefix via timing.
+    # Constant-time compare to avoid leaking token length / prefix via timing.
     if not hmac.compare_digest(presented, expected.value):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
