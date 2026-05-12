@@ -8,14 +8,19 @@
  * `page.route()` instead.
  */
 import { _electron as electron, ElectronApplication, Page } from '@playwright/test'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+// ESM-safe replacement for `__dirname` (apps/desktop has `"type": "module"`).
+const __filenameESM = fileURLToPath(import.meta.url)
+const __dirnameESM = dirname(__filenameESM)
 
 /**
  * Launches the packaged Electron app from `out/`. Caller must have run
  * `npm run build` first (CI workflow handles this).
  */
 export async function launchApp(): Promise<{ app: ElectronApplication; page: Page }> {
-  const repoRoot = join(__dirname, '..')
+  const repoRoot = join(__dirnameESM, '..')
   const app = await electron.launch({
     args: [join(repoRoot, 'out/main/index.js')],
     env: {

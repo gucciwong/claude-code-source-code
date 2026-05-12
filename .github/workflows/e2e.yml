@@ -55,6 +55,8 @@ jobs:
 
       - name: Install workspace deps
         # See ci.yml — rm both lockfile + node_modules + force optional deps.
+        # `shell: bash` so Unix-style `rm` works on Windows runners too.
+        shell: bash
         run: |
           rm -f package-lock.json
           rm -rf node_modules
@@ -62,6 +64,7 @@ jobs:
 
       - name: Install desktop deps
         working-directory: apps/desktop
+        shell: bash
         run: |
           rm -f package-lock.json
           rm -rf node_modules
@@ -69,10 +72,12 @@ jobs:
 
       - name: Install Playwright browsers
         working-directory: apps/desktop
+        shell: bash
         run: npx playwright install --with-deps chromium
 
       - name: Build desktop app
         working-directory: apps/desktop
+        shell: bash
         run: npm run build
 
       # Linux only: xvfb so Electron can launch in headless CI.
