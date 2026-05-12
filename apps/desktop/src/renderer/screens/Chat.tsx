@@ -266,46 +266,103 @@ export function Chat() {
       <div className="flex flex-col flex-1 min-w-0">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-border-default bg-bg-surface-1 shrink-0">
-        <div className="flex items-center gap-2">
-          {/* W5-T15: Model Picker with CAMR Auto mode.
-              The sentinel value `__auto__` toggles the router store; any
-              real model id selects that model and reverts to manual mode. */}
-          <select
-            value={routerMode === 'auto' ? '__auto__' : activeModel || ''}
-            onChange={e => {
-              const next = e.target.value
-              if (next === '__auto__') {
-                setRouterMode('auto')
-              } else if (next) {
-                setRouterMode('manual')
-                useSystemStore.setState({ activeModel: next })
-              }
-            }}
-            className="bg-bg-surface-2 border border-border-default rounded px-2 py-1 text-sm font-semibold text-text-primary cursor-pointer max-w-[200px]"
-            aria-label="Select model"
+        {/* UI W4 — Stitch-distilled hero model picker.
+         *  Pill-shaped Auto / Manual segmented control on the left,
+         *  with the active mode's payload to its right:
+         *  • Auto: emerald lightning + "CAMR" wordmark, plus a mono
+         *    caption with the model + reason CAMR most recently chose.
+         *  • Manual: the existing select dropdown.
+         *  Same routerStore contract as before — only the chrome changes. */}
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            role="group"
+            aria-label="Model selection mode"
+            className="inline-flex items-center bg-bg-surface-2 border border-border-default rounded-md p-0.5 text-xs font-medium"
           >
-            <option value="__auto__">Auto (CAMR — pick best model)</option>
-            {!activeModel && ollamaModels.length === 0 && availableModels.length === 0 && (
-              <option value="">No model loaded</option>
-            )}
-            {ollamaModels.map(m => (
-              <option key={`ollama:${m.name}`} value={m.name}>{`${m.name} (${formatModelSizeFromBytes(m.size) ?? 'Unknown size'}, Ollama)`}</option>
-            ))}
-            {availableModels.map(m => (
-              <option key={m.id} value={m.id}>{`${m.name}${formatModelSizeFromBytes(m.size_bytes) ? ` (${formatModelSizeFromBytes(m.size_bytes)})` : ''}`}</option>
-            ))}
-            {activeModel && !ollamaModels.find(m => m.name === activeModel) && !availableModels.find(m => m.id === activeModel) && (
-              <option value={activeModel}>{activeModel}</option>
-            )}
-          </select>
-          {routerMode === 'auto' && routerLastChoice && (
-            <span
-              className="text-[11px] text-text-muted/80 truncate max-w-[260px]"
-              title={routerLastChoice.reason}
-              data-testid="camr-reason"
+            <button
+              type="button"
+              onClick={() => setRouterMode('auto')}
+              aria-pressed={routerMode === 'auto'}
+              className={[
+                'flex items-center gap-1 px-2.5 py-1 rounded transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500',
+                routerMode === 'auto'
+                  ? 'bg-accent-500/15 text-accent-400 border border-accent-500/40'
+                  : 'text-text-muted hover:text-text-secondary border border-transparent',
+              ].join(' ')}
+              title="CAMR picks the model for each prompt"
             >
-              {routerLastChoice.model_id} · {routerLastChoice.reason}
-            </span>
+              <Zap size={12} aria-hidden="true" />
+              Auto
+            </button>
+            <button
+              type="button"
+              onClick={() => setRouterMode('manual')}
+              aria-pressed={routerMode === 'manual'}
+              className={[
+                'px-2.5 py-1 rounded transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-500',
+                routerMode === 'manual'
+                  ? 'bg-bg-surface-3 text-text-primary border border-border-default'
+                  : 'text-text-muted hover:text-text-secondary border border-transparent',
+              ].join(' ')}
+              title="You pick the model"
+            >
+              Manual
+            </button>
+          </div>
+
+          {routerMode === 'auto' ? (
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-xs font-semibold text-accent-400 tracking-wide uppercase">
+                CAMR
+              </span>
+              {routerLastChoice ? (
+                <span
+                  className="text-[11px] font-mono text-text-muted truncate max-w-[320px]"
+                  title={routerLastChoice.reason}
+                  data-testid="camr-reason"
+                >
+                  → {routerLastChoice.model_id}
+                  {routerLastChoice.reason && (
+                    <span className="text-text-muted/60"> · {routerLastChoice.reason}</span>
+                  )}
+                </span>
+              ) : (
+                <span className="text-[11px] text-text-muted/70 italic">
+                  awaiting first prompt…
+                </span>
+              )}
+            </div>
+          ) : (
+            <select
+              value={activeModel || ''}
+              onChange={(e) => {
+                const next = e.target.value
+                if (next) useSystemStore.setState({ activeModel: next })
+              }}
+              className="bg-bg-surface-2 border border-border-default rounded px-2 py-1 text-sm font-semibold text-text-primary cursor-pointer max-w-[240px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+              aria-label="Select model"
+            >
+              {!activeModel &&
+                ollamaModels.length === 0 &&
+                availableModels.length === 0 && (
+                  <option value="">No model loaded</option>
+                )}
+              {ollamaModels.map((m) => (
+                <option key={`ollama:${m.name}`} value={m.name}>
+                  {`${m.name} (${formatModelSizeFromBytes(m.size) ?? 'Unknown size'}, Ollama)`}
+                </option>
+              ))}
+              {availableModels.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {`${m.name}${formatModelSizeFromBytes(m.size_bytes) ? ` (${formatModelSizeFromBytes(m.size_bytes)})` : ''}`}
+                </option>
+              ))}
+              {activeModel &&
+                !ollamaModels.find((m) => m.name === activeModel) &&
+                !availableModels.find((m) => m.id === activeModel) && (
+                  <option value={activeModel}>{activeModel}</option>
+                )}
+            </select>
           )}
         </div>
         <div className="flex items-center gap-3">

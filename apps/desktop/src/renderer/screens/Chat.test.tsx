@@ -7,6 +7,7 @@ import { useAgentStore } from '../store/agentStore'
 import { useVoiceStore } from '../store/voiceStore'
 import { useModelManagerStore } from '../store/modelManagerStore'
 import { useModelsStore } from '../store/modelsStore'
+import { useRouterStore, _resetRouterStoreForTests } from '../store/routerStore'
 import * as ollamaClient from '../services/ollamaClient'
 import { modelManagerAPI } from '../services/modelManagerAPI'
 
@@ -49,6 +50,7 @@ beforeEach(() => {
     last_error: null,
   })
   useModelsStore.setState({ installed: [], selected: null })
+  _resetRouterStoreForTests()
 })
 
 test('renders chat screen', () => {
@@ -288,6 +290,68 @@ test('shows error message in assistant bubble when stream fails', async () => {
   await user.type(screen.getByRole('textbox', { name: /chat message input/i }), 'hello')
   await user.click(screen.getByRole('button', { name: 'Send message' }))
   expect(await screen.findByText(/Connection reset/i)).toBeInTheDocument()
+})
+
+// ── UI W4-a — CAMR Auto pill (hero model picker) ────────────────────────
+
+test('renders the Auto / Manual mode toggle group', () => {
+  render(<Chat />)
+  const group = screen.getByRole('group', { name: /model selection mode/i })
+  expect(group).toBeInTheDocument()
+  // Both segments are buttons inside the group.
+  expect(screen.getByRole('button', { name: /^Auto$/ })).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /^Manual$/ })).toBeInTheDocument()
+})
+
+test('Manual mode renders the model select dropdown', () => {
+  useRouterStore.setState({ mode: 'manual', lastChoice: null })
+  render(<Chat />)
+  expect(screen.getByRole('combobox', { name: /select model/i })).toBeInTheDocument()
+})
+
+test('Auto mode hides the select and shows the CAMR wordmark', () => {
+  useRouterStore.setState({ mode: 'auto', lastChoice: null })
+  render(<Chat />)
+  expect(screen.queryByRole('combobox', { name: /select model/i })).not.toBeInTheDocument()
+  expect(screen.getByText('CAMR')).toBeInTheDocument()
+  expect(screen.getByText(/awaiting first prompt/i)).toBeInTheDocument()
+})
+
+test('Auto mode caption shows the last CAMR-chosen model + reason', () => {
+  useRouterStore.setState({
+    mode: 'auto',
+    lastChoice: {
+      model_id: 'qwen2.5-coder:14b',
+      reason: 'larger context window for refactor',
+      decided_at: 0,
+    } as unknown as Parameters<typeof useRouterStore.setState>[0]['lastChoice'],
+  })
+  render(<Chat />)
+  expect(screen.getByTestId('camr-reason')).toHaveTextContent('qwen2.5-coder:14b')
+  expect(screen.getByTestId('camr-reason')).toHaveTextContent('larger context window for refactor')
+})
+
+test('clicking Auto switches routerStore mode to auto', async () => {
+  const user = userEvent.setup()
+  useRouterStore.setState({ mode: 'manual', lastChoice: null })
+  render(<Chat />)
+  await user.click(screen.getByRole('button', { name: /^Auto$/ }))
+  expect(useRouterStore.getState().mode).toBe('auto')
+})
+
+test('clicking Manual switches routerStore mode to manual', async () => {
+  const user = userEvent.setup()
+  useRouterStore.setState({ mode: 'auto', lastChoice: null })
+  render(<Chat />)
+  await user.click(screen.getByRole('button', { name: /^Manual$/ }))
+  expect(useRouterStore.getState().mode).toBe('manual')
+})
+
+test('the active mode button has aria-pressed=true', () => {
+  useRouterStore.setState({ mode: 'auto', lastChoice: null })
+  render(<Chat />)
+  expect(screen.getByRole('button', { name: /^Auto$/ })).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.getByRole('button', { name: /^Manual$/ })).toHaveAttribute('aria-pressed', 'false')
 })
 
 test('routes chat through model-manager when the active model is a model-manager model', async () => {
