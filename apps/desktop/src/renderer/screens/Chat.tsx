@@ -5,6 +5,7 @@ import { useSystemStore } from '../store/systemStore'
 import { useAgentStore } from '../store/agentStore'
 import { streamChat } from '../services/ollamaClient'
 import { ToolTrace } from '../components/chat/ToolTrace'
+import { ToolTracePill } from '../components/chat/ToolTracePill'
 import { DiffViewer } from '../components/chat/DiffViewer'
 import { VoicePanel } from '../components/common/VoicePanel'
 import { ThinkingAnimation } from '../components/chat/ThinkingAnimation'
@@ -55,7 +56,7 @@ export function Chat() {
   const [voicePanelExpanded, setVoicePanelExpanded] = useState(false)
   const { messages, addMessage, appendToLast, setLastStreaming, setLastTokPerSec, clear } = useChatStore()
   const activeModel = useSystemStore(s => s.activeModel)
-  const { agentMode, setAgentMode, dryRun, setDryRun } = useAgentStore()
+  const { agentMode, setAgentMode, dryRun, setDryRun, toolCalls } = useAgentStore()
   const { isProcessing } = useVoiceStore()
   const { logCompletion: logTrainingCompletion, logInference, isServiceAvailable: isTrainingServiceAvailable } = useTrainingService()
   const availableModels = useModelManagerStore(s => s.models)
@@ -362,6 +363,12 @@ export function Chat() {
         {messages.map(msg => (
           <MessageBubble key={msg.id} message={msg} />
         ))}
+        {/* Stitch-distilled inline tool-trace pill — surfaces the
+         *  current/just-finished tool sequence right where the
+         *  assistant's next reply will appear. Only renders when
+         *  agent mode is on AND there are toolCalls to summarize.
+         *  See ToolTracePill.tsx for visual spec. */}
+        {agentMode && <ToolTracePill calls={toolCalls} />}
         <div ref={bottomRef} />
       </div>
 
