@@ -22,7 +22,12 @@ const __dirnameESM = dirname(__filenameESM)
 export async function launchApp(): Promise<{ app: ElectronApplication; page: Page }> {
   const repoRoot = join(__dirnameESM, '..')
   const app = await electron.launch({
-    args: [join(repoRoot, 'out/main/index.js')],
+    // `--no-sandbox` is required on GitHub Actions ubuntu runners (kernel
+    // user-namespace sandbox is locked down) and is also safe on macOS /
+    // Windows runners. Without it the Electron main process bails before
+    // creating a window, which surfaces as Playwright's
+    // `electronApplication.firstWindow: Timeout … waiting for event "window"`.
+    args: [join(repoRoot, 'out/main/index.js'), '--no-sandbox'],
     env: {
       ...process.env,
       NODE_ENV: 'test',
@@ -30,7 +35,7 @@ export async function launchApp(): Promise<{ app: ElectronApplication; page: Pag
       // Force the test renderer to load from disk, not the dev URL.
       ELECTRON_RENDERER_URL: '',
     },
-    timeout: 30_000,
+    timeout: 60_000,
   })
   const page = await app.firstWindow()
   await page.waitForLoadState('domcontentloaded')
