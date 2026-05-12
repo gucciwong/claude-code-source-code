@@ -37,3 +37,15 @@ test('clicking a nav item calls setActive', () => {
   fireEvent.click(screen.getByText('Models'))
   expect(useNavigationStore.getState().active).toBe('models')
 })
+
+// ── Workspace identity card (v1.0 sovereign redesign) ──────────────────
+
+test('Sidebar shows workspace identity card with brand mark and status', () => {
+  render(<Sidebar />)
+  // Brand mark "SC" inside the rounded square avatar
+  expect(screen.getByText('SC')).toBeInTheDocument()
+  // Product name
+  expect(screen.getByText('Sovereign Code')).toBeInTheDocument()
+  // "Local Context Active" status line
+  expect(screen.getByText('Local Context Active')).toBeInTheDocument()
+})

@@ -5,6 +5,7 @@ import { useSystemStore } from '../../store/systemStore'
 import { useDownloadStore } from '../../store/downloadStore'
 import { useModelsStore } from '../../store/modelsStore'
 import { useModelManagerStore } from '../../store/modelManagerStore'
+import { useHealthStore } from '../../store/healthStore'
 
 beforeEach(() => {
   useSystemStore.setState({
@@ -45,6 +46,16 @@ beforeEach(() => {
     checkServiceAvailable: vi.fn().mockResolvedValue(true),
     last_error: null,
     cleanup_polls: vi.fn(),
+  })
+  // Reset health to "never checked" so tests that don't opt in to
+  // populated services don't see the Services Online pill.
+  useHealthStore.setState({
+    services: [
+      { name: 'Voice', url: 'x', status: 'unknown', latencyMs: null, lastChecked: null, error: null },
+      { name: 'Training', url: 'x', status: 'unknown', latencyMs: null, lastChecked: null, error: null },
+    ],
+    polling: false,
+    pollInterval: null,
   })
 })
 
@@ -138,4 +149,59 @@ test('StatusBar shows active download speed when a model is downloading', () => 
 
   render(<StatusBar />)
   expect(screen.getByText(/DL 51\.2 MB\/s/i)).toBeInTheDocument()
+})
+
+// ── Services Online pill (v1.0 sovereign redesign) ─────────────────────
+
+test('StatusBar hides Services Online pill until health has been checked at least once', () => {
+  // Default beforeEach() state: services array populated but lastChecked
+  // is null on every entry. Pill should not render.
+  render(<StatusBar />)
+  expect(screen.queryByText(/Services Online/)).not.toBeInTheDocument()
+})
+
+test('StatusBar shows "N/N Services Online" with green dot when all healthy', () => {
+  useHealthStore.setState({
+    services: [
+      { name: 'Voice', url: 'x', status: 'healthy', latencyMs: 12, lastChecked: new Date(), error: null },
+      { name: 'Training', url: 'x', status: 'healthy', latencyMs: 8, lastChecked: new Date(), error: null },
+      { name: 'Model Manager', url: 'x', status: 'healthy', latencyMs: 5, lastChecked: new Date(), error: null },
+    ],
+    polling: false,
+    pollInterval: null,
+  })
+  render(<StatusBar />)
+  expect(screen.getByText('3/3 Services Online')).toBeInTheDocument()
+  expect(screen.getByLabelText('3 of 3 services online')).toBeInTheDocument()
+})
+
+test('StatusBar shows amber state when some services are down', () => {
+  useHealthStore.setState({
+    services: [
+      { name: 'Voice', url: 'x', status: 'healthy', latencyMs: 12, lastChecked: new Date(), error: null },
+      { name: 'Training', url: 'x', status: 'unhealthy', latencyMs: null, lastChecked: new Date(), error: 'ECONNREFUSED' },
+      { name: 'Model Manager', url: 'x', status: 'healthy', latencyMs: 5, lastChecked: new Date(), error: null },
+    ],
+    polling: false,
+    pollInterval: null,
+  })
+  render(<StatusBar />)
+  const label = screen.getByText('2/3 Services Online')
+  expect(label).toBeInTheDocument()
+  expect(label.className).toMatch(/text-yellow-400/)
+})
+
+test('StatusBar shows red state when no services are healthy', () => {
+  useHealthStore.setState({
+    services: [
+      { name: 'Voice', url: 'x', status: 'unhealthy', latencyMs: null, lastChecked: new Date(), error: 'down' },
+      { name: 'Training', url: 'x', status: 'unhealthy', latencyMs: null, lastChecked: new Date(), error: 'down' },
+    ],
+    polling: false,
+    pollInterval: null,
+  })
+  render(<StatusBar />)
+  const label = screen.getByText('0/2 Services Online')
+  expect(label).toBeInTheDocument()
+  expect(label.className).toMatch(/text-red-400/)
 })
