@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import { spawn, ChildProcess, execSync } from 'child_process'
 import { join, resolve } from 'path'
-import { existsSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import * as net from 'net'
 import { is } from '@electron-toolkit/utils'
 
@@ -33,6 +33,39 @@ function resolveRepoRoot(): string {
   }
   // In production: services are copied as extraResources next to the app
   return process.resourcesPath
+}
+
+/**
+ * Per-service persistent SQLite DB path overrides.
+ *
+ * Three services (memory / federation / plugin-registry) ship a SQLite
+ * backend that only activates when its `*_DB_PATH` env var is set —
+ * otherwise the registry falls back to in-memory, and the user's data
+ * vanishes on the next service restart (Codex review, PR #1).
+ *
+ * The Python registries intentionally keep the env-unset → in-memory
+ * behaviour so pytest stays hermetic; the *product* run is made
+ * persistent here, by pointing each service at a file under Electron's
+ * per-user `userData` directory. The dir is created lazily so a fresh
+ * install doesn't trip over a missing folder.
+ */
+function persistenceEnvFor(serviceName: string): Record<string, string> {
+  const dataDir = join(app.getPath('userData'), 'service-data')
+  const map: Record<string, string> = {
+    'memory-service': 'MEMORY_DB_PATH',
+    'federation-service': 'FED_PEER_DB_PATH',
+    'plugin-registry-service': 'PLUGIN_REGISTRY_DB_PATH',
+  }
+  const envKey = map[serviceName]
+  if (!envKey) return {}
+  try {
+    mkdirSync(dataDir, { recursive: true })
+  } catch {
+    // Non-fatal: if the dir can't be created the service falls back to
+    // in-memory (same as before this fix) rather than crashing.
+    return {}
+  }
+  return { [envKey]: join(dataDir, `${serviceName}.db`) }
 }
 
 function findPythonInPath(): string | null {
@@ -110,7 +143,14 @@ export async function startAllServices(): Promise<void> {
     const proc = spawn(
       python,
       ['-m', 'uvicorn', 'main:app', '--host', '127.0.0.1', '--port', String(svc.port), '--log-level', 'warning'],
-      { cwd: svcDir, stdio: 'ignore', detached: false }
+      {
+        cwd: svcDir,
+        stdio: 'ignore',
+        detached: false,
+        // Inherit the parent env (so SOVEREIGN_LOCAL_TOKEN etc. propagate)
+        // and layer the per-service persistent DB path on top.
+        env: { ...process.env, ...persistenceEnvFor(svc.name) },
+      }
     )
 
     proc.on('error', (err) => console.error(`[ServiceManager] ${svc.name} error: ${err.message}`))

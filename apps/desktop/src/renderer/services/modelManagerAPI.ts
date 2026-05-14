@@ -2,7 +2,16 @@
  * Model Manager API Client
  * Communicates with model-manager service (http://localhost:8002)
  * Handles all model lifecycle operations: list, download, load, inference, export
+ *
+ * All calls go through `authFetch` (W3-T8c) rather than bare `fetch`.
+ * Many model-manager routes are guarded by `verify_local_token` server-side;
+ * `authFetch` attaches the local-token Bearer header negotiated with the
+ * Electron main process. It is a safe no-op when no token bridge is present
+ * (vitest jsdom, browser tab, dev without a configured token), so swapping
+ * it in is always correct and never regresses the unauthenticated path.
  */
+
+import { authFetch } from './authFetch'
 
 const API_BASE = import.meta.env.VITE_MODEL_MANAGER_URL ?? 'http://localhost:8002'
 
@@ -108,7 +117,7 @@ class ModelManagerAPI {
    * List all cached models from the model-manager registry
    */
   async listModels(): Promise<{ models: ModelMetadata[]; activeModel: string | null }> {
-    const res = await fetch(`${API_BASE}/api/v1/models`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models`, {
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) throw new Error(`Failed to list models: HTTP ${res.status}`)
@@ -123,7 +132,7 @@ class ModelManagerAPI {
    * Set a model as the active model (loads it into memory for inference)
    */
   async setActiveModel(modelId: string, loadConfig?: Record<string, unknown>): Promise<{ active_model: string }> {
-    const res = await fetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/set-active`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/set-active`, {
       method: 'POST',
       headers: loadConfig ? { 'Content-Type': 'application/json' } : {},
       body: loadConfig ? JSON.stringify(loadConfig) : undefined,
@@ -140,7 +149,7 @@ class ModelManagerAPI {
    * Unload a model from memory
    */
   async unloadModel(modelId: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/unload`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/unload`, {
       method: 'POST',
       signal: AbortSignal.timeout(30_000),
     })
@@ -153,7 +162,7 @@ class ModelManagerAPI {
   async downloadFromHuggingFace(modelId: string, ggufFile?: string): Promise<any> {
     const url = new URL(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/download`)
     if (ggufFile) url.searchParams.set('gguf_file', ggufFile)
-    const res = await fetch(url.toString(), {
+    const res = await authFetch(url.toString(), {
       method: 'POST',
       signal: AbortSignal.timeout(30_000),
     })
@@ -165,7 +174,7 @@ class ModelManagerAPI {
    * Get download status for all in-progress downloads
    */
   async getDownloadStatus(): Promise<Record<string, DownloadStatus>> {
-    const res = await fetch(`${API_BASE}/api/v1/downloads/status`, {
+    const res = await authFetch(`${API_BASE}/api/v1/downloads/status`, {
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) throw new Error(`Failed to get download status: HTTP ${res.status}`)
@@ -177,7 +186,7 @@ class ModelManagerAPI {
    * Cancel a download
    */
   async cancelDownload(modelId: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/cancel`, {
+    const res = await authFetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/cancel`, {
       method: 'POST',
       signal: AbortSignal.timeout(10_000),
     })
@@ -188,7 +197,7 @@ class ModelManagerAPI {
    * Pause an in-progress download
    */
   async pauseDownload(modelId: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/pause`, {
+    const res = await authFetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/pause`, {
       method: 'POST',
       signal: AbortSignal.timeout(10_000),
     })
@@ -199,7 +208,7 @@ class ModelManagerAPI {
    * Resume a paused download
    */
   async resumeDownload(modelId: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/resume`, {
+    const res = await authFetch(`${API_BASE}/api/v1/downloads/${encodeURIComponent(modelId)}/resume`, {
       method: 'POST',
       signal: AbortSignal.timeout(10_000),
     })
@@ -210,7 +219,7 @@ class ModelManagerAPI {
    * Export model to a different format
    */
   async exportModel(modelId: string, targetFormat: string = 'safetensors'): Promise<any> {
-    const res = await fetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/export`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ target_format: targetFormat }),
@@ -224,7 +233,7 @@ class ModelManagerAPI {
    * Delete a cached model
    */
   async deleteModel(modelId: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models/${encodeURIComponent(modelId)}`, {
       method: 'DELETE',
       signal: AbortSignal.timeout(30_000),
     })
@@ -264,7 +273,7 @@ class ModelManagerAPI {
     if (options?.seed !== undefined && options.seed >= 0) params.set('seed', String(options.seed))
     if (options?.stop) params.set('stop', options.stop)
 
-    const res = await fetch(`${API_BASE}/api/v1/inference?${params}`, {
+    const res = await authFetch(`${API_BASE}/api/v1/inference?${params}`, {
       method: 'POST',
       signal: options?.signal,
     })
@@ -308,7 +317,7 @@ class ModelManagerAPI {
     if (options?.max_tokens) params.set('max_tokens', String(options.max_tokens))
     if (options?.temperature !== undefined) params.set('temperature', String(options.temperature))
 
-    const res = await fetch(`${API_BASE}/api/v1/inference/complete?${params}`, {
+    const res = await authFetch(`${API_BASE}/api/v1/inference/complete?${params}`, {
       method: 'POST',
       signal: AbortSignal.timeout(120_000),
     })
@@ -321,7 +330,7 @@ class ModelManagerAPI {
    * Start training job — delegates to training-service on port 8001
    */
   async startTraining(config: TrainingConfig): Promise<TrainingJob> {
-    const res = await fetch('http://localhost:8001/finetune/start', {
+    const res = await authFetch('http://localhost:8001/finetune/start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(config),
@@ -338,7 +347,7 @@ class ModelManagerAPI {
    * trajectories already stored in the training service DB, then launches a fine-tune job.
    */
   async startOneClickTraining(options?: AutoTrainingOptions): Promise<TrainingJob & { data_stats?: AutoDatasetStats; base_model?: string; message?: string }> {
-    const res = await fetch('http://localhost:8001/finetune/auto-start', {
+    const res = await authFetch('http://localhost:8001/finetune/auto-start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(options ?? {}),
@@ -355,7 +364,7 @@ class ModelManagerAPI {
    * Fetch how much auto-collectable data is available before starting a job.
    */
   async getAutoDatasetStats(): Promise<AutoDatasetStats> {
-    const res = await fetch('http://localhost:8001/finetune/auto-dataset-stats', {
+    const res = await authFetch('http://localhost:8001/finetune/auto-dataset-stats', {
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) throw new Error(`Failed to fetch auto dataset stats: HTTP ${res.status}`)
@@ -366,7 +375,7 @@ class ModelManagerAPI {
    * Submit chat messages to the training service for use in fine-tuning.
    */
   async submitChatMessages(messages: Array<{ role: string; content: string; session_id?: string; model_id?: string }>): Promise<{ stored: number }> {
-    const res = await fetch('http://localhost:8001/finetune/chat-messages', {
+    const res = await authFetch('http://localhost:8001/finetune/chat-messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages }),
@@ -380,7 +389,7 @@ class ModelManagerAPI {
    * Get training job status — delegates to training-service on port 8001
    */
   async getTrainingStatus(jobId: string): Promise<TrainingJob> {
-    const res = await fetch(`http://localhost:8001/finetune/status/${encodeURIComponent(jobId)}`, {
+    const res = await authFetch(`http://localhost:8001/finetune/status/${encodeURIComponent(jobId)}`, {
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) throw new Error(`Failed to get training status: HTTP ${res.status}`)
@@ -393,7 +402,7 @@ class ModelManagerAPI {
    */
   async searchModels(query: string, limit: number = 20): Promise<any[]> {
     const params = new URLSearchParams({ q: query, limit: String(limit) })
-    const res = await fetch(`${API_BASE}/api/v1/models/search?${params}`, {
+    const res = await authFetch(`${API_BASE}/api/v1/models/search?${params}`, {
       signal: AbortSignal.timeout(15_000),
     })
     if (!res.ok) throw new Error(`Search failed: HTTP ${res.status}`)
@@ -404,7 +413,7 @@ class ModelManagerAPI {
    * Get health / service status
    */
   async getHealth(): Promise<any> {
-    const res = await fetch(`${API_BASE}/health`, {
+    const res = await authFetch(`${API_BASE}/health`, {
       signal: AbortSignal.timeout(5_000),
     })
     if (!res.ok) throw new Error(`Health check failed: HTTP ${res.status}`)
@@ -416,7 +425,7 @@ class ModelManagerAPI {
    */
   async isServiceAvailable(): Promise<boolean> {
     try {
-      const res = await fetch(`${API_BASE}/health`, {
+      const res = await authFetch(`${API_BASE}/health`, {
         signal: AbortSignal.timeout(5_000),
       })
       return res.ok
