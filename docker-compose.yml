@@ -200,6 +200,11 @@ services:
       - "8008:8008"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175
+      # Persist the peer registry across container restarts (Codex review,
+      # PR #1). Without this the registry falls back to in-memory.
+      - FED_PEER_DB_PATH=/data/federation.db
+    volumes:
+      - federation-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8008/health')"]
       interval: 30s
@@ -237,6 +242,11 @@ services:
       - "8010:8010"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175
+      # Persist conversation memory across container restarts (Codex
+      # review, PR #1). Without this user memories vanish on restart.
+      - MEMORY_DB_PATH=/data/memory.db
+    volumes:
+      - memory-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8010/health')"]
       interval: 30s
@@ -305,6 +315,11 @@ services:
       - "8015:8015"
     environment:
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:5175,http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:5175
+      # Persist the plugin registry across container restarts (Codex
+      # review, PR #1). Without this installed-plugin state is in-memory.
+      - PLUGIN_REGISTRY_DB_PATH=/data/plugin-registry.db
+    volumes:
+      - plugin-registry-data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8015/health')"]
       interval: 30s
@@ -447,6 +462,10 @@ volumes:
   prometheus-data:
   grafana-data:
   loki-data:
+  # SQLite persistence for the W6-T16 registry services (Codex review, PR #1)
+  memory-data:
+  federation-data:
+  plugin-registry-data:
 
 networks:
   sovereign-network:
