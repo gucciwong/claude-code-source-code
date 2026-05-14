@@ -175,9 +175,11 @@ class BenchmarkMetricsAggregator:
             )
 
             # Count newly solved and regressed (if we have detail-level data)
-            # This would require tracking individual problem results through runs
-            newly_solved = 0  # TODO: Track at problem level
-            regressed = 0  # TODO: Track at problem level
+            # This would require tracking individual problem results through runs.
+            # Tracked-In: 2026-05-11-ga-runway-plan.md (post-GA — benchmark v2;
+            # problem-level tracking requires schema change on benchmark_results).
+            newly_solved = 0  # post-GA: problem-level diff
+            regressed = 0     # post-GA: problem-level diff
 
             comparison = BenchmarkComparison(
                 benchmark_name=name,

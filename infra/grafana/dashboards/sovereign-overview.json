@@ -1,0 +1,103 @@
+{
+  "title": "Sovereign Code — Service Overview",
+  "uid": "sovereign-overview",
+  "tags": ["sovereign", "overview"],
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(http_requests_total, service)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "current": { "selected": false, "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Request rate (per service)",
+      "type": "timeseries",
+      "datasource": "Prometheus",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "sum by (service) (rate(http_requests_total{service=~\"$service\"}[1m]))",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "reqps" } }
+    },
+    {
+      "title": "Error rate (5xx / total)",
+      "type": "timeseries",
+      "datasource": "Prometheus",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "sum by (service) (rate(http_requests_total{status=~\"5..\",service=~\"$service\"}[5m])) / clamp_min(sum by (service) (rate(http_requests_total{service=~\"$service\"}[5m])), 1e-6)",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1 } }
+    },
+    {
+      "title": "p50 latency",
+      "type": "timeseries",
+      "datasource": "Prometheus",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum by (service, le) (rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])))",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    },
+    {
+      "title": "p95 latency",
+      "type": "timeseries",
+      "datasource": "Prometheus",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (service, le) (rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])))",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    },
+    {
+      "title": "Top routes by traffic",
+      "type": "table",
+      "datasource": "Prometheus",
+      "gridPos": { "x": 0, "y": 16, "w": 24, "h": 8 },
+      "targets": [
+        {
+          "expr": "topk(20, sum by (service, path, method) (increase(http_requests_total{service=~\"$service\"}[1h])))",
+          "format": "table",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "title": "Recent logs (Loki, all services)",
+      "type": "logs",
+      "datasource": "Loki",
+      "gridPos": { "x": 0, "y": 24, "w": 24, "h": 10 },
+      "targets": [
+        {
+          "expr": "{job=\"sovereign\"} |~ \"\""
+        }
+      ],
+      "options": { "showTime": true, "wrapLogMessage": true }
+    }
+  ]
+}

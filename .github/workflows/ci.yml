@@ -23,7 +23,15 @@ jobs:
           cache-dependency-path: apps/desktop/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        # npm/cli#4828: package-lock.json only records optionalDependencies
+        # for the platform that generated it (Windows). On Linux runners
+        # `@rollup/rollup-linux-x64-gnu` is missing, so we wipe lockfile +
+        # node_modules and force `--include=optional` to make npm re-resolve
+        # rollup's per-platform native binaries fresh.
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
 
       - name: Run tests
         run: npm test
@@ -44,7 +52,15 @@ jobs:
           cache-dependency-path: apps/vscode-extension/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        # npm/cli#4828: package-lock.json only records optionalDependencies
+        # for the platform that generated it (Windows). On Linux runners
+        # `@rollup/rollup-linux-x64-gnu` is missing, so we wipe lockfile +
+        # node_modules and force `--include=optional` to make npm re-resolve
+        # rollup's per-platform native binaries fresh.
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
 
       - name: Run tests
         run: npm test

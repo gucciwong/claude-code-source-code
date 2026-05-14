@@ -1,0 +1,67 @@
+# W3-T8b: docker-compose now uses the repo root as build context for the
+# 4 services that import services/_shared. Without this dockerignore the
+# daemon would receive ~hundreds of MB of node_modules / venvs / git data.
+# Keep the list conservative: only exclude things that are NEVER needed
+# inside any service image. Per-service Dockerfiles still COPY only what
+# they need (their own dir + services/_shared).
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+.github/
+.worktrees/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Python virtualenvs (Windows + Linux layouts)
+.venv/
+.venv-*/
+**/venv/
+**/.venv/
+**/venv_test/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node — apps and root
+node_modules/
+**/node_modules/
+**/dist/
+**/out/
+apps/desktop/dist/
+apps/desktop/out/
+apps/vscode-extension/out/
+
+# Build / test artefacts
+.playwright-mcp/
+logs/
+**/logs/
+*.log
+build_output.txt
+*.bak
+
+# Large output bundles
+*.tar
+*.tar.gz
+*.zip
+
+# Local docs that don't belong in images
+docs/
+figma-export/
+extensions/
+
+# Sovereign Code session state
+.sovereign-code/
+**/.sovereign-code/
+
+# Python venv lock files left over from dev
+.python-version

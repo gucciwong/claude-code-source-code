@@ -1,0 +1,10 @@
+# W6 — extras required by services that import services/_shared/{auth,observability,logging}.py.
+# Each consuming service appends `-r ../_shared/requirements.txt` to its own requirements.txt
+# (handled by the W3-T8b Dockerfile pattern: `COPY services/_shared/ ./_shared/`).
+#
+# Pinned conservatively. `prometheus_client` and `fastapi` are already in the
+# Python ecosystem mainstream — no churn risk at this layer.
+
+prometheus_client>=0.20.0
+# fastapi + starlette already pinned per service; listed here as a comment
+# so newcomers know _shared assumes a modern fastapi (>=0.109).

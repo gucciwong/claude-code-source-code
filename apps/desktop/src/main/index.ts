@@ -1,7 +1,9 @@
-import { app, shell, BrowserWindow, session } from 'electron'
+import { app, shell, BrowserWindow, session, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { startAllServices, stopAllServices } from './serviceManager'
+import { initLocalToken } from './localToken'
+import { initAutoUpdater } from './updater'
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -35,7 +37,7 @@ async function createWindow(): Promise<void> {
     backgroundColor: '#0D0D0D',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: true,
       contextIsolation: true
     }
@@ -71,6 +73,16 @@ async function createWindow(): Promise<void> {
 
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.sovereigncoder.desktop')
+
+  // W3-T8c: initialize the local-token secret BEFORE any service spawn,
+  // so child processes inherit SOVEREIGN_LOCAL_TOKEN via env. The renderer
+  // pulls it through IPC handler `local-token:get` (registered below).
+  const localToken = initLocalToken()
+  ipcMain.handle('local-token:get', () => localToken)
+
+  // W4-T12: register electron-updater IPC handlers + schedule a background
+  // check. No-op in dev. Renderer drives the UI via `window.sovereign.updater`.
+  initAutoUpdater()
 
   // Start all backend services before the window opens
   await startAllServices()

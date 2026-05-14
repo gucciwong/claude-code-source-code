@@ -88,25 +88,54 @@ Unlike cloud-based alternatives (GitHub Copilot, Cursor), Sovereign Code ensures
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.4 Current Status (v0.7.x — April 2026)
+### 1.4 Current Status (v0.7.x — Reconciled 2026-05-11)
 
-Sovereign Code has completed core platform milestones from v0.1 through v0.7, with v1.0 now the primary forward target.
+Sovereign Code has completed core platform milestones from v0.1 through v0.7, with v1.0 the active target (8-week runway, see `docs/plans/2026-05-11-ga-runway-plan.md`).
 
-The desktop application and service ecosystem are production-oriented with broad feature coverage across local inference, training, voice, knowledge, enterprise integration, federated learning, and advanced developer tooling.
+The table below is the **post-reconciliation truth**: prior versions of this section marked features as ✅ Built that were only partially wired in the codebase. Statuses now reflect what is actually shippable today. "Partial" entries are not blockers in themselves but are referenced from the GA Runway Plan.
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Electron desktop app | ✅ Built | React 18 + Tailwind v4, 314 tests passing |
-| Local model inference | ✅ Built | Hugging Face integration, GGUF support |
-| Model manager service | ✅ Built | FastAPI on port 8002 |
-| Training service | ✅ Built | FastAPI on port 8001, QLoRA pipeline |
-| Voice I/O (VibeVoice) | ✅ Built | Whisper ASR + Google TTS |
-| China mirror support | ✅ Built | hf-mirror.com toggle in Settings |
-| Windows EXE packaging | ✅ Built | electron-builder, 70MB installer |
-| Personal Knowledge Library | ✅ Built | PKL system, knowledge-service, 408 tests |
-| Enterprise Data Integration | ✅ Built | FastAPI port 8004, 4 connectors, PII masking, audit log, 501 tests |
-| Live Execution Trace Injection | ✅ Built | Python/JS sandbox runners, TraceSerializer, FastAPI port 8005 |
-| Temporal Decision Graph | ✅ Built | GitHistoryParser, GraphQueryEngine, DecisionTimeline UI |
+Legend: ✅ Built · ⚠️ Partial · 🚧 In-Progress · ❌ Not Started
+
+| Component | Status | Notes (with code reference) |
+|-----------|--------|-----------------------------|
+| Electron desktop app | ✅ Built | React 18 + Tailwind v4, sandbox+contextIsolation+CSP enabled (`apps/desktop/src/main/index.ts`). Vitest suite green. |
+| Local model inference (Ollama path) | ✅ Built | Chat → stream → display end-to-end; `AbortController`-based interrupt in `screens/Chat.tsx`. |
+| Local model inference (Hugging Face / GGUF) | ⚠️ Partial | Backend in `services/model-manager` works; **no UI entry point** to browse/download from HF (`Models.tsx` only lists Ollama models). Closing in W2-T4. |
+| Model manager service | ✅ Built | FastAPI on port 8002. Mirror + download endpoints implemented. |
+| Training service | ⚠️ Partial | FastAPI on port 8001, QLoRA scaffolding present; **orchestrator/registry wiring is `TODO`** in `main.py` lines 459/491/519. Closing in W2-T6. |
+| Training UI | ⚠️ Partial | `screens/Training.tsx` still renders **hardcoded** runs (v1.4/v1.3/v1.2) and fixed `progress=48`; GPU stats literal-string. Closing in W1-T3. |
+| Voice I/O (VibeVoice) | ✅ Built | Whisper ASR + Google TTS; both `/synthesize` and `/speak` endpoints exposed; desktop hook aligned. |
+| China mirror support (backend) | ✅ Built | `POST /api/v1/mirror/switch` operational on model-manager. |
+| China mirror toggle (UI) | ⚠️ Partial | `MirrorSelector.tsx` shows CLI instructions instead of calling the switch endpoint. Closing in W2-T5. |
+| Windows EXE packaging | ✅ Built | electron-builder configured; `apps/desktop/resources/` present; `LICENSE` in repo root. |
+| macOS / Linux packaging | 🚧 In-Progress | Build scripts exist (`build:mac`, `build:linux`); **multi-OS matrix in CI has not yet produced signed installers**. Closing in W4-T11. |
+| Personal Knowledge Library | ✅ Built | PKL system + knowledge-service; large test suite. |
+| Enterprise Data Integration | ⚠️ Partial | FastAPI port 8004 with 4 connectors, PII masking, audit log; **endpoints currently unauthenticated** (CORS only). Closing in W3-T8. |
+| Live Execution Trace Injection | ⚠️ Partial | Python/JS runners + TraceSerializer + FastAPI port 8005. Sandbox hardening pending. Closing in W3-T9. |
+| Temporal Decision Graph | ✅ Built | GitHistoryParser, GraphQueryEngine, DecisionTimeline UI. Manual annotation only; automated archaeology (Innovation #10) deferred to v1.1. |
+| Federation (legacy `Federation.tsx`) | ❌ Deprecated | Renders hardcoded mock federations ("Finance AI Consortium" etc.) with no handlers. Removed in W1-T2. |
+| Federation core (`FederationCore.tsx`) | ✅ Built | `useFederationCore` hook + peer register/round-start wired. Single-peer happy path only for GA. |
+| Service-side authentication | ❌ Not Started | All 18 services accept unauthenticated calls; only CORS restricts origins. Closing in W3-T7/T8. |
+| Multi-service CI | ❌ Not Started | `.github/workflows/ci.yml` covers only `apps/desktop` + `apps/vscode-extension`; 18 Python services have no CI. Closing in W4-T10. |
+| Signed release pipeline + auto-update | ❌ Not Started | No release workflow; `electron-updater` not wired. Closing in W4-T11/T12. |
+| Observability stack | ⚠️ Partial | Prometheus instrumentation only in `voice-service`. No central Grafana/Loki. Closing in W6-T17. |
+
+#### Known v1.0 Gaps (closed by GA Runway Plan)
+
+These are the only items that block tagging `v1.0.0`. See `docs/plans/2026-05-11-ga-runway-plan.md` for ticket-level acceptance criteria.
+
+1. HuggingFace browse/download UI (P0 — W2-T4).
+2. Real training data on Training screen (P0 — W1-T3).
+3. Removal of legacy Federation mock screen (P0 — W1-T2).
+4. China mirror toggle wired to backend (P2 — W2-T5).
+5. Local-token authentication on sensitive service endpoints (P0 — W3-T7/T8).
+6. Multi-service CI + signed multi-OS release pipeline + auto-update (P0 — W4).
+7. One ML Innovation (Context-Aware Model Router) as GA hero feature (P3 — W5).
+8. Persistence migration for in-memory services + observability stack (P1 — W6).
+9. Playwright e2e + first-run onboarding + perf budget (P1 — W7).
+10. Signed GA, SBOM, dual-region distribution (P0 — W8).
+
+Innovations #1, 2, 4–10 from `docs/plans/2026-04-09-ten-innovations-design.md` are explicitly deferred to v1.1+.
 
 ---
 

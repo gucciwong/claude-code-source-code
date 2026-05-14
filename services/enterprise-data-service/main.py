@@ -6,7 +6,7 @@ from typing import Any
 
 import os
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
@@ -23,7 +23,27 @@ from starlette.requests import Request
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+
+# === W3-T8: local-token authentication ====================================
+# All routes in this service (except /health) require a valid local token.
+# Shared module resolved via sys.path; for Docker, build-context fix in
+# W3-T8b ensures services/_shared is COPYed into the image.
+import sys as _sys
+from pathlib import Path as _Path
+_shared_parent = _Path(__file__).resolve().parents[1]
+if str(_shared_parent) not in _sys.path:
+    _sys.path.insert(0, str(_shared_parent))
+from _shared.auth import verify_local_token  # noqa: E402
+
+# W6-T17 + W6-T18: shared observability + structured logging.
+from _shared.observability import setup_metrics  # noqa: E402
+from _shared.logging import install as install_logging  # noqa: E402
+# ==========================================================================
 app = FastAPI(title="Enterprise Data Service", version="0.1.0")
+
+# W6-T17 + T18: install JSON logging + request-id middleware + /metrics.
+install_logging(app, "enterprise-data-service")
+setup_metrics(app, service_name="enterprise-data-service")
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -79,20 +99,31 @@ class ContextRequest(BaseModel):
 
 @limiter.limit("60/minute")
 @app.post("/connectors", status_code=201)
-def register_connector(request: Request, body: ConnectorCreateRequest) -> dict:
+def register_connector(
+    request: Request,
+    body: ConnectorCreateRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     config = body.model_dump()
     return _registry.register(config)
 
 
 @limiter.limit("60/minute")
 @app.get("/connectors")
-def list_connectors(request: Request) -> list[dict]:
+def list_connectors(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> list[dict]:
     return _registry.list_all()
 
 
 @limiter.limit("60/minute")
 @app.delete("/connectors/{connector_id}", status_code=204)
-def delete_connector(request: Request, connector_id: str):
+def delete_connector(
+    request: Request,
+    connector_id: str,
+    _token: str = Depends(verify_local_token),
+):
     removed = _registry.remove(connector_id)
     if not removed:
         raise HTTPException(status_code=404, detail="Connector not found")
@@ -101,7 +132,12 @@ def delete_connector(request: Request, connector_id: str):
 
 @limiter.limit("60/minute")
 @app.post("/connectors/{connector_id}/query")
-def query_connector(request: Request, connector_id: str, body: QueryRequest) -> dict:
+def query_connector(
+    request: Request,
+    connector_id: str,
+    body: QueryRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     connector = _registry.build_connector(connector_id)
     if connector is None:
         raise HTTPException(status_code=404, detail="Connector not found")
@@ -133,7 +169,11 @@ def query_connector(request: Request, connector_id: str, body: QueryRequest) -> 
 
 @limiter.limit("60/minute")
 @app.get("/connectors/{connector_id}/schema")
-def get_schema(request: Request, connector_id: str) -> dict:
+def get_schema(
+    request: Request,
+    connector_id: str,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     connector = _registry.build_connector(connector_id)
     if connector is None:
         raise HTTPException(status_code=404, detail="Connector not found")
@@ -148,7 +188,11 @@ def get_schema(request: Request, connector_id: str) -> dict:
 
 @limiter.limit("60/minute")
 @app.post("/context")
-def build_context(request: Request, body: ContextRequest) -> dict:
+def build_context(
+    request: Request,
+    body: ContextRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     xml_block = _assembler.build_context(body.prompt, body.connector_ids)
     return {"enterprise_context": xml_block}
 
@@ -160,19 +204,28 @@ def build_context(request: Request, body: ContextRequest) -> dict:
 
 @limiter.limit("60/minute")
 @app.get("/audit-log")
-def get_audit_log(request: Request) -> list[dict]:
+def get_audit_log(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> list[dict]:
     return _audit_logger.get_all()
 
 
 @limiter.limit("60/minute")
 @app.get("/audit-log/verify")
-def verify_audit_log(request: Request) -> dict:
+def verify_audit_log(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     return {"valid": _audit_logger.verify_chain()}
 
 
 @limiter.limit("60/minute")
 @app.get("/audit-log/export", response_class=PlainTextResponse)
-def export_audit_log(request: Request) -> str:
+def export_audit_log(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> str:
     return _audit_logger.export_csv()
 
 
@@ -216,7 +269,11 @@ class SandboxVerifyResponse(BaseModel):
 
 @limiter.limit("60/minute")
 @app.post("/api/v1/ztla/scan")
-def ztla_scan(request: Request, body: ScanRequest) -> dict:
+def ztla_scan(
+    request: Request,
+    body: ScanRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     """Scan text for data exfiltration patterns."""
     scan = _zt_monitor.scan_output(body.text)
     result = scan.to_dict()
@@ -227,7 +284,11 @@ def ztla_scan(request: Request, body: ScanRequest) -> dict:
 
 @limiter.limit("60/minute")
 @app.post("/api/v1/ztla/egress-check")
-def ztla_egress_check(request: Request, body: EgressCheckRequest) -> dict:
+def ztla_egress_check(
+    request: Request,
+    body: EgressCheckRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     """Verify no unauthorized outbound connections."""
     result = _zt_monitor.check_network_egress()
     result["allowed"] = result.get("status") == "clean"
@@ -236,7 +297,11 @@ def ztla_egress_check(request: Request, body: EgressCheckRequest) -> dict:
 
 @limiter.limit("60/minute")
 @app.post("/api/v1/ztla/sandbox-verify")
-def ztla_sandbox_verify(request: Request, body: SandboxVerifyRequest) -> dict:
+def ztla_sandbox_verify(
+    request: Request,
+    body: SandboxVerifyRequest,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     """Verify sandbox isolation integrity."""
     result = _zt_monitor.verify_sandbox()
     result["verified"] = all([
@@ -256,14 +321,20 @@ def ztla_sandbox_verify(request: Request, body: SandboxVerifyRequest) -> dict:
 
 @limiter.limit("60/minute")
 @app.get("/api/v1/ztla/audit-log")
-def ztla_audit_log(request: Request) -> dict:
+def ztla_audit_log(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     """Get zero-trust audit log entries."""
     return {"entries": _zt_monitor.get_audit_log()}
 
 
 @limiter.limit("60/minute")
 @app.get("/api/v1/ztla/security-report")
-def ztla_security_report(request: Request) -> dict:
+def ztla_security_report(
+    request: Request,
+    _token: str = Depends(verify_local_token),
+) -> dict:
     """Get comprehensive security report."""
     return _zt_monitor.get_security_report()
 

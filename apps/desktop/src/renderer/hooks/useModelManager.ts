@@ -1,9 +1,16 @@
 /**
  * Hook for managing models via the Model Manager service
- * Handles communication with FastAPI backend on port 8002
+ * Handles communication with FastAPI backend on port 8002.
+ *
+ * W3-T8c: write/control endpoints (mirror/switch, download, cancel, pause,
+ * resume) go through `authFetch` to attach the Authorization: Bearer header
+ * required by `services/_shared/auth.verify_local_token`. Read-only routes
+ * (mirror config, model list, search, file listing) remain plain `fetch`
+ * since they are unprotected on the server side.
  */
 
 import { useState, useCallback } from 'react'
+import { authFetch } from '../services/authFetch'
 
 const MODEL_MANAGER_BASE_URL = import.meta.env.VITE_MODEL_MANAGER_URL ?? 'http://localhost:8002'
 
@@ -114,7 +121,7 @@ export function useModelManager() {
       setLoading(true)
       setError(null)
       try {
-        const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/mirror/switch?mirror_name=${mirrorName}`, {
+        const response = await authFetch(`${MODEL_MANAGER_BASE_URL}/api/v1/mirror/switch?mirror_name=${mirrorName}`, {
           method: 'POST',
         })
         if (!response.ok) throw new Error(`Failed to switch mirror: ${response.statusText}`)
@@ -152,7 +159,7 @@ export function useModelManager() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/${modelId}/download`, {
+      const response = await authFetch(`${MODEL_MANAGER_BASE_URL}/api/v1/models/${modelId}/download`, {
         method: 'POST',
       })
       if (!response.ok) throw new Error(`Failed to download model: ${response.statusText}`)
@@ -223,7 +230,7 @@ export function useModelManager() {
   // Cancel an in-progress download
   const cancelDownload = useCallback(async (modelId: string): Promise<boolean> => {
     try {
-      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/cancel`, { method: 'POST' })
+      await authFetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/cancel`, { method: 'POST' })
       return true
     } catch {
       return false
@@ -233,7 +240,7 @@ export function useModelManager() {
   // Pause an in-progress download
   const pauseDownload = useCallback(async (modelId: string): Promise<boolean> => {
     try {
-      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/pause`, { method: 'POST' })
+      await authFetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/pause`, { method: 'POST' })
       return true
     } catch {
       return false
@@ -243,7 +250,7 @@ export function useModelManager() {
   // Resume a paused download
   const resumeDownload = useCallback(async (modelId: string): Promise<boolean> => {
     try {
-      await fetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/resume`, { method: 'POST' })
+      await authFetch(`${MODEL_MANAGER_BASE_URL}/api/v1/downloads/${modelId}/resume`, { method: 'POST' })
       return true
     } catch {
       return false

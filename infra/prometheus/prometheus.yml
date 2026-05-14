@@ -1,0 +1,104 @@
+# W6-T17 — Prometheus scrape config for Sovereign Code services.
+# Each FastAPI service exposes /metrics via _shared/observability.setup_metrics.
+# We scrape internal docker DNS names (each service's container name) on its
+# canonical port.
+
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "voice-service"
+    static_configs:
+      - targets: ["sovereign-voice-service:8000"]
+        labels: { service: "voice-service" }
+
+  - job_name: "training-service"
+    static_configs:
+      - targets: ["training-service:8001"]
+        labels: { service: "training-service" }
+
+  - job_name: "model-manager"
+    static_configs:
+      - targets: ["model-manager:8002"]
+        labels: { service: "model-manager" }
+
+  - job_name: "knowledge-service"
+    static_configs:
+      - targets: ["knowledge-service:8003"]
+        labels: { service: "knowledge-service" }
+
+  - job_name: "enterprise-data-service"
+    static_configs:
+      - targets: ["enterprise-data-service:8004"]
+        labels: { service: "enterprise-data-service" }
+
+  - job_name: "execution-trace-service"
+    static_configs:
+      - targets: ["execution-trace-service:8005"]
+        labels: { service: "execution-trace-service" }
+
+  - job_name: "orchestration-service"
+    static_configs:
+      - targets: ["orchestration-service:8006"]
+        labels: { service: "orchestration-service" }
+
+  - job_name: "code-completion-service"
+    static_configs:
+      - targets: ["code-completion-service:8007"]
+        labels: { service: "code-completion-service" }
+
+  - job_name: "federation-service"
+    static_configs:
+      - targets: ["federation-service:8008"]
+        labels: { service: "federation-service" }
+
+  - job_name: "analytics-service"
+    static_configs:
+      - targets: ["analytics-service:8009"]
+        labels: { service: "analytics-service" }
+
+  - job_name: "memory-service"
+    static_configs:
+      - targets: ["memory-service:8010"]
+        labels: { service: "memory-service" }
+
+  - job_name: "award-service"
+    static_configs:
+      - targets: ["award-service:8011"]
+        labels: { service: "award-service" }
+
+  - job_name: "messaging-bridge-service"
+    static_configs:
+      - targets: ["messaging-bridge-service:8012"]
+        labels: { service: "messaging-bridge-service" }
+
+  - job_name: "org-intelligence-service"
+    static_configs:
+      - targets: ["org-intelligence-service:8013"]
+        labels: { service: "org-intelligence-service" }
+
+  - job_name: "persona-council-service"
+    static_configs:
+      - targets: ["persona-council-service:8014"]
+        labels: { service: "persona-council-service" }
+
+  - job_name: "plugin-registry-service"
+    static_configs:
+      - targets: ["plugin-registry-service:8015"]
+        labels: { service: "plugin-registry-service" }
+
+  - job_name: "pr-review-service"
+    static_configs:
+      - targets: ["pr-review-service:8016"]
+        labels: { service: "pr-review-service" }
+
+  - job_name: "semantic-search-service"
+    static_configs:
+      - targets: ["semantic-search-service:8017"]
+        labels: { service: "semantic-search-service" }
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

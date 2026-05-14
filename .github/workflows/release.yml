@@ -1,0 +1,270 @@
+# W4-T11 — Multi-OS signed installer pipeline.
+#
+# Triggers:
+#   - push of a tag matching `v*` (GA) or `v*-rc*` (release candidate)
+#   - manual `workflow_dispatch` for emergency rebuilds (without re-tagging)
+#
+# Each OS in the matrix builds the desktop app and publishes its artifacts
+# to a GitHub Release draft (created by the first job to reach the upload
+# step; subsequent OS jobs append to the same draft).
+#
+# Code-signing is opt-in via repository secrets:
+#   Windows (electron-builder env var names):
+#     CSC_LINK                  - base64 PFX or HTTPS URL
+#     CSC_KEY_PASSWORD          - PFX password
+#   macOS:
+#     CSC_LINK                  - base64 P12 OR HTTPS URL
+#     CSC_KEY_PASSWORD          - P12 password
+#     APPLE_ID                  - Apple Developer Apple ID
+#     APPLE_APP_SPECIFIC_PASSWORD - notarytool password
+#     APPLE_TEAM_ID             - 10-char team id
+#   Linux:
+#     - no signing required for AppImage/deb in this pipeline
+#
+# If signing secrets are absent the build still completes but produces an
+# UNSIGNED installer (electron-builder logs a clear warning). The job is
+# still useful for catching build-time regressions; cutting a real GA
+# requires the secrets configured.
+#
+# NOTE: macOS notarization is gated by the `notarize` flag in
+# electron-builder.json. Flip it to `true` once Apple Developer enrollment
+# is provisioned (tracked in W8-T23).
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'        # v1.0.0
+      - 'v[0-9]+.[0-9]+.[0-9]+-rc*'    # v1.0.0-rc1
+      - 'v[0-9]+.[0-9]+.[0-9]+-beta*'
+      - 'v[0-9]+.[0-9]+.[0-9]+-alpha*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Override tag (e.g. v1.0.0-rc1) — must already exist'
+        required: false
+        type: string
+
+permissions:
+  contents: write   # for creating Releases and uploading assets
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-13
+          - windows-latest
+        include:
+          - os: ubuntu-latest
+            build_script: build:linux
+            artifact_glob: |
+              apps/desktop/dist/*.AppImage
+              apps/desktop/dist/*.deb
+              apps/desktop/dist/latest-linux*.yml
+          - os: macos-13
+            build_script: build:mac
+            artifact_glob: |
+              apps/desktop/dist/*.dmg
+              apps/desktop/dist/*.zip
+              apps/desktop/dist/*.blockmap
+              apps/desktop/dist/latest-mac*.yml
+          - os: windows-latest
+            build_script: build:win
+            artifact_glob: |
+              apps/desktop/dist/*.exe
+              apps/desktop/dist/*.blockmap
+              apps/desktop/dist/latest*.yml
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # electron-builder reads commit info for changelog
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/desktop/package-lock.json
+
+      - name: Install workspace deps
+        # See ci.yml — rm both lockfile + node_modules + force optional deps.
+        # `shell: bash` so Unix-style `rm` works on Windows runners too.
+        shell: bash
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
+
+      - name: Install desktop deps
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
+
+      - name: Run desktop tests (sanity)
+        working-directory: apps/desktop
+        shell: bash
+        run: npm test
+
+      - name: Build & package
+        working-directory: apps/desktop
+        env:
+          # Forward signing secrets via env if present.
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # electron-builder publish provider is `github`; GH_TOKEN auth.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Don't auto-publish from each job — we collect artifacts first
+          # and the dedicated `publish` job creates the Release draft.
+          ELECTRON_BUILDER_PUBLISH: never
+        run: npm run ${{ matrix.build_script }}
+
+      - name: Upload OS artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: |
+            apps/desktop/dist/*.exe
+            apps/desktop/dist/*.dmg
+            apps/desktop/dist/*.zip
+            apps/desktop/dist/*.AppImage
+            apps/desktop/dist/*.deb
+            apps/desktop/dist/*.blockmap
+            apps/desktop/dist/latest*.yml
+          if-no-files-found: warn
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub Release draft
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve tag name
+        id: tagname
+        run: |
+          if [ "${{ github.event_name }}" = 'workflow_dispatch' ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download all installer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: installer-*
+          merge-multiple: true
+
+      - name: List collected artifacts
+        run: ls -lah dist/
+
+      # ─── W8-T23: cosign + SBOM + dual-region distribution ──────────────
+      - name: Compute SHA-256 checksums
+        working-directory: dist
+        run: |
+          # SHA256SUMS file lists every release asset by hash. Consumers
+          # verify with: `cosign verify-blob --signature SHA256SUMS.sig …`
+          # then `sha256sum -c SHA256SUMS`.
+          find . -maxdepth 1 -type f \
+            \( -name '*.exe' -o -name '*.dmg' -o -name '*.zip' \
+               -o -name '*.AppImage' -o -name '*.deb' -o -name '*.blockmap' \
+               -o -name 'latest*.yml' \) \
+            -exec sha256sum {} + | sort -k2 > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Install syft
+        uses: anchore/sbom-action/download-syft@v0.17.4
+
+      - name: Generate SBOM (SPDX JSON, source tree)
+        # `dir:.` produces an SBOM of every requirements.txt + package.json
+        # we ship — sufficient for SOC2 / supply-chain audit needs.
+        run: |
+          syft dir:. \
+            -o spdx-json=dist/sbom-spdx.json \
+            -o cyclonedx-json=dist/sbom-cyclonedx.json
+          ls -lah dist/sbom-*.json
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.6.0
+
+      - name: Sign checksums (keyless / OIDC)
+        # Sigstore keyless signing uses GitHub Actions' OIDC token; no key
+        # material to manage. Verification: `cosign verify-blob --certificate …`
+        env:
+          COSIGN_EXPERIMENTAL: '1'
+        working-directory: dist
+        run: |
+          cosign sign-blob --yes \
+            --output-signature SHA256SUMS.sig \
+            --output-certificate SHA256SUMS.pem \
+            SHA256SUMS
+
+      - name: Mirror to Aliyun OSS (China distribution)
+        # Optional: only runs when the secret bundle is configured. Skipping
+        # in repos that don't have OSS access keeps the workflow green.
+        if: env.ALIYUN_OSS_BUCKET != ''
+        env:
+          ALIYUN_OSS_BUCKET: ${{ secrets.ALIYUN_OSS_BUCKET }}
+          ALIYUN_OSS_ENDPOINT: ${{ secrets.ALIYUN_OSS_ENDPOINT }}
+          ALIYUN_OSS_KEY: ${{ secrets.ALIYUN_OSS_KEY }}
+          ALIYUN_OSS_SECRET: ${{ secrets.ALIYUN_OSS_SECRET }}
+        run: |
+          # ossutil is the official Aliyun CLI; install pinned binary.
+          curl -fsSL -o ossutil https://gosspublic.alicdn.com/ossutil/1.7.18/ossutil64
+          chmod +x ossutil
+          ./ossutil config \
+            -e "$ALIYUN_OSS_ENDPOINT" \
+            -i "$ALIYUN_OSS_KEY" \
+            -k "$ALIYUN_OSS_SECRET"
+          ./ossutil cp -r dist/ \
+            "oss://$ALIYUN_OSS_BUCKET/releases/${{ steps.tagname.outputs.name }}/" \
+            --update --include "*.exe" --include "*.dmg" --include "*.zip" \
+            --include "*.AppImage" --include "*.deb" --include "*.blockmap" \
+            --include "SHA256SUMS*" --include "sbom-*.json" --include "latest*.yml"
+      # ───────────────────────────────────────────────────────────────────
+
+      - name: Create or update GitHub Release (draft)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tagname.outputs.name }}
+          name: ${{ steps.tagname.outputs.name }}
+          draft: true
+          prerelease: ${{ contains(steps.tagname.outputs.name, 'rc') || contains(steps.tagname.outputs.name, 'beta') || contains(steps.tagname.outputs.name, 'alpha') }}
+          generate_release_notes: true
+          files: |
+            dist/**/*.exe
+            dist/**/*.dmg
+            dist/**/*.zip
+            dist/**/*.AppImage
+            dist/**/*.deb
+            dist/**/*.blockmap
+            dist/**/latest*.yml
+            dist/SHA256SUMS
+            dist/SHA256SUMS.sig
+            dist/SHA256SUMS.pem
+            dist/sbom-spdx.json
+            dist/sbom-cyclonedx.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

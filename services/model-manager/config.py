@@ -36,7 +36,7 @@ MAX_CACHE_GB = int(os.getenv("MAX_CACHE_GB", "50"))
 AUTO_CLEANUP_PERCENT = 0.85  # Trigger cleanup at 85% of max
 
 # === Inference Configuration ===
-DEVICE = os.getenv("DEVICE", "cpu")  # cpu, cuda, mps, auto
+DEVICE = os.getenv("DEVICE", "cuda")  # cpu, cuda, mps, auto
 DEVICE_MAP = os.getenv("DEVICE_MAP", "auto")  # auto, cpu, cuda, sequential
 USE_QUANTIZATION = os.getenv("USE_QUANTIZATION", "false").lower() == "true"
 QUANTIZATION_TYPE = os.getenv("QUANTIZATION_TYPE", "int8")  # int8, int4, fp32

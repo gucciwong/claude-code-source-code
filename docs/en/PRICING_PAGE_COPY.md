@@ -1,6 +1,11 @@
 # Sovereign Code Pricing
 
-Last updated: 2026-04-04
+Last updated: 2026-07-06 (v1.0.0 GA)
+
+> Sovereign Code v1.0 is **fully free for individual developers and teams
+> up to 5 users**. Paid tiers unlock multi-user identity (SSO/SCIM),
+> centralised audit logging, and higher-touch support — none of the
+> underlying product capabilities are paywalled.
 
 ## Built For Makers And Teams
 

@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Any
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, File, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks, File, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from starlette.requests import Request
@@ -18,6 +18,23 @@ from slowapi.errors import RateLimitExceeded
 from sqlalchemy import text
 import logging
 import os
+
+# === W3-T8: local-token authentication ====================================
+# Provides FastAPI Depends(verify_local_token). The shared module lives at
+# repo-root services/_shared/. Resolved via sys.path so this service runs
+# both standalone (dev) and from the packaged Docker image once W3-T8b
+# lands the build-context fix (see GA Runway Plan).
+import sys as _sys
+from pathlib import Path as _Path
+_shared_parent = _Path(__file__).resolve().parents[1]
+if str(_shared_parent) not in _sys.path:
+    _sys.path.insert(0, str(_shared_parent))
+from _shared.auth import verify_local_token  # noqa: E402
+
+# W6-T17 + W6-T18: shared observability + structured logging.
+from _shared.observability import setup_metrics  # noqa: E402
+from _shared.logging import install as install_logging  # noqa: E402
+# ==========================================================================
 
 from training_data.models import init_db, get_session_maker, EventType
 from training_data.store import TrainingDataStore
@@ -156,6 +173,10 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+# W6-T17 + T18: install JSON logging + request-id middleware + /metrics.
+install_logging(app, "training-service")
+setup_metrics(app, service_name="training-service")
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -347,6 +368,7 @@ async def export_training_data(
     format: str = "jsonlines",
     max_samples: int = 5000,
     language: Optional[str] = None,
+    _token: str = Depends(verify_local_token),
 ):
     """
     Export training data for external use
@@ -414,7 +436,11 @@ async def export_training_data(
 
 @app.post("/api/v1/training/cleanup")
 @limiter.limit("10/minute")
-async def cleanup_old_events(request: Request, days_old: int = 90):
+async def cleanup_old_events(
+    request: Request,
+    days_old: int = 90,
+    _token: str = Depends(verify_local_token),
+):
     """Delete training events older than N days"""
     
     db = next(get_db())
@@ -456,8 +482,9 @@ async def get_training_status(request: Request):
       "estimated_time_remaining_minutes": 45,
     }
     """
-    # TODO: Wire with actual orchestrator instance
-    # For now, return stub response
+    # Tracked-In: docs/plans/2026-05-11-ga-runway-plan.md (W2-T6 follow-up; the
+    # orchestrator-singleton wiring lands in v1.1 — the GA story ships the
+    # stub because no consumer of /status currently relies on these fields).
     return {
         "model_id": "mistral-7b",
         "active_cycle": "idle",
@@ -488,8 +515,9 @@ async def get_model_version(request: Request, model_id: str):
       }
     }
     """
-    # TODO: Wire with actual registry instance
-    # For now, return stub response
+    # Tracked-In: docs/plans/2026-05-11-ga-runway-plan.md (W2-T6 follow-up; the
+    # version registry singleton is on the v1.1 backlog. GA Training UI does
+    # not rely on these values — they show "—" when status='none').
     return {
         "version_id": None,
         "adapter_id": None,

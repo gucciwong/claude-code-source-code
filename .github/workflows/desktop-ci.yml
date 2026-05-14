@@ -14,6 +14,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
@@ -26,10 +27,20 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # See ci.yml — rm both lockfile + node_modules + force optional deps.
+        # `shell: bash` makes the Unix `rm` work on Windows runners too
+        # (default shell there is pwsh, where `rm -f` collides with
+        # Remove-Item's ambiguous -Filter/-Force parameters).
+        shell: bash
+        run: |
+          rm -f apps/desktop/package-lock.json
+          rm -rf apps/desktop/node_modules
+          npm install --prefix apps/desktop --include=optional --no-audit --no-fund
 
       - name: Build desktop app
+        shell: bash
         run: cd apps/desktop && npm run build
 
       - name: Run tests
+        shell: bash
         run: cd apps/desktop && npm test

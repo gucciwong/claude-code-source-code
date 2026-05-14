@@ -12,6 +12,18 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 app = FastAPI(title="Sovereign Code Plugin Registry", version="0.1.0")
 
+# === W6 observability + logging (T17 + T18) =============================
+import sys as _sys
+from pathlib import Path as _Path
+_shared_parent = _Path(__file__).resolve().parents[1]
+if str(_shared_parent) not in _sys.path:
+    _sys.path.insert(0, str(_shared_parent))
+from _shared.observability import setup_metrics as _setup_metrics  # noqa: E402
+from _shared.logging import install as _install_logging  # noqa: E402
+_install_logging(app, "plugin-registry-service")
+_setup_metrics(app, service_name="plugin-registry-service")
+# ========================================================================
+
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

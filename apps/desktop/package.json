@@ -12,6 +12,8 @@
     "preview": "electron-vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
     "build:win": "npm run build && electron-builder --win --publish never",
     "build:win:exe": "npm run build && electron-builder --win nsis --publish never",
     "build:mac": "npm run build && electron-builder --mac --publish never",
@@ -35,10 +37,18 @@
     "zod": "^4.3.6",
     "zustand": "^4.5.2"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "*",
+    "@rollup/rollup-linux-arm64-gnu": "*",
+    "@rollup/rollup-darwin-x64": "*",
+    "@rollup/rollup-darwin-arm64": "*",
+    "@rollup/rollup-win32-x64-msvc": "*"
+  },
   "devDependencies": {
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@playwright/test": "^1.48.0",
     "@tailwindcss/vite": "^4.0.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^16.0.0",

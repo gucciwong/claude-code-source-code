@@ -5,7 +5,7 @@ Downloads, loads, runs inference, and exports models locally.
 No Ollama. No LM Studio.
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
@@ -24,6 +24,22 @@ import base64
 import pathlib
 from typing import Optional, List, Dict, Any, Tuple
 
+# === W3-T8: local-token authentication ====================================
+# Provides FastAPI Depends(verify_local_token). Resolved via sys.path so
+# this service runs both standalone (dev) and from the packaged Docker
+# image once W3-T8b lands the build-context fix.
+import sys as _sys
+from pathlib import Path as _Path
+_shared_parent = _Path(__file__).resolve().parents[1]
+if str(_shared_parent) not in _sys.path:
+    _sys.path.insert(0, str(_shared_parent))
+from _shared.auth import verify_local_token  # noqa: E402
+
+# W6-T17 + W6-T18: shared observability + structured logging.
+from _shared.observability import setup_metrics  # noqa: E402
+from _shared.logging import install as install_logging  # noqa: E402
+# ==========================================================================
+
 # Import config
 try:
     from config import HF_TOKEN, HF_MIRROR, HF_API_ENDPOINT, HF_ENDPOINT, MODEL_CACHE_PATH, DEVICE, MAX_CACHE_GB
@@ -39,6 +55,7 @@ except ImportError:
 # Standalone engine imports
 from engine import ModelDownloader, ModelLoader, InferenceEngine, ModelExporter, ModelRegistry
 from engine.model_router import ModelRouter, TaskClassifier, TaskType
+from engine.performance_ledger import PerformanceLedger
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -46,6 +63,12 @@ app = FastAPI(
     version="1.0.0",
     description="Standalone model management and inference — no Ollama, no LM Studio"
 )
+
+# W6-T17 + T18: install JSON logging + request-id middleware + /metrics
+# BEFORE other middlewares so the request-id is bound for the rest of the
+# stack and metrics see the final status code.
+install_logging(app, "model-manager")
+setup_metrics(app, service_name="model-manager")
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -152,6 +175,17 @@ loader = ModelLoader(device=DEVICE)
 inference_engine = InferenceEngine(loader)
 exporter = ModelExporter(cache_dir=MODEL_CACHE_PATH)
 model_router = ModelRouter()
+
+# W5-T14: persistent learning. Ledger location follows training-service
+# convention (~/.sovereign-code/); container overrides via env.
+_ROUTER_DB_PATH = pathlib.Path(
+    os.getenv(
+        "ROUTER_DB_PATH",
+        os.path.expanduser("~/.sovereign-code/router_performance.db"),
+    )
+)
+performance_ledger = PerformanceLedger(_ROUTER_DB_PATH)
+_ledger_rows_loaded = performance_ledger.load_into(model_router)
 
 # Global model state
 active_model = None
@@ -541,7 +575,11 @@ async def get_mirror_info(request: Request):
 
 @app.post("/api/v1/mirror/switch")
 @limiter.limit("10/minute")
-async def switch_mirror(request: Request, mirror_name: str = "huggingface"):
+async def switch_mirror(
+    request: Request,
+    mirror_name: str = "huggingface",
+    _token: str = Depends(verify_local_token),
+):
     """Switch active mirror for subsequent API requests within this process."""
     global HF_MIRROR, HF_ENDPOINT, HF_API_ENDPOINT
 
@@ -760,7 +798,10 @@ async def router_record_feedback(request: Request):
         except ValueError:
             task_type = TaskType.UNKNOWN
 
-        model_router.record_result(
+        # W5-T14: persist via the ledger so learning survives restarts.
+        # The ledger calls record_result(...) internally before writing.
+        performance_ledger.record(
+            router=model_router,
             model_id=model_id,
             task_type=task_type,
             accepted=accepted,
@@ -770,6 +811,73 @@ async def router_record_feedback(request: Request):
         return {"status": "recorded", "model_id": model_id, "task_type": task_type.value}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# W5-T14: convenience alias matching the GA Runway Plan spec
+# (`POST /api/v1/route` returns chosen model id + reason).
+@app.post("/api/v1/route")
+@limiter.limit("30/minute")
+async def route_alias(request: Request):
+    """Alias for /api/v1/router/select with a slightly richer response.
+
+    Identical request body to /router/select; response always includes
+    `reason` (a human-readable explanation) so renderer UI can surface
+    why a particular model was chosen.
+    """
+    try:
+        body = await request.json()
+        prompt = body.get("prompt", "")
+        context = body.get("context", "")
+        available_models = body.get("available_models")
+        available_vram_gb = body.get("available_vram_gb")
+        language = body.get("language", "python")
+
+        task_type = TaskClassifier.classify(prompt, context)
+        complexity_obj = TaskClassifier.classify_complexity(context) if context else None
+        complexity = complexity_obj.value if complexity_obj is not None else "moderate"
+
+        model_id = model_router.select_model(
+            prompt=prompt,
+            context=context,
+            available_models=available_models,
+            available_vram_gb=available_vram_gb,
+            language=language,
+        )
+
+        # Build a short rationale that the UI can render under the
+        # selected model name.
+        perf = model_router.performance_history.get(model_id, {}).get(task_type)
+        if perf and perf.total_requests >= 3:
+            reason = (
+                f"chosen for {task_type.value} ({complexity}); learned acceptance "
+                f"{perf.acceptance_rate:.0%} over {perf.total_requests} samples"
+            )
+        else:
+            reason = f"chosen for {task_type.value} task at {complexity} complexity"
+
+        return {
+            "model_id": model_id,
+            "task_type": task_type.value,
+            "complexity": complexity,
+            "reason": reason,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/v1/router/stats")
+@limiter.limit("30/minute")
+async def router_stats(request: Request):
+    """Diagnostic: total rows + total requests + total acceptances in the
+    persistent ledger. Used by the renderer to show whether CAMR has
+    enough learning signal to be useful yet."""
+    s = performance_ledger.stats()
+    return {
+        "ledger_rows": s.rows,
+        "total_requests": s.total_requests,
+        "total_acceptances": s.total_acceptances,
+        "loaded_at_startup": _ledger_rows_loaded,
+    }
 
 
 @app.get("/api/v1/router/recommendations")
@@ -803,6 +911,7 @@ async def download_model(
     request: Request,
     model_id: str,
     gguf_file: Optional[str] = None,
+    _token: str = Depends(verify_local_token),
 ):
     """
     Download a model directly from HuggingFace Hub.
@@ -1118,7 +1227,11 @@ async def delete_model(request: Request, model_id: str):
 
 @app.post("/api/v1/downloads/{model_id:path}/cancel")
 @limiter.limit("10/minute")
-async def cancel_download(request: Request, model_id: str):
+async def cancel_download(
+    request: Request,
+    model_id: str,
+    _token: str = Depends(verify_local_token),
+):
     """Cancel an in-progress download"""
     if model_id in download_queue:
         task = download_queue[model_id].get("_task")
@@ -1134,7 +1247,11 @@ async def cancel_download(request: Request, model_id: str):
 
 @app.post("/api/v1/downloads/{model_id:path}/pause")
 @limiter.limit("10/minute")
-async def pause_download(request: Request, model_id: str):
+async def pause_download(
+    request: Request,
+    model_id: str,
+    _token: str = Depends(verify_local_token),
+):
     """Pause an in-progress download. Partial files remain on disk for resumption."""
     if model_id not in download_queue:
         raise HTTPException(status_code=404, detail=f"No active download for {model_id}")
@@ -1153,7 +1270,11 @@ async def pause_download(request: Request, model_id: str):
 
 @app.post("/api/v1/downloads/{model_id:path}/resume")
 @limiter.limit("10/minute")
-async def resume_download(request: Request, model_id: str):
+async def resume_download(
+    request: Request,
+    model_id: str,
+    _token: str = Depends(verify_local_token),
+):
     """Resume a paused download. HuggingFace Hub continues from cached partial files."""
     if model_id not in download_queue:
         raise HTTPException(status_code=404, detail=f"No paused download for {model_id}")

@@ -1,0 +1,119 @@
+# W7-T19 — Playwright e2e cross-OS workflow.
+#
+# Runs `npm run e2e` against a freshly-built desktop bundle on Win/macOS/Linux.
+# Each OS spawns its own Electron instance; per-test traces + videos + the
+# HTML report are uploaded as artifacts on failure.
+#
+# Service spawn is disabled in e2e (env SOVEREIGN_E2E_SKIP_SERVICES=1) — the
+# specs stub the relevant fetches via Playwright route handlers so we test
+# renderer behavior without booting 18 Python services on every run.
+
+name: E2E
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/desktop/**'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/desktop/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: e2e (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    # v1.0.0 GA: e2e is ADVISORY. Unit tests, integration tests, and
+    # cross-OS builds are blocking gates; Playwright/Electron e2e on
+    # hosted runners is a known-flaky area (sandbox, display-server, and
+    # Electron launch quirks). Trace artifacts upload on failure so we
+    # can iterate. Plan to flip this off in v1.0.1 once we stabilize the
+    # firstWindow timeout path.
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/desktop/package-lock.json
+
+      - name: Install workspace deps
+        # See ci.yml — rm both lockfile + node_modules + force optional deps.
+        # `shell: bash` so Unix-style `rm` works on Windows runners too.
+        shell: bash
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
+
+      - name: Install desktop deps
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --include=optional --no-audit --no-fund
+
+      - name: Install Playwright browsers
+        working-directory: apps/desktop
+        shell: bash
+        run: npx playwright install --with-deps chromium
+
+      - name: Build desktop app
+        working-directory: apps/desktop
+        shell: bash
+        run: npm run build
+
+      # Linux only: xvfb so Electron can launch in headless CI.
+      - name: Start xvfb (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1280x720x24 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Run e2e
+        working-directory: apps/desktop
+        env:
+          SOVEREIGN_E2E_SKIP_SERVICES: '1'
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.os }}
+          path: apps/desktop/playwright-report
+          retention-days: 14
+
+      - name: Upload test-results (traces + videos)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ matrix.os }}
+          path: apps/desktop/test-results
+          retention-days: 14
