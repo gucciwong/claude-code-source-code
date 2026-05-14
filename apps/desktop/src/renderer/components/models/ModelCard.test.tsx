@@ -33,22 +33,51 @@ test('renders "Download" button when status is idle', () => {
   expect(screen.getByText('Download')).toBeInTheDocument()
 })
 
-test('renders "Downloading…" with spinner when status is downloading (button disabled)', () => {
+test('renders "Downloading" status chip when status is downloading', () => {
   render(<ModelCard {...defaultProps} downloadStatus="downloading" />)
-  const button = screen.getByRole('button', { name: /Downloading/ })
-  expect(button).toBeDisabled()
-  expect(screen.getByText('Downloading…')).toBeInTheDocument()
+  // The chip carries role="status" — the button-with-spinner from
+  // pre-W4-b is gone; downloading state is now expressed as a chip
+  // in the footer plus an inline progressbar at the top of the card.
+  const chip = screen.getByRole('status', { name: /Downloading/i })
+  expect(chip).toBeInTheDocument()
+  // No download button while in flight.
+  expect(screen.queryByRole('button', { name: /^Download$/i })).not.toBeInTheDocument()
 })
 
-test('renders "Downloaded" when status is done', () => {
+test('shows inline progressbar with percentage when progressPct is set', () => {
+  render(<ModelCard {...defaultProps} downloadStatus="downloading" progressPct={47.3} />)
+  const bar = screen.getByRole('progressbar', { name: /Downloading Llama 3.1 8B Instruct/i })
+  expect(bar).toHaveAttribute('aria-valuenow', '47')
+  // Percentage label appears in mono next to the bar AND inside the chip.
+  expect(screen.getAllByText(/47%/).length).toBeGreaterThan(0)
+})
+
+test('progressbar is indeterminate when progressPct is undefined', () => {
+  render(<ModelCard {...defaultProps} downloadStatus="downloading" />)
+  const bar = screen.getByRole('progressbar')
+  expect(bar).not.toHaveAttribute('aria-valuenow')
+})
+
+test('renders "Downloaded" chip when status is done', () => {
   render(<ModelCard {...defaultProps} downloadStatus="done" />)
-  expect(screen.getByText('Downloaded')).toBeInTheDocument()
+  expect(screen.getByRole('status', { name: /Downloaded/i })).toBeInTheDocument()
+})
+
+test('renders "Queued" chip when status is pending', () => {
+  render(<ModelCard {...defaultProps} downloadStatus="pending" />)
+  expect(screen.getByRole('status', { name: /Queued/i })).toBeInTheDocument()
 })
 
 test('renders "Retry" button when status is error', () => {
   render(<ModelCard {...defaultProps} downloadStatus="error" />)
   expect(screen.getByRole('button', { name: /Retry/ })).toBeInTheDocument()
   expect(screen.getByText('Retry')).toBeInTheDocument()
+})
+
+test('error status renders BOTH the Error chip and the Retry button', () => {
+  render(<ModelCard {...defaultProps} downloadStatus="error" />)
+  expect(screen.getByRole('status', { name: /Error/i })).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /Retry/ })).toBeInTheDocument()
 })
 
 test('calls onDownload with correct model ID when Download button clicked', async () => {

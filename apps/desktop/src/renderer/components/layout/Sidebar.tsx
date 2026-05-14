@@ -72,9 +72,34 @@ export function Sidebar() {
       style={{ width: sidebarWidth }}
       aria-label="Main navigation"
     >
-      {/* Logo area */}
-      <div className="px-4 py-4 border-b border-border-subtle">
-        <span className="text-text-primary font-semibold text-sm tracking-wide" style={{ fontFamily: 'Rubik, sans-serif' }}>Sovereign Code</span>
+      {/* Workspace identity card — Stitch-distilled. Replaces the
+       *  plain wordmark with a workspace badge that includes the
+       *  product mark, the project name, and a "Local Context
+       *  Active" status line. The emerald square + tiny dot
+       *  re-uses the accent token, so it re-skins with the theme. */}
+      <div className="px-4 py-3 border-b border-border-subtle">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="flex-shrink-0 w-8 h-8 rounded-md bg-accent-500/15 border border-accent-500/30 flex items-center justify-center"
+            aria-hidden="true"
+          >
+            <span className="text-accent-400 font-semibold text-[13px] leading-none">SC</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-text-primary font-semibold text-[13px] leading-tight truncate">
+              Sovereign Code
+            </div>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-accent-400 inline-block"
+                aria-hidden="true"
+              />
+              <span className="text-[11px] text-text-muted leading-none">
+                Local Context Active
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Main navigation */}

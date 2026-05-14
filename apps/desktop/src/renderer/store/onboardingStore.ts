@@ -1,22 +1,28 @@
 /**
  * W7-T20 — First-run onboarding state machine.
  *
- * On first launch the desktop walks the user through:
- *   1. detect → query the system VRAM via `useSystemStore` (already populated
- *      by the hardware-profile hook) and pick a `recommendedModel` from a
- *      static table keyed by VRAM tier.
- *   2. download → kick off the model-manager `/download` flow; UI polls for
- *      progress (we just store a percentage here; the actual fetch is done
- *      by the existing `useModelManager` hook).
- *   3. warmup → after download completes, hit `/api/v1/inference/warmup` so
- *      the first chat reply isn't cold-start slow.
- *   4. ready → terminal state; clicking the "Take me to Chat" button calls
- *      `complete()` which persists `hasCompleted` to localStorage so the
- *      screen never reappears.
+ * The user sees four top-level phases (UI W3 — Stitch-distilled flow):
  *
- * Mode is persisted to localStorage so a hard refresh during onboarding
- * resumes where the user left off (except `pending` ↦ `detect` on reload —
- * we want the user to see the detection animation each time).
+ *   Phase 1 — Pick a model
+ *     Internal sub-machine `step`: detect → choose → download → warmup → ready.
+ *     Once `step === 'ready'` the model is loaded and the phase is done.
+ *
+ *   Phase 2 — Import workspace
+ *     User picks (or accepts the suggested) repo root. Stored in
+ *     `useCodingStore.workspaceRoot`. Skippable — user can pick later
+ *     from the Coding screen.
+ *
+ *   Phase 3 — Enable agent
+ *     Toggle agent-mode + dry-run defaults. Skippable — agent mode also
+ *     lives in the Chat composer.
+ *
+ *   Phase 4 — Invite a federation peer (optional)
+ *     Show the local node's invite code (if available). User can copy and
+ *     send to a peer, or skip entirely — local-first works fine solo.
+ *
+ * Mode is persisted to localStorage so a hard refresh resumes where the
+ * user left off. The model-pick sub-step is intentionally NOT persisted
+ * (we want the detection animation to play again on reload mid-phase).
  */
 
 import { create } from 'zustand'
@@ -28,7 +34,19 @@ export type OnboardingStep =
   | 'choose'     // user picks/confirms the recommended model
   | 'download'   // download in progress
   | 'warmup'    // warm-up inference call
-  | 'ready'      // finished; user can dismiss
+  | 'ready'      // model-pick phase finished — user can dismiss or move on
+
+/**
+ * Top-level onboarding phase. UI W3 — Stitch-distilled flow. The model-pick
+ * phase contains the existing 5-state sub-machine (`OnboardingStep`); the
+ * other three phases are simple one-screen forms with skip.
+ */
+export type OnboardingPhase =
+  | 'model'       // Phase 1 — Pick a model (uses OnboardingStep internally)
+  | 'workspace'   // Phase 2 — Import workspace
+  | 'agent'       // Phase 3 — Enable agent
+  | 'federation'  // Phase 4 — Invite a federation peer (optional)
+  | 'complete'    // terminal — screen will be dismissed
 
 export interface StarterModel {
   id: string           // HuggingFace canonical id, e.g. "Qwen/Qwen2.5-Coder-7B-Instruct-GGUF"
@@ -85,6 +103,9 @@ export function pickStarter(vramGb: number | null | undefined): StarterModel {
 }
 
 interface OnboardingState {
+  /** Top-level phase the user is on (model / workspace / agent / federation). */
+  phase: OnboardingPhase
+  /** Sub-step within the `model` phase (detect → choose → download → …). */
   step: OnboardingStep
   hasCompleted: boolean
   recommended: StarterModel | null
@@ -99,16 +120,32 @@ interface OnboardingActions {
   finishDownload: () => void
   finishWarmup: () => void
   fail: (err: string) => void
+  /** Mark the active phase done and advance to the next one. */
+  advancePhase: () => void
+  /** Skip the active phase (workspace / agent / federation only — the
+   *  model phase isn't skippable because you can't chat without one). */
+  skipPhase: () => void
+  /** Final exit — flips `hasCompleted` and dismisses the screen. */
   complete: () => void
   reset: () => void   // mostly for tests; the "Reset onboarding" Settings button could call this
 }
 
 const INITIAL: OnboardingState = {
+  phase: 'model',
   step: 'pending',
   hasCompleted: false,
   recommended: null,
   downloadProgress: 0,
   error: null,
+}
+
+const PHASE_ORDER: OnboardingPhase[] = ['model', 'workspace', 'agent', 'federation', 'complete']
+
+/** Helper — get the next phase in the W3 flow. */
+export function nextPhase(p: OnboardingPhase): OnboardingPhase {
+  const i = PHASE_ORDER.indexOf(p)
+  if (i < 0 || i >= PHASE_ORDER.length - 1) return 'complete'
+  return PHASE_ORDER[i + 1]
 }
 
 export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
@@ -146,8 +183,26 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
         set({ error: err })
       },
 
+      advancePhase() {
+        const cur = get().phase
+        const next = nextPhase(cur)
+        if (next === 'complete') {
+          set({ phase: 'complete', hasCompleted: true })
+        } else {
+          set({ phase: next, error: null })
+        }
+      },
+
+      skipPhase() {
+        // The model phase isn't skippable — without a loaded model the
+        // first chat reply hangs forever. We silently no-op here so the
+        // UI's "Skip for now" button can be wired without conditionals.
+        if (get().phase === 'model') return
+        get().advancePhase()
+      },
+
       complete() {
-        set({ hasCompleted: true, step: 'ready' })
+        set({ hasCompleted: true, phase: 'complete', step: 'ready' })
       },
 
       reset() {
@@ -157,8 +212,10 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
     {
       name: 'sovereign-onboarding',
       storage: createJSONStorage(() => localStorage),
-      // We persist only the gate flag; transient progress is volatile.
-      partialize: (s) => ({ hasCompleted: s.hasCompleted }),
+      // Persist the gate flag + the active phase so a refresh resumes
+      // where the user left off. Transient model-pick sub-state stays
+      // volatile (we want the detection animation to play again).
+      partialize: (s) => ({ hasCompleted: s.hasCompleted, phase: s.phase }),
     },
   ),
 )

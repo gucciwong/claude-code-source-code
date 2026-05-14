@@ -5,6 +5,7 @@ import { useKnowledgeLibraryStore } from '../../store/knowledgeLibraryStore'
 import { useDownloadStore } from '../../store/downloadStore'
 import { useModelsStore } from '../../store/modelsStore'
 import { useModelManagerStore } from '../../store/modelManagerStore'
+import { useHealthStore } from '../../store/healthStore'
 import { formatModelSizeFromBytes } from '../../utils/modelSize'
 
 function formatDownloadSpeed(downloadedGbPerSecond: number): string {
@@ -30,6 +31,16 @@ export function StatusBar() {
   const downloadDetails = useDownloadStore(s => s.downloadDetails)
   const ollamaModels = useModelsStore(s => s.installed)
   const mmModels = useModelManagerStore(s => s.models)
+  // v1.0 — services online indicator. Reads from healthStore which is
+  // populated by HealthDashboard's polling loop (or any future global
+  // poller). When zero services have been checked yet we hide the pill
+  // entirely so we don't show "0/0 Services Online" on cold boot.
+  const healthServices = useHealthStore(s => s.services)
+  const healthyServices = healthServices.filter(s => s.status === 'healthy').length
+  const totalServices = healthServices.length
+  const everChecked = healthServices.some(s => s.lastChecked !== null)
+  const allHealthy = totalServices > 0 && healthyServices === totalServices
+  const noneHealthy = totalServices > 0 && healthyServices === 0
 
   const activeModelMeta = mmModels.find(model => model.id === activeModel || model.name === activeModel)
     ?? ollamaModels.find(model => model.name === activeModel)
@@ -138,6 +149,35 @@ export function StatusBar() {
             {isRecording ? 'Recording' : serviceReady ? 'Voice Ready' : 'Voice Loading'}
           </span>
         </>
+      )}
+
+      {/* Spacer pushes the services-online pill to the right edge. */}
+      <span className="flex-1" aria-hidden="true" />
+
+      {/* Services Online — Stitch-distilled health indicator. Only
+       *  surfaces once HealthDashboard (or any future poller) has
+       *  done at least one /health round-trip, so we don't show a
+       *  misleading "0/N down" on cold start. The pill dot tone
+       *  hard-greens when everything's up, ambers when partial,
+       *  reds when total outage. */}
+      {everChecked && totalServices > 0 && (
+        <span
+          className="flex items-center gap-1.5 flex-shrink-0"
+          aria-label={`${healthyServices} of ${totalServices} services online`}
+          title={healthServices
+            .map(s => `${s.name}: ${s.status}${s.latencyMs != null ? ` (${s.latencyMs}ms)` : ''}`)
+            .join('\n')}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              allHealthy ? 'bg-green-400' : noneHealthy ? 'bg-red-400' : 'bg-yellow-400'
+            }`}
+            aria-hidden="true"
+          />
+          <span className={allHealthy ? 'text-text-secondary' : noneHealthy ? 'text-red-400' : 'text-yellow-400'}>
+            {healthyServices}/{totalServices} Services Online
+          </span>
+        </span>
       )}
     </footer>
   )

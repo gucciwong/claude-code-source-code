@@ -502,6 +502,7 @@ export function HuggingFacePanel() {
                       downloads={0}
                       addedDate=""
                       downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
+                      progressPct={downloadDetails[model.id]?.progress}
                       onPickFiles={handlePickFiles}
                       compatibility={model.size_gb != null ? getModelCompatibility(model.size_gb, '', model.name) : undefined}
                     />
@@ -522,6 +523,7 @@ export function HuggingFacePanel() {
                   stars={model.stars}
                   downloads={model.downloads}
                   downloadStatus={downloadStatuses.get(model.id) ?? 'idle'}
+                  progressPct={downloadDetails[model.id]?.progress}
                   onPickFiles={handlePickFiles}
                   compatibility={getModelCompatibility(model.sizeGb, model.params, model.name)}
                 />

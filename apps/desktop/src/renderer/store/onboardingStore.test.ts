@@ -5,6 +5,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import {
   useOnboardingStore,
   pickStarter,
+  nextPhase,
   _resetOnboardingStoreForTests,
   _STARTER_MODELS_FOR_TESTS,
 } from './onboardingStore'
@@ -137,5 +138,75 @@ describe('useOnboardingStore', () => {
     expect(s.step).toBe('pending')
     expect(s.hasCompleted).toBe(false)
     expect(s.recommended).toBeNull()
+    expect(s.phase).toBe('model')
+  })
+})
+
+// ── UI W3 — 4-phase flow ──────────────────────────────────────────────
+
+describe('nextPhase()', () => {
+  it('walks the 4-phase order then terminates on complete', () => {
+    expect(nextPhase('model')).toBe('workspace')
+    expect(nextPhase('workspace')).toBe('agent')
+    expect(nextPhase('agent')).toBe('federation')
+    expect(nextPhase('federation')).toBe('complete')
+    expect(nextPhase('complete')).toBe('complete')
+  })
+})
+
+describe('useOnboardingStore — W3 phase machinery', () => {
+  it('starts in the model phase', () => {
+    expect(useOnboardingStore.getState().phase).toBe('model')
+  })
+
+  it('advancePhase walks model → workspace → agent → federation → complete', () => {
+    const store = useOnboardingStore
+    expect(store.getState().phase).toBe('model')
+
+    store.getState().advancePhase()
+    expect(store.getState().phase).toBe('workspace')
+
+    store.getState().advancePhase()
+    expect(store.getState().phase).toBe('agent')
+
+    store.getState().advancePhase()
+    expect(store.getState().phase).toBe('federation')
+
+    store.getState().advancePhase()
+    expect(store.getState().phase).toBe('complete')
+    expect(store.getState().hasCompleted).toBe(true)
+  })
+
+  it('skipPhase is a no-op when on the model phase', () => {
+    useOnboardingStore.getState().skipPhase()
+    expect(useOnboardingStore.getState().phase).toBe('model')
+  })
+
+  it('skipPhase advances on workspace / agent / federation phases', () => {
+    // Get to workspace first.
+    useOnboardingStore.getState().advancePhase()
+    expect(useOnboardingStore.getState().phase).toBe('workspace')
+    useOnboardingStore.getState().skipPhase()
+    expect(useOnboardingStore.getState().phase).toBe('agent')
+    useOnboardingStore.getState().skipPhase()
+    expect(useOnboardingStore.getState().phase).toBe('federation')
+    useOnboardingStore.getState().skipPhase()
+    expect(useOnboardingStore.getState().phase).toBe('complete')
+    expect(useOnboardingStore.getState().hasCompleted).toBe(true)
+  })
+
+  it('advancePhase clears the error so a recovered phase starts clean', () => {
+    useOnboardingStore.getState().fail('disk full')
+    expect(useOnboardingStore.getState().error).toBe('disk full')
+    useOnboardingStore.getState().advancePhase()
+    expect(useOnboardingStore.getState().error).toBeNull()
+  })
+
+  it('complete() jumps straight to terminal phase', () => {
+    useOnboardingStore.getState().complete()
+    const s = useOnboardingStore.getState()
+    expect(s.phase).toBe('complete')
+    expect(s.hasCompleted).toBe(true)
+    expect(s.step).toBe('ready')
   })
 })

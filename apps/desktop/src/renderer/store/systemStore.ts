@@ -13,8 +13,8 @@ interface SystemState {
   ollamaConnectionError: string | null
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
-  uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate'
-  setUiTemplate: (uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate') => void
+  uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate' | 'sovereign'
+  setUiTemplate: (uiTemplate: 'sentry' | 'sanity' | 'mistral' | 'replicate' | 'sovereign') => void
 }
 
 export const useSystemStore = create<SystemState>((set) => ({
@@ -30,6 +30,10 @@ export const useSystemStore = create<SystemState>((set) => ({
   ollamaConnectionError: null,
   theme: 'dark',
   setTheme: (theme) => set({ theme }),
-  uiTemplate: 'mistral',
+  // v1.0 GA — `sovereign` is the canonical theme (Stitch-distilled
+  // Terminal Emerald dark palette). Legacy themes (sentry/sanity/
+  // mistral/replicate) remain available for experimentation via
+  // Settings → Appearance.
+  uiTemplate: 'sovereign',
   setUiTemplate: (uiTemplate) => set({ uiTemplate }),
 }))
